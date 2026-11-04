@@ -1,0 +1,15 @@
+{
+  "name": "여자야구 기록실 2026",
+  "short_name": "여자야구2026",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#14213D",
+  "theme_color": "#14213D",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
