@@ -2067,7 +2067,7 @@ select option:checked, select option:hover, .teamsel option:checked, .teamsel op
   letter-spacing: -0.02em !important;
 }
 
-/* 타율, 출루율, 타격효율 수치 */
+/* 타율, 출루율 등 수치 */
 .lc-tb .v {
   color: #e2e8f0 !important;
   font-weight: 700 !important;
@@ -8565,14 +8565,14 @@ const LU={
   del(tid,id){const o=this.all();o[tid]=(o[tid]||[]).filter(x=>x.id!==id);this.save(o)},
   extra(tid){try{return JSON.parse(localStorage.getItem('kbsa_lu_extra_'+tid)||'[]')}catch(e){return []}},
   addExtra(tid,n){const a=this.extra(tid);if(!a.includes(n)){a.push(n);try{localStorage.setItem('kbsa_lu_extra_'+tid,JSON.stringify(a))}catch(e){}}},
-  cols(){try{return JSON.parse(localStorage.getItem('kbsa_lu_cols')||'null')||['AVG','OBP','BAT']}catch(e){return ['AVG','OBP','BAT']}},
+  cols(){try{const raw=localStorage.getItem('kbsa_lu_cols');let a=raw?JSON.parse(raw):['AVG','OBP'];if(!Array.isArray(a))a=['AVG','OBP'];a=a.filter(k=>k!=='BAT'&&LU_COLS.some(c=>c.k===k));return a.length?a:['AVG','OBP']}catch(e){return ['AVG','OBP']}},
   setCols(a){try{localStorage.setItem('kbsa_lu_cols',JSON.stringify(a))}catch(e){}}
 };
 const LU_COLS=[
   {k:'AVG',t:'타율',v:p=>p&&p.B.AB?f3(p.B.AVG):'-'},
   {k:'OBP',t:'출루율',v:p=>p&&p.B.PA?f3(p.B.OBP):'-'},
   {k:'SLG',t:'장타율',v:p=>p&&p.B.AB?f3(p.B.SLG):'-'},
-  {k:'BAT',t:'타격 효율',v:p=>{const e=p&&EFF.get(p);return e&&e.bat!=null&&p.B.PA?e.bat:'-'}},
+  {k:'OPS',t:'OPS',v:p=>p&&p.B.PA?f3(p.B.OPS):'-'},
   {k:'TOT',t:'종합',v:p=>{const e=p&&EFF.get(p);return e&&e.total!=null?e.total:'-'}},
   {k:'SB',t:'도루',v:p=>p&&p.B.PA?p.B.SB:'-'},
   {k:'PA',t:'타석',v:p=>p?p.B.PA:'-'}
@@ -8706,7 +8706,7 @@ V.lineup=(q,tid)=>{
   ${luCard(t,l,th,mode,cols)}
   <div class="lu-del"><button data-del>이 라인업 삭제</button></div>
   ${note('POS 표기: SS 유격수 · CF 중견수 · 2B 2루수 · 3B 3루수 · 1B 1루수 · LF 좌익수 · C 포수 · RF 우익수 · P 투수 · DH 지명타자. 이름 옆 ✓ 는 이미 다른 타순·후보에 들어간 선수이며, 고르면 두 자리가 서로 바뀝니다.',
-    '타격 효율 = wRC+ (100 = 리그 평균), 종합 = 효율지수 종합. 자세히 보기의 팀 전력과 예상 승률은 예상 경기 탭과 같은 계산(상대는 2026 최다 라인업·주 선발 기준)입니다.')}`;
+    '종합 = 효율지수 종합. 자세히 보기의 팀 전력과 예상 승률은 예상 경기 탭과 같은 계산(상대는 2026 최다 라인업·주 선발 기준)입니다.')}`;
   V.lineup.bind=()=>{
     const save=()=>{LU.put(t.id,l);const s=document.getElementById('luSaved');if(s){s.textContent='저장됨 ✓';}};
     const re=()=>{save();const y=window.scrollY;render();window.scrollTo(0,y)};
