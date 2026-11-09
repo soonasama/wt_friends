@@ -7971,6 +7971,67 @@ function effDetail(p){
   return blocks.join('');
 }
 
+const HEX=(()=>{
+  const S=Store;
+  const bPool=S.players.filter(p=>p.B.PA>=20),pPool=S.players.filter(p=>p.P.BF>=30);
+  const dPool=S.players.map(p=>EFF.get(p)).filter(e=>e&&e.drel>=1).map(e=>e.def).sort((a,b)=>a-b);
+  const bAx=[
+    {k:'정확성',d:'타율',v:p=>p.B.AB?p.B.H/p.B.AB:null,f:v=>f3(v)},
+    {k:'장타력',d:'순장타율',v:p=>p.B.AB?(p.B.TB-p.B.H)/p.B.AB:null,f:v=>f3(v)},
+    {k:'선구안',d:'(볼넷+사구) ÷ 타석',v:p=>p.B.PA?(p.B.BB+p.B.HBP)/p.B.PA:null,f:v=>(v*100).toFixed(1)+'%'},
+    {k:'수비력',d:'Def+',v:p=>{const e=EFF.get(p);return e&&e.dc&&e.dc.inn>=7?e.def:null},f:v=>'Def+ '+v,pool:'def'},
+    {k:'주루',d:'도루 ÷ 출루',v:p=>(p.B.H+p.B.BB+p.B.HBP)?p.B.SB/(p.B.H+p.B.BB+p.B.HBP):null,f:v=>(v*100).toFixed(0)+'%'},
+    {k:'타점 생산',d:'타점 ÷ 타석',v:p=>p.B.PA?p.B.RBI/p.B.PA:null,f:v=>v.toFixed(3)}];
+  const pAx=[
+    {k:'실점 억제',v:p=>p.P.outs?p.P.ER*27/p.P.outs:null,low:1,f:v=>f2(v)},
+    {k:'삼진 능력',v:p=>p.P.BF?p.P.SO/p.P.BF:null,f:v=>(v*100).toFixed(1)+'%'},
+    {k:'제구력',v:p=>p.P.BF?(p.P.BB+p.P.HBP)/p.P.BF:null,low:1,f:v=>(v*100).toFixed(1)+'%'},
+    {k:'피안타 억제',v:p=>p.P.AB?p.P.H/p.P.AB:null,low:1,f:v=>f3(v)},
+    {k:'이닝 소화',v:p=>p.P.G?p.P.outs/p.P.G:null,f:v=>ipStr(Math.round(v))+'이닝'},
+    {k:'주자 억제',v:p=>p.P.outs?(p.P.BB+p.P.H)*3/p.P.outs:null,low:1,f:v=>f2(v)}];
+  const vals=(pool,ax)=>ax.map(a=>a.pool==='def'?dPool:pool.map(p=>a.v(p)).filter(v=>v!=null&&isFinite(v)).sort((x,y)=>x-y));
+  const bV=vals(bPool,bAx),pV=vals(pPool,pAx);
+  const pctl=(arr,v,low)=>{if(v==null||!arr.length)return null;let n=0;for(const x of arr){if(x<v)n++;else if(x===v)n+=.5}const q=n/arr.length*100;return Math.round(low?100-q:q)};
+  function scores(p,kind){const ax=kind==='bat'?bAx:pAx,V=kind==='bat'?bV:pV;
+    const n=kind==='bat'?p.B.PA:p.P.BF,k=kind==='bat'?20:30;
+    return ax.map((a,i)=>{const v=a.v(p);const q=pctl(V[i],v,a.low);if(q==null)return {k:a.k,v,txt:'기록 없음',p:0,est:true};
+      const adj=n>=k?q:Math.round((q*n+25*k)/(n+k));return {k:a.k,v,txt:a.f(v),p:adj,raw:q,small:n<k}})}
+  const pctOf=(k,v)=>{const i=bAx.findIndex(a=>a.k===k);return pctl(bV[i],v)};
+  function svg(sc,color){
+    const W=320,H=300,cx=160,cy=150,R=100;const ang=i=>-Math.PI/2+i*Math.PI/3;const pt=(i,r)=>[cx+Math.cos(ang(i))*r,cy+Math.sin(ang(i))*r];
+    const ring=f=>sc.map((_,i)=>pt(i,R*f).map(n=>n.toFixed(1)).join(',')).join(' ');
+    const poly=sc.map((s,i)=>pt(i,R*Math.max(.04,s.p/100)).map(n=>n.toFixed(1)).join(',')).join(' ');
+    return `<svg viewBox="0 0 ${W} ${H}" class="hex" role="img" aria-label="능력치 레이더">
+      ${[.2,.4,.6,.8,1].map(f=>`<polygon points="${ring(f)}" fill="${f===1?'#F7F9FC':'none'}" stroke="#D3D9E2"/>`).join('')}
+      ${sc.map((_,i)=>{const [x,y]=pt(i,R);return `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#D3D9E2"/>`}).join('')}
+      <polygon points="${ring(.5)}" fill="none" stroke="#5B6678" stroke-width="1.5" stroke-dasharray="4 4"/>
+      <polygon points="${poly}" fill="${color}" fill-opacity=".28" stroke="${color}" stroke-width="2.5" stroke-linejoin="round"/>
+      ${sc.map((s,i)=>{const [x,y]=pt(i,R*Math.max(.04,s.p/100));return `<circle cx="${x}" cy="${y}" r="4" fill="${s.est?'#fff':color}" stroke="${color}" stroke-width="2"/>`}).join('')}
+      ${sc.map((s,i)=>{const [x,y]=pt(i,R+30);const anc=Math.abs(x-cx)<10?'middle':x>cx?'start':'end';const dx=anc==='start'?-14:anc==='end'?14:0;
+        return `<text x="${x+dx}" y="${y-3}" text-anchor="${anc}" class="hx-k">${s.k}</text><text x="${x+dx}" y="${y+13}" text-anchor="${anc}" class="hx-v">${s.est?'없음':s.p}</text>`}).join('')}
+    </svg>`;
+  }
+  return {scores,svg,pctOf,bN:bPool.length,pN:pPool.length,dN:dPool.length};
+})();
+NOTES.comb=NOTES.eff;
+function vsPitchers(p){
+  const S=Store,L=S.L.prod/S.L.pa,sAvg=p.B.AVG||0;const m=new Map(),ty={};TYPES.forEach(t=>ty[t.k]={pa:0,ab:0,h:0,pr:0});
+  p.bat.filter(b=>b.PA>0).forEach(b=>{const sp=S.oppStarter(b.game,p.team.i);
+    if(sp){const k=sp.team.id+'|'+sp.name;const o=m.get(k)||m.set(k,{sp,rows:[]}).get(k);o.rows.push(b)}
+    const op=S.pitOf(b.game).filter(x=>x.team.i!==p.team.i);const tot=op.reduce((a,x)=>a+x.BF,0);if(!tot)return;
+    op.forEach(x=>{const pl=S.player(x.team.id+'|'+x.name);const t=pl&&pl.ptype;if(!t)return;const w=x.BF/tot,o=ty[t];o.pa+=b.PA*w;o.ab+=b.AB*w;o.h+=b.H*w;o.pr+=S.prod(b)*w})});
+  const tag=(avg,ab)=>ab<3?'<span class="pill">표본 적음</span>':avg-sAvg>=.1?'<span class="pill good">강세</span>':avg-sAvg<=-.1?'<span class="pill bad">약세</span>':'<span class="pill">보통</span>';
+  const list=[...m.values()].map(o=>{const s=S.sumBat(o.rows);const pl=S.player(o.sp.team.id+'|'+o.sp.name);return {sp:o.sp,type:pl?.ptype||null,G:o.rows.length,s,idx:s.PA?Math.round(s.PROD/s.PA/L*100):null,tag:tag(s.AVG||0,s.AB)}}).sort((a,b)=>b.s.AB-a.s.AB||(b.s.AVG||0)-(a.s.AVG||0));
+  const types=TYPES.map(t=>{const o=ty[t.k];const avg=o.ab?o.h/o.ab:null;return {k:t.k,pa:o.pa,ab:o.ab,avg,idx:o.pa?Math.round(o.pr/o.pa/L*100):null,tag:o.pa>=3?tag(avg||0,o.ab):''}});
+  const q=list.filter(x=>x.s.AB>=3);const strong=q.filter(x=>(x.s.AVG||0)-sAvg>=.1).sort((a,b)=>b.s.AVG-a.s.AVG),weak=q.filter(x=>(x.s.AVG||0)-sAvg<=-.1).sort((a,b)=>a.s.AVG-b.s.AVG);
+  const tq=types.filter(x=>x.ab>=3&&x.avg!=null);const tb=tq.length?tq.reduce((a,b)=>b.avg>a.avg?b:a):null,tw=tq.length?tq.reduce((a,b)=>b.avg<a.avg?b:a):null;
+  let summary=`시즌 타율 <b>${f3(p.B.AVG)}</b> 기준, 선발로 상대한 투수 ${list.length}명 중 3타수 이상 맞붙은 투수는 ${q.length}명입니다. `;
+  summary+=strong.length?`강세: ${strong.slice(0,3).map(x=>`<b>${esc(x.sp.name)}</b>(${esc(x.sp.team.short)}) ${f3(x.s.AVG)}`).join(', ')}. `:'뚜렷한 강세 투수는 없습니다. ';
+  summary+=weak.length?`약세: ${weak.slice(0,3).map(x=>`<b>${esc(x.sp.name)}</b>(${esc(x.sp.team.short)}) ${f3(x.s.AVG)}`).join(', ')}. `:'뚜렷한 약세 투수는 없습니다. ';
+  if(tb&&tw&&tb!==tw)summary+=`유형별로는 <b>${tb.k}</b> 상대 타율이 ${f3(tb.avg)}로 가장 높고, <b>${tw.k}</b> 상대가 ${f3(tw.avg)}로 가장 낮습니다.`;
+  return {list,types,summary};
+}
+
 function playerSummary(p,D,C,R,pr){
   const B = p.B, P = p.P;
   let t = '';
