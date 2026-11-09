@@ -7610,7 +7610,6 @@ V.team.bind=()=>{
   }
   const goclub = $app && $app.querySelector ? $app.querySelector('[data-go-club]') : null;
   if(goclub) goclub.onclick = () => { UI.teamTab = 'club'; render(); };
-};
   $app.querySelectorAll('[data-tt]').forEach(b=>b.onclick=()=>{UI.teamTab=b.dataset.tt;const y=window.scrollY;render();window.scrollTo(0,y)});
   if(UI.teamTab==='club')bindTeamClubView();
   $app.querySelectorAll('[data-pp]').forEach(b=>b.onclick=()=>{UI.teamPitcher=b.dataset.pp;const y=window.scrollY;render();window.scrollTo(0,y)});
