@@ -6292,6 +6292,76 @@ html[data-theme="dark"] .stabs button.on:hover {
   white-space: nowrap !important;
 }
 
+
+/* ==========================================================================
+   STRICT MOBILE VS DESKTOP GNB / TABBAR ROUTING
+   ========================================================================== */
+@media (max-width: 900px) {
+  header.top nav,
+  .top nav,
+  #topnav {
+    display: none !important; /* Mobile strictly uses bottom .tabbar */
+  }
+  .tabbar,
+  #tabbar {
+    display: flex !important;
+  }
+}
+
+@media (min-width: 901px) {
+  header.top nav,
+  .top nav,
+  #topnav {
+    display: flex !important;
+  }
+  .tabbar,
+  #tabbar {
+    display: none !important;
+  }
+}
+
+/* ==========================================================================
+   MOBILE HERO BOARD HEADER: PREVENT BUTTON / TITLE OVERLAP
+   ========================================================================== */
+@media (max-width: 768px) {
+  .board .bhead {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 12px !important;
+  }
+  .board .bhead .badge {
+    flex-shrink: 0 !important;
+  }
+  .board .bname {
+    flex: 1 1 calc(100% - 90px) !important;
+    min-width: 0 !important;
+  }
+  .board .bname .tm {
+    white-space: nowrap !important;
+    font-size: clamp(18px, 5.2vw, 24px) !important;
+    line-height: 1.2 !important;
+  }
+  .board .vsbtns {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-top: 10px !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 6px !important;
+  }
+  .board .vsbtns .vsbtn {
+    width: 100% !important;
+    justify-content: center !important;
+    text-align: center !important;
+    margin: 0 !important;
+    padding: 8px 6px !important;
+    font-size: 12px !important;
+    box-sizing: border-box !important;
+  }
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
 </head>
@@ -8609,13 +8679,13 @@ V.lineup=(q,tid)=>{
   const th=teamTheme(t);const lid=parse().parts[2];
   const head=`<div class="board lu-b" style="background: linear-gradient(135deg, #0D043D 0%, #172554 60%, #0F5FA4 100%) !important; color: #ffffff !important;"><div class="bhead">${badge(t,76)}<div class="bname">
     <span class="wt-hero-slogan" style="margin-bottom:6px">WINNERS TOGETHER · FRIENDS</span>
-    <div class="tm" style="color:#ffffff !important;font-weight:900;font-size:26px !important">${esc(t.short)} 라인업</div>
+    <div class="tm" style="color:#ffffff !important;font-weight:900;font-size:clamp(19px, 5.2vw, 26px) !important;white-space:nowrap !important;letter-spacing:-0.03em !important;line-height:1.2 !important">${esc(t.short)} 라인업</div>
     <small style="color:rgba(255,255,255,0.92) !important">${esc(t.name)} · 이 기기 & 구글 시트 실시간 저장</small>
   </div>
-  <div style="display:flex;gap:8px;flex-wrap:wrap">
+  <span class="vsbtns">
     <button type="button" class="vsbtn" data-sheet-db style="color:#38bdf8;background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.5);cursor:pointer">📊 구글 시트 DB ↗</button>
     <a class="vsbtn" href="#/team/${t.id}" style="color:#ffffff;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.28)">구단 상세 ›</a>
-  </div></div></div>`;
+  </span></div></div>`;
   if(!lid){
     const L=LU.list(t.id);
     V.lineup.bind=()=>{};
