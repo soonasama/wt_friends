@@ -27,6 +27,12 @@ window.WT_ASSETS = {
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="여자야구 기록실">
 <meta name="description" content="한국여자야구연맹 등록 구단 2026 시즌 통합 기록실 — 순위, 경기 결과, 박스스코어, 선수 기록">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="shortcut icon" href="icons/favicon.png">
+<meta name="apple-mobile-web-app-title" content="WT프렌즈">
+<meta name="application-name" content="WT프렌즈">
 <title>여자야구 기록실 2026</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚾</text></svg>">
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
@@ -6250,6 +6256,7 @@ html[data-theme="dark"] .stabs button.on:hover {
 }
 
 </style>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
 </head>
 <body>
 <header class="top"><div class="in">
@@ -6268,7 +6275,12 @@ html[data-theme="dark"] .stabs button.on:hover {
 </div></header>
 <main id="app"><div class="loading">기록을 불러오는 중…</div></main>
 <span id="back" style="display:none !important"></span>
-<div class="foot">출처: KBSA 통합경기정보시스템(kbsa.or.kr) 동호인야구여성(연맹) 2026 시즌 기록, <span id="collected"></span> 수집. 타석·타수·안타·타점·득점·도루는 사이트 집계값, 장타·볼넷·사구·삼진 등은 타석 결과 기록을 세어 계산했습니다. 일부 경기는 KBSA에 박스스코어가 등록되지 않았습니다. · <a href="privacy.html" style="text-decoration:underline">개인정보처리방침</a></div>
+<div class="foot">
+  <div style="text-align:center;margin:16px 0 10px">
+    <button type="button" data-action="install-app" style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.08);border:1px solid var(--line);border-radius:999px;padding:7px 16px;color:var(--ink);font-size:12.5px;font-weight:700;cursor:pointer;transition:all 0.2s ease">
+      <span>📲</span> <span>홈 화면 바로가기 / 앱 아이콘 추가</span>
+    </button>
+  </div>출처: KBSA 통합경기정보시스템(kbsa.or.kr) 동호인야구여성(연맹) 2026 시즌 기록, <span id="collected"></span> 수집. 타석·타수·안타·타점·득점·도루는 사이트 집계값, 장타·볼넷·사구·삼진 등은 타석 결과 기록을 세어 계산했습니다. 일부 경기는 KBSA에 박스스코어가 등록되지 않았습니다. · <a href="privacy.html" style="text-decoration:underline">개인정보처리방침</a></div>
 <nav class="tabbar" id="tabbar"></nav>
 
 <script src="js/kbsa2026.js"></script>
@@ -6905,6 +6917,22 @@ V.home=()=>{
     </section>
     ${T.html}
     ${body}
+    
+    <!-- WT Friends App Install Banner -->
+    <div class="card app-install-banner" style="margin-top:28px;text-align:center;padding:24px 20px;background:linear-gradient(135deg, rgba(13,4,61,0.96) 0%, rgba(23,37,84,0.97) 100%);border:1px solid rgba(255,255,255,0.18);border-radius:20px;color:#ffffff;box-sizing:border-box">
+      <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:8px">
+        <img src="icons/icon-192.png" style="width:42px;height:42px;border-radius:11px;object-fit:contain;background:#091835;padding:2px;border:1.5px solid rgba(255,255,255,0.3)" alt="WT프렌즈 엠블럼">
+        <b style="font-size:18px;font-weight:900;letter-spacing:-0.025em">WT프렌즈 앱 아이콘 홈 화면에 추가하기</b>
+      </div>
+      <p style="font-size:13.5px;color:rgba(255,255,255,0.88);margin:0 auto 16px;max-width:520px;line-height:1.55;word-break:keep-all">
+        스마트폰 홈 화면이나 PC 바탕화면에 바로가기 앱 아이콘을 추가하여 언제든 원클릭으로 WT프렌즈 기록실에 접속하세요!
+      </p>
+      <div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap">
+        <button type="button" class="btn-install-app" data-action="install-app" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg, #F12F42 0%, #DC2626 100%);color:#ffffff;border:none;border-radius:999px;padding:12px 26px;font-size:14.5px;font-weight:900;cursor:pointer;box-shadow:0 4px 16px rgba(241,47,66,0.4);transition:transform 0.15s ease">
+          <span style="font-size:18px">📲</span> <span>홈 화면 바로가기 / 앱 설치</span>
+        </button>
+      </div>
+    </div>
   `;
 };
 
@@ -10403,7 +10431,28 @@ function bindTeamClubView() {
 V.comm = () => { setTimeout(()=>go('#/'), 0); return '<div class="loading">홈으로 이동 중…</div>'; };
 V.comm.bind = () => {};
 
-function luLoadH2C(){return window.html2canvas?Promise.resolve():new Promise((ok,no)=>{const s=document.createElement('script');s.src='lib/html2canvas.min.js';s.onload=ok;s.onerror=no;document.head.appendChild(s)})}
+function luLoadH2C(){
+  if(window.html2canvas) return Promise.resolve(window.html2canvas);
+  return new Promise((ok, no) => {
+    const s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js';
+    s.onload = () => ok(window.html2canvas);
+    s.onerror = () => {
+      const s2 = document.createElement('script');
+      s2.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+      s2.onload = () => ok(window.html2canvas);
+      s2.onerror = () => {
+        const s3 = document.createElement('script');
+        s3.src = 'https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.js';
+        s3.onload = () => ok(window.html2canvas);
+        s3.onerror = no;
+        document.head.appendChild(s3);
+      };
+      document.head.appendChild(s2);
+    };
+    document.head.appendChild(s);
+  });
+}
 
 const WT_GAS_URL = 'https://script.google.com/macros/s/AKfycbwJkdWv9a7BXTsI-rwdOasNLL11iJiBgMyzMrmIcGS_2VfR2_TeAA_z_nbEYY5Un7cO/exec';
 
@@ -10452,13 +10501,44 @@ async function saveLineupToGoogleSheet(l, t, btn) {
   }
 }
 
-function luSaveImage(l,t,btn){const el=document.getElementById('lcard');if(!el)return;const txt=btn.textContent;btn.textContent='만드는 중…';
-  luLoadH2C().then(()=>html2canvas(el,{scale:2,backgroundColor:null,useCORS:true})).then(cv=>{
-    const fn=`lineup-${(l.date||'').replace(/-/g,'')}-${(l.time||'').replace(':','')}-${t.id}.png`;
-    cv.toBlob(b=>{const f=new File([b],fn,{type:'image/png'});
-      const dl=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=fn;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500)};
-      if(navigator.canShare&&navigator.canShare({files:[f]})&&/Android|iPhone|iPad/i.test(navigator.userAgent)){navigator.share({files:[f],title:fn}).catch(dl)}else dl();
-      btn.textContent=txt},'image/png')}).catch(()=>{btn.textContent='저장 실패 — 다시 시도';setTimeout(()=>btn.textContent=txt,2500)})}
+function luSaveImage(l, t, btn) {
+  const el = document.getElementById('lcard');
+  if (!el) return;
+  const txt = btn.textContent;
+  btn.textContent = '⏳ 만드는 중…';
+  btn.disabled = true;
+
+  luLoadH2C()
+    .then(() => html2canvas(el, { scale: 2.5, backgroundColor: null, useCORS: true, logging: false }))
+    .then(cv => {
+      const fn = `lineup-${(l.date || '').replace(/-/g, '')}-${(l.time || '').replace(':', '')}-${t.id}.png`;
+      cv.toBlob(b => {
+        if (!b) throw new Error('Blob creation failed');
+        const dl = () => {
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(b);
+          a.download = fn;
+          document.body.appendChild(a);
+          a.click();
+          setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 2000);
+        };
+        const f = new File([b], fn, { type: 'image/png' });
+        if (navigator.canShare && navigator.canShare({ files: [f] }) && /Android|iPhone|iPad/i.test(navigator.userAgent)) {
+          navigator.share({ files: [f], title: fn }).catch(dl);
+        } else {
+          dl();
+        }
+        btn.textContent = '✅ 저장 완료!';
+        setTimeout(() => { btn.disabled = false; btn.textContent = txt; }, 2000);
+      }, 'image/png');
+    })
+    .catch(err => {
+      console.error('Lineup Save Image Error:', err);
+      btn.disabled = false;
+      btn.textContent = '저장 실패 — 다시 시도';
+      setTimeout(() => btn.textContent = txt, 2500);
+    });
+}
 /* =========================================================================
    4) ROUTER
    ========================================================================= */
@@ -10696,6 +10776,159 @@ document.addEventListener('click', e => {
 
 window.addEventListener('hashchange',render);
 let _mob=isMobile();window.addEventListener('resize',()=>{if(isMobile()!==_mob){_mob=isMobile();const y=window.scrollY;render();window.scrollTo(0,y)}});
+
+/* ==========================================================================
+   WT FRIENDS PWA & SHORTCUT INSTALLATION SYSTEM (MOBILE & PC CROSS-PLATFORM)
+   ========================================================================== */
+if (typeof navigator !== 'undefined' && 'serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
+}
+
+let deferredInstallPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+});
+
+function handleAppInstallClick() {
+  if (deferredInstallPrompt) {
+    deferredInstallPrompt.prompt();
+    deferredInstallPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        alert('🎉 WT프렌즈 앱 아이콘이 홈 화면에 성공적으로 추가되었습니다!');
+      }
+      deferredInstallPrompt = null;
+    });
+    return;
+  }
+
+  const ua = typeof navigator !== 'undefined' ? navigator.userAgent : '';
+  const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+  const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+
+  if (isIOS) {
+    showIosInstallModal();
+  } else if (!isMobile) {
+    showDesktopInstallModal();
+  } else {
+    showAndroidGuideModal();
+  }
+}
+
+function showIosInstallModal() {
+  const modal = document.createElement('div');
+  modal.className = 'tc-modal-wrap';
+  modal.style.zIndex = '9999';
+  modal.innerHTML = `
+    <div class="tc-modal-dialog" style="max-width:440px;padding:24px 20px;text-align:center;color:var(--ink);background:var(--card);border:1.5px solid var(--border);border-radius:20px;box-sizing:border-box">
+      <div style="display:flex;justify-content:center;margin-bottom:12px">
+        <img src="icons/icon-192.png" style="width:60px;height:60px;border-radius:14px;background:#091835;padding:3px;border:1.5px solid rgba(255,255,255,0.25)" alt="WT프렌즈">
+      </div>
+      <h3 style="font-size:18px;font-weight:900;margin-bottom:6px">아이폰 홈 화면에 바로가기 추가</h3>
+      <p style="font-size:13px;color:var(--mute);margin-bottom:16px;line-height:1.5">사파리(Safari) 브라우저에서 아래 2단계를 진행하시면 바탕화면에 엠블럼 아이콘이 생성됩니다.</p>
+      <div style="background:var(--bg-hover,#f1f5f9);border:1px solid var(--border);border-radius:14px;padding:14px 16px;text-align:left;font-size:13px;line-height:1.7;margin-bottom:18px">
+        <div><b>1단계:</b> 사파리 화면 하단 중앙의 <b>공유 버튼 (사각형 화살표 ⎋)</b>을 누릅니다.</div>
+        <div style="margin-top:6px"><b>2단계:</b> 아래로 스크롤하여 <b>[홈 화면에 추가 ➕]</b>를 누릅니다.</div>
+        <div style="margin-top:6px"><b>3단계:</b> 우측 상단의 <b>[추가]</b>를 누르면 완료!</div>
+      </div>
+      <button type="button" class="more-btn" style="width:100%;padding:11px;font-size:14px;font-weight:800;border-radius:10px;background:var(--ink);color:#fff;border:none;cursor:pointer">확인했습니다</button>
+    </div>
+  `;
+  modal.onclick = (e) => { if(e.target === modal || e.target.closest('button')) modal.remove(); };
+  document.body.appendChild(modal);
+}
+
+function showAndroidGuideModal() {
+  const modal = document.createElement('div');
+  modal.className = 'tc-modal-wrap';
+  modal.style.zIndex = '9999';
+  modal.innerHTML = `
+    <div class="tc-modal-dialog" style="max-width:440px;padding:24px 20px;text-align:center;color:var(--ink);background:var(--card);border:1.5px solid var(--border);border-radius:20px;box-sizing:border-box">
+      <div style="display:flex;justify-content:center;margin-bottom:12px">
+        <img src="icons/icon-192.png" style="width:60px;height:60px;border-radius:14px;background:#091835;padding:3px;border:1.5px solid rgba(255,255,255,0.25)" alt="WT프렌즈">
+      </div>
+      <h3 style="font-size:18px;font-weight:900;margin-bottom:6px">스마트폰 홈 화면에 바로가기 추가</h3>
+      <p style="font-size:13px;color:var(--mute);margin-bottom:16px;line-height:1.5">브라우저 메뉴에서 원클릭으로 홈 화면에 아이콘을 추가할 수 있습니다.</p>
+      <div style="background:var(--bg-hover,#f1f5f9);border:1px solid var(--border);border-radius:14px;padding:14px 16px;text-align:left;font-size:13px;line-height:1.7;margin-bottom:18px">
+        <div><b>1.</b> 브라우저 우측 상단 메뉴 <b>(점 3개 ⋮)</b>를 누릅니다.</div>
+        <div style="margin-top:6px"><b>2.</b> <b>[홈 화면에 추가]</b> 또는 <b>[앱 설치]</b>를 선택합니다.</div>
+      </div>
+      <button type="button" class="more-btn" style="width:100%;padding:11px;font-size:14px;font-weight:800;border-radius:10px;background:var(--ink);color:#fff;border:none;cursor:pointer">확인했습니다</button>
+    </div>
+  `;
+  modal.onclick = (e) => { if(e.target === modal || e.target.closest('button')) modal.remove(); };
+  document.body.appendChild(modal);
+}
+
+function showDesktopInstallModal() {
+  const modal = document.createElement('div');
+  modal.className = 'tc-modal-wrap';
+  modal.style.zIndex = '9999';
+  modal.innerHTML = `
+    <div class="tc-modal-dialog" style="max-width:480px;padding:26px 22px;text-align:center;color:var(--ink);background:var(--card);border:1.5px solid var(--border);border-radius:20px;box-sizing:border-box">
+      <div style="display:flex;justify-content:center;margin-bottom:12px">
+        <img src="icons/icon-192.png" style="width:64px;height:64px;border-radius:14px;background:#091835;padding:3px;border:1.5px solid rgba(255,255,255,0.25)" alt="WT프렌즈">
+      </div>
+      <h3 style="font-size:19px;font-weight:900;margin-bottom:6px">PC 바탕화면에 바로가기 만들기</h3>
+      <p style="font-size:13px;color:var(--mute);margin-bottom:18px;line-height:1.5">아래 방법 중 편하신 방식을 선택하시면 바탕화면에서 원클릭으로 접속하실 수 있습니다.</p>
+      
+      <div style="display:grid;gap:12px;margin-bottom:20px">
+        <div style="background:var(--bg-hover,#f1f5f9);border:1px solid var(--border);border-radius:14px;padding:14px 16px;text-align:left">
+          <b style="font-size:13.5px;color:var(--ink);display:block;margin-bottom:4px">방법 1: 바탕화면 바로가기 파일 즉시 다운로드</b>
+          <p style="font-size:12px;color:var(--mute);margin-bottom:10px">다운로드된 바로가기 파일을 바탕화면에 끌어다 놓으시면 됩니다.</p>
+          <button type="button" id="btnDownloadShortcutFile" style="display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg, #F12F42 0%, #DC2626 100%);color:#fff;border:none;border-radius:8px;padding:9px 16px;font-size:13px;font-weight:800;cursor:pointer">
+            <span>📥</span> <span>바로가기 파일(.url) 다운로드</span>
+          </button>
+        </div>
+
+        <div style="background:var(--bg-hover,#f1f5f9);border:1px solid var(--border);border-radius:14px;padding:14px 16px;text-align:left">
+          <b style="font-size:13.5px;color:var(--ink);display:block;margin-bottom:4px">방법 2: 브라우저 앱(PWA) 설치 (Chrome / Edge)</b>
+          <p style="font-size:12px;color:var(--mute);margin:0">상단 인터넷 주소창 우측의 <b>[설치 ⊕]</b> 아이콘을 클릭하시면 컴퓨터에 독립 실행형 앱으로 설치됩니다.</p>
+        </div>
+      </div>
+
+      <button type="button" class="more-btn" style="width:100%;padding:11px;font-size:14px;font-weight:800;border-radius:10px;background:var(--ink);color:#fff;border:none;cursor:pointer">닫기</button>
+    </div>
+  `;
+  modal.onclick = (e) => {
+    if(e.target === modal || (e.target.closest('button') && e.target.id !== 'btnDownloadShortcutFile')) {
+      modal.remove();
+    }
+  };
+  const dlBtn = modal.querySelector('#btnDownloadShortcutFile');
+  if (dlBtn) {
+    dlBtn.onclick = () => {
+      downloadDesktopShortcut();
+    };
+  }
+  document.body.appendChild(modal);
+}
+
+function downloadDesktopShortcut() {
+  const currentUrl = window.location.href.split('#')[0];
+  const shortcutContent = `[InternetShortcut]\r\nURL=${currentUrl}\r\nIconIndex=0\r\nIconFile=${currentUrl}icons/favicon.png\r\n`;
+  const blob = new Blob([shortcutContent], { type: 'application/octet-stream' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'WT프렌즈_야구기록실.url';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+// Global click delegation for install buttons
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-action="install-app"], #btnInstallApp');
+  if (btn) {
+    e.preventDefault();
+    handleAppInstallClick();
+  }
+});
+
+
 render();
 </script>
 
