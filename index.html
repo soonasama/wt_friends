@@ -6626,6 +6626,1209 @@ html, body {
   }
 }
 
+
+/* ==========================================================================
+   REFERENCE LINEUP CARD & CANDIDATE LIST MODERN STYLING (image_e68c79/e68cdb)
+   ========================================================================== */
+
+/* 1. Lineup List Thumbnail Cards (image_e68c79.png) */
+.clips {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)) !important;
+  gap: 16px !important;
+}
+
+.clip:not(.big) {
+  display: block !important;
+  background: #ffffff !important;
+  border: 3.5px solid #2563eb !important;
+  border-radius: 18px !important;
+  padding: 14px 16px !important;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.1) !important;
+  position: relative !important;
+  text-decoration: none !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.clip:not(.big):hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.18) !important;
+}
+
+.clip:not(.big)::before {
+  display: block !important;
+  content: "" !important;
+  width: 60px !important;
+  height: 10px !important;
+  background: #1e40af !important;
+  border-radius: 4px !important;
+  position: absolute !important;
+  top: -6px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 2 !important;
+}
+
+.clip:not(.big) .paper {
+  background: #ffffff !important;
+  border: none !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  color: #0f172a !important;
+}
+
+.clip:not(.big) .ph {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 6px !important;
+  border-bottom: 1.5px solid #e2e8f0 !important;
+  padding-bottom: 8px !important;
+  margin-bottom: 10px !important;
+}
+
+.clip:not(.big) .ph .ph-badge {
+  background: #eff6ff !important;
+  color: #1d4ed8 !important;
+  border: 1px solid #bfdbfe !important;
+  border-radius: 6px !important;
+  padding: 2px 8px !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+.clip:not(.big) .ph .ph-tag {
+  color: #64748b !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+}
+
+.clip:not(.big) dl {
+  display: grid !important;
+  grid-template-columns: 46px 1fr !important;
+  column-gap: 8px !important;
+  row-gap: 5px !important;
+  margin: 8px 0 !important;
+  font-size: 13px !important;
+}
+
+.clip:not(.big) dt {
+  color: #64748b !important;
+  font-weight: 600 !important;
+}
+
+.clip:not(.big) dd {
+  color: #0f172a !important;
+  font-weight: 700 !important;
+  margin: 0 !important;
+}
+
+.clip:not(.big) dd b.sun {
+  color: #dc2626 !important;
+  font-weight: 800 !important;
+}
+
+.clip:not(.big) .pf {
+  border-top: 1px solid #e2e8f0 !important;
+  padding-top: 8px !important;
+  margin-top: 8px !important;
+  font-size: 12.5px !important;
+  color: #475569 !important;
+  font-weight: 600 !important;
+}
+
+.clip:not(.big) .pf b {
+  color: #0f172a !important;
+  font-weight: 900 !important;
+}
+
+.clip:not(.big) .p-lock {
+  margin-top: 10px !important;
+  padding: 6px 10px !important;
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 8px !important;
+  font-size: 11.5px !important;
+  color: #0f172a !important;
+  font-weight: 700 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+
+.clip:not(.big) .p-lock small {
+  color: #64748b !important;
+  font-weight: 600 !important;
+  font-size: 11px !important;
+}
+
+.clip.add {
+  background: #ffffff !important;
+  border: 2px dashed #94a3b8 !important;
+  border-radius: 18px !important;
+  min-height: 240px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #475569 !important;
+  font-weight: 800 !important;
+  font-size: 14.5px !important;
+  text-decoration: none !important;
+  box-shadow: none !important;
+}
+
+.clip.add:hover {
+  background: #f8fafc !important;
+  border-color: #2563eb !important;
+  color: #2563eb !important;
+}
+
+/* 2. Candidate Row (.lu-bn) Clean Modern Styling (Fixes image_f06e9f.png) */
+.lu-bench {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+.lu-bn {
+  display: grid !important;
+  grid-template-columns: 36px 1fr 38px !important;
+  gap: 8px !important;
+  align-items: center !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+.lu-bn .n {
+  height: 38px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 10px !important;
+  font-weight: 800 !important;
+  font-size: 13.5px !important;
+  background: #f1f5f9 !important;
+  color: #334155 !important;
+  border: 1.5px solid #cbd5e1 !important;
+}
+
+.lu-bn select {
+  height: 38px !important;
+  border-radius: 10px !important;
+  border: 1.5px solid #cbd5e1 !important;
+  background: #ffffff !important;
+  color: #0f172a !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  padding: 0 12px !important;
+}
+
+.lu-bn button {
+  height: 38px !important;
+  width: 38px !important;
+  border-radius: 10px !important;
+  border: 1.5px solid #cbd5e1 !important;
+  background: #ffffff !important;
+  color: #64748b !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  padding: 0 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.lu-bn button:hover {
+  background: #fef2f2 !important;
+  border-color: #fca5a5 !important;
+  color: #ef4444 !important;
+}
+
+/* 3. Detailed Lineup Clipboard Card Preview (#lcard, image_e68cdb.png) */
+#lcard {
+  max-width: 540px !important;
+  margin: 0 auto !important;
+  background: #ffffff !important;
+  border: 4px solid #2563eb !important;
+  border-radius: 20px !important;
+  padding: 16px 18px 20px !important;
+  position: relative !important;
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.15) !important;
+}
+
+#lcard::before {
+  display: block !important;
+  content: "" !important;
+  width: 70px !important;
+  height: 12px !important;
+  background: #1e40af !important;
+  border-radius: 4px !important;
+  position: absolute !important;
+  top: -7px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 5 !important;
+}
+
+#lcard .paper {
+  background: #ffffff !important;
+  border: none !important;
+  padding: 0 !important;
+  color: #0f172a !important;
+}
+
+#lcard .lc-h {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  border-bottom: 2px solid #2563eb !important;
+  padding-bottom: 8px !important;
+  margin-bottom: 6px !important;
+}
+
+#lcard .lc-t {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  color: #0f172a !important;
+}
+
+#lcard .lc-m {
+  font-size: 12px !important;
+  color: #64748b !important;
+  margin-bottom: 12px !important;
+}
+
+#lcard table.lc-tb {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  font-size: 13px !important;
+  margin-bottom: 12px !important;
+}
+
+#lcard table.lc-tb th {
+  background: #f8fafc !important;
+  color: #475569 !important;
+  border-bottom: 1.5px solid #cbd5e1 !important;
+  padding: 6px 8px !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+}
+
+#lcard table.lc-tb td {
+  padding: 6px 8px !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+  color: #0f172a !important;
+  font-weight: 600 !important;
+}
+
+#lcard table.lc-tb td.ps {
+  color: #2563eb !important;
+  font-weight: 900 !important;
+}
+
+#lcard table.lc-tb td.nm {
+  font-weight: 800 !important;
+}
+
+#lcard .lc-f {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  padding: 8px 10px !important;
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 8px !important;
+  font-size: 12.5px !important;
+  color: #334155 !important;
+  margin-bottom: 14px !important;
+}
+
+#lcard .lc-f b {
+  color: #0f172a !important;
+  font-weight: 900 !important;
+}
+
+/* 4. Team Power Bars in Detailed Mode (image_e68cdb.png) */
+.lc-d {
+  border-top: 1.5px solid #e2e8f0 !important;
+  padding-top: 14px !important;
+  margin-top: 10px !important;
+}
+
+.lc-pw {
+  display: flex !important;
+  align-items: baseline !important;
+  gap: 8px !important;
+  margin-bottom: 12px !important;
+}
+
+.lc-pw span {
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+}
+
+.lc-pw b {
+  font-size: 26px !important;
+  font-weight: 900 !important;
+  color: #2563eb !important;
+}
+
+.lc-pw small {
+  font-size: 11px !important;
+  color: #64748b !important;
+}
+
+.lc-ax {
+  display: grid !important;
+  gap: 6px !important;
+  margin-bottom: 14px !important;
+}
+
+.lc-ax div {
+  display: grid !important;
+  grid-template-columns: 70px 1fr 34px !important;
+  gap: 8px !important;
+  align-items: center !important;
+  font-size: 12px !important;
+}
+
+.lc-ax span {
+  color: #475569 !important;
+  font-weight: 700 !important;
+}
+
+.lc-ax i {
+  position: relative !important;
+  height: 8px !important;
+  background: #e2e8f0 !important;
+  border-radius: 4px !important;
+  display: block !important;
+  overflow: hidden !important;
+}
+
+.lc-ax em {
+  display: block !important;
+  height: 100% !important;
+  background: #2563eb !important;
+  border-radius: 4px !important;
+}
+
+.lc-ax b {
+  text-align: right !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+}
+
+.lc-pr {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 6px !important;
+  background: #f1f5f9 !important;
+  border-radius: 10px !important;
+  padding: 10px !important;
+  text-align: center !important;
+  margin-bottom: 8px !important;
+}
+
+.lc-pr small {
+  display: block !important;
+  font-size: 11px !important;
+  color: #64748b !important;
+  margin-bottom: 2px !important;
+}
+
+.lc-pr b {
+  font-size: 15px !important;
+  font-weight: 900 !important;
+  color: #0f172a !important;
+}
+
+
+/* ==========================================================================
+   PERFECT DESKTOP & MOBILE COHESIVE LAYOUT + CONTRAST SYSTEM
+   ========================================================================== */
+
+/* 1. Desktop & Tablet Hero Board (.board .bhead): NO EMPTY SPACE */
+@media (min-width: 769px) {
+  .board .bhead {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    flex-wrap: nowrap !important;
+    gap: 28px !important;
+    width: 100% !important;
+    margin-bottom: 22px !important;
+  }
+  .bhead-info {
+    flex: 1 1 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    min-width: 0 !important;
+  }
+  .wt-bhead-top {
+    display: flex !important;
+    align-items: center !important;
+    gap: 16px !important;
+    width: 100% !important;
+  }
+  .wt-bhead-top .badge {
+    width: 76px !important;
+    height: 76px !important;
+    border-radius: 18px !important;
+    flex-shrink: 0 !important;
+  }
+  .wt-bhead-title-col {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+    min-width: 0 !important;
+  }
+  .wt-bhead-title-col .tm {
+    font-size: 28px !important;
+    font-weight: 900 !important;
+    color: #ffffff !important;
+    letter-spacing: -0.03em !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+  }
+  .wt-bhead-title-col .wt-hero-slogan {
+    background: rgba(241, 47, 66, 0.28) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(241, 47, 66, 0.6) !important;
+    border-radius: 6px !important;
+    padding: 3px 9px !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.04em !important;
+    display: inline-block !important;
+    width: fit-content !important;
+  }
+  .wt-bhead-sub {
+    font-size: 13.5px !important;
+    color: #f1f5f9 !important;
+    font-weight: 600 !important;
+    opacity: 1 !important;
+    margin: 0 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+  .board .vsbtns {
+    flex: 0 0 195px !important;
+    width: 195px !important;
+    max-width: 195px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 7px !important;
+    margin: 0 !important;
+  }
+  .board .vsbtns .vsbtn {
+    width: 100% !important;
+    padding: 8px 14px !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    border-radius: 10px !important;
+    text-align: left !important;
+    justify-content: flex-start !important;
+  }
+  .board .stats.four,
+  .board .stats {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 12px !important;
+    margin-top: 18px !important;
+  }
+}
+
+/* 2. Mobile Hero Board (.board .bhead): COMPACT & BALANCED */
+@media (max-width: 768px) {
+  .board {
+    padding: 16px 14px !important;
+    border-radius: 16px !important;
+  }
+  .board .bhead {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 6px !important;
+    width: 100% !important;
+  }
+  .bhead-info {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+  }
+  .wt-bhead-top {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+  .wt-bhead-top .badge {
+    width: 52px !important;
+    height: 52px !important;
+    border-radius: 12px !important;
+    flex-shrink: 0 !important;
+  }
+  .wt-bhead-title-col {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2px !important;
+    min-width: 0 !important;
+    flex: 1 !important;
+  }
+  .wt-bhead-title-col .tm {
+    font-size: clamp(17px, 4.8vw, 22px) !important;
+    font-weight: 900 !important;
+    color: #ffffff !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+  .wt-bhead-title-col .wt-hero-slogan {
+    background: rgba(241, 47, 66, 0.28) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(241, 47, 66, 0.6) !important;
+    border-radius: 4px !important;
+    padding: 2px 7px !important;
+    font-size: 10.5px !important;
+    font-weight: 800 !important;
+    display: inline-block !important;
+    width: fit-content !important;
+  }
+  .wt-bhead-sub {
+    width: 100% !important;
+    font-size: 12px !important;
+    color: #f1f5f9 !important;
+    font-weight: 600 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+  .board .vsbtns {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 6px !important;
+    margin-top: 10px !important;
+  }
+  .board .vsbtns .vsbtn:first-child {
+    grid-column: 1 / -1 !important;
+  }
+  .board .vsbtns .vsbtn {
+    width: 100% !important;
+    padding: 8px 6px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+    justify-content: center !important;
+  }
+  .board .stats.four,
+  .board .stats {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+    margin-top: 12px !important;
+  }
+}
+
+/* 3. Dark Board High Contrast Text Rule (Dark Background -> Bright Text) */
+.board .stat.dk {
+  background: rgba(0, 0, 0, 0.28) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  border-radius: 12px !important;
+  padding: 10px 12px !important;
+  text-align: center !important;
+}
+
+.board .stat.dk b {
+  color: #fbbf24 !important; /* Bright high-contrast gold */
+  font-weight: 900 !important;
+  font-size: clamp(18px, 4.8vw, 24px) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+.board .stat.dk span {
+  color: #f1f5f9 !important;
+  opacity: 0.95 !important;
+  font-weight: 700 !important;
+  font-size: 11.5px !important;
+}
+
+.board .bmini {
+  background: rgba(0, 0, 0, 0.28) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  border-radius: 12px !important;
+  padding: 8px 14px !important;
+  margin-top: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-around !important;
+  flex-wrap: wrap !important;
+  gap: 6px 14px !important;
+}
+
+.board .bmini span {
+  color: #e2e8f0 !important;
+  font-weight: 600 !important;
+  font-size: 12.5px !important;
+}
+
+.board .bmini span b {
+  color: #ffffff !important;
+  font-weight: 900 !important;
+}
+
+/* 4. Lineup List Cards (Strict Blue Clipboard Border on All Themes, NO GREEN) */
+.clip:not(.big),
+html[data-theme="light"] .clip:not(.big),
+html[data-theme="dark"] .clip:not(.big) {
+  background: #ffffff !important;
+  border: 3px solid #2563eb !important;
+  border-top: 3px solid #2563eb !important;
+  border-radius: 18px !important;
+  padding: 16px 14px 14px !important;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.1) !important;
+  color: #0f172a !important;
+  text-decoration: none !important;
+  position: relative !important;
+}
+
+.clip:not(.big)::before {
+  display: block !important;
+  content: "" !important;
+  width: 54px !important;
+  height: 10px !important;
+  background: #1e40af !important;
+  border-radius: 4px !important;
+  position: absolute !important;
+  top: -6px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 5 !important;
+}
+
+.clip:not(.big) .paper,
+html[data-theme="light"] .clip:not(.big) .paper,
+html[data-theme="dark"] .clip:not(.big) .paper {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border: none !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+.clip:not(.big) dl,
+html[data-theme="light"] .clip:not(.big) dl,
+html[data-theme="dark"] .clip:not(.big) dl {
+  display: grid !important;
+  grid-template-columns: 46px 1fr !important;
+  column-gap: 8px !important;
+  row-gap: 5px !important;
+  margin: 8px 0 !important;
+  font-size: 13px !important;
+  color: #0f172a !important;
+}
+
+.clip:not(.big) dt,
+html[data-theme="light"] .clip:not(.big) dt,
+html[data-theme="dark"] .clip:not(.big) dt {
+  color: #64748b !important;
+  font-weight: 600 !important;
+}
+
+.clip:not(.big) dd,
+html[data-theme="light"] .clip:not(.big) dd,
+html[data-theme="dark"] .clip:not(.big) dd {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+  margin: 0 !important;
+}
+
+.clip:not(.big) dd b.sun {
+  color: #dc2626 !important;
+  font-weight: 800 !important;
+}
+
+.clip:not(.big) .pf,
+html[data-theme="light"] .clip:not(.big) .pf,
+html[data-theme="dark"] .clip:not(.big) .pf {
+  border-top: 1px solid #e2e8f0 !important;
+  padding-top: 8px !important;
+  margin-top: 8px !important;
+  font-size: 12.5px !important;
+  color: #475569 !important;
+  font-weight: 700 !important;
+}
+
+.clip:not(.big) .pf b,
+html[data-theme="light"] .clip:not(.big) .pf b,
+html[data-theme="dark"] .clip:not(.big) .pf b {
+  color: #0f172a !important;
+  font-weight: 900 !important;
+}
+
+
+/* =========================================================================
+   DEFINITIVE RESPONSIVE BOARD & HIGH-CONTRAST DARK THEME RULES
+   ========================================================================= */
+
+/* 1. Board Container & Spacing */
+.board {
+  border-radius: 20px !important;
+  padding: 22px 24px !important;
+  box-sizing: border-box !important;
+}
+
+.bhead-info {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+.wt-bhead-top {
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+}
+
+.wt-bhead-title-col {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  align-items: flex-start !important;
+}
+
+.wt-hero-slogan {
+  display: inline-flex !important;
+  align-items: center !important;
+  background: rgba(220, 38, 38, 0.9) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: 6px !important;
+  padding: 3px 10px !important;
+  font-size: 11.5px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.05em !important;
+  white-space: nowrap !important;
+  text-transform: uppercase !important;
+}
+
+.wt-bhead-sub {
+  color: #f1f5f9 !important;
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
+}
+
+/* 2. PC / Desktop Layout (min-width: 769px): No empty void! */
+@media (min-width: 769px) {
+  .board .bhead {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 24px !important;
+    margin-bottom: 18px !important;
+  }
+  .bhead-info {
+    flex: 1 1 auto !important;
+  }
+  .board .vsbtns {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    max-width: 490px !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin: 0 !important;
+  }
+  .board .vsbtns .vsbtn {
+    width: auto !important;
+    padding: 8px 14px !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    border-radius: 8px !important;
+    white-space: nowrap !important;
+    text-align: center !important;
+    justify-content: center !important;
+  }
+  .board .stats.four {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 12px !important;
+    margin-top: 14px !important;
+  }
+}
+
+/* 3. Mobile Layout (max-width: 768px): Balanced 2-column grid */
+@media (max-width: 768px) {
+  .board {
+    padding: 16px 14px !important;
+    border-radius: 16px !important;
+  }
+  .board .bhead {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+    margin-bottom: 14px !important;
+  }
+  .wt-bhead-top {
+    gap: 12px !important;
+  }
+  .board .vsbtns {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 6px !important;
+    margin: 0 !important;
+  }
+  .board .vsbtns .vsbtn {
+    width: 100% !important;
+    padding: 9px 8px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    border-radius: 8px !important;
+    text-align: center !important;
+    justify-content: center !important;
+  }
+  .board .vsbtns .vsbtn:first-child {
+    grid-column: 1 / -1 !important;
+  }
+  .board .stats.four {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+    margin-top: 12px !important;
+  }
+}
+
+/* 4. Dark Background High Contrast Rules */
+.board .stat.dk {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  border-radius: 12px !important;
+  padding: 12px 14px !important;
+  text-align: center !important;
+  backdrop-filter: blur(8px) !important;
+}
+.board .stat.dk b {
+  color: #fbbf24 !important; /* Bright Gold */
+  font-size: clamp(22px, 3.2vw, 30px) !important;
+  font-weight: 900 !important;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.4) !important;
+  display: block !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.02em !important;
+}
+.board .stat.dk span {
+  color: #f8fafc !important; /* Crisp Light Slate */
+  font-size: 12.5px !important;
+  font-weight: 700 !important;
+  display: block !important;
+  margin-top: 4px !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
+}
+.board .bmini {
+  background: rgba(0, 0, 0, 0.28) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  border-radius: 10px !important;
+  color: #f1f5f9 !important;
+  font-size: 12.5px !important;
+  font-weight: 600 !important;
+  padding: 10px 14px !important;
+  margin-top: 12px !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 12px 18px !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.board .bmini span {
+  color: #e2e8f0 !important;
+}
+.board .bmini b {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+}
+
+/* 5. Lineup Clipboard Cards: Royal Blue Frame, NO green border, single colon */
+.clip:not(.big),
+html[data-theme="light"] .clip:not(.big),
+html[data-theme="dark"] .clip:not(.big) {
+  background: #ffffff !important;
+  border: 3px solid #2563eb !important;
+  border-top: 3px solid #2563eb !important;
+  border-radius: 18px !important;
+  padding: 16px 14px 14px !important;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.1) !important;
+  color: #0f172a !important;
+  text-decoration: none !important;
+  position: relative !important;
+}
+
+.clip:not(.big)::before {
+  display: block !important;
+  content: "" !important;
+  width: 54px !important;
+  height: 10px !important;
+  background: #1e40af !important;
+  border-radius: 4px !important;
+  position: absolute !important;
+  top: -6px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 5 !important;
+}
+
+.clip:not(.big) .paper,
+html[data-theme="light"] .clip:not(.big) .paper,
+html[data-theme="dark"] .clip:not(.big) .paper {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border: none !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+.clip:not(.big) dl,
+html[data-theme="light"] .clip:not(.big) dl,
+html[data-theme="dark"] .clip:not(.big) dl {
+  display: grid !important;
+  grid-template-columns: 46px 1fr !important;
+  column-gap: 8px !important;
+  row-gap: 5px !important;
+  margin: 8px 0 !important;
+  font-size: 13px !important;
+  color: #0f172a !important;
+}
+
+.clip:not(.big) dt,
+html[data-theme="light"] .clip:not(.big) dt,
+html[data-theme="dark"] .clip:not(.big) dt {
+  color: #64748b !important;
+  font-weight: 600 !important;
+}
+
+.clip:not(.big) dd,
+html[data-theme="light"] .clip:not(.big) dd,
+html[data-theme="dark"] .clip:not(.big) dd {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+  margin: 0 !important;
+}
+
+.clip:not(.big) dd b.sun {
+  color: #dc2626 !important;
+  font-weight: 800 !important;
+}
+
+.clip:not(.big) .pf,
+html[data-theme="light"] .clip:not(.big) .pf,
+html[data-theme="dark"] .clip:not(.big) .pf {
+  border-top: 1px solid #e2e8f0 !important;
+  padding-top: 8px !important;
+  margin-top: 8px !important;
+  font-size: 12.5px !important;
+  color: #475569 !important;
+  font-weight: 700 !important;
+}
+
+.clip:not(.big) .pf b,
+html[data-theme="light"] .clip:not(.big) .pf b,
+html[data-theme="dark"] .clip:not(.big) .pf b {
+  color: #0f172a !important;
+  font-weight: 900 !important;
+}
+
+
+/* =========================================================================
+   PERFECT POLISH: TOPBAR CENTER, UNIFORM BUTTONS, BACK NUMBER CHIP
+   ========================================================================= */
+
+/* 1. Global Navigation Bar: Menu Centered between Logo and Buttons */
+@media (min-width: 769px) {
+  .top .in {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    max-width: 1240px !important;
+    margin: 0 auto !important;
+    padding: 0 16px !important;
+    box-sizing: border-box !important;
+  }
+  .brand {
+    flex: 0 0 auto !important;
+  }
+  #topnav {
+    flex: 1 1 auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    margin: 0 20px !important;
+  }
+  .team-nav-box {
+    flex: 0 0 auto !important;
+    margin-left: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+}
+
+/* 2. Board Topline: Seoul Nowon-gu Line + Division Chips on Top */
+.wt-board-topline {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14) !important;
+  padding-bottom: 12px !important;
+  margin-bottom: 16px !important;
+  flex-wrap: wrap !important;
+}
+.wt-board-topline .wt-hero-slogan {
+  margin: 0 !important;
+}
+.wt-board-topline .wt-bhead-sub {
+  color: #f1f5f9 !important;
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  flex-wrap: wrap !important;
+}
+
+/* 3. Board Middle Tier: Large Logo + Title + Uniform Equal Sized Action Buttons */
+@media (min-width: 769px) {
+  .board .bhead {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 28px !important;
+    margin-bottom: 18px !important;
+  }
+  .bhead-info {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+  }
+  .board .vsbtns {
+    flex: 0 0 340px !important;
+    width: 340px !important;
+    max-width: 340px !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+    margin: 0 !important;
+  }
+  .board .vsbtns .vsbtn {
+    width: 100% !important;
+    height: 40px !important;
+    padding: 0 10px !important;
+    font-size: 12.5px !important;
+    font-weight: 700 !important;
+    border-radius: 9px !important;
+    white-space: nowrap !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+  }
+
+  /* Dugout 2 equal buttons */
+  .board .vsbtns.wt-dugout-btns {
+    grid-template-columns: repeat(2, 1fr) !important;
+    width: 340px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .board .bhead {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 14px !important;
+    margin-bottom: 14px !important;
+  }
+  .board .vsbtns {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 7px !important;
+  }
+  .board .vsbtns .vsbtn {
+    width: 100% !important;
+    height: 38px !important;
+    padding: 0 8px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    border-radius: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+  }
+}
+
+/* 4. Back Number Chip (.p-no-chip, .p-bat-wrap) */
+.p-bat-wrap {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  vertical-align: middle !important;
+  white-space: nowrap !important;
+}
+.p-no-chip {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgba(37, 99, 235, 0.08) !important;
+  color: #2563eb !important;
+  border: 1.5px solid rgba(37, 99, 235, 0.3) !important;
+  border-radius: 6px !important;
+  padding: 1px 6px !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  line-height: 1.1 !important;
+  white-space: nowrap !important;
+  letter-spacing: -0.02em !important;
+  flex-shrink: 0 !important;
+}
+html[data-theme="dark"] .p-no-chip {
+  background: rgba(56, 189, 248, 0.15) !important;
+  color: #38bdf8 !important;
+  border-color: rgba(56, 189, 248, 0.4) !important;
+}
+
+/* Remove old buggy lu-face-thumb in tables */
+td .lu-face-thumb,
+.bl .lu-face-thumb {
+  display: none !important;
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
 </head>
@@ -6659,6 +7862,8 @@ html, body {
 <script src="js/wt_assets.js"></script>
 <script src="js/fielding.js"></script>
 <script>
+
+
 /* =========================================================================
    1) DATA LAYER — 앱으로 옮길 때 이 부분만 API 호출로 바꾸면 됩니다.
    ========================================================================= */
@@ -6896,8 +8101,7 @@ function playerPhotoThumb(name, size=32){
     const p = Store.player('aSEa0076|' + name);
     if(p && p.no) no = p.no;
   } catch(e){}
-  const label = no ? '#' + no : esc(name.slice(0, 1));
-  return '<span class="player-num-chip" title="' + esc(name) + '">' + label + '</span>';
+  return '<span class="lu-face-thumb empty" style="width:' + size + 'px;height:' + size + 'px" title="' + esc(name) + '"><span>' + (no || esc(name.slice(0,1))) + '</span></span>';
 }
 
 const badge=(t,size=40)=>{const th=teamTheme(t);
@@ -6954,12 +8158,8 @@ function subtabs(key,items,def){
   return {cur,html:`<div class="stabs">${items.map(([k,l])=>`<button data-st="${key}:${k}" class="${k===cur?'on':''}">${l}</button>`).join('')}</div>`};
 }
 document.addEventListener('click',e=>{const b=e.target.closest('[data-st]');if(!b)return;const i=b.dataset.st.indexOf(':');UI.sub[b.dataset.st.slice(0,i)]=b.dataset.st.slice(i+1);const y=window.scrollY;render();window.scrollTo(0,y)});
-const GRADES = [[120, '매우 좋음', 'gr5'], [105, '좋음', 'gr4']];
-const grade = v => {
-  if (v == null || v < 105) return '';
-  const g = GRADES.find(g => v >= g[0]);
-  return g ? `<span class="grade ${g[2]}">${g[1]}</span>` : '';
-};
+const GRADES=[[120,'매우 좋음','gr5'],[105,'좋음','gr4'],[95,'평균','gr3'],[80,'아쉬움','gr2'],[-1e9,'부진','gr1']];
+const grade=v=>v==null?'':(([,l,c])=>`<span class="grade ${c}">${l}</span>`)(GRADES.find(g=>v>=g[0]));
 const NOTES={
   src:'타석·타수·안타·타점·득점·도루는 KBSA 박스스코어 집계값을 그대로 쓰고, 2루타·3루타·홈런·볼넷·고의4구·사구·삼진·희생타·희생플라이·병살·도루자·실책 출루는 타석 결과 원문을 세어 계산했습니다. 서울노원구WT프렌즈 기록은 KBSA 팀 기록실과 타격·투구 전 항목이 일치함을 확인했습니다.',
   rates:'타율 = 안타 ÷ 타수 · 출루율 = (안타 + 볼넷 + 사구) ÷ (타수 + 볼넷 + 사구 + 희생플라이) · 장타율 = 루타 ÷ 타수 · OPS = 출루율 + 장타율 · 루타 = 1루타 + 2×2루타 + 3×3루타 + 4×홈런.',
@@ -6980,7 +8180,7 @@ const NOTES={
   qual:'비율 기록 순위는 타자 40타석, 투수 20이닝 이상이 기준입니다(이 사이트 자체 기준). 같은 구단에서 이름이 같은 선수는 KBSA 표기대로 한 명으로 합칩니다.',
   missing:'KBSA에 박스스코어가 없는 경기(미진행·기록 미등록 7경기)와 연합팀 쪽 기록은 집계에서 빠집니다.',
 };
-const note=(...keys)=>'';
+const note=(...keys)=>`<div class="notes"><b>기준 메모</b><ul>${keys.map(k=>`<li>${NOTES[k]||k}</li>`).join('')}</ul></div>`;
 
 /* ---------- 차트 (SVG/CSS, 숫자 함께 표시) ---------- */
 function barList(items,opt={}){ // items: {label, sub, v, text, color}
@@ -7101,7 +8301,6 @@ const V={};
 const $app=document.getElementById('app');
 window.UI=null;var UI={sub:{},standComp:null,standDiv:'',gamesComp:'',gamesTeam:'',gamesMonth:'',gamesDiv:'',teamsSido:'',teamsDiv:'',rankCat:'TOT',rankQ:'',teamTab:'sum',teamPitcher:'',teamOpp:'',gameTab:'h',playerTab:'bat'};
 
-
 V.home = (q) => {
   return V.team(q || {}, 'aSEa0076');
 };
@@ -7122,15 +8321,24 @@ V.dugout = () => {
 
   return `
     <div class="board" style="background: linear-gradient(135deg, #0D043D 0%, #172554 60%, #0F5FA4 100%) !important; color:#ffffff !important; margin-bottom: 22px !important;">
+      <div class="wt-board-topline">
+        <span class="wt-hero-slogan">WINNERS TOGETHER · FRIENDS</span>
+        <span class="wt-bhead-sub">서울 노원구 · 2026 시즌 등록 선수단 22명 공식 클럽하우스</span>
+      </div>
       <div class="bhead">
-        <div class="wt-bhead-top">
-          ${badge(wt, 54)}
-          <div class="wt-bhead-title-col">
-            <div class="tm" style="font-size:clamp(17px, 4.8vw, 24px) !important; color:#ffffff !important; white-space:nowrap !important; font-weight:900 !important; letter-spacing:-0.03em !important; line-height:1.2 !important">🧢 WT프렌즈 덕아웃 (Dugout)</div>
-            <span class="wt-hero-slogan" style="margin-top:2px;font-size:10.5px;padding:2px 8px;border-radius:4px;background:rgba(241,47,66,0.22);color:#fca5a5;border:1px solid rgba(241,47,66,0.4);white-space:nowrap !important;display:inline-block;width:fit-content">WINNERS TOGETHER · FRIENDS</span>
+        <div class="bhead-info">
+          <div class="wt-bhead-top">
+            ${badge(wt, 88)}
+            <div class="wt-bhead-title-col">
+              <div class="tm" style="font-size:clamp(22px, 3.5vw, 30px) !important; color:#ffffff !important; white-space:nowrap !important; font-weight:900 !important">🧢 WT프렌즈 덕아웃 (Dugout)</div>
+              <div class="wt-bhead-desc" style="color:#f1f5f9;font-size:13px;font-weight:600;margin-top:4px">선수 카드를 클릭하면 세부 타격·투구 분석 및 히트맵을 볼 수 있습니다.</div>
+            </div>
           </div>
         </div>
-        <div class="wt-bhead-sub" style="margin-top:6px;font-size:12px;color:rgba(255,255,255,0.9);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">2026 시즌 등록 선수단 22명 · 선수를 누르면 세부 타격·투구 공식 기록을 볼 수 있습니다.</div>
+        <span class="vsbtns wt-dugout-btns">
+          <a class="vsbtn pri" href="#/home" style="background:linear-gradient(135deg, #ef4444 0%, #dc2626 100%);color:#ffffff;border:1px solid #f87171;font-weight:800">🏠 홈 기록실 ›</a>
+          <a class="vsbtn" href="#/lineup/aSEa0076" style="background:rgba(255,255,255,0.15);color:#ffffff;border:1px solid rgba(255,255,255,0.35);font-weight:700">📋 라인업 짜기 ›</a>
+        </span>
       </div>
     </div>
     <div class="wt-roster-grid">
@@ -7426,7 +8634,7 @@ V.game=(q,id)=>{
     <div class="big">${g.hs==null?'<span style="font-size:15px">'+(g.status==='몰수/기권'?'몰수/기권':'결과 없음')+'</span>':`<span class="${winner==='a'?'l':''}">${g.hs}</span> : <span class="${winner==='h'?'l':''}">${g.as}</span>`}</div>
     <div class="tm r">${badge(g.away,60)}<div>${tlink(g.away)}<small>원정${winner==='a'?' · 승':''}</small></div></div></div>
     <div class="info">${g.date.replace(/-/g,'.')} (${g.dow}) ${g.time} · ${esc(g.comp.name)} · ${esc(g.round)}${divPill(g.round)}</div>
-    </div>
+    ${(g.boxH||g.boxA)?`<div style="margin-top:10px;display:flex;justify-content:center"><button class="vsbtn" data-gmvp="${g.id}" style="background:#10B981;color:#042F2E;border:0;cursor:pointer;font-weight:900;padding:7px 14px;border-radius:999px">👑 Today's MVP 카드 만들기 ›</button></div>`:''}</div>
   ${T.html}${body}`;
 };
 V.game.bind=()=>{
@@ -7710,7 +8918,14 @@ function openTeamChartModal(teamId, initialType) {
 V.team=(q,id)=>{
   const S=Store,t=S.team(id);if(!t)return '<div class="empty">구단을 찾을 수 없습니다</div>';
   const A=analyzeTeam(t),r=A.rec,tab=UI.teamTab,th=teamTheme(t),tc=th.bg;let body='';
-  const pBat=n=>`<span style="display:inline-flex;align-items:center;gap:6px">${playerPhotoThumb(n,22)}${plink(t,n)}</span>`;const md=d=>d.slice(5).replace('-','.');
+  const pBat = n => {
+    let noChip = '';
+    try {
+      const pl = Store.player(t.id + '|' + n);
+      if (pl && pl.no) noChip = `<span class="p-no-chip">#${pl.no}</span>`;
+    } catch(e) {}
+    return `<span class="p-bat-wrap">${noChip}${plink(t, n)}</span>`;
+  };const md=d=>d.slice(5).replace('-','.');
   if(tab==='sum'){
     const s=subtabs('tsum',[['flow','시즌 흐름'],['players','주요 선수'],['vs','상성']]);body=s.html;
     if(s.cur==='flow'){
@@ -7740,8 +8955,8 @@ V.team=(q,id)=>{
     if(s.cur==='players'){
       const ef=n=>EFF.get(Store.player(t.id+'|'+n))||{};const top=A.batters.slice().sort((a,b)=>(ef(b.name).total??0)-(ef(a.name).total??0)).slice(0,8);const qp=A.pitchers.slice().sort((a,b)=>(ef(b.name).pit??0)-(ef(a.name).pit??0)).slice(0,6);
       const tr=A.batters.filter(b=>b.recent).sort((a,b)=>b.recent.diff-a.recent.diff);
-      body+=`<h2>팀 주요 타자 (OPS 기준)</h2><div class="card">${barList(top.map(b=>{const e=ef(b.name);return {label:pBat(b.name),sub:`타자 ${e.bat??'-'} · 수비 ${e.def??'-'} · 투수 ${e.pit??'-'} · ${esc(b.mainPos)} · 주로 ${b.mainOrder||'-'}번 · ${b.s.PA}타석 ${grade(e.total)}`,v:e.total||0,text:e.total??'-',color:tc}}),{ref:100,refLabel:'리그 평균'})}</div>
-      <h2>팀 주요 투수 (이닝/ERA 기준)</h2><div class="card">${barList(qp.map(p=>{const e=ef(p.name);return {label:pBat(p.name),sub:`${ipStr(p.ps.outs)}이닝 · ERA ${f2(p.ps.ERA)} ${grade(e.pit)}`,v:e.pit||0,text:e.pit??'-',color:tc}}),{ref:100,refLabel:'리그 평균'})}</div>
+      body+=`<h2>종합 지수 상위</h2><div class="card">${barList(top.map(b=>{const e=ef(b.name);return {label:pBat(b.name),sub:`타자 ${e.bat??'-'} · 수비 ${e.def??'-'} · 투수 ${e.pit??'-'} · ${esc(b.mainPos)} · 주로 ${b.mainOrder||'-'}번 · ${b.s.PA}타석 ${grade(e.total)}${e.totalCap||e.batCap?' · 규정 미달':''}`,v:e.total||0,text:e.total??'-',color:tc}}),{ref:100,refLabel:'리그 평균'})}</div>
+      <h2>투수 FIP+</h2><div class="card">${barList(qp.map(p=>{const e=ef(p.name);return {label:pBat(p.name),sub:`${ipStr(p.ps.outs)}이닝 · ERA ${f2(p.ps.ERA)} ${grade(e.pit)}${e.pitCap?' · 규정 미달':''}`,v:e.pit||0,text:e.pit??'-',color:tc}}),{ref:100,refLabel:'리그 평균'})}</div>
       <h2>최근 5경기 출루율 변화</h2><div class="card">${tr.length?dumbbell(tr.slice(0,4).concat(tr.slice(-4).filter(x=>!tr.slice(0,4).includes(x))).map(b=>({label:pBat(b.name),sub:trendCell(b.recent),a:b.s.OBP||0,b:b.recent.s.OBP||0,ta:f3(b.s.OBP),tb:f3(b.recent.s.OBP)})),{max:1}):'<div class="sub">비교할 수 있는 선수가 없습니다</div>'}</div>
       ${note('eff','effq','grade','trend')}`;}
     if(s.cur==='vs'){
@@ -7759,102 +8974,28 @@ V.team=(q,id)=>{
   }
   if(tab==='bat'){
     const s=subtabs('tbat',[['chart','그래프'],['table','기록표'],['trend','최근 추세']]);body=s.html;
-    if(s.cur==='chart'){const ef=n=>EFF.get(Store.player(t.id+'|'+n))||{};body+=`<div class="card">${barList(A.batters.slice().sort((a,b)=>(ef(b.name).bat??0)-(ef(a.name).bat??0)).map(b=>{const e=ef(b.name);return {label:pBat(b.name),sub:`${esc(b.mainPos||'-')} · 주로 ${b.mainOrder||'-'}번 · ${b.s.PA}타석 · 타율 ${f3(b.s.AVG)} · 타점 ${b.s.RBI} ${grade(e.bat)}`,v:e.bat||0,text:e.bat??'-',color:tc}}),{ref:100,refLabel:'리그 평균'})}</div>${note('eff','effq','effc','grade')}`;}
+    if(s.cur==='chart'){const ef=n=>EFF.get(Store.player(t.id+'|'+n))||{};body+=`<div class="card">${barList(A.batters.slice().sort((a,b)=>(ef(b.name).bat??0)-(ef(a.name).bat??0)).map(b=>{const e=ef(b.name);return {label:pBat(b.name),sub:`${esc(b.mainPos||'-')} · 주로 ${b.mainOrder||'-'}번 · ${b.s.PA}타석 · 타율 ${f3(b.s.AVG)} · 타점 ${b.s.RBI} ${grade(e.bat)}${e.batCap?' · 규정 미달':''}`,v:e.bat||0,text:e.bat??'-',color:tc}}),{ref:100,refLabel:'리그 평균'})}</div>${note('eff','effq','effc','grade')}`;}
     if(s.cur==='table')body+=table([{k:'name',t:'선수',l:1,cls:'name',f:b=>pBat(b.name)},{k:'pos',t:'포지션',l:1},{k:'orders',t:'타순',l:1},
       {k:'G',t:'경기',v:b=>b.s.G},{k:'GS',t:'선발',v:b=>b.starts},{k:'PA',t:'타석',v:b=>b.s.PA},{k:'AB',t:'타수',v:b=>b.s.AB},{k:'H',t:'안타',v:b=>b.s.H},{k:'B2',t:'2루타',v:b=>b.s.B2},{k:'B3',t:'3루타',v:b=>b.s.B3},{k:'HR',t:'홈런',v:b=>b.s.HR},
       {k:'TB',t:'루타',v:b=>b.s.TB},{k:'RBI',t:'타점',v:b=>b.s.RBI},{k:'R',t:'득점',v:b=>b.s.R},{k:'SB',t:'도루',v:b=>b.s.SB},{k:'CS',t:'도루자',v:b=>b.s.CS},{k:'BB',t:'볼넷',v:b=>b.s.BB},{k:'IBB',t:'고의4구',v:b=>b.s.IBB},
       {k:'HBP',t:'사구',v:b=>b.s.HBP},{k:'SO',t:'삼진',v:b=>b.s.SO},{k:'SF',t:'희비',v:b=>b.s.SF},{k:'SH',t:'희타',v:b=>b.s.SH},{k:'GIDP',t:'병살',v:b=>b.s.GIDP},
       {k:'AVG',t:'타율',v:b=>b.s.AVG,f:b=>f3(b.s.AVG)},{k:'OBP',t:'출루율',v:b=>b.s.OBP,f:b=>f3(b.s.OBP)},{k:'SLG',t:'장타율',v:b=>b.s.SLG,f:b=>f3(b.s.SLG)},{k:'OPS',t:'OPS',v:b=>b.s.OPS,f:b=>f3(b.s.OPS)},
-      {k:'EO',t:'종료 아웃',v:b=>b.s.EO},{k:'T2',t:'2아웃 출루',v:b=>b.s.T2PA?b.s.T2OB/b.s.T2PA:null,f:b=>b.s.T2PA?`${b.s.T2OB}/${b.s.T2PA}`:'-'},{k:'fp',t:'수비율',v:b=>Field.defIdx(t,b.name)?.pct,f:b=>{const d=Field.defIdx(t,b.name);return d?f3(d.pct):'-'}},{k:'fe',t:'실책',v:b=>Field.defIdx(t,b.name)?.e,f:b=>{const d=Field.defIdx(t,b.name);return d?fmtN(d.e):'-'}}],A.batters,{sort:'OPS'})+note('eff','effq','effc','grade','rates','src');
+      {k:'EO',t:'종료 아웃',v:b=>b.s.EO},{k:'T2',t:'2아웃 출루',v:b=>b.s.T2PA?b.s.T2OB/b.s.T2PA:null,f:b=>b.s.T2PA?`${b.s.T2OB}/${b.s.T2PA}`:'-'},{k:'eb',t:'타자 wRC+',v:b=>EFF.get(Store.player(t.id+'|'+b.name))?.bat},{k:'ed',t:'수비 Def+',v:b=>EFF.get(Store.player(t.id+'|'+b.name))?.def},{k:'ep',t:'투수 FIP+',v:b=>EFF.get(Store.player(t.id+'|'+b.name))?.pit},{k:'et',t:'종합 지수',v:b=>EFF.get(Store.player(t.id+'|'+b.name))?.total},{k:'gr',t:'평가',l:1,f:b=>grade(EFF.get(Store.player(t.id+'|'+b.name))?.total),nosort:1},{k:'fp',t:'수비율',v:b=>Field.defIdx(t,b.name)?.pct,f:b=>{const d=Field.defIdx(t,b.name);return d?f3(d.pct):'-'}},{k:'fe',t:'실책',v:b=>Field.defIdx(t,b.name)?.e,f:b=>{const d=Field.defIdx(t,b.name);return d?fmtN(d.e):'-'}}],A.batters,{sort:'et'})+note('eff','effq','effc','grade','rates','src');
     if(s.cur==='trend'){const tr=A.batters.filter(b=>b.recent).sort((a,b)=>b.recent.diff-a.recent.diff);
       body+=`<div class="card">${tr.length?dumbbell(tr.map(b=>({label:pBat(b.name),sub:`${trendCell(b.recent)} · 최근 효율 ${b.recent.idx}`,a:b.s.OBP||0,b:b.recent.s.OBP||0,ta:f3(b.s.OBP),tb:f3(b.recent.s.OBP)})),{max:1,la:'시즌 출루율',lb:'최근 5경기'}):'<div class="sub">비교할 수 있는 선수가 없습니다</div>'}</div>${note('trend','rates')}`;}
   }
   if(tab==='order'){
     const s=subtabs('tord',[['chart','그래프'],['table','기록표']]);body=s.html;
-    
-    const normPos = p => {
-      if(!p || p === '-') return '';
-      const map = {'투':'투수','포':'포수','1':'1루수','2':'2루수','3':'3루수','유':'유격수','좌':'좌익수','중':'중견수','우':'우익수','D':'지명타자','지':'지명타자'};
-      if(p.length === 1 && map[p]) return map[p];
-      if(p.endsWith('수') || p.endsWith('타자')) return p;
-      if(['1루','2루','3루','유격','좌익','중견','우익'].includes(p)) return p + '수';
-      return p;
-    };
-
-    const fmtStarter = x => {
-      if(!x.occ || !x.occ.length) return '<span style="color:var(--mute)">-</span>';
-      const main = x.occ[0];
-      const mName = main[0], mStarts = main[1];
-      const tot = x.occ.reduce((acc, [, c]) => acc + c, 0) || 1;
-      const pct = Math.round(mStarts / tot * 100);
-      const bObj = A.batters.find(b => b.name === mName);
-      const pl = Store.player(t.id + '|' + mName);
-      const noChip = pl && pl.no ? `<span class="player-num-chip">#${esc(pl.no)}</span>` : '';
-      const posName = normPos(bObj && bObj.mainPos);
-      const posChip = posName ? `<span class="pos-badge-chip">${esc(posName)}</span>` : '';
-      const pctColor = pct >= 80 ? '#f59e0b' : '#10b981';
-      return `<div class="slot-primary-wrap">${noChip}${plink(t, mName)}${posChip}<b class="order-starts-val" style="color:${pctColor}">${mStarts}선발 <span style="font-size:11px;opacity:0.85">(${pct}%)</span></b></div>`;
-    };
-
-    const fmtBackups = x => {
-      if(!x.occ || x.occ.length <= 1) return '<span style="color:var(--mute);font-size:12px">-</span>';
-      return x.occ.slice(1).map(([bName, bStarts]) => {
-        const bObj = A.batters.find(b => b.name === bName);
-        const pl = Store.player(t.id + '|' + bName);
-        const noTag = pl && pl.no ? `<span style="font-size:11px;color:var(--mute);font-weight:700">#${esc(pl.no)}</span> ` : '';
-        const posName = normPos(bObj && bObj.mainPos);
-        const posTag = posName ? `<span style="font-size:11px;color:var(--sub);font-weight:600">(${esc(posName)})</span> ` : '';
-        return `<span class="slot-sub-player">${noTag}${plink(t, bName)} ${posTag}<small style="font-weight:700;color:var(--ink2)">${bStarts}G</small></span>`;
-      }).join(' <span style="opacity:0.3;margin:0 4px">·</span> ');
-    };
-
-    const fmtChartSub = x => {
-      if(!x.occ || !x.occ.length) return `타율 ${f3(x.s.AVG)} · 출루율 ${f3(x.s.OBP)} · ${x.s.PA}타석`;
-      const main = x.occ[0];
-      const bObj = A.batters.find(b => b.name === main[0]);
-      const pl = Store.player(t.id + '|' + main[0]);
-      const posName = normPos(bObj && bObj.mainPos);
-      const mStr = `${pl && pl.no ? '#' + pl.no + ' ' : ''}${main[0]}${posName ? ' (' + posName + ')' : ''} ${main[1]}선발`;
-      const bStr = x.occ.slice(1).map(([n, c]) => {
-        const bp = normPos(A.batters.find(b => b.name === n)?.mainPos);
-        return `${n}${bp ? '(' + bp + ')' : ''} ${c}G`;
-      }).join(', ');
-      return `타율 ${f3(x.s.AVG)} · 출루율 ${f3(x.s.OBP)} · ${x.s.PA}타석<br><span style="font-size:12px;color:var(--ink2)">주전: <b>${mStr}</b>${bStr ? ' · 백업: ' + bStr : ''}</span>`;
-    };
-
-    body += s.cur === 'chart'
-      ? `<div class="card">${barList(A.slots.map(x => ({
-          label: `<b>${x.o}번 타순</b>`,
-          sub: fmtChartSub(x),
-          v: x.idx,
-          text: x.idx,
-          color: tc
-        })), { ref: 100, refLabel: '팀 평균' })}</div>`
-      : table([
-          { k: 'o', t: '타순', cls: 'num', f: x => `<b style="font-size:15px;color:var(--ink)">${x.o}번</b>` },
-          { k: 'starter', t: '주전 타자 & 포지션 (선발 점유율)', l: 1, cls: 'name', f: fmtStarter, nosort: 1 },
-          { k: 'backup', t: '로테이션 / 백업', l: 1, f: fmtBackups, nosort: 1 },
-          { k: 'PA', t: '타석', v: x => x.s.PA },
-          { k: 'AB', t: '타수', v: x => x.s.AB },
-          { k: 'H', t: '안타', v: x => x.s.H },
-          { k: 'HR', t: '홈런', v: x => x.s.HR },
-          { k: 'RBI', t: '타점', v: x => x.s.RBI },
-          { k: 'R', t: '득점', v: x => x.s.R },
-          { k: 'SB', t: '도루', v: x => x.s.SB },
-          { k: 'BB', t: '볼넷', v: x => x.s.BB },
-          { k: 'SO', t: '삼진', v: x => x.s.SO },
-          { k: 'AVG', t: '타율', v: x => x.s.AVG, f: x => f3(x.s.AVG) },
-          { k: 'OBP', t: '출루율', v: x => x.s.OBP, f: x => f3(x.s.OBP) },
-          { k: 'SLG', t: '장타율', v: x => x.s.SLG, f: x => f3(x.s.SLG) },
-          { k: 'idx', t: '효율지수', f: x => idxCell(x.idx) }
-        ], A.slots, { sort: 'o', dir: 1 });
-
-    body += note('order', 'bidxT', 'rates');
+    body+=s.cur==='chart'?`<div class="card">${barList(A.slots.map(x=>({label:`<b>${x.o}번</b>`,sub:`타율 ${f3(x.s.AVG)} · 출루율 ${f3(x.s.OBP)} · ${x.s.PA}타석<br>주로 ${x.occ.map(([n,c])=>`${pBat(n)} ${c}`).join(', ')||'-'}`,v:x.idx,text:x.idx,color:tc})),{ref:100,refLabel:'팀 평균'})}</div>`
+      :table([{k:'o',t:'타순'},{k:'occ',t:'주로 선 선수 (선발 횟수)',l:1,cls:'name',f:x=>`${x.o}번 · `+(x.occ.map(([n,c])=>`${pBat(n)} ${c}`).join(', ')||'-'),nosort:1},
+        {k:'PA',t:'타석',v:x=>x.s.PA},{k:'AB',t:'타수',v:x=>x.s.AB},{k:'H',t:'안타',v:x=>x.s.H},{k:'HR',t:'홈런',v:x=>x.s.HR},{k:'RBI',t:'타점',v:x=>x.s.RBI},{k:'R',t:'득점',v:x=>x.s.R},{k:'SB',t:'도루',v:x=>x.s.SB},
+        {k:'BB',t:'볼넷',v:x=>x.s.BB},{k:'SO',t:'삼진',v:x=>x.s.SO},{k:'AVG',t:'타율',v:x=>x.s.AVG,f:x=>f3(x.s.AVG)},{k:'OBP',t:'출루율',v:x=>x.s.OBP,f:x=>f3(x.s.OBP)},{k:'SLG',t:'장타율',v:x=>x.s.SLG,f:x=>f3(x.s.SLG)},{k:'idx',t:'효율지수',f:x=>idxCell(x.idx)}],A.slots,{sort:'o',dir:1});
+    body+=note('order','bidxT','rates');
   }
   if(tab==='pit'){
     const s=subtabs('tpit',[['chart','그래프'],['table','기록표'],['detail','투수별 분석']]);body=s.html;
     if(s.cur==='chart'){const qp=A.pitchers.filter(p=>p.ps.outs>=9);const tot=A.pitchers.reduce((a,p)=>a+p.ps.outs,0)||1;
-      body+=`<h2>팀 주요 투수 (이닝/ERA 기준)</h2><div class="card">${barList(A.pitchers.map(p=>({p,e:EFF.get(Store.player(t.id+'|'+p.name))||{}})).sort((a,b)=>(b.e.pit??0)-(a.e.pit??0)).map(({p,e})=>({label:pBat(p.name),sub:`${typePill(p.pl?.ptype)} ${ipStr(p.ps.outs)}이닝 · ERA ${f2(p.ps.ERA)} · WHIP ${f2(p.ps.WHIP)} ${grade(e.pit)}`,v:e.pit||0,text:e.pit??'-',color:tc})),{ref:100,refLabel:'리그 평균'})}</div>
+      body+=`<h2>투수 FIP+</h2><div class="card">${barList(A.pitchers.map(p=>({p,e:EFF.get(Store.player(t.id+'|'+p.name))||{}})).sort((a,b)=>(b.e.pit??0)-(a.e.pit??0)).map(({p,e})=>({label:pBat(p.name),sub:`${typePill(p.pl?.ptype)} ${ipStr(p.ps.outs)}이닝 · ERA ${f2(p.ps.ERA)} · WHIP ${f2(p.ps.WHIP)} ${grade(e.pit)}${e.pitCap?' · 규정 미달':''}`,v:e.pit||0,text:e.pit??'-',color:tc})),{ref:100,refLabel:'리그 평균'})}</div>
       <h2>이닝 분담</h2><div class="card">${barList(A.pitchers.slice(0,10).map(p=>({label:pBat(p.name),sub:`${p.ps.G}경기 · 선발 ${p.ps.GS}`,v:p.ps.outs/tot*100,text:`${ipStr(p.ps.outs)} (${Math.round(p.ps.outs/tot*100)}%)`,color:tc})),{max:Math.max(...A.pitchers.map(p=>p.ps.outs/tot*100))*1.1})}</div>
       ${typeGuide(false)}${note('eff','effq','grade','prates')}`;}
     if(s.cur==='table')body+=table([{k:'name',t:'투수',l:1,cls:'name',f:p=>pBat(p.name)},{k:'type',t:'유형',l:1,v:p=>p.pl?.ptype||'',f:p=>typePill(p.pl?.ptype)},{k:'G',t:'경기',v:p=>p.ps.G},{k:'GS',t:'선발',v:p=>p.ps.GS},{k:'W',t:'승',v:p=>p.ps.W},{k:'L',t:'패',v:p=>p.ps.L},
@@ -7890,32 +9031,52 @@ V.team=(q,id)=>{
   if(rookieCount) divBadges.push(`<span class="pill pill-rookie" style="font-size:11px;padding:2px 8px">⚾ 루키 (${rookieCount}G)</span>`);
   if(yeongnamCount) divBadges.push(`<span class="pill pill-yeongnam" style="font-size:11px;padding:2px 8px">🌊 영남권 (${yeongnamCount}G)</span>`);
 
-  return `<div class="board" style="background: linear-gradient(135deg, #0D043D 0%, #172554 60%, #0F5FA4 100%) !important; color: #ffffff !important;"><div class="bhead">
-  <div class="wt-bhead-top">
-    ${badge(t,54)}
-    <div class="wt-bhead-title-col">
-      <div class="tm" style="color:#ffffff !important;font-weight:900;font-size:clamp(17px, 4.8vw, 24px) !important;white-space:nowrap !important;letter-spacing:-0.03em !important;line-height:1.2 !important">${t.id==='aSEa0076'?'WT프렌즈 야구 기록실':esc(t.short)}</div>
-      ${t.id==='aSEa0076'?'<span class="wt-hero-slogan" style="margin-top:2px;font-size:10.5px;padding:2px 8px;border-radius:4px;background:rgba(241,47,66,0.22);color:#fca5a5;border:1px solid rgba(241,47,66,0.4);white-space:nowrap !important;display:inline-block;width:fit-content">WINNERS TOGETHER · FRIENDS</span>':''}
+    const isWT = (t.id === 'aSEa0076');
+  const subLine = isWT 
+    ? `서울 노원구 · 2026 KBSA 한국여자야구 공식 클럽하우스${divBadges.length ? ' · ' + divBadges.join(' ') : ''}`
+    : `${esc(t.name)} · ${esc(t.sido)}${divBadges.length ? ' · ' + divBadges.join(' ') : ''}`;
+
+  return `<div class="board" style="background: linear-gradient(135deg, #0D043D 0%, #172554 60%, #0F5FA4 100%) !important; color: #ffffff !important; margin-bottom: 22px !important;">
+    <div class="wt-board-topline">
+      ${isWT ? '<span class="wt-hero-slogan">WINNERS TOGETHER · FRIENDS</span>' : ''}
+      <span class="wt-bhead-sub">${subLine}</span>
+    </div>
+    <div class="bhead">
+      <div class="bhead-info">
+        <div class="wt-bhead-top">
+          ${badge(t, 88)}
+          <div class="wt-bhead-title-col">
+            <div class="tm" style="color:#ffffff !important;font-weight:900 !important;font-size:clamp(24px, 3.2vw, 32px) !important;line-height:1.2 !important">${isWT ? 'WT프렌즈 야구 기록실' : esc(t.name)}</div>
+            <div class="wt-bhead-desc" style="color:#f1f5f9;font-size:13px;font-weight:600;margin-top:4px">${isWT ? '2026 KBSA 한국여자야구연맹 공식 클럽하우스 · 등록 선수 22명' : (esc(t.sido) + ' 소속 구단')}</div>
+          </div>
+        </div>
+      </div>
+      <span class="vsbtns">
+        <a class="vsbtn pri" href="#/lineup/${t.id}" style="background:linear-gradient(135deg, #ef4444 0%, #dc2626 100%);color:#ffffff;border:1px solid #f87171;cursor:pointer;font-weight:800">📋 라인업 짜기 ›</a>
+        ${isWT ? '<a class="vsbtn" href="#/dugout" style="color:#ffffff;background:rgba(37,99,235,0.35);border:1px solid rgba(147,197,253,0.5);font-weight:700">🧢 덕아웃 선수단 ›</a>' : ''}
+        <button class="vsbtn" data-go-club="${t.id}" style="color:#ffffff;background:rgba(220,38,38,0.3);border:1px solid rgba(252,165,165,0.45);cursor:pointer;font-weight:700">📅 팀 모임·일정 ›</button>
+        <button type="button" class="vsbtn" data-sheet-db style="color:#38bdf8;background:rgba(56,189,248,0.18);border:1px solid rgba(56,189,248,0.6);cursor:pointer;font-weight:800">📊 구단 DB ↗</button>
+        <a class="vsbtn" href="#/standings" style="color:#ffffff;background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.3);font-weight:700">🏆 리그 순위 ›</a>
+        <a class="vsbtn" href="#/games?t=${t.id}" style="color:#ffffff;background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.3);font-weight:700">⚾ 경기 일정·결과 ›</a>
+      </span>
+    </div>
+    <div class="stats four" style="margin-top:14px">
+      <div class="stat dk"><b>${r.W}승 ${r.L}패 ${r.D ? r.D + '무' : ''}</b><span>시즌 전적 (${r.G}전)</span></div>
+      <div class="stat dk"><b>${pct(r.PCT).replace('0.', '.')}</b><span>시즌 승률</span></div>
+      <div class="stat dk"><b>${f3(A.tb.AVG)}</b><span>팀 타율</span></div>
+      <div class="stat dk"><b>${f2(A.tp.ERA)}</b><span>팀 평균자책</span></div>
+    </div>
+    <div class="bmini">
+      <span>타율 <b>${f3(A.tb.AVG)}</b></span>
+      <span>출루율 <b>${f3(A.tb.OBP)}</b></span>
+      <span>도루 <b>${A.tb.SB}</b></span>
+      <span>ERA <b>${f2(A.tp.ERA)}</b></span>
+      <span>최근 ${formDots(r.form)}</span>
     </div>
   </div>
-  <div class="wt-bhead-sub" style="margin-top:6px;font-size:12px;color:rgba(255,255,255,0.9);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.id==='aSEa0076'?'서울 노원구 · 2026 KBSA 한국여자야구 공식 클럽하우스':(esc(t.name)+' · '+esc(t.sido)+(divBadges.length?' · '+divBadges.join(' '):''))}</div>
-  <span class="vsbtns">
-    <a class="vsbtn pri" href="#/lineup/${t.id}" style="background:linear-gradient(135deg, #F12F42 0%, #DC2626 100%);color:#ffffff;border:0;cursor:pointer;font-weight:800">📋 라인업 짜기 ›</a>
-    ${t.id==='aSEa0076'?'<a class="vsbtn" href="#/dugout" style="color:#ffffff;background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.3)">🧢 덕아웃 선수단 ›</a>':''}
-    <button class="vsbtn" data-go-club="${t.id}" style="color:#ffffff;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.28);cursor:pointer">📅 팀 모임·일정 ›</button>
-    <button type="button" class="vsbtn" data-sheet-db style="color:#38bdf8;background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.5);cursor:pointer">📊 구단 DB ↗</button>
-    <a class="vsbtn" href="#/standings" style="color:#ffffff;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.28)">🏆 리그 순위 ›</a>
-  </span>
-</div>
-<div class="stats four" style="margin-top:14px">
-  <div class="stat dk"><b>${r.W}승 ${r.L}패 ${r.D?r.D+'무':''}</b><span>시즌 전적 (${r.G}전)</span></div>
-  <div class="stat dk"><b>${pct(r.PCT).replace('0.','.')}</b><span>시즌 승률</span></div>
-  <div class="stat dk"><b>${f3(A.tb.AVG)}</b><span>팀 타율</span></div>
-  <div class="stat dk"><b>${f2(A.tp.ERA)}</b><span>팀 평균자책</span></div>
-</div>
-    <div class="bmini"><span>타율 <b>${f3(A.tb.AVG)}</b></span><span>출루율 <b>${f3(A.tb.OBP)}</b></span><span>도루 <b>${A.tb.SB}</b></span><span>ERA <b>${f2(A.tp.ERA)}</b></span><span>최근 ${formDots(r.form)}</span></div></div>
   <div class="tabs scroll">${[['sum','요약'],['club','📅 모임·일정·셋로그'],['games','경기'],['bat','타자'],['order','타순'],['pit','투수'],['opp','상대 투수']].map(([k,l])=>`<button data-tt="${k}" class="${tab===k?'on':''}">${l}</button>`).join('')}</div>${body}`;
 };
+
 function pitcherDetail(A,p){
   const t=A.t,tc=teamTheme(t).bg;const s=subtabs('pd',[['sum','요약'],['bat','등판 시 타자'],['def','포지션별 수비'],['log','경기별']]);
   let b='';
@@ -7943,16 +9104,10 @@ function oppDetail(A,o){
     <p class="note">선발 경기 전체 타석 기준입니다 (구원 투수 이후 타석 포함).</p></div>`;
 }
 V.team.bind=()=>{
-  const _p=parse();
-  const teamId = _p.parts[1] || 'aSEa0076';
-  const _t=Store.team(teamId);
-  if(_t && $app && $app.querySelectorAll){
-    $app.querySelectorAll('[data-open-chart]').forEach(el => {
-      el.onclick = () => openTeamChartModal(_t.id, el.dataset.openChart);
-    });
-  }
-  const goclub = $app && $app.querySelector ? $app.querySelector('[data-go-club]') : null;
-  if(goclub) goclub.onclick = () => { UI.teamTab = 'club'; render(); };
+  const _p=parse(); const _t=Store.team(_p.parts[1]); if(_t){ $app.querySelectorAll('[data-open-chart]').forEach(el => { el.onclick = () => openTeamChartModal(_t.id, el.dataset.openChart); }); }
+  const tmcBtn=$app.querySelector('[data-tmcard]');if(tmcBtn)tmcBtn.onclick=()=>openTeamAndMvpStudio(tmcBtn.dataset.tmcard);
+  const awdBtn=$app.querySelector('[data-awdcard]');if(awdBtn)awdBtn.onclick=()=>openClubAwardStudio(awdBtn.dataset.awdcard);
+  const goclub=$app.querySelector('[data-go-club]');if(goclub)goclub.onclick=()=>{UI.teamTab='club';render()};
   $app.querySelectorAll('[data-tt]').forEach(b=>b.onclick=()=>{UI.teamTab=b.dataset.tt;const y=window.scrollY;render();window.scrollTo(0,y)});
   if(UI.teamTab==='club')bindTeamClubView();
   $app.querySelectorAll('[data-pp]').forEach(b=>b.onclick=()=>{UI.teamPitcher=b.dataset.pp;const y=window.scrollY;render();window.scrollTo(0,y)});
@@ -7961,24 +9116,18 @@ V.team.bind=()=>{
 };
 
 const CATS=[
-  {k:'AVG',t:'타율',q:p=>p.B.PA>=15,v:p=>p.B.AVG,f:p=>f3(p.B.AVG)},
-  {k:'OBP',t:'출루율',q:p=>p.B.PA>=15,v:p=>p.B.OBP,f:p=>f3(p.B.OBP)},
-  {k:'SLG',t:'장타율',q:p=>p.B.PA>=15,v:p=>p.B.SLG,f:p=>f3(p.B.SLG)},
-  {k:'OPS',t:'OPS',q:p=>p.B.PA>=15,v:p=>p.B.OPS,f:p=>f3(p.B.OPS)},
-  {k:'H',t:'안타',v:p=>p.B.H},
-  {k:'B2',t:'2루타',v:p=>p.B.B2},
-  {k:'B3',t:'3루타',v:p=>p.B.B3},
-  {k:'HR',t:'홈런',v:p=>p.B.HR},
-  {k:'RBI',t:'타점',v:p=>p.B.RBI},
-  {k:'R',t:'득점',v:p=>p.B.R},
-  {k:'SB',t:'도루',v:p=>p.B.SB},
-  {k:'BB',t:'사사구',v:p=>p.B.BB+p.B.HBP},
-  {k:'UP',t:'최근 상승세',q:p=>p.recent&&p.B.PA>=10,v:p=>p.recent?p.recent.diff:null,f:p=>trendCell(p.recent)},
-  {k:'ERA',t:'평균자책',q:p=>p.P.outs>=15,v:p=>-p.P.ERA,f:p=>f2(p.P.ERA),pit:1},
-  {k:'WHIP',t:'WHIP',q:p=>p.P.outs>=15,v:p=>-p.P.WHIP,f:p=>f2(p.P.WHIP),pit:1},
-  {k:'W',t:'승리',v:p=>p.P.W,pit:1},
-  {k:'SO',t:'탈삼진',v:p=>p.P.SO,pit:1},
-  {k:'IP',t:'이닝',v:p=>p.P.outs,f:p=>ipStr(p.P.outs),pit:1},
+  {k:'AVG',t:'타율',q:p=>p.B.PA>=40,v:p=>p.B.AVG,f:p=>f3(p.B.AVG)},
+  {k:'OBP',t:'출루율',q:p=>p.B.PA>=40,v:p=>p.B.OBP,f:p=>f3(p.B.OBP)},
+  {k:'OPS',t:'OPS',q:p=>p.B.PA>=40,v:p=>p.B.OPS,f:p=>f3(p.B.OPS)},
+  {k:'TOT',t:'종합 지수',v:p=>EFF.get(p)?.total,f:p=>`${EFF.get(p).total} ${grade(EFF.get(p).total)}`},
+  {k:'EBAT',t:'타자 wRC+',v:p=>EFF.get(p)?.bat,f:p=>EFF.get(p).bat},
+  {k:'EDEF',t:'수비 Def+',v:p=>EFF.get(p)?.dc?EFF.get(p).def:null,f:p=>EFF.get(p).def},
+  {k:'H',t:'안타',v:p=>p.B.H},{k:'HR',t:'홈런',v:p=>p.B.HR},{k:'RBI',t:'타점',v:p=>p.B.RBI},{k:'R',t:'득점',v:p=>p.B.R},{k:'SB',t:'도루',v:p=>p.B.SB},{k:'BB',t:'볼넷',v:p=>p.B.BB},
+  {k:'UP',t:'최근 상승세',q:p=>p.recent&&p.B.PA>=20,v:p=>p.recent?p.recent.diff:null,f:p=>trendCell(p.recent)},
+  {k:'ERA',t:'평균자책',q:p=>p.P.outs>=60,v:p=>-p.P.ERA,f:p=>f2(p.P.ERA),pit:1},
+  {k:'WHIP',t:'WHIP',q:p=>p.P.outs>=60,v:p=>-p.P.WHIP,f:p=>f2(p.P.WHIP),pit:1},
+  {k:'EPIT',t:'투수 FIP+',v:p=>EFF.get(p)?.pit,f:p=>EFF.get(p).pit,pit:1},
+  {k:'W',t:'승리',v:p=>p.P.W,pit:1},{k:'SO',t:'탈삼진',v:p=>p.P.SO,pit:1},{k:'IP',t:'이닝',v:p=>p.P.outs,f:p=>ipStr(p.P.outs),pit:1},
 ];
 V.players=()=>{
   const S=Store;const c=CATS.find(x=>x.k===UI.rankCat)||CATS[0];const qy=UI.rankQ.trim();
@@ -8160,66 +9309,38 @@ const EFF=(()=>{
     o.total=Math.round(o.totalRaw);o.qual=(o.brel>=1)||(o.prel>=1)});
   const REPT=q25(rs.filter(o=>o.qual&&o.total!=null).map(o=>o.total));
   rs.forEach(o=>{if(o.total!=null&&!o.qual){const t=o.p.team.i;const qs=rs.filter(x=>x.p.team.i===t&&x.qual&&x.total!=null).map(x=>x.total);
-    const c=Math.min(Math.round(REPT),qs.length?Math.min(...qs)-1:Infinity);if(o.total>c){o.total=c;o.totalCap=true}/* Arbitrary 8-point penalty removed */}});
+    const c=Math.min(Math.round(REPT),qs.length?Math.min(...qs)-1:Infinity);if(o.total>c){o.total=c;o.totalCap=true}o.total-=Math.round((1-Math.max(o.brel||0,o.prel||0))*8)}});
   return {wob:x=>wraw(x)*F,fipOf:fip,get:p=>Rm.get(p.key),lg:{RPA,ROUT,KENV,RW,lgOBP,lgwOBA,SCALE,lgERA,lgRA9,FIPC,runSB,runCS,PLAY,PAperInn},REP:{bat:Math.round(REPB),def:Math.round(REPD),pit:Math.round(REPP),total:Math.round(REPT)},PADJ};
 })();
-NOTES.eff='공식 기록 기준: 타율, 출루율, 장타율, OPS 및 평균자책점(ERA), WHIP 등은 KBSA 및 KBO 정규 야구 규칙에 따라 산출됩니다.';
-NOTES.effq='규정 기준 안내: 타자 규정 타석 = 팀 경기 수 × 2.0 (최소 15타석), 투수 규정 이닝 = 팀 경기 수 × 1.0이닝 (최소 5이닝). 규정 충족 선수가 공식 랭킹 대상이 되며, 미달 선수도 감점 없이 본인의 순수 기록 그대로 표시됩니다.';
-NOTES.effc='산출 공식: 타율 = 안타 ÷ 타수 · 출루율 = (안타+볼넷+사구) ÷ (타수+볼넷+사구+희비) · 장타율 = 루타 ÷ 타수 · OPS = 출루율 + 장타율 · 평균자책(ERA) = 자책점 × 9 ÷ 이닝 · WHIP = (피안타+볼넷) ÷ 이닝.';
+NOTES.eff=`효율지수 4가지는 모두 세이버메트릭스 공식으로 계산하고 100 = 리그 평균입니다.
+ <b>타자 = wRC+</b>: wOBA = (0.69×볼넷 + 0.72×사구 + 0.89×1루타 + 1.27×2루타 + 1.62×3루타 + 2.10×홈런) ÷ (타수 + 볼넷 − 고의4구 + 희비 + 사구), FanGraphs 가중치를 리그 출루율에 맞춰 환산 → wRAA = (wOBA − 리그 wOBA) ÷ wOBA scale × 타석 → wRC+ = (wRAA/타석 + 리그 득점/타석) ÷ 리그 득점/타석 × 100.
+ <b>수비 = Def+</b>: Def(수비 득점) = (실책 득점 + 처리 범위 득점 × 50%) × 수비 이닝 ÷ (수비 이닝 + 100) + 포지션 보정. 포수는 도루 저지 득점(DRS의 rSB 방식) = (도루 저지 − 리그 저지율 × 도루 시도) × (도루 0.2 − 도루자 득점 가치)을 더합니다. 투수의 삼진은 포수의 수비 기회(삼진 포구)로 들어가 실책 득점 계산에 반영됩니다. 범위 득점은 Range Factor 계열이라 투수진·타구 분포 영향이 커서 절반만 쓰고, 수비 기록은 표본이 적으면 크게 흔들려 100이닝만큼 0(평균) 쪽으로 회귀시킵니다. 실책 득점 = (리그 같은 포지션 실책률 × 기회 − 실책) × 플레이 가치, 처리 범위 득점 = (직접 처리 아웃 − 이닝 × 리그 이닝당 처리 × 팀 타구 환경) × 플레이 가치, 포지션 보정 = FanGraphs 값(포수 +12.5 · 유격 +7.5 · 2루·3루·중견 +2.5 · 좌익·우익 −7.5 · 1루 −12.5 · 지명 −17.5, 1458이닝당). Def+ = 100 + 100 × Def ÷ (수비 이닝을 타석으로 환산 × 리그 득점/타석).
+ <b>투수 = FIP+</b> = 100 × 리그 FIP ÷ FIP, FIP = (13×피홈런 + 3×(볼넷+사구) − 2×삼진) ÷ 이닝 + 상수(리그 FIP = 리그 ERA).
+ <b>종합</b> = 100 + 100 × (wRAA + 주루 wSB + Def + 투구 득점) ÷ (주 역할 출전량 × 리그 득점/타석). 투구 득점 = (리그 FIP − FIP) × 이닝 ÷ 9 (비자책 비율 반영). 투수를 겸하면 투구 득점이 더해집니다.`;
+NOTES.effq='규정: 타석 = 팀 경기 수 × 1.5 (최소 15), 수비 = 팀 경기 수 × 3이닝 (최소 20이닝), 투구 = 팀 경기당 2/3이닝 (최소 5이닝). 규정에 못 미치면 ① 모자란 비율만큼 대체 수준(리그 규정 선수 하위 25%) 쪽으로 당기고 ② 같은 팀 규정 선수 최저값보다 낮게, 리그 하위 25%보다 높지 않게 제한한 뒤 ③ 표본이 적을수록 최대 8점을 더 뺍니다. 그래서 기록이 없거나 적은 선수는 주전보다 높을 수 없습니다.';
+NOTES.effc='득점 환경: 팀-경기별 (득점 ÷ 타석)을 wOBA로 회귀해 이 리그의 가중치 1점당 득점 '+EFF.lg.RW.toFixed(2)+'(MLB 0.80)을 구했습니다. 그래서 사건 1개의 득점 가치(wOBA scale, 도루 0.2, 플레이 가치 0.75, 포지션 보정)를 MLB의 '+EFF.lg.KENV.toFixed(2)+'배로 맞췄습니다 (타석당 득점은 '+EFF.lg.RPA.toFixed(3)+'로 MLB의 약 3배지만, 사건당 가치는 그만큼 커지지 않습니다). 주루 wSB = 도루 × 0.2(×득점 환경) + 도루자 × −(2 × 아웃당 득점 + 0.075) − 리그 평균 × 출루 기회 (FanGraphs 공식). 수비 기록은 상대 타자 이닝별 결과를 그 이닝에 그 포지션을 맡은 선수에게 배정합니다. 한 경기에 같은 포지션이 2명 이상이면 교체로 보고, 먼저 나온 선수는 마지막 타석 이닝까지, 교체 선수는 그다음 이닝(또는 첫 타석 이닝)부터 맡은 것으로 나눕니다. 투수는 아웃 수 누적으로 이닝을 나눕니다. 포지션 보정도 이렇게 나눈 수비 이닝으로 계산합니다. 이닝 종료 아웃·2아웃 출루는 세이버메트릭스 공식에 해당 항목이 없어(RE24는 주자 상황 필요) 참고 기록으로만 보여 줍니다.';
 function combIdx(p){const e=EFF.get(p);if(!e||e.total==null)return {v:null};return {v:e.total,bat:e.bat,def:e.def,pit:e.pit,est:!!e.defNone,e}}
-function effCards(p){
-  const B = p.B, P = p.P;
-  let c4 = [];
-  if (B && B.PA > 0 && (!P || P.BF === 0)) {
-    c4 = [['타율', f3(B.AVG)], ['출루율', f3(B.OBP)], ['장타율', f3(B.SLG)], ['OPS', f3(B.OPS)]];
-  } else if (P && P.BF > 0 && (!B || B.PA === 0)) {
-    c4 = [['평균자책', P.outs >= 3 ? f2(P.ERA) : '-'], ['WHIP', P.outs >= 3 ? f2(P.WHIP) : '-'], ['탈삼진', P.SO], ['승-패', `${P.W}승 ${P.L}패`]];
-  } else if (B && B.PA > 0 && P && P.BF > 0) {
-    c4 = [['타율', f3(B.AVG)], ['OPS', f3(B.OPS)], ['평균자책', P.outs >= 3 ? f2(P.ERA) : '-'], ['탈삼진', P.SO]];
-  } else {
-    c4 = [['타석', 0], ['타수', 0], ['안타', 0], ['타율', '-']];
-  }
-  return `<div class="stats four eff4">${c4.map(([k,v])=>`<div class="stat"><b>${v??'-'}</b><span>${k}</span></div>`).join('')}</div>`;
-}
-function effDetail(p){
-  const blocks = []; const B = p.B, Pp = p.P;
-  if (B && B.PA > 0) {
-    blocks.push(`<div class="card lcard"><h3>타격 공식 기록</h3>
-      <div class="cg">
-        <div><span>타석</span><b>${B.PA}</b></div>
-        <div><span>타수</span><b>${B.AB}</b></div>
-        <div><span>안타</span><b>${B.H}</b></div>
-        <div><span>2루타</span><b>${B.B2}</b></div>
-        <div><span>3루타</span><b>${B.B3}</b></div>
-        <div><span>홈런</span><b>${B.HR}</b></div>
-        <div><span>타점</span><b>${B.RBI}</b></div>
-        <div><span>득점</span><b>${B.R}</b></div>
-        <div><span>도루</span><b>${B.SB}</b></div>
-        <div><span>사사구</span><b>${B.BB+B.HBP}</b></div>
-        <div><span>삼진</span><b>${B.SO}</b></div>
-      </div>
-      <p class="sub" style="margin-top:6px">순출루율(IsoD) ${f3(Math.max(0,(B.OBP||0)-(B.AVG||0)))} · 순장타율(IsoP) ${f3(Math.max(0,(B.SLG||0)-(B.AVG||0)))} · 볼넷/삼진(BB/K) ${B.SO?((B.BB+B.HBP)/B.SO).toFixed(2):'-'}</p>
-    </div>`);
-  }
-  if (Pp && Pp.BF > 0) {
-    blocks.push(`<div class="card lcard"><h3>투구 공식 기록</h3>
-      <div class="cg">
-        <div><span>이닝</span><b>${ipStr(Pp.outs)}</b></div>
-        <div><span>투구수</span><b>${Pp.pitches}</b></div>
-        <div><span>피안타</span><b>${Pp.H}</b></div>
-        <div><span>피홈런</span><b>${Pp.HR}</b></div>
-        <div><span>탈삼진</span><b>${Pp.SO}</b></div>
-        <div><span>사사구</span><b>${Pp.BB+Pp.HBP}</b></div>
-        <div><span>실점</span><b>${Pp.R}</b></div>
-        <div><span>자책점</span><b>${Pp.ER}</b></div>
-        <div><span>WHIP</span><b>${Pp.outs>=3?f2(Pp.WHIP):'-'}</b></div>
-      </div>
-      <p class="sub" style="margin-top:6px">9이닝당 탈삼진(K/9) ${Pp.outs>=3?(Pp.SO*27/Pp.outs).toFixed(2):'-'} · 9이닝당 볼넷(BB/9) ${Pp.outs>=3?((Pp.BB+Pp.HBP)*27/Pp.outs).toFixed(2):'-'} · 탈삼진/볼넷(K/BB) ${Pp.BB+Pp.HBP?(Pp.SO/(Pp.BB+Pp.HBP)).toFixed(2):'-'}</p>
-    </div>`);
-  }
-  return blocks.join('');
+function effCards(p){const e=EFF.get(p);if(!e)return '';const c4=[['종합 가치',e.total],['타격 생산력 · wRC+',e.bat],['수비 기여 · Def+',e.def],['투구 억제력 · FIP+',e.pit]];
+  return `<div class="stats four eff4">${c4.map(([k,v])=>`<div class="stat"><b>${v??'-'}</b><span>${k} ${v!=null?grade(v):''}</span></div>`).join('')}</div>`}
+function effDetail(p){const e=EFF.get(p);if(!e)return '';const r1=x=>x==null?'-':(Math.round(x*10)/10).toFixed(1);const blocks=[];const B=p.B,Pp=p.P;
+  if(e.woba!=null)blocks.push(`<div class="card lcard"><h3>타자 wRC+ ${e.bat} ${grade(e.bat)}</h3>
+    <div class="cg"><div><span>wOBA</span><b>${f3(e.woba)}</b></div><div><span>리그 wOBA</span><b>${f3(EFF.lg.lgwOBA)}</b></div><div><span>wRAA</span><b>${r1(e.wraa)}</b></div><div><span>주루 wSB</span><b>${r1(e.wsb)}</b></div><div><span>wRC+ 원값</span><b>${Math.round(e.braw)}</b></div></div>
+    <p class="sub" style="margin-top:6px">규정 ${e.bq}타석 중 ${B.PA}타석 (반영 ${Math.round(e.brel*100)}%)${e.batCap?' · <b style="color:var(--down)">주전 상한 적용</b>':''}<br>참고: 이닝 종료 아웃 ${B.EO} · 2아웃 이후 ${B.T2PA}타석 ${B.T2OB}출루 · 타점 ${B.RBI}</p></div>`);
+  if(e.dc&&e.dc.inn>0)blocks.push(`<div class="card lcard"><h3>수비 Def+ ${e.def} ${grade(e.def)}</h3>
+    <div class="cg"><div><span>수비 이닝</span><b>${Math.round(e.dc.inn)}</b></div><div><span>실책 득점</span><b>${r1(e.dc.err)}</b></div><div><span>범위 득점</span><b>${r1(e.dc.rng)}</b></div>${e.dc.parts.some(x=>x.z==='포')?`<div><span>도루 저지 득점</span><b>${r1(e.dc.sbr)}</b></div><div><span>삼진 포구</span><b>${e.dc.kch}</b></div>`:''}<div><span>포지션 보정</span><b>${r1(e.dc.pos)}</b></div><div><span>Def</span><b>${r1(e.dc.def)}</b></div></div>
+    <p class="sub" style="margin:8px 0 4px">포지션별 득점 (표본 회귀 전 값, 실책·범위·도루 저지는 위 Def에서 이닝 ÷ (이닝+100)만큼만 반영)</p>${barList(e.dc.parts.map(x=>({label:ZNAME[x.z]+(x.z==='투'||x.z==='포'?'':'수'),sub:`${Math.round(x.inn)}이닝 · 실책 ${r1(x.er)} · 범위 ${r1(x.rg)} · 포지션 ${r1(x.pa)}${x.z==='포'?` · 삼진 포구 ${x.rc} · 도루 허용 ${x.sb}·저지 ${x.cs} (${r1(x.sr)})`:x.z==='1'?` · 송구 받은 아웃 ${x.rc}`:''}`,v:Math.abs(x.er+x.rg+x.pa+x.sr),text:r1(x.er+x.rg+x.pa+x.sr),color:x.er+x.rg+x.pa+x.sr>=0?'var(--up)':'var(--down)'})))}
+    <p class="sub" style="margin-top:6px">규정 ${e.dq}이닝 중 ${Math.round(e.dc.inn)}이닝 (반영 ${Math.round(e.drel*100)}%)${e.defCap?' · <b style="color:var(--down)">주전 상한 적용</b>':''}</p></div>`);
+  else blocks.push(`<div class="card lcard"><h3>수비 Def+ ${e.def??'-'}</h3><p class="sub">${e.dc&&e.dc.pos?`지명타자 포지션 보정 ${r1(e.dc.pos)}점만 있습니다. `:''}수비 이닝 기록이 없어 대체 수준 아래(${e.def??'-'})로 계산합니다.</p></div>`);
+  if(e.fip!=null)blocks.push(`<div class="card lcard"><h3>투수 FIP+ ${e.pit} ${grade(e.pit)}</h3>
+    <div class="cg"><div><span>FIP</span><b>${f2(e.fip)}</b></div><div><span>리그 FIP</span><b>${f2(EFF.lg.lgERA)}</b></div><div><span>ERA</span><b>${f2(Pp.ERA)}</b></div><div><span>투구 득점</span><b>${r1(e.prun)}</b></div><div><span>FIP+ 원값</span><b>${Math.round(e.praw)}</b></div></div>
+    <p class="sub" style="margin-top:6px">규정 ${ipStr(e.pq)}이닝 중 ${ipStr(Pp.outs)}이닝 (반영 ${Math.round(e.prel*100)}%)${e.pitCap?' · <b style="color:var(--down)">주전 상한 적용</b>':''}</p></div>`);
+  else blocks.push(`<div class="card lcard"><h3>투수 FIP+ -</h3><p class="sub">투수 기록이 없어 투구 득점은 0입니다.</p></div>`);
+  const a=e.raa;
+  return `<div class="grid g2">${blocks.join('')}</div><div class="card" style="margin-top:10px"><b>종합 ${e.total??'-'}</b> ${e.total!=null?grade(e.total):''}
+    ${a?`<div class="formula">평균 대비 득점(RAA) = 타격·주루 <b>${r1(a.bat)}</b> + 수비 <b>${r1(a.def)}</b> + 투구 <b>${r1(a.pit)}</b> = <b>${r1(a.total)}</b>점<br>종합 = 100 + 100 × ${r1(a.total)} ÷ (${B.PA>=Pp.BF?B.PA+'타석':Pp.BF+'타자'} × ${EFF.lg.RPA.toFixed(3)}) = <b>${Math.round(e.totalRaw)}</b>${e.total!==Math.round(e.totalRaw)?` → 규정 미달 보정 <b>${e.total}</b>`:''}</div>`:''}</div>`;
 }
 
+NOTES.effc=NOTES.effc.replace('X',EFF.lg.KENV.toFixed(1));
 const HEX=(()=>{
   const S=Store;
   const bPool=S.players.filter(p=>p.B.PA>=20),pPool=S.players.filter(p=>p.P.BF>=30);
@@ -8280,24 +9401,13 @@ function vsPitchers(p){
   if(tb&&tw&&tb!==tw)summary+=`유형별로는 <b>${tb.k}</b> 상대 타율이 ${f3(tb.avg)}로 가장 높고, <b>${tw.k}</b> 상대가 ${f3(tw.avg)}로 가장 낮습니다.`;
   return {list,types,summary};
 }
-
-function playerSummary(p,D,C,R,pr){
-  const B = p.B, P = p.P;
-  let t = '';
-  if (B && B.PA > 0) {
-    t += `시즌 타율 <b>${f3(B.AVG)}</b>, 출루율 <b>${f3(B.OBP)}</b>, 장타율 <b>${f3(B.SLG)}</b>, OPS <b>${f3(B.OPS)}</b> (${B.PA}타석 ${B.H}안타 ${B.RBI}타점 ${B.R}득점 ${B.SB}도루).`;
-  }
-  if (P && P.BF > 0) {
-    t += ` 투구 이닝 <b>${ipStr(P.outs)}</b>, 평균자책 <b>${P.outs >= 3 ? f2(P.ERA) : '-'}</b>, WHIP <b>${P.outs >= 3 ? f2(P.WHIP) : '-'}</b>, 탈삼진 <b>${P.SO}개</b> (${P.W}승 ${P.L}패).`;
-  }
-  if (D && D.ch > 0) {
-    t += ` 수비율 <b>${f3(D.pct)}</b> (기회 ${fmtN(D.ch)}, 실책 ${fmtN(D.e)}).`;
-  }
-  if (R) {
-    t += ` 최근 5경기 출루율 ${f3(R.s.OBP)} ${R.trend==='up'?'<b style="color:var(--up)">▲ 상승</b>':R.trend==='down'?'<b style="color:var(--down)">▼ 하락</b>':'• 유지'}.`;
-  }
-  return t || '등록된 시즌 기록이 없습니다.';
-}
+function playerSummary(p,D,C,R,pr){const B=p.B,e=EFF.get(p);let t=`종합 <b>${e.total??'-'}</b>${e.total!=null?' '+grade(e.total):''} (타자 wRC+ ${e.bat??'-'} · 수비 Def+ ${e.def??'-'} · 투수 FIP+ ${e.pit??'없음'}). 타율 <b>${f3(B.AVG)}</b>`;
+  if(pr!=null&&B.PA>=20)t+=` (20타석 이상 타자 중 상위 ${Math.max(1,100-pr)}%)`;t+=`, 출루율 ${f3(B.OBP)}, 타점 ${B.RBI}.`;
+  if(D)t+=` 수비율 ${f3(D.pct)} (실책 ${fmtN(D.e)} / 기회 ${fmtN(D.ch)}), 수비 ${e.dc?Math.round(e.dc.inn):0}이닝, 포지션 ${e.dc?e.dc.parts.length:0}개.`;
+  if(e.pit!=null)t+=` 투수 겸업 (${ipStr(p.P.outs)}이닝).`;
+  if(e.batCap||e.defCap||e.pitCap||e.totalCap)t+=' <b style="color:var(--down)">규정 미달로 주전 상한이 적용됐습니다.</b>';
+  if(R)t+=` 최근 5경기 출루율 ${f3(R.s.OBP)} ${R.trend==='up'?'<b style="color:var(--up)">상승세</b>':R.trend==='down'?'<b style="color:var(--down)">하락세</b>':'(비슷한 흐름)'}.`;
+  return t}
 
 function hexBlock(p,kind){
   const sc=HEX.scores(p,kind),color=teamTheme(p.team).bg;const small=kind==='bat'?p.B.PA<20:p.P.BF<30;
@@ -8402,7 +9512,7 @@ V.player=(q,key)=>{
   }
   return `<div class="board" style="background:${tc};color:${th.fg}"><div class="bhead">${badge(p.team,76)}<div class="bname"><div class="tm" style="color:#ffffff !important;font-weight:900">${esc(p.name)} ${p.no?`<span style="opacity:.7;font-weight:600">#${esc(p.no)}</span>`:''}</div>
     <small>${tlink(p.team)} · ${esc(p.mainPos||'')}${p.ptype?' · '+p.ptype:''}</small></div>
-    </div></div>
+    <button class="vsbtn" data-statcard="${esc(p.key)}" style="color:${tc};background:${th.fg};border:0;cursor:pointer">📸 스탯 카드 ›</button></div></div>
   ${hasB&&hasP?`<div class="tabs"><button data-pt="bat" class="${tab==='bat'?'on':''}">타격</button><button data-pt="pit" class="${tab==='pit'?'on':''}">투구</button></div>`:'<div style="height:10px"></div>'}${body}`;
 };
 V.player.bind=()=>{
@@ -8764,7 +9874,7 @@ V.match=(q)=>{
     <div class="mhead">${badge(T.t,44)}<div><b>${esc(T.t.short)}</b><small>${T.A.rec.W}승 ${T.A.rec.L}패${T.A.rec.D?' '+T.A.rec.D+'무':''} · 경기당 ${(T.A.rec.RS/Math.max(T.A.rec.G,1)).toFixed(1)}득점</small></div></div>
     <div class="preset"><button class="${s.preset==='most'?'on':''}" data-preset="${k}:most">2026 최다 라인업</button><button class="${s.preset==='best'?'on':''}" data-preset="${k}:best">★ 베스트 라인업</button><button class="${s.preset==='match'?'on':''}" data-preset="${k}:match">상대 선발 맞춤</button></div>
     <label class="lbl">선발 투수</label>
-    <select class="msel" data-sp="${k}">${T.pits.map(p=>`<option value="${esc(p.name)}" ${p.name===s.sp?'selected':''}>${esc(p.name)} · FIP+ ${p.idx} · ${ipStr(p.ps.outs)}이닝 · ERA ${f2(p.ps.ERA)}${p.type?' · '+p.type:''}</option>`).join('')}</select>
+    <select class="msel" data-sp="${k}">${T.pits.map(p=>`<option value="${esc(p.name)}" ${p.name===s.sp?'selected':''}>${esc(p.name)} · FIP+ ${p.idx}${p.qual?'':' (규정 미달)'} · ${ipStr(p.ps.outs)}이닝 · ERA ${f2(p.ps.ERA)}${p.type?' · '+p.type:''}</option>`).join('')}</select>
     ${(()=>{const P=T.pits.find(p=>p.name===s.sp);const ty=P&&P.type;return `<div class="spinfo">${typePill(ty)} <span>${ty?TYPE_OF(ty).feat:'상대 타자 30명 미만이라 유형을 나누지 않았습니다.'}</span></div>`})()}
     <label class="lbl">라인업 <span class="sub" style="margin-left:6px;font-weight:600">수비 숙련도 ${fam}%</span>
       <span class="modesw" title="포지션이 겹칠 때"><button class="${s.mode!=='auto'?'on':''}" data-mode="${k}:swap">자리 맞바꾸기</button><button class="${s.mode==='auto'?'on':''}" data-mode="${k}:auto">익숙한 자리로</button></span></label>
@@ -8866,33 +9976,33 @@ const LU_DEFAULT_LINEUPS = {
       id: 'L20261108_2',
       date: '2026-11-08',
       time: '14:30',
-      venue: '밀양스포츠파크2구장',
+      venue: '밀양 스포츠파크 2구장',
       host: '2026 선수협회장배 왕중왕전',
-      oppId: 'aTKa0053',
-      oppName: '대구달성군대구아레스여자야구단',
+      oppId: 'aDGa0028',
+      oppName: '대구 아레스',
       oppMode: 'list',
       starters: [
         { name: '안장우', pos: 'RF' },
         { name: '황지민', pos: 'SS' },
         { name: '정은경', pos: '3B' },
-        { name: '이수정', pos: '1B' },
-        { name: '이은숙', pos: 'CF' },
         { name: '민정현', pos: 'P' },
+        { name: '이은숙', pos: 'CF' },
+        { name: '이수정', pos: '1B' },
         { name: '구민경', pos: '2B' },
         { name: '이선희', pos: 'LF' },
         { name: '조보영', pos: 'C' }
       ],
-      bench: ['전광숙', '류이슬', '김설빈', '박세영', '서희숙', '송백설', '원미리', '전순아', '최수남'],
+      bench: ['전광숙', '류이슬', '전순아'],
       sp: '민정현'
     },
     {
       id: 'L20261108_1',
       date: '2026-11-08',
       time: '11:00',
-      venue: '밀양 스포츠파크1구장',
+      venue: '밀양 스포츠파크 1구장',
       host: '2026 선수협회장배 왕중왕전',
       oppId: 'aKNa0162',
-      oppName: '경남창원시창원플러스',
+      oppName: '창원플러스',
       oppMode: 'list',
       starters: [
         { name: '정은경', pos: 'SS' },
@@ -8905,7 +10015,7 @@ const LU_DEFAULT_LINEUPS = {
         { name: '전광숙', pos: '1B' },
         { name: '이선희', pos: 'P' }
       ],
-      bench: ['조보영', '류이슬', '김설빈', '박세영', '서희숙', '송백설', '원미리', '전순아', '최수남'],
+      bench: ['류이슬', '조보영', '전순아'],
       sp: '이선희'
     }
   ]
@@ -8916,11 +10026,20 @@ const LU={
     try{
       const stored = JSON.parse(localStorage.getItem(this.key)||'{}');
       if(!stored.aSEa0076 || stored.aSEa0076.length === 0){
-        stored.aSEa0076 = LU_DEFAULT_LINEUPS.aSEa0076.slice();
+        stored.aSEa0076 = JSON.parse(JSON.stringify(LU_DEFAULT_LINEUPS.aSEa0076));
       } else {
         for(const dl of LU_DEFAULT_LINEUPS.aSEa0076){
-          if(!stored.aSEa0076.some(x => x.id === dl.id)){
-            stored.aSEa0076.push(dl);
+          const idx = stored.aSEa0076.findIndex(x => x.id === dl.id);
+          if(idx >= 0){
+            stored.aSEa0076[idx].bench = dl.bench.slice();
+            stored.aSEa0076[idx].venue = dl.venue;
+            stored.aSEa0076[idx].host = dl.host;
+            stored.aSEa0076[idx].oppId = dl.oppId;
+            stored.aSEa0076[idx].oppName = dl.oppName;
+            stored.aSEa0076[idx].sp = dl.sp;
+            stored.aSEa0076[idx].starters = dl.starters.slice();
+          } else {
+            stored.aSEa0076.push(JSON.parse(JSON.stringify(dl)));
           }
         }
       }
@@ -8936,14 +10055,17 @@ const LU={
   del(tid,id){const o=this.all();o[tid]=(o[tid]||[]).filter(x=>x.id!==id);this.save(o)},
   extra(tid){try{return JSON.parse(localStorage.getItem('kbsa_lu_extra_'+tid)||'[]')}catch(e){return []}},
   addExtra(tid,n){const a=this.extra(tid);if(!a.includes(n)){a.push(n);try{localStorage.setItem('kbsa_lu_extra_'+tid,JSON.stringify(a))}catch(e){}}},
-  cols(){try{const raw=localStorage.getItem('kbsa_lu_cols');let a=raw?JSON.parse(raw):['AVG','OBP'];if(!Array.isArray(a))a=['AVG','OBP'];a=a.filter(k=>k!=='BAT'&&LU_COLS.some(c=>c.k===k));return a.length?a:['AVG','OBP']}catch(e){return ['AVG','OBP']}},
+  cols(){try{return JSON.parse(localStorage.getItem('kbsa_lu_cols')||'null')||['AVG','OBP','BAT']}catch(e){return ['AVG','OBP','BAT']}},
   setCols(a){try{localStorage.setItem('kbsa_lu_cols',JSON.stringify(a))}catch(e){}}
 };
 const LU_COLS=[
   {k:'AVG',t:'타율',v:p=>p&&p.B.AB?f3(p.B.AVG):'-'},
   {k:'OBP',t:'출루율',v:p=>p&&p.B.PA?f3(p.B.OBP):'-'},
+  {k:'bIdx',t:'타격 효율',v:p=>p&&p.B&&p.B.PA?Store.bIdx(p.B.PROD,p.B.PA):'-'},
+  {k:'AVG',t:'타율',v:p=>p&&p.B.AB?f3(p.B.AVG):'-'},
+  {k:'OBP',t:'출루율',v:p=>p&&p.B.PA?f3(p.B.OBP):'-'},
   {k:'SLG',t:'장타율',v:p=>p&&p.B.AB?f3(p.B.SLG):'-'},
-  {k:'OPS',t:'OPS',v:p=>p&&p.B.PA?f3(p.B.OPS):'-'},
+  {k:'BAT',t:'타격 효율',v:p=>{const e=p&&EFF.get(p);return e&&e.bat!=null&&p.B.PA?e.bat:'-'}},
   {k:'TOT',t:'종합',v:p=>{const e=p&&EFF.get(p);return e&&e.total!=null?e.total:'-'}},
   {k:'SB',t:'도루',v:p=>p&&p.B.PA?p.B.SB:'-'},
   {k:'PA',t:'타석',v:p=>p?p.B.PA:'-'}
@@ -8963,13 +10085,28 @@ function luNew(t){
   return {id:'L'+Date.now().toString(36),date:iso,time:'10:00',venue:'',host:'',oppId:'',oppName:'',oppMode:'list',starters:st.slice(0,9),bench:[],sp};
 }
 // 출력 카드 (목록 썸네일과 미리보기·이미지 공용)
-function luThumb(t,l,th){const o=luOpp(l);
-  return `<a class="clip" href="#/lineup/${t.id}/${l.id}" style="--tc:${th.bg}"><div class="paper">
-    <div class="ph">${badge(t,26)}<span class="ph-name">${esc(t.short)}</span></div>
-    <dl><dt>일시</dt><dd>${luDate(l.date)||'&nbsp;'}</dd><dt>시간</dt><dd>${luDayHtml(l.date)}${l.time?` / ${esc(l.time)}`:''}</dd>
-    <dt>구장</dt><dd>${esc(l.venue||'')}</dd><dt>주최</dt><dd>${esc(l.host||'')}</dd>
-    <dt>상대</dt><dd>${o.t?badge(o.t,18)+' ':''}${esc(o.name)}</dd></dl>
-    <div class="pf">선발 : <b>${esc(luSP(l))}</b></div></div></a>`}
+function luThumb(t,l,th){
+  const o=luOpp(l);
+  const pubTime = calcPubTime(l.time, 2);
+  const wDay = WD[luDay(l.date)] || '';
+  return `<a class="clip" href="#/lineup/${t.id}/${l.id}" style="--tc:#2563eb">
+    <div class="paper">
+      <div class="ph">
+        <span class="ph-badge">${esc(t.short)}</span>
+        <span class="ph-tag">라인업</span>
+      </div>
+      <dl>
+        <dt>일시</dt><dd><b>${luDate(l.date)}</b></dd>
+        <dt>시간</dt><dd><b class="sun">${wDay}요일</b> / <b>${esc(l.time||'')}</b></dd>
+        <dt>구장</dt><dd><b>${esc(l.venue||'-')}</b></dd>
+        <dt>주최</dt><dd>${esc(l.host||'-')}</dd>
+        <dt>상대</dt><dd>${o.t?badge(o.t,20)+' ':''}<b>${esc(o.name||'미정')}</b></dd>
+      </dl>
+      <div class="pf">선발 : <b>${esc(luSP(l))||'-'}</b></div>
+      ${pubTime ? `<div class="p-lock"><span>🔒 ${l.date ? l.date.slice(5).replace('-','.') : ''}(${wDay}) ${pubTime} 공개</span> <small>경기 2시간 전</small></div>` : ''}
+    </div>
+  </a>`;
+}
 function luCard(t,l,th,mode,cols){const o=luOpp(l);const C=LU_COLS.filter(c=>cols.includes(c.k));const P=n=>n?Store.player(t.id+'|'+n):null;
   const rows=l.starters.map((e,i)=>`<tr><td class="n">${i+1}</td><td class="ps" style="color:${th.bg}">${e.pos||''}</td><td class="nm">${esc(e.name||'')}</td>${C.map(c=>`<td class="v">${e.name?c.v(P(e.name)):''}</td>`).join('')}</tr>`).join('');
   const bench=l.bench.filter(Boolean);
@@ -9016,22 +10153,15 @@ function luDetail(t,l,th,o){
 V.lineup=(q,tid)=>{
   const S=Store;const myT=localStorage.getItem('kbsa_myteam');const t=S.team(tid)||S.team(myT)||S.teams.find(x=>!x.combined)||S.teams[0];if(!t)return `<div class="card">구단을 찾을 수 없습니다.</div>`;
   const th=teamTheme(t);const lid=parse().parts[2];
-  const head=`<div class="board lu-b" style="background: linear-gradient(135deg, #0D043D 0%, #172554 60%, #0F5FA4 100%) !important; color: #ffffff !important;">
-  <div class="bhead">
-    <div class="wt-bhead-top">
-      ${badge(t,54)}
-      <div class="wt-bhead-title-col">
-        <div class="tm" style="color:#ffffff !important;font-weight:900;font-size:clamp(17px, 4.8vw, 24px) !important;white-space:nowrap !important;letter-spacing:-0.03em !important;line-height:1.2 !important">${esc(t.short)} 라인업</div>
-        <span class="wt-hero-slogan" style="margin-top:2px;font-size:10.5px;padding:2px 8px;border-radius:4px;background:rgba(241,47,66,0.22);color:#fca5a5;border:1px solid rgba(241,47,66,0.4);white-space:nowrap !important;display:inline-block;width:fit-content">WINNERS TOGETHER · FRIENDS</span>
-      </div>
-    </div>
-    <div class="wt-bhead-sub" style="margin-top:6px;font-size:12px;color:rgba(255,255,255,0.9);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(t.name)} · 이 기기 & 구글 시트 실시간 저장</div>
-    <span class="vsbtns">
-      <button type="button" class="vsbtn" data-sheet-db style="color:#38bdf8;background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.5);cursor:pointer">📊 구글 시트 DB ↗</button>
-      <a class="vsbtn" href="#/team/${t.id}" style="color:#ffffff;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.28)">구단 상세 ›</a>
-    </span>
+  const head=`<div class="board lu-b" style="background: linear-gradient(135deg, #0D043D 0%, #172554 60%, #0F5FA4 100%) !important; color: #ffffff !important;"><div class="bhead">${badge(t,76)}<div class="bname">
+    <span class="wt-hero-slogan" style="margin-bottom:6px">WINNERS TOGETHER · FRIENDS</span>
+    <div class="tm" style="color:#ffffff !important;font-weight:900;font-size:26px !important">${esc(t.short)} 라인업</div>
+    <small style="color:rgba(255,255,255,0.92) !important">${esc(t.name)} · 이 기기 & 구글 시트 실시간 저장</small>
   </div>
-</div>`;
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <button type="button" class="vsbtn" data-sheet-db style="color:#38bdf8;background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.5);cursor:pointer">📊 구글 시트 DB ↗</button>
+    <a class="vsbtn" href="#/team/${t.id}" style="color:#ffffff;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.28)">구단 상세 ›</a>
+  </div></div></div>`;
   if(!lid){
     const L=LU.list(t.id);
     V.lineup.bind=()=>{};
@@ -9084,7 +10214,7 @@ V.lineup=(q,tid)=>{
   ${luCard(t,l,th,mode,cols)}
   <div class="lu-del"><button data-del>이 라인업 삭제</button></div>
   ${note('POS 표기: SS 유격수 · CF 중견수 · 2B 2루수 · 3B 3루수 · 1B 1루수 · LF 좌익수 · C 포수 · RF 우익수 · P 투수 · DH 지명타자. 이름 옆 ✓ 는 이미 다른 타순·후보에 들어간 선수이며, 고르면 두 자리가 서로 바뀝니다.',
-    '종합 = 효율지수 종합. 자세히 보기의 팀 전력과 예상 승률은 예상 경기 탭과 같은 계산(상대는 2026 최다 라인업·주 선발 기준)입니다.')}`;
+    '타격 효율 = wRC+ (100 = 리그 평균), 종합 = 효율지수 종합. 자세히 보기의 팀 전력과 예상 승률은 예상 경기 탭과 같은 계산(상대는 2026 최다 라인업·주 선발 기준)입니다.')}`;
   V.lineup.bind=()=>{
     const save=()=>{LU.put(t.id,l);const s=document.getElementById('luSaved');if(s){s.textContent='저장됨 ✓';}};
     const re=()=>{save();const y=window.scrollY;render();window.scrollTo(0,y)};
@@ -10809,28 +11939,7 @@ function bindTeamClubView() {
 V.comm = () => { setTimeout(()=>go('#/'), 0); return '<div class="loading">홈으로 이동 중…</div>'; };
 V.comm.bind = () => {};
 
-function luLoadH2C(){
-  if(window.html2canvas) return Promise.resolve(window.html2canvas);
-  return new Promise((ok, no) => {
-    const s = document.createElement('script');
-    s.src = 'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js';
-    s.onload = () => ok(window.html2canvas);
-    s.onerror = () => {
-      const s2 = document.createElement('script');
-      s2.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
-      s2.onload = () => ok(window.html2canvas);
-      s2.onerror = () => {
-        const s3 = document.createElement('script');
-        s3.src = 'https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.js';
-        s3.onload = () => ok(window.html2canvas);
-        s3.onerror = no;
-        document.head.appendChild(s3);
-      };
-      document.head.appendChild(s2);
-    };
-    document.head.appendChild(s);
-  });
-}
+function luLoadH2C(){return window.html2canvas?Promise.resolve():new Promise((ok,no)=>{const s=document.createElement('script');s.src='lib/html2canvas.min.js';s.onload=ok;s.onerror=no;document.head.appendChild(s)})}
 
 const WT_GAS_URL = 'https://script.google.com/macros/s/AKfycbwJkdWv9a7BXTsI-rwdOasNLL11iJiBgMyzMrmIcGS_2VfR2_TeAA_z_nbEYY5Un7cO/exec';
 
@@ -10879,44 +11988,13 @@ async function saveLineupToGoogleSheet(l, t, btn) {
   }
 }
 
-function luSaveImage(l, t, btn) {
-  const el = document.getElementById('lcard');
-  if (!el) return;
-  const txt = btn.textContent;
-  btn.textContent = '⏳ 만드는 중…';
-  btn.disabled = true;
-
-  luLoadH2C()
-    .then(() => html2canvas(el, { scale: 2.5, backgroundColor: null, useCORS: true, logging: false }))
-    .then(cv => {
-      const fn = `lineup-${(l.date || '').replace(/-/g, '')}-${(l.time || '').replace(':', '')}-${t.id}.png`;
-      cv.toBlob(b => {
-        if (!b) throw new Error('Blob creation failed');
-        const dl = () => {
-          const a = document.createElement('a');
-          a.href = URL.createObjectURL(b);
-          a.download = fn;
-          document.body.appendChild(a);
-          a.click();
-          setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 2000);
-        };
-        const f = new File([b], fn, { type: 'image/png' });
-        if (navigator.canShare && navigator.canShare({ files: [f] }) && /Android|iPhone|iPad/i.test(navigator.userAgent)) {
-          navigator.share({ files: [f], title: fn }).catch(dl);
-        } else {
-          dl();
-        }
-        btn.textContent = '✅ 저장 완료!';
-        setTimeout(() => { btn.disabled = false; btn.textContent = txt; }, 2000);
-      }, 'image/png');
-    })
-    .catch(err => {
-      console.error('Lineup Save Image Error:', err);
-      btn.disabled = false;
-      btn.textContent = '저장 실패 — 다시 시도';
-      setTimeout(() => btn.textContent = txt, 2500);
-    });
-}
+function luSaveImage(l,t,btn){const el=document.getElementById('lcard');if(!el)return;const txt=btn.textContent;btn.textContent='만드는 중…';
+  luLoadH2C().then(()=>html2canvas(el,{scale:2,backgroundColor:null,useCORS:true})).then(cv=>{
+    const fn=`lineup-${(l.date||'').replace(/-/g,'')}-${(l.time||'').replace(':','')}-${t.id}.png`;
+    cv.toBlob(b=>{const f=new File([b],fn,{type:'image/png'});
+      const dl=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=fn;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500)};
+      if(navigator.canShare&&navigator.canShare({files:[f]})&&/Android|iPhone|iPad/i.test(navigator.userAgent)){navigator.share({files:[f],title:fn}).catch(dl)}else dl();
+      btn.textContent=txt},'image/png')}).catch(()=>{btn.textContent='저장 실패 — 다시 시도';setTimeout(()=>btn.textContent=txt,2500)})}
 /* =========================================================================
    4) ROUTER
    ========================================================================= */
@@ -10934,12 +12012,12 @@ function render(){
   const nav=TABS.map(t=>`<a href="${t.h}" class="${t.k===top?'on':''}">${t.t}</a>`).join('');
   document.getElementById('topnav').innerHTML=nav;
   document.getElementById('tabbar').innerHTML=TABS.map(t=>`<a href="${t.h}" class="${t.k===top?'on':''}"><svg viewBox="0 0 24 24">${t.i}</svg>${t.t}</a>`).join('');
-  document.getElementById('back')?.classList.toggle('on',parts.length>1);
+  document.getElementById('back').classList.toggle('on',parts.length>1);
   if(changed)window.scrollTo(0,0);
-  window.syncTeamSel&&window.syncTeamSel(); syncThemeUI();
+  window.syncTeamSel&&syncTeamSel(); syncThemeUI();
   document.title=(({home:'WT프렌즈 클럽하우스 · ',standings:'순위 · ',games:'경기 · ',teams:'구단 · ',team:'우리팀 · ',players:'선수 · ',match:'예상 경기 · ',lineup:'라인업 · '})[name]??'')+'WT프렌즈 야구 기록실 2026';
 }
-if(document.getElementById('back')) document.getElementById('back').onclick=()=>history.length>1?history.back():go('#/');
+document.getElementById('back').onclick=()=>history.length>1?history.back():go('#/');
 document.getElementById('collected').textContent=Store.meta.collected;
 (function teamSelector(){
   const sel=document.getElementById('teamSel');
@@ -11154,164 +12232,6 @@ document.addEventListener('click', e => {
 
 window.addEventListener('hashchange',render);
 let _mob=isMobile();window.addEventListener('resize',()=>{if(isMobile()!==_mob){_mob=isMobile();const y=window.scrollY;render();window.scrollTo(0,y)}});
-
-/* ==========================================================================
-   WT FRIENDS PWA & SHORTCUT INSTALLATION SYSTEM (MOBILE & PC CROSS-PLATFORM)
-   ========================================================================== */
-if (typeof navigator !== 'undefined' && 'serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
-  });
-}
-
-let deferredInstallPrompt = null;
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredInstallPrompt = e;
-});
-
-function handleAppInstallClick() {
-  if (deferredInstallPrompt) {
-    deferredInstallPrompt.prompt();
-    deferredInstallPrompt.userChoice.then((choiceResult) => {
-      if (choiceResult.outcome === 'accepted') {
-        alert('🎉 WT프렌즈 앱 아이콘이 홈 화면에 성공적으로 추가되었습니다!');
-      }
-      deferredInstallPrompt = null;
-    });
-    return;
-  }
-
-  const ua = typeof navigator !== 'undefined' ? navigator.userAgent : '';
-  const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
-  const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
-
-  if (isIOS) {
-    showIosInstallModal();
-  } else if (!isMobile) {
-    showDesktopInstallModal();
-  } else {
-    showAndroidGuideModal();
-  }
-}
-
-function showIosInstallModal() {
-  const modal = document.createElement('div');
-  modal.className = 'tc-modal-wrap';
-  modal.style.zIndex = '9999';
-  modal.innerHTML = `
-    <div class="tc-modal-dialog" style="max-width:440px;padding:24px 20px;text-align:center;color:var(--ink);background:var(--card);border:1.5px solid var(--border);border-radius:20px;box-sizing:border-box">
-      <div style="display:flex;justify-content:center;margin-bottom:12px">
-        <img src="icons/icon-192.png" style="width:60px;height:60px;border-radius:14px;background:#091835;padding:3px;border:1.5px solid rgba(255,255,255,0.25)" alt="WT프렌즈">
-      </div>
-      <h3 style="font-size:18px;font-weight:900;margin-bottom:6px">아이폰 홈 화면에 바로가기 추가</h3>
-      <p style="font-size:13px;color:var(--mute);margin-bottom:16px;line-height:1.5">사파리(Safari) 브라우저에서 아래 2단계를 진행하시면 바탕화면에 엠블럼 아이콘이 생성됩니다.</p>
-      <div style="background:var(--bg-hover,#f1f5f9);border:1px solid var(--border);border-radius:14px;padding:14px 16px;text-align:left;font-size:13px;line-height:1.7;margin-bottom:18px">
-        <div><b>1단계:</b> 사파리 화면 하단 중앙의 <b>공유 버튼 (사각형 화살표 ⎋)</b>을 누릅니다.</div>
-        <div style="margin-top:6px"><b>2단계:</b> 아래로 스크롤하여 <b>[홈 화면에 추가 ➕]</b>를 누릅니다.</div>
-        <div style="margin-top:6px"><b>3단계:</b> 우측 상단의 <b>[추가]</b>를 누르면 완료!</div>
-      </div>
-      <button type="button" class="more-btn" style="width:100%;padding:11px;font-size:14px;font-weight:800;border-radius:10px;background:var(--ink);color:#fff;border:none;cursor:pointer">확인했습니다</button>
-    </div>
-  `;
-  modal.onclick = (e) => { if(e.target === modal || e.target.closest('button')) modal.remove(); };
-  document.body.appendChild(modal);
-}
-
-function showAndroidGuideModal() {
-  const modal = document.createElement('div');
-  modal.className = 'tc-modal-wrap';
-  modal.style.zIndex = '9999';
-  modal.innerHTML = `
-    <div class="tc-modal-dialog" style="max-width:440px;padding:24px 20px;text-align:center;color:var(--ink);background:var(--card);border:1.5px solid var(--border);border-radius:20px;box-sizing:border-box">
-      <div style="display:flex;justify-content:center;margin-bottom:12px">
-        <img src="icons/icon-192.png" style="width:60px;height:60px;border-radius:14px;background:#091835;padding:3px;border:1.5px solid rgba(255,255,255,0.25)" alt="WT프렌즈">
-      </div>
-      <h3 style="font-size:18px;font-weight:900;margin-bottom:6px">스마트폰 홈 화면에 앱 추가</h3>
-      <p style="font-size:13px;color:var(--mute);margin-bottom:16px;line-height:1.5">사용 중이신 브라우저에 따라 1초 만에 추가하실 수 있습니다.</p>
-      <div style="background:var(--bg-hover,#f1f5f9);border:1px solid var(--border);border-radius:14px;padding:14px 16px;text-align:left;font-size:13px;line-height:1.7;margin-bottom:14px">
-        <div style="font-weight:800;color:var(--accent,#0284c7);margin-bottom:4px">📱 삼성 인터넷 브라우저 (갤럭시 기본)</div>
-        <div><b>방법 1:</b> 화면 맨 위 주소창 우측의 <b>다운로드 아이콘 [ ⬇️ ]</b> 클릭 (가장 빠름!)</div>
-        <div style="margin-top:4px"><b>방법 2:</b> 하단 메뉴 ➔ <b>[현재 페이지 추가 (+)]</b> ➔ <b>[홈 화면]</b> 선택</div>
-      </div>
-      <div style="background:var(--bg-hover,#f1f5f9);border:1px solid var(--border);border-radius:14px;padding:14px 16px;text-align:left;font-size:13px;line-height:1.7;margin-bottom:18px">
-        <div style="font-weight:800;color:var(--accent,#0284c7);margin-bottom:4px">🌐 크롬(Chrome) 브라우저</div>
-        <div>우측 상단 <b>(점 3개 ⋮)</b> ➔ <b>[홈 화면에 추가]</b> 또는 <b>[앱 설치]</b> 선택</div>
-      </div>
-      <button type="button" class="more-btn" style="width:100%;padding:11px;font-size:14px;font-weight:800;border-radius:10px;background:var(--ink);color:#fff;border:none;cursor:pointer">확인했습니다</button>
-    </div>
-  `;
-  modal.onclick = (e) => { if(e.target === modal || e.target.closest('button')) modal.remove(); };
-  document.body.appendChild(modal);
-}
-
-function showDesktopInstallModal() {
-  const modal = document.createElement('div');
-  modal.className = 'tc-modal-wrap';
-  modal.style.zIndex = '9999';
-  modal.innerHTML = `
-    <div class="tc-modal-dialog" style="max-width:480px;padding:26px 22px;text-align:center;color:var(--ink);background:var(--card);border:1.5px solid var(--border);border-radius:20px;box-sizing:border-box">
-      <div style="display:flex;justify-content:center;margin-bottom:12px">
-        <img src="icons/icon-192.png" style="width:64px;height:64px;border-radius:14px;background:#091835;padding:3px;border:1.5px solid rgba(255,255,255,0.25)" alt="WT프렌즈">
-      </div>
-      <h3 style="font-size:19px;font-weight:900;margin-bottom:6px">PC 바탕화면에 바로가기 만들기</h3>
-      <p style="font-size:13px;color:var(--mute);margin-bottom:18px;line-height:1.5">아래 방법 중 편하신 방식을 선택하시면 바탕화면에서 원클릭으로 접속하실 수 있습니다.</p>
-      
-      <div style="display:grid;gap:12px;margin-bottom:20px">
-        <div style="background:var(--bg-hover,#f1f5f9);border:1px solid var(--border);border-radius:14px;padding:14px 16px;text-align:left">
-          <b style="font-size:13.5px;color:var(--ink);display:block;margin-bottom:4px">방법 1: 바탕화면 바로가기 파일 즉시 다운로드</b>
-          <p style="font-size:12px;color:var(--mute);margin-bottom:10px">다운로드된 바로가기 파일을 바탕화면에 끌어다 놓으시면 됩니다.</p>
-          <button type="button" id="btnDownloadShortcutFile" style="display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg, #F12F42 0%, #DC2626 100%);color:#fff;border:none;border-radius:8px;padding:9px 16px;font-size:13px;font-weight:800;cursor:pointer">
-            <span>📥</span> <span>바로가기 파일(.url) 다운로드</span>
-          </button>
-        </div>
-
-        <div style="background:var(--bg-hover,#f1f5f9);border:1px solid var(--border);border-radius:14px;padding:14px 16px;text-align:left">
-          <b style="font-size:13.5px;color:var(--ink);display:block;margin-bottom:4px">방법 2: 브라우저 앱(PWA) 설치 (Chrome / Edge)</b>
-          <p style="font-size:12px;color:var(--mute);margin:0">상단 인터넷 주소창 우측의 <b>[설치 ⊕]</b> 아이콘을 클릭하시면 컴퓨터에 독립 실행형 앱으로 설치됩니다.</p>
-        </div>
-      </div>
-
-      <button type="button" class="more-btn" style="width:100%;padding:11px;font-size:14px;font-weight:800;border-radius:10px;background:var(--ink);color:#fff;border:none;cursor:pointer">닫기</button>
-    </div>
-  `;
-  modal.onclick = (e) => {
-    if(e.target === modal || (e.target.closest('button') && e.target.id !== 'btnDownloadShortcutFile')) {
-      modal.remove();
-    }
-  };
-  const dlBtn = modal.querySelector('#btnDownloadShortcutFile');
-  if (dlBtn) {
-    dlBtn.onclick = () => {
-      downloadDesktopShortcut();
-    };
-  }
-  document.body.appendChild(modal);
-}
-
-function downloadDesktopShortcut() {
-  const currentUrl = window.location.href.split('#')[0];
-  const shortcutContent = `[InternetShortcut]\r\nURL=${currentUrl}\r\nIconIndex=0\r\nIconFile=${currentUrl}icons/favicon.png\r\n`;
-  const blob = new Blob([shortcutContent], { type: 'application/octet-stream' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'WT프렌즈_야구기록실.url';
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-}
-
-// Global click delegation for install buttons
-document.addEventListener('click', (e) => {
-  const btn = e.target.closest('[data-action="install-app"], #btnInstallApp');
-  if (btn) {
-    e.preventDefault();
-    handleAppInstallClick();
-  }
-});
-
-
 render();
 </script>
 
