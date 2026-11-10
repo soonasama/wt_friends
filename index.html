@@ -9216,6 +9216,60 @@ html[data-theme="dark"] .bl .p-no-chip {
   color: #60a5fa !important;
 }
 
+
+/* =========================================================================
+   SETLOG CHIPS HIGH CONTRAST (훈련 셋로그 가독성 보강)
+   ========================================================================= */
+.sl-metrics {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  margin: 6px 0 !important;
+}
+
+.sl-mchip {
+  background: #eef2ff !important;
+  color: #1e40af !important;
+  border: 1px solid #c7d2fe !important;
+  font-weight: 800 !important;
+  font-size: 12.5px !important;
+  padding: 5px 12px !important;
+  border-radius: 8px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+
+.sl-mchip.bat {
+  background: #ecfdf5 !important;
+  color: #065f46 !important;
+  border: 1px solid #a7f3d0 !important;
+}
+
+.sl-mchip.pit {
+  background: #fef2f2 !important;
+  color: #991b1b !important;
+  border: 1px solid #fecdd3 !important;
+}
+
+html[data-theme="dark"] .sl-mchip {
+  background: rgba(30, 58, 138, 0.4) !important;
+  color: #93c5fd !important;
+  border-color: rgba(96, 165, 250, 0.4) !important;
+}
+
+html[data-theme="dark"] .sl-mchip.bat {
+  background: rgba(6, 95, 70, 0.4) !important;
+  color: #6ee7b7 !important;
+  border-color: rgba(52, 211, 153, 0.4) !important;
+}
+
+html[data-theme="dark"] .sl-mchip.pit {
+  background: rgba(153, 27, 27, 0.4) !important;
+  color: #fca5a5 !important;
+  border-color: rgba(248, 113, 113, 0.4) !important;
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
 </head>
@@ -13394,12 +13448,13 @@ function updateEventsSheet(ss, events) {
 }
 
 function updateNoticesSheet(ss, notices) {
-  var sheet = getOrCreateSheet(ss, '📣 공지사항');
+  var sheet = getOrCreateSheet(ss, '📣 공지사항 및 댓글');
   sheet.clear();
-  var headers = ['구분', '고정 여부', '작성자', '작성일', '제목', '내용', '댓글 수'];
+  var headers = ['구분', '고정 여부', '작성자', '작성일', '제목', '공지 내용', '팀원 댓글'];
   var rows = [headers];
   notices.forEach(function(nt) {
-    rows.push([nt.cat || '공지', nt.pinned ? '📌 고정' : '일반', nt.author || '', nt.date || '', nt.title || '', nt.body || '', (nt.comments || []).length + '개']);
+    var cmtTexts = (nt.comments || []).map(function(c) { return c.author + ': ' + c.text + ' (' + c.date + ')'; }).join('\n');
+    rows.push([nt.cat || '공지', nt.pinned ? '📌 고정' : '일반', nt.author || '', nt.date || '', nt.title || '', nt.body || '', cmtTexts || '댓글 없음']);
   });
   sheet.getRange(1, 1, rows.length, headers.length).setValues(rows);
   sheet.getRange(1, 1, 1, headers.length).setBackground('#0f172a').setFontColor('#ffffff').setFontWeight('bold');
@@ -13681,7 +13736,9 @@ function bindTeamClubView() {
   const ntForm = document.getElementById('ntFormBox');
   if (ntForm) ntForm.onsubmit = (e) => {
     e.preventDefault();
-    data.notices.unshift({
+    const curData = ClubStore.getTeamData(t);
+    curData.notices = curData.notices || [];
+    curData.notices.unshift({
       id: 'nt' + Date.now().toString(36),
       cat: document.getElementById('ntInCat').value,
       pinned: document.getElementById('ntInPin').checked,
@@ -13691,29 +13748,55 @@ function bindTeamClubView() {
       body: document.getElementById('ntInBody').value.trim(),
       comments: []
     });
-    ClubStore.saveTeamData(t, data);
+    ClubStore.saveTeamData(t, curData);
     UI.showNtForm = false;
     re();
   };
 
   $app.querySelectorAll('[data-nt-del]').forEach(btn => {
-    btn.onclick = () => {
-      data.notices = data.notices.filter(x => x.id !== btn.dataset.ntDel);
-      ClubStore.saveTeamData(t, data);
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      const ntId = btn.dataset.ntDel;
+      if (!confirm('이 공지글을 삭제하시겠습니까?')) return;
+      const curData = ClubStore.getTeamData(t);
+      curData.notices = (curData.notices || []).filter(x => x.id !== ntId);
+      ClubStore.saveTeamData(t, curData);
       re();
     };
   });
 
+  // 댓글 등록 버튼 및 엔터키 입력 바인딩
+  const postComment = (id) => {
+    const inp = $app.querySelector(`[data-nt-cin="${id}"]`);
+    if (!inp || !inp.value.trim()) return;
+    const curData = ClubStore.getTeamData(t);
+    const nt = (curData.notices || []).find(x => x.id === id);
+    if (nt) {
+      nt.comments = nt.comments || [];
+      nt.comments.push({
+        author: me,
+        text: inp.value.trim(),
+        date: new Date().toISOString().slice(5, 10).replace('-', '.')
+      });
+      ClubStore.saveTeamData(t, curData);
+      re();
+    }
+  };
+
   $app.querySelectorAll('[data-nt-cbtn]').forEach(btn => {
-    btn.onclick = () => {
-      const id = btn.dataset.ntCbtn;
-      const inp = $app.querySelector(`[data-nt-cin="${id}"]`);
-      if (!inp || !inp.value.trim()) return;
-      const nt = data.notices.find(x => x.id === id);
-      if (nt) {
-        nt.comments.push({ author: me, text: inp.value.trim(), date: new Date().toISOString().slice(5, 10).replace('-', '.') });
-        ClubStore.saveTeamData(t, data);
-        re();
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      postComment(btn.dataset.ntCbtn);
+    };
+  });
+
+  $app.querySelectorAll('[data-nt-cin]').forEach(inp => {
+    inp.onkeydown = (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        postComment(inp.dataset.ntCin);
       }
     };
   });
@@ -13726,7 +13809,9 @@ function bindTeamClubView() {
   const slForm = document.getElementById('slFormBox');
   if (slForm) slForm.onsubmit = (e) => {
     e.preventDefault();
-    data.setlogs.unshift({
+    const curData = ClubStore.getTeamData(t);
+    curData.setlogs = curData.setlogs || [];
+    curData.setlogs.unshift({
       id: 'sl' + Date.now().toString(36),
       author: me,
       date: new Date().toISOString().slice(0, 10),
@@ -13736,15 +13821,20 @@ function bindTeamClubView() {
       drill: document.getElementById('slInDrill').value.trim(),
       memo: document.getElementById('slInMemo').value.trim()
     });
-    ClubStore.saveTeamData(t, data);
+    ClubStore.saveTeamData(t, curData);
     UI.showSlForm = false;
     re();
   };
 
   $app.querySelectorAll('[data-sl-del]').forEach(btn => {
-    btn.onclick = () => {
-      data.setlogs = data.setlogs.filter(x => x.id !== btn.dataset.slDel);
-      ClubStore.saveTeamData(t, data);
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      const slId = btn.dataset.slDel;
+      if (!confirm('이 훈련 셋로그를 삭제하시겠습니까?')) return;
+      const curData = ClubStore.getTeamData(t);
+      curData.setlogs = (curData.setlogs || []).filter(x => x.id !== slId);
+      ClubStore.saveTeamData(t, curData);
       re();
     };
   });

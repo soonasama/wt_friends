@@ -138,11 +138,15 @@ function updateEventsSheet(ss, events) {
 }
 
 function updateNoticesSheet(ss, notices) {
-  var sheet = getOrCreateSheet(ss, '📣 공지사항');
+  var sheet = getOrCreateSheet(ss, '📣 공지사항 및 댓글');
   sheet.clear();
-  var headers = ['구분', '고정 여부', '작성자', '작성일', '제목', '내용', '댓글 수'];
+  var headers = ['구분', '고정 여부', '작성자', '작성일', '제목', '공지 내용', '팀원 댓글 내용 (작성자: 내용)'];
   var rows = [headers];
   notices.forEach(function(nt) {
+    var cmtTexts = (nt.comments || []).map(function(c) {
+      return c.author + ': ' + c.text + ' (' + c.date + ')';
+    }).join('
+');
     rows.push([
       nt.cat || '공지',
       nt.pinned ? '📌 고정' : '일반',
@@ -150,7 +154,7 @@ function updateNoticesSheet(ss, notices) {
       nt.date || '',
       nt.title || '',
       nt.body || '',
-      (nt.comments || []).length + '개'
+      cmtTexts || '댓글 없음'
     ]);
   });
   sheet.getRange(1, 1, rows.length, headers.length).setValues(rows);
