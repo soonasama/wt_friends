@@ -9179,7 +9179,7 @@ html[data-theme="dark"] #lcard .paper {
 
 .br {
   display: grid !important;
-  grid-template-columns: minmax(200px, 46%) 1fr 48px !important;
+  grid-template-columns: minmax(180px, 40%) 1fr auto !important;
   gap: 14px !important;
   align-items: center !important;
   padding: 4px 0 !important;
@@ -9564,6 +9564,86 @@ button#btnTestAndSaveSheet {
   background: #ef4444 !important;
   color: #ffffff !important;
   border-color: #ef4444 !important;
+}
+
+
+/* =========================================================================
+   DUMBBELL CHART CLEAN HIGH CONTRAST (최근 추세 덤벨 그래프 및 수치 잘림 해결)
+   ========================================================================= */
+.bt.db {
+  position: relative !important;
+  height: 10px !important;
+  background: #e2e8f0 !important;
+  border-radius: 999px !important;
+  overflow: visible !important;
+}
+
+.bt.db .seg {
+  position: absolute !important;
+  top: 3px !important;
+  height: 4px !important;
+  border-radius: 2px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  display: block !important;
+}
+
+.bt.db .seg.up {
+  background: #10b981 !important; /* 상승: 에메랄드 그린 */
+}
+
+.bt.db .seg.down {
+  background: #ef4444 !important; /* 하락: 레드 */
+}
+
+.bt.db .dot {
+  position: absolute !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: 12px !important;
+  height: 12px !important;
+  margin: 0 !important;
+  border-radius: 50% !important;
+  border: 2px solid #ffffff !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25) !important;
+  display: block !important;
+}
+
+.bt.db .dot.a {
+  background: #64748b !important; /* 시즌 기준점: 슬레이트 그레이 */
+  z-index: 2 !important;
+}
+
+.bt.db .dot.b.up {
+  background: #10b981 !important; /* 최근 상승: 에메랄드 그린 */
+  z-index: 3 !important;
+}
+
+.bt.db .dot.b.down {
+  background: #ef4444 !important; /* 최근 하락: 레드 */
+  z-index: 3 !important;
+}
+
+/* 수치 텍스트 우측 잘림 방지 */
+.br .bv {
+  min-width: 95px !important;
+  font-size: 13.5px !important;
+  font-weight: 800 !important;
+  font-variant-numeric: tabular-nums !important;
+  text-align: right !important;
+  white-space: nowrap !important;
+  color: #0f172a !important;
+}
+
+html[data-theme=dark] .bt.db {
+  background: #334155 !important;
+}
+html[data-theme=dark] .bt.db .dot.a {
+  background: #94a3b8 !important;
+  border-color: #0f172a !important;
+}
+html[data-theme=dark] .br .bv {
+  color: #f8fafc !important;
 }
 
 </style>
