@@ -8860,9 +8860,75 @@ const POS_EN={'유격':'SS','중견':'CF','2루':'2B','3루':'3B','1루':'1B','�
 const POS_ORDER=['SS','CF','2B','3B','1B','LF','C','RF','P','DH'];
 const EN2K=Object.fromEntries(Object.entries(POS_EN).map(([k,v])=>[v,k]));
 const pEN=p=>POS_EN[p]||p;
+const LU_DEFAULT_LINEUPS = {
+  aSEa0076: [
+    {
+      id: 'L20261108_2',
+      date: '2026-11-08',
+      time: '14:30',
+      venue: '밀양스포츠파크2구장',
+      host: '2026 선수협회장배 왕중왕전',
+      oppId: 'aTKa0053',
+      oppName: '대구달성군대구아레스여자야구단',
+      oppMode: 'list',
+      starters: [
+        { name: '안장우', pos: 'RF' },
+        { name: '황지민', pos: 'SS' },
+        { name: '정은경', pos: '3B' },
+        { name: '이수정', pos: '1B' },
+        { name: '이은숙', pos: 'CF' },
+        { name: '민정현', pos: 'P' },
+        { name: '구민경', pos: '2B' },
+        { name: '이선희', pos: 'LF' },
+        { name: '조보영', pos: 'C' }
+      ],
+      bench: ['전광숙', '류이슬', '김설빈', '박세영', '서희숙', '송백설', '원미리', '전순아', '최수남'],
+      sp: '민정현'
+    },
+    {
+      id: 'L20261108_1',
+      date: '2026-11-08',
+      time: '11:00',
+      venue: '밀양 스포츠파크1구장',
+      host: '2026 선수협회장배 왕중왕전',
+      oppId: 'aKNa0162',
+      oppName: '경남창원시창원플러스',
+      oppMode: 'list',
+      starters: [
+        { name: '정은경', pos: 'SS' },
+        { name: '황지민', pos: 'LF' },
+        { name: '이은숙', pos: 'CF' },
+        { name: '민정현', pos: '3B' },
+        { name: '이수정', pos: 'C' },
+        { name: '안장우', pos: 'RF' },
+        { name: '구민경', pos: '2B' },
+        { name: '전광숙', pos: '1B' },
+        { name: '이선희', pos: 'P' }
+      ],
+      bench: ['조보영', '류이슬', '김설빈', '박세영', '서희숙', '송백설', '원미리', '전순아', '최수남'],
+      sp: '이선희'
+    }
+  ]
+};
 const LU={
   key:'kbsa_lineups',
-  all(){try{return JSON.parse(localStorage.getItem(this.key)||'{}')}catch(e){return {}}},
+  all(){
+    try{
+      const stored = JSON.parse(localStorage.getItem(this.key)||'{}');
+      if(!stored.aSEa0076 || stored.aSEa0076.length === 0){
+        stored.aSEa0076 = LU_DEFAULT_LINEUPS.aSEa0076.slice();
+      } else {
+        for(const dl of LU_DEFAULT_LINEUPS.aSEa0076){
+          if(!stored.aSEa0076.some(x => x.id === dl.id)){
+            stored.aSEa0076.push(dl);
+          }
+        }
+      }
+      return stored;
+    }catch(e){
+      return LU_DEFAULT_LINEUPS;
+    }
+  },
   save(o){try{localStorage.setItem(this.key,JSON.stringify(o));return true}catch(e){return false}},
   list(tid){return (this.all()[tid]||[]).slice().sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time))},
   get(tid,id){return (this.all()[tid]||[]).find(x=>x.id===id)},
