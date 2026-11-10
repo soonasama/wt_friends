@@ -9270,6 +9270,155 @@ html[data-theme="dark"] .sl-mchip.pit {
   border-color: rgba(248, 113, 113, 0.4) !important;
 }
 
+
+/* =========================================================================
+   CLEAN STREAMLINED CLUB PROFILE BAR (팀 라운지 프로필 선택 바 깔끔 정돈)
+   ========================================================================= */
+.cl-bar {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  background: #ffffff !important;
+  border: 1.5px solid #e2e8f0 !important;
+  border-radius: 14px !important;
+  padding: 14px 18px !important;
+  margin-bottom: 16px !important;
+  box-shadow: none !important;
+}
+
+.cl-bar-main {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 14px !important;
+  flex-wrap: wrap !important;
+}
+
+.cl-who-group {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+}
+
+.cl-who-label {
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+}
+
+.cl-who-select {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border: 1.5px solid #cbd5e1 !important;
+  border-radius: 10px !important;
+  padding: 8px 12px !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  min-width: 170px !important;
+  max-width: 280px !important;
+  outline: none !important;
+  transition: border-color 0.15s ease !important;
+}
+
+.cl-who-select:focus {
+  border-color: #2563eb !important;
+}
+
+.cl-bar-btns {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex-shrink: 0 !important;
+}
+
+.cl-bar-sub {
+  font-size: 12px !important;
+  color: #64748b !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+  border-top: 1px dashed #e2e8f0 !important;
+  padding-top: 8px !important;
+  margin-top: 2px !important;
+}
+
+/* 모바일 뷰 최적화: 가로 분할 및 줄바꿈 없는 깔끔한 정렬 */
+@media (max-width: 640px) {
+  .cl-bar {
+    padding: 12px 14px !important;
+    gap: 8px !important;
+  }
+  .cl-bar-main {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+  }
+  .cl-who-group {
+    width: 100% !important;
+    justify-content: space-between !important;
+  }
+  .cl-who-select {
+    flex: 1 !important;
+    max-width: none !important;
+  }
+  .cl-bar-btns {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+  .cl-bar-btns button {
+    width: 100% !important;
+    text-align: center !important;
+    padding: 8px 6px !important;
+  }
+}
+
+html[data-theme="dark"] .cl-bar {
+  background: #0f172a !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+html[data-theme="dark"] .cl-who-label {
+  color: #f8fafc !important;
+}
+html[data-theme="dark"] .cl-who-select {
+  background: #1e293b !important;
+  color: #f8fafc !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+}
+html[data-theme="dark"] .cl-bar-sub {
+  color: #94a3b8 !important;
+  border-top-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+
+/* =========================================================================
+   VACATION EVENT STYLING (방학·휴식기 확인 투표 스타일)
+   ========================================================================= */
+.ev-badge.방학,
+.ev-badge.vacation {
+  background: #e0f2fe !important;
+  color: #0369a1 !important;
+  border: 1px solid #bae6fd !important;
+}
+
+.ev-rsvp-btns.vacation {
+  display: flex !important;
+  justify-content: flex-start !important;
+}
+
+.ev-rsvp-btns.vacation .rsvp-b {
+  width: auto !important;
+  min-width: 210px !important;
+  padding: 10px 18px !important;
+  font-size: 13.5px !important;
+  border-radius: 10px !important;
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
 </head>
@@ -12950,7 +13099,7 @@ const ClubStore = {
     const saved = localStorage.getItem(this.meKey + team.id);
     const roster = luRoster(team);
     if (saved && roster.includes(saved)) return saved;
-    return roster[0] || '팀원';
+    return '';
   },
   setMe(team, name) {
     try { localStorage.setItem(this.meKey + team.id, name); } catch (e) {}
@@ -13148,16 +13297,21 @@ function renderTeamClubView(t, A, tc, th) {
   // 상단 내 프로필(선수) 선택 바 + 카톡 공유/초대 안내
   let html = `
     <div class="cl-bar">
-      <div class="cl-who">
-        <span>👋 내 프로필 선택:</span>
-        <select id="clMeSel">
-          ${roster.map(n => `<option value="${esc(n)}" ${n===me?'selected':''}>${esc(n)} (${esc(t.short)})</option>`).join('')}
-        </select>
-        <span class="sub">선택한 이름으로 참석 투표·댓글·셋로그가 기록됩니다</span>
+      <div class="cl-bar-main">
+        <div class="cl-who-group">
+          <span class="cl-who-label">👤 내 프로필</span>
+          <select id="clMeSel" class="cl-who-select">
+            <option value="" ${!me ? 'selected disabled' : 'disabled'}>선수 본인 선택 (22명)</option>
+            ${roster.map(n => `<option value="${esc(n)}" ${n===me?'selected':''}>${esc(n)} (${esc(t.short)})</option>`).join('')}
+          </select>
+        </div>
+        <div class="cl-bar-btns">
+          <button type="button" class="cl-btn ghost sm" id="clOpenSheetSync" title="구글 시트 연동 설정">${ClubStore.getSheetUrl(t) ? '🟢 시트 연동 중' : '📊 구글 시트 연동'}</button>
+          <button type="button" class="cl-btn ghost sm" id="clCopyTeamLink">🔗 초대 링크 복사</button>
+        </div>
       </div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap">
-        <button type="button" class="cl-btn ghost sm" id="clOpenSheetSync" title="구글 시트 연동 설정">${ClubStore.getSheetUrl(t) ? '🟢 구글 시트 연동 중' : '📊 구글 시트 연동'}</button>
-        <button type="button" class="cl-btn ghost sm" id="clCopyTeamLink">🔗 팀 라운지 초대 링크 복사</button>
+      <div class="cl-bar-sub">
+        선택한 선수 이름으로 참석 투표, 공지 댓글, 훈련 기록이 실시간 자동 기록됩니다.
       </div>
     </div>
     ${sub.html}
@@ -13181,6 +13335,7 @@ function renderTeamClubView(t, A, tc, th) {
             <option value="자체경기">🔥 팀 자체 청백전</option>
             <option value="공식대회">🏆 공식 대회 일정</option>
             <option value="모임">🍻 팀 회식·납회식·모임</option>
+            <option value="방학">🏖️ 팀 방학·휴식 (확인 투표)</option>
           </select>
           <input type="date" id="evInDate" value="${new Date().toISOString().slice(0,10)}" required>
           <input type="time" id="evInTime" value="10:00" required>
@@ -13197,49 +13352,70 @@ function renderTeamClubView(t, A, tc, th) {
       <div class="grid" style="gap:12px">
         ${data.events.map(ev => {
           const rsvp = ev.rsvp || {};
+          const isVacation = (ev.type === '방학' || ev.type === '휴식' || ev.type === '방학/휴식' || (ev.title && (ev.title.includes('방학') || ev.title.includes('휴식기') || ev.title.includes('재충전'))));
           const myStatus = rsvp[me] || '';
-          const inList = Object.entries(rsvp).filter(([,v]) => v === 'in' || v === 'car');
+          const isMyConfirmed = myStatus === 'in' || myStatus === 'car' || myStatus === 'ok';
+          const inList = Object.entries(rsvp).filter(([,v]) => v === 'in' || v === 'car' || v === 'ok');
           const carList = Object.entries(rsvp).filter(([,v]) => v === 'car');
           const outList = Object.entries(rsvp).filter(([,v]) => v === 'out');
           const tbdList = Object.entries(rsvp).filter(([,v]) => v === 'tbd');
 
           return `
-            <div class="ev-card" style="--tc:${tc}">
+            <div class="ev-card" style="--tc:${isVacation ? '#0284c7' : tc}">
               <div class="ev-top">
                 <div>
-                  <span class="ev-badge ${esc(ev.type)}">${esc(ev.type)}</span>
+                  <span class="ev-badge ${isVacation ? 'vacation' : esc(ev.type)}">${isVacation ? '🏖️ 팀 방학·휴식' : esc(ev.type)}</span>
                   <div class="ev-title">${esc(ev.title)}</div>
                 </div>
                 <button type="button" class="cl-btn ghost sm" data-ev-del="${esc(ev.id)}" title="일정 삭제">✕</button>
               </div>
               <div class="ev-meta">
                 <span>🗓️ ${luDate(ev.date)} (${WD[luDay(ev.date)]||''}) ${esc(ev.time)}</span>
-                <span>📍 ${esc(ev.venue)}</span>
-                <span>👥 참석 <b>${inList.length}명</b> (🚗 차량지원 ${carList.length}대) · 불참 ${outList.length}명 · 미정 ${tbdList.length}명</span>
+                <span>📍 ${esc(ev.venue || '각자 휴식')}</span>
+                ${isVacation ? `
+                  <span>👥 공지 확인 <b>${inList.length}명</b> 완료</span>
+                ` : `
+                  <span>👥 참석 <b>${inList.length}명</b> (🚗 차량지원 ${carList.length}대) · 불참 ${outList.length}명 · 미정 ${tbdList.length}명</span>
+                `}
               </div>
               ${ev.note ? `<div class="sub" style="background:var(--chip);color:var(--ink2);padding:8px 11px;border-radius:8px;border:1px dashed var(--line)">💡 ${esc(ev.note)}</div>` : ''}
 
               <div class="ev-rsvp-box">
                 <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:800;color:var(--ink2)">
-                  <span>🙋‍♀️ <b>${esc(me)}</b>님의 참석 투표 (클릭 시 즉시 반영)</span>
-                  <span>${myStatus ? '✓ 투표 완료' : '미투표'}</span>
+                  <span>🙋‍♀️ <b>${me ? esc(me) + '님' : '선수 본인'}</b>의 ${isVacation ? '일정 확인' : '참석 투표 (클릭 시 즉시 반영)'}</span>
+                  <span>${isMyConfirmed ? '✓ 확인 완료' : (myStatus ? '✓ 투표 완료' : '미확인')}</span>
                 </div>
-                <div class="ev-rsvp-btns">
-                  <button type="button" class="rsvp-b in ${myStatus==='in'?'on':''}" data-rsvp="${esc(ev.id)}:in">⭕ 참석 (${inList.length - carList.length})</button>
-                  <button type="button" class="rsvp-b car ${myStatus==='car'?'on':''}" data-rsvp="${esc(ev.id)}:car">🚗 참석+차량지원 (${carList.length})</button>
-                  <button type="button" class="rsvp-b out ${myStatus==='out'?'on':''}" data-rsvp="${esc(ev.id)}:out">❌ 불참 (${outList.length})</button>
-                  <button type="button" class="rsvp-b tbd ${myStatus==='tbd'?'on':''}" data-rsvp="${esc(ev.id)}:tbd">❓ 미정 (${tbdList.length})</button>
-                </div>
-                <div class="ev-who-list">
-                  ${inList.length ? inList.map(([nm, st]) => `<span class="ev-pchip ${st}">${st==='car'?'🚗':'⚾'} ${esc(nm)}</span>`).join('') : '<span class="sub">아직 참석 투표한 선수가 없습니다. 첫 번째로 참석을 눌러보세요!</span>'}
-                </div>
+                ${isVacation ? `
+                  <div class="ev-rsvp-btns vacation">
+                    <button type="button" class="rsvp-b in ${isMyConfirmed ? 'on' : ''}" data-rsvp="${esc(ev.id)}:in" style="width:auto;min-width:210px;padding:9px 18px;font-size:13.5px">
+                      ${isMyConfirmed ? '✓ 공지 확인 완료 (충전 중 🏖️)' : '👍 공지 확인했습니다'} (${inList.length}명)
+                    </button>
+                  </div>
+                  <div class="ev-who-list">
+                    ${inList.length ? inList.map(([nm]) => `<span class="ev-pchip in">👍 ${esc(nm)}</span>`).join('') : '<span class="sub">아직 확인한 선수가 없습니다. 첫 번째로 확인을 눌러보세요!</span>'}
+                  </div>
+                ` : `
+                  <div class="ev-rsvp-btns">
+                    <button type="button" class="rsvp-b in ${myStatus==='in'?'on':''}" data-rsvp="${esc(ev.id)}:in">⭕ 참석 (${inList.length - carList.length})</button>
+                    <button type="button" class="rsvp-b car ${myStatus==='car'?'on':''}" data-rsvp="${esc(ev.id)}:car">🚗 참석+차량지원 (${carList.length})</button>
+                    <button type="button" class="rsvp-b out ${myStatus==='out'?'on':''}" data-rsvp="${esc(ev.id)}:out">❌ 불참 (${outList.length})</button>
+                    <button type="button" class="rsvp-b tbd ${myStatus==='tbd'?'on':''}" data-rsvp="${esc(ev.id)}:tbd">❓ 미정 (${tbdList.length})</button>
+                  </div>
+                  <div class="ev-who-list">
+                    ${inList.length ? inList.map(([nm, st]) => `<span class="ev-pchip ${st}">${st==='car'?'🚗':'⚾'} ${esc(nm)}</span>`).join('') : '<span class="sub">아직 참석 투표한 선수가 없습니다. 첫 번째로 참석을 눌러보세요!</span>'}
+                  </div>
+                `}
               </div>
 
               <div class="ev-foot">
-                <span class="sub">참석 인원 ${inList.length}명${inList.length>=9?' (9명 라인업 구성 가능 ✓)':` (9명까지 ${Math.max(0,9-inList.length)}명 더 필요)`}</span>
+                ${isVacation ? `
+                  <span class="sub" style="color:#0284c7;font-weight:800">🏖️ 팀 방학·휴식 기간입니다! 푹 쉬고 재충전하세요.</span>
+                ` : `
+                  <span class="sub">참석 인원 ${inList.length}명${inList.length>=9?' (9명 라인업 구성 가능 ✓)':` (9명까지 ${Math.max(0,9-inList.length)}명 더 필요)`}</span>
+                `}
                 <div style="display:flex;gap:6px;flex-wrap:wrap">
                   <button type="button" class="cl-btn ghost sm" data-ev-share="${esc(ev.id)}">💬 카톡 공지 문구 복사</button>
-                  <button type="button" class="cl-btn sm" style="background:${tc};color:${th.fg}" data-ev-lineup="${esc(ev.id)}">📋 참석자로 라인업 바로 짜기 ›</button>
+                  ${!isVacation ? `<button type="button" class="cl-btn sm" style="background:${tc};color:${th.fg}" data-ev-lineup="${esc(ev.id)}">📋 참석자로 라인업 바로 짜기 ›</button>` : ''}
                 </div>
               </div>
             </div>
@@ -13646,15 +13822,23 @@ function bindTeamClubView() {
   if (evForm) evForm.onsubmit = (e) => {
     e.preventDefault();
     const curData = ClubStore.getTeamData(t);
+    const curMe = ClubStore.getMe(t);
+    if (!curMe) {
+      alert('먼저 상단에서 본인 선수 프로필을 선택해 주세요!');
+      document.getElementById('clMeSel')?.focus();
+      return;
+    }
+    const evType = document.getElementById('evInType').value;
+    const isVac = (evType === '방학' || evType === '휴식');
     curData.events.unshift({
       id: 'ev' + Date.now().toString(36),
-      type: document.getElementById('evInType').value,
+      type: evType,
       date: document.getElementById('evInDate').value,
       time: document.getElementById('evInTime').value,
-      venue: document.getElementById('evInVenue').value.trim(),
+      venue: document.getElementById('evInVenue').value.trim() || (isVac ? '각자 휴식' : ''),
       title: document.getElementById('evInTitle').value.trim(),
       note: document.getElementById('evInNote').value.trim(),
-      rsvp: { [me]: 'in' }
+      rsvp: {} // 새 일정 생성 시 기본값으로 0명에서 시작 (작성자 강제 참석 방지)
     });
     ClubStore.saveTeamData(t, curData);
     UI.showEvForm = false;
@@ -13665,12 +13849,18 @@ function bindTeamClubView() {
     btn.onclick = (e) => {
       e.stopPropagation();
       e.preventDefault();
+      const curMe = ClubStore.getMe(t);
+      if (!curMe) {
+        alert('먼저 상단에서 본인 선수 프로필을 선택해 주세요!');
+        document.getElementById('clMeSel')?.focus();
+        return;
+      }
       const [evId, status] = btn.dataset.rsvp.split(':');
       const curData = ClubStore.getTeamData(t);
       const ev = curData.events.find(x => x.id === evId);
       if (!ev) return;
       ev.rsvp = ev.rsvp || {};
-      ev.rsvp[me] = ev.rsvp[me] === status ? '' : status;
+      ev.rsvp[curMe] = ev.rsvp[curMe] === status ? '' : status;
       ClubStore.saveTeamData(t, curData);
       re();
     };
@@ -13693,8 +13883,11 @@ function bindTeamClubView() {
     btn.onclick = () => {
       const ev = data.events.find(x => x.id === btn.dataset.evShare);
       if (!ev) return;
-      const inList = Object.entries(ev.rsvp || {}).filter(([,v]) => v === 'in' || v === 'car').map(([k,v]) => v==='car'?`${k}(🚗)`:k);
-      const txt = `[${t.short} 일정 및 참석 투표 안내]\n📌 ${ev.title}\n🗓️ 일시: ${ev.date} ${ev.time}\n📍 장소: ${ev.venue}\n👥 현재 참석(${inList.length}명): ${inList.join(', ') || '투표 진행 중'}\n👉 투표 및 라인업 확인: ${location.origin + location.pathname}#/team/${t.id}?tab=club`;
+      const isVac = (ev.type === '방학' || ev.type === '휴식' || ev.type === '방학/휴식' || (ev.title && (ev.title.includes('방학') || ev.title.includes('휴식기') || ev.title.includes('재충전'))));
+      const inList = Object.entries(ev.rsvp || {}).filter(([,v]) => v === 'in' || v === 'car' || v === 'ok').map(([k,v]) => v==='car'?`${k}(🚗)`:k);
+      const txt = isVac
+        ? `[${t.short} 팀 공지 - 방학·휴식기 안내]\n📌 ${ev.title}\n🗓️ 일시: ${ev.date} ${ev.time}\n📍 장소: ${ev.venue || '각자 휴식'}\n💡 ${ev.note || '푹 쉬고 재충전하세요!'}\n👥 공지 확인(${inList.length}명): ${inList.join(', ') || '확인 진행 중'}\n👉 공지 확인하기: ${location.origin + location.pathname}#/team/${t.id}?tab=club`
+        : `[${t.short} 일정 및 참석 투표 안내]\n📌 ${ev.title}\n🗓️ 일시: ${ev.date} ${ev.time}\n📍 장소: ${ev.venue}\n👥 현재 참석(${inList.length}명): ${inList.join(', ') || '투표 진행 중'}\n👉 투표 및 라인업 확인: ${location.origin + location.pathname}#/team/${t.id}?tab=club`;
       navigator.clipboard?.writeText(txt);
       const orig = btn.textContent;
       btn.textContent = '✓ 카톡 공지 복사 완료!';
