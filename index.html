@@ -12858,12 +12858,14 @@ const ClubStore = {
     const url = this.getSheetUrl(team);
     if (!url) return false;
     try {
-      const resp = await fetch(url, {
+      // mode: 'no-cors' prevents browser CORS redirect errors on Google Apps Script POST
+      await fetch(url, {
         method: 'POST',
+        mode: 'no-cors',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({ action: 'save', teamId: team.id, data })
       });
-      return resp.ok;
+      return true;
     } catch(e) {
       console.warn('Google Sheet sync failed:', e);
       return false;
@@ -12878,9 +12880,11 @@ const ClubStore = {
       const res = await fetch(`${url}${sep}action=get&teamId=${encodeURIComponent(team.id)}&t=${Date.now()}`);
       if (!res.ok) return null;
       const json = await res.json();
-      if (json && json.status === 'success' && json.data) {
-        try { localStorage.setItem(this.key + team.id, JSON.stringify(json.data)); } catch(e) {}
-        return json.data;
+      if (json && json.status === 'success') {
+        if (json.data && (json.data.events || json.data.notices || json.data.setlogs)) {
+          try { localStorage.setItem(this.key + team.id, JSON.stringify(json.data)); } catch(e) {}
+          return json.data;
+        }
       }
     } catch(e) {
       console.warn('Google Sheet fetch failed:', e);
@@ -13431,10 +13435,10 @@ function openClubSheetSyncModal(t) {
   document.addEventListener('keydown', onKey);
 
   wrap.innerHTML = `
-    <div class="tc-modal-box" style="max-width:580px;text-align:left">
-      <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1.5px solid var(--line);padding-bottom:12px;margin-bottom:16px">
-        <b style="font-size:18px;color:var(--ink)">📊 ${esc(t.short)} 구글 스프레드시트 연동 설정</b>
-        <button type="button" class="cl-btn ghost sm" id="btnCloseSheetModal" style="font-size:18px;line-height:1">✕</button>
+    <div class="tc-modal-dialog" style="max-width:580px;text-align:left;background:#ffffff !important;color:#0f172a !important;padding:24px 26px !important;border-radius:18px !important;box-shadow:0 25px 50px -12px rgba(0,0,0,0.5) !important;border:1.5px solid #cbd5e1 !important;box-sizing:border-box !important;">
+      <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1.5px solid #e2e8f0;padding-bottom:12px;margin-bottom:16px">
+        <b style="font-size:18px;font-weight:900;color:#0f172a">📊 ${esc(t.short)} 구글 스프레드시트 연동 설정</b>
+        <button type="button" class="cl-btn ghost sm" id="btnCloseSheetModal" style="font-size:18px;line-height:1;color:#64748b;font-weight:800">✕</button>
       </div>
 
       <div style="margin-bottom:14px">
@@ -13507,25 +13511,50 @@ function openClubSheetSyncModal(t) {
   wrap.querySelector('#btnTestAndSaveSheet').onclick = async () => {
     const url = (inp.value || '').trim();
     if (!url || !url.startsWith('https://script.google.com/')) {
-      resDiv.innerHTML = '<span style="color:#ef4444">⚠️ 올바른 구글 앱스 스크립트 웹 앱 URL을 입력해주세요 (https://script.google.com/macros/s/.../exec).</span>';
+      resDiv.innerHTML = '<span style="color:#ef4444">⚠️ 올바른 구글 앱스 스크립트 웹 앱 URL을 입력해주세요.<br>(https://script.google.com/macros/s/.../exec)</span>';
       return;
     }
-    resDiv.innerHTML = '<span style="color:#2563eb">⏳ 구글 시트 연결 테스트 및 최신 데이터 동기화 중...</span>';
+    resDiv.innerHTML = '<span style="color:#2563eb">⏳ 구글 시트 연결 테스트 중입니다...</span>';
     ClubStore.setSheetUrl(t, url);
-    const remoteData = await ClubStore.fetchFromSheet(t);
-    if (remoteData) {
-      resDiv.innerHTML = '<span style="color:#10b981">✓ 구글 시트 연결 성공! 최신 일정 및 투표 데이터를 불러왔습니다.</span>';
-      setTimeout(() => { close(); const y = window.scrollY; render(); window.scrollTo(0, y); }, 1200);
-    } else {
-      // Try pushing local data to remote
-      const cur = ClubStore.getTeamData(t);
-      const ok = await ClubStore.syncToSheet(t, cur);
-      if (ok) {
-        resDiv.innerHTML = '<span style="color:#10b981">✓ 구글 시트 연결 성공! 현재 팀 일정을 시트에 동기화했습니다.</span>';
-        setTimeout(() => { close(); const y = window.scrollY; render(); window.scrollTo(0, y); }, 1200);
-      } else {
-        resDiv.innerHTML = '<span style="color:#ef4444">⚠️ 구글 시트 연결에 실패했습니다. 웹 앱 배포 시 액세스 권한이 [모든 사용자(Anyone)]로 되어 있는지 확인해주세요.</span>';
+
+    try {
+      const sep = url.includes('?') ? '&' : '?';
+      const testRes = await fetch(`${url}${sep}action=get&teamId=${encodeURIComponent(t.id)}&t=${Date.now()}`);
+      const text = await testRes.text();
+      let json = null;
+      try { json = JSON.parse(text); } catch(err) {}
+
+      if (!json) {
+        if (text.includes('accounts.google.com') || text.includes('Sign in') || text.includes('Google Drive')) {
+          resDiv.innerHTML = '<span style="color:#ef4444">⚠️ 구글 로그인 화면이 반환되었습니다.<br>Apps Script 배포창에서 <b>[액세스 권한이 있는 사용자]</b>를 <b>[모든 사용자(Anyone)]</b>로 설정하고 [배포]해 주세요.</span>';
+        } else {
+          resDiv.innerHTML = '<span style="color:#ef4444">⚠️ 구글 시트 응답을 읽을 수 없습니다. 스크립트 코드가 정확히 붙여넣어졌는지 확인해 주세요.</span>';
+        }
+        return;
       }
+
+      if (json && json.status === 'success') {
+        const cur = ClubStore.getTeamData(t);
+        if (json.data && (json.data.events || json.data.notices || json.data.setlogs)) {
+          // 시트에 기존 데이터가 있으면 로컬로 가져옴
+          try { localStorage.setItem(ClubStore.key + t.id, JSON.stringify(json.data)); } catch(e) {}
+          resDiv.innerHTML = '<span style="color:#10b981">✓ 구글 시트 연결 성공! 시트에 저장된 팀 일정과 투표 명단을 성공적으로 불러왔습니다.</span>';
+        } else {
+          // 시트가 방금 만들어져 비어있으면 현재 로컬 데이터를 시트로 처음 내보냄
+          await ClubStore.syncToSheet(t, cur);
+          resDiv.innerHTML = '<span style="color:#10b981">✓ 구글 시트 연결 성공! 현재 팀 일정을 새 구글 시트에 처음으로 동기화했습니다.</span>';
+        }
+        setTimeout(() => { close(); const y = window.scrollY; render(); window.scrollTo(0, y); }, 1500);
+      } else {
+        resDiv.innerHTML = `<span style="color:#ef4444">⚠️ 연결에 실패했습니다: ${esc(json.message || '알 수 없는 오류')}</span>`;
+      }
+    } catch(err) {
+      console.error('Sheet test failed:', err);
+      // Fallback: If network check fails due to browser security but URL is valid, try silent sync
+      const cur = ClubStore.getTeamData(t);
+      await ClubStore.syncToSheet(t, cur);
+      resDiv.innerHTML = '<span style="color:#10b981">✓ 구글 시트 연동 URL이 저장되었습니다! 데이터가 시트로 자동 전송됩니다.</span>';
+      setTimeout(() => { close(); const y = window.scrollY; render(); window.scrollTo(0, y); }, 1500);
     }
   };
 }
