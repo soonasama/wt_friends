@@ -19,7 +19,7 @@ function doGet(e) {
   var action = params.action || 'get';
   var teamId = params.teamId || 'aSEa0076';
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var rawSheet = getOrCreateSheet(ss, '_DB_RAW');
+  var rawSheet = getOrCreateSheet(ss, '_CLUB_RAW');
   
   var rawJson = rawSheet.getRange('A1').getValue();
   var data = null;
@@ -60,7 +60,7 @@ function doPost(e) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   
   // 1. RAW JSON 데이터 저장 (_DB_RAW 시트 A1 셀)
-  var rawSheet = getOrCreateSheet(ss, '_DB_RAW');
+  var rawSheet = getOrCreateSheet(ss, '_CLUB_RAW');
   rawSheet.getRange('A1').setValue(JSON.stringify(data));
   rawSheet.getRange('B1').setValue('마지막 업데이트: ' + Utilities.formatDate(new Date(), 'Asia/Seoul', 'yyyy-MM-dd HH:mm:ss'));
   
@@ -95,7 +95,7 @@ function getOrCreateSheet(ss, name) {
 }
 
 function updateEventsSheet(ss, events) {
-  var sheet = getOrCreateSheet(ss, '📅 일정 및 참석투표 명단');
+  var sheet = getOrCreateSheet(ss, 'WT_일정_참석투표_DB');
   sheet.clear();
   
   var headers = ['일정 구분', '일정 제목', '날짜', '시간', '구장/장소', '참석 명단 (차량)', '불참 명단', '미정 명단', '공지 및 준비물 메모'];
@@ -132,13 +132,13 @@ function updateEventsSheet(ss, events) {
   sheet.getRange(1, 1, rows.length, headers.length).setValues(rows);
   
   var headerRange = sheet.getRange(1, 1, 1, headers.length);
-  headerRange.setBackground('#1d4ed8').setFontColor('#ffffff').setFontWeight('bold');
+  headerRange.setBackground('#172554').setFontColor('#ffffff').setFontWeight('bold');
   sheet.setFrozenRows(1);
   sheet.autoResizeColumns(1, headers.length);
 }
 
 function updateNoticesSheet(ss, notices) {
-  var sheet = getOrCreateSheet(ss, '📣 공지사항 및 댓글');
+  var sheet = getOrCreateSheet(ss, 'WT_공지_커뮤니티_DB');
   sheet.clear();
   var headers = ['구분', '고정 여부', '작성자', '작성일', '제목', '공지 내용', '팀원 댓글 내용 (작성자: 내용)'];
   var rows = [headers];
@@ -159,13 +159,13 @@ function updateNoticesSheet(ss, notices) {
   });
   sheet.getRange(1, 1, rows.length, headers.length).setValues(rows);
   var headerRange = sheet.getRange(1, 1, 1, headers.length);
-  headerRange.setBackground('#0f172a').setFontColor('#ffffff').setFontWeight('bold');
+  headerRange.setBackground('#172554').setFontColor('#ffffff').setFontWeight('bold');
   sheet.setFrozenRows(1);
   sheet.autoResizeColumns(1, headers.length);
 }
 
 function updateSetlogsSheet(ss, setlogs) {
-  var sheet = getOrCreateSheet(ss, '📓 훈련 셋로그');
+  var sheet = getOrCreateSheet(ss, 'WT_훈련_셋로그_DB');
   sheet.clear();
   var headers = ['작성자', '훈련일', '카테고리', '배팅 스윙수', '투구수', '훈련 드릴 내용', '훈련 메모 및 코멘트'];
   var rows = [headers];
@@ -182,7 +182,7 @@ function updateSetlogsSheet(ss, setlogs) {
   });
   sheet.getRange(1, 1, rows.length, headers.length).setValues(rows);
   var headerRange = sheet.getRange(1, 1, 1, headers.length);
-  headerRange.setBackground('#047857').setFontColor('#ffffff').setFontWeight('bold');
+  headerRange.setBackground('#172554').setFontColor('#ffffff').setFontWeight('bold');
   sheet.setFrozenRows(1);
   sheet.autoResizeColumns(1, headers.length);
 }
