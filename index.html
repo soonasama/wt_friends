@@ -1086,10 +1086,54 @@ tbody tr:hover, table tr:hover td, .sh-row:hover {
 }
 
 /* 3. 투수/타자 비교 상자 (.compare div, .lc-pr) */
-.compare div, .lc-pr > div {
-  background: rgba(30, 41, 59, 0.65) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+/* High contrast, bright clean stat cards for .compare and .lc-pr (배경 어두움 및 글자 안 보임 완전 해결) */
+.compare div,
+html[data-theme="light"] .compare div,
+.lc-pr > div,
+html[data-theme="light"] .lc-pr > div {
+  background: #f8fafc !important;
+  border: 1.5px solid #cbd5e1 !important;
+  border-radius: 12px !important;
+  padding: 14px 12px !important;
+  text-align: center !important;
+  box-shadow: none !important;
+}
+
+.compare div b,
+html[data-theme="light"] .compare div b,
+.lc-pr > div b,
+html[data-theme="light"] .lc-pr > div b {
+  display: block !important;
+  color: #0f172a !important; /* 선명한 다크 네이비 */
+  font-size: 22px !important;
+  font-weight: 900 !important;
+  line-height: 1.2 !important;
+}
+
+.compare div span,
+html[data-theme="light"] .compare div span,
+.lc-pr > div small,
+html[data-theme="light"] .lc-pr > div small {
+  display: block !important;
+  color: #475569 !important; /* 또렷한 슬레이트 그레이 */
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  margin-top: 6px !important;
+  line-height: 1.35 !important;
+}
+
+html[data-theme="dark"] .compare div,
+html[data-theme="dark"] .lc-pr > div {
+  background: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+html[data-theme="dark"] .compare div b,
+html[data-theme="dark"] .lc-pr > div b {
   color: #f8fafc !important;
+}
+html[data-theme="dark"] .compare div span,
+html[data-theme="dark"] .lc-pr > div small {
+  color: #94a3b8 !important;
 }
 
 /* 4. 등급 & 티어 뱃지 (.gr5 ~ .gr1, .tier.t4 ~ .tier.t0) */
@@ -8748,12 +8792,52 @@ main,
 }
 
 /* (3) Rock-Solid Table Column Stability (No Jumping When Switching Tabs) */
-.tw-fixed-wrap table,
-.tw table,
-.tbl table {
+/* Only player search ranking table uses fixed layout */
+.p-search-tbl table,
+.tw-fixed-wrap table {
   table-layout: fixed !important;
   width: 100% !important;
   border-collapse: collapse !important;
+}
+
+/* ALL other data tables scroll naturally with auto layout and generous padding (NO TEXT OVERLAP!) */
+.tw table {
+  table-layout: auto !important;
+  width: max-content !important;
+  min-width: 100% !important;
+  border-collapse: collapse !important;
+  white-space: nowrap !important;
+}
+
+.tw th,
+.tw td {
+  padding: 10px 14px !important;
+  white-space: nowrap !important;
+  font-size: 13px !important;
+}
+
+.tw td.name,
+.tw th.l,
+.tw td.l {
+  text-align: left !important;
+  padding-left: 14px !important;
+  padding-right: 14px !important;
+}
+
+/* Table badges and player links inline flex layout */
+.tw td .p-bat-wrap {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  white-space: nowrap !important;
+}
+.tw td .tpill,
+.tw td .pill,
+.tw td .grade {
+  display: inline-block !important;
+  margin-left: 6px !important;
+  white-space: nowrap !important;
+  vertical-align: middle !important;
 }
 
 .col-rk {
