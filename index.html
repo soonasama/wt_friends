@@ -9646,6 +9646,47 @@ html[data-theme=dark] .br .bv {
   color: #f8fafc !important;
 }
 
+
+/* =========================================================================
+   WBAK EVENT BADGE & CLUB FORM VISIBILITY (WBAK 연맹 행사 클리닉 배지 & 폼 가독성)
+   ========================================================================= */
+.ev-badge.연맹행사,
+.ev-badge.클리닉 {
+  background: #f3e8ff !important;
+  color: #6b21a8 !important;
+  border: 1px solid #d8b4fe !important;
+  font-weight: 800 !important;
+}
+
+.ev-badge.자체경기 {
+  background: #fef3c7 !important;
+  color: #92400e !important;
+}
+
+/* 라이트 테마 일정/공지/셋로그 등록 폼 가독성 보강 */
+html[data-theme="light"] .cl-form {
+  background: #f8fafc !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+html[data-theme="light"] .cl-form b {
+  color: #0f172a !important;
+}
+
+html[data-theme="light"] .cl-form input,
+html[data-theme="light"] .cl-form select,
+html[data-theme="light"] .cl-form textarea {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border: 1.5px solid #cbd5e1 !important;
+}
+
+/* 다크 테마 폼 타이틀 보강 */
+html[data-theme="dark"] .cl-form b {
+  color: #ffffff !important;
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
 </head>
@@ -13269,10 +13310,11 @@ function openTeamProModal(teamId) {
    구단별 그룹모임 (일정·참석투표·공지·셋로그) & 전체 커뮤니티 모듈 (v15)
    ========================================================================= */
 const ClubStore = {
-  key: 'kbsa_club_v15_',
-  commKey: 'kbsa_comm_v15',
+  key: 'kbsa_club_v20_',
+  commKey: 'kbsa_comm_v20',
   meKey: 'kbsa_me_player_',
   sheetUrlKey: 'kbsa_sheet_api_url_',
+  _isSyncing: false,
 
   getSheetUrl(team) {
     try {
@@ -13332,10 +13374,12 @@ const ClubStore = {
       if (!res.ok) return null;
       const json = await res.json();
       if (json && json.status === 'success') {
-        if (json.data && (json.data.events || json.data.notices || json.data.setlogs)) {
-          try { localStorage.setItem(this.key + team.id, JSON.stringify(json.data)); } catch(e) {}
-          return json.data;
-        }
+        const d = json.data || { events: [], notices: [], setlogs: [] };
+        d.events = Array.isArray(d.events) ? d.events : [];
+        d.notices = Array.isArray(d.notices) ? d.notices : [];
+        d.setlogs = Array.isArray(d.setlogs) ? d.setlogs : [];
+        try { localStorage.setItem(this.key + team.id, JSON.stringify(d)); } catch(e) {}
+        return d;
       }
     } catch(e) {
       console.warn('Google Sheet fetch failed:', e);
@@ -13366,94 +13410,13 @@ const ClubStore = {
   },
 
   seedTeamData(team) {
-    const roster = luRoster(team);
-    const p1 = roster[0] || '김서연', p2 = roster[1] || '이지은', p3 = roster[2] || '박민지', p4 = roster[3] || '최유진', p5 = roster[4] || '정하윤';
-    const d1 = new Date(Date.now() + 86400000 * 4).toISOString().slice(0, 10);
-    const d2 = new Date(Date.now() + 86400000 * 11).toISOString().slice(0, 10);
-    const today = new Date().toISOString().slice(0, 10);
-
     const data = {
-      events: [
-        {
-          id: 'ev1',
-          type: '훈련',
-          title: `${team.short} 주말 정기 팀 훈련 (수비 시프트 & 배팅 케이지)`,
-          date: d1,
-          time: '10:00',
-          venue: '살곶이 야구장 (또는 지역 연습구장)',
-          note: '글러브, 개인 배트, 스파이크 지참 필수! 9시 40분까지 집합 후 워밍업 시작합니다.',
-          rsvp: {
-            [p1]: 'in',
-            [p2]: 'car',
-            [p3]: 'in',
-            [p4]: 'in',
-            [p5]: 'tbd'
-          }
-        },
-        {
-          id: 'ev2',
-          type: '훈련',
-          title: `${team.short} 주말 정기 훈련 및 팀 자체 청백전`,
-          date: d2,
-          time: '13:00',
-          venue: '화성 드림파크 여성야구장',
-          note: '홈 유니폼 착용. 참석 투표 인원을 기준으로 선발 라인업이 자동 생성됩니다.',
-          rsvp: {
-            [p1]: 'car',
-            [p2]: 'in',
-            [p3]: 'in'
-          }
-        }
-      ],
-      notices: [
-        {
-          id: 'nt1',
-          pinned: true,
-          cat: '필독 공지',
-          author: `${p1} (주장/총무)`,
-          date: today,
-          title: `📣 [공지] 2026 시즌 ${team.short} 회비 납부 및 주말 훈련 출석 안내`,
-          body: `안녕하세요 ${team.short} 팀원 여러분!\n1. 주말 정기 훈련 및 연습경기 일정은 [일정·참석투표] 탭에서 목요일 밤 10시까지 반드시 참석 여부를 투표해 주세요.\n2. 참석 투표 명단은 감독님 라인업 작성 화면과 100% 자동 연동됩니다.\n3. 차량 지원(카풀 가능)이 가능하신 분은 '🚗 참석(차량지원)' 버튼을 눌러주시면 카풀 배정에 큰 도움이 됩니다!`,
-          comments: [
-            { author: p2, text: '확인했습니다! 이번 주 토요일 차량 지원 가능합니다 🚗', date: '방금' },
-            { author: p3, text: '네! 목요일 전까지 꼭 투표 완료하겠습니다⚾', date: '방금' }
-          ]
-        },
-        {
-          id: 'nt2',
-          pinned: false,
-          cat: '장비/유니폼',
-          author: `${p2} (장비팀)`,
-          date: today,
-          title: `⚾ 팀 공용 배트 그립 교체 및 시합구 재고 현황 공유`,
-          body: `팀 배트 3자루(32/27, 31/26) 리자드스킨 그립 교체 완료했습니다. 연습구 2더즌 새로 보충해 두었으니 훈련 후 공 수거 꼭 함께 부탁드려요!`,
-          comments: []
-        }
-      ],
-      setlogs: [
-        {
-          id: 'sl1',
-          author: p1,
-          date: today,
-          cat: '타격·수비 훈련',
-          swings: 120,
-          pitches: 0,
-           drill: '티배팅 60개 + 소프트토스 60개 + 내야 펑고 30분',
-          memo: '아웃코스 공을 억지로 잡아당기지 않고 우중간으로 결대로 밀어치는 타구 질이 훨씬 좋아졌다. 타격 준비 자세에서 오른쪽 어깨가 빨리 열리지 않게 고정하기!'
-        },
-        {
-          id: 'sl2',
-          author: p2,
-          date: today,
-          cat: '투구·불펜 피칭',
-          swings: 0,
-          pitches: 55,
-          drill: '하프 피칭 15구 + 전력 불펜 피칭 40구 + 견제 연습',
-          memo: '바깥쪽 낮은 스트라이크 존 제구 집중. 30구 넘어갈 때 릴리스 포인트가 높아져서 공이 날리는 현상 체크. 하체 축발 버티기에 신경 쓰자.'
-        }
-      ]
+      initialized: true,
+      events: [],
+      notices: [],
+      setlogs: []
     };
-    this.saveTeamData(team, data);
+    try { localStorage.setItem(this.key + team.id, JSON.stringify(data)); } catch (e) {}
     return data;
   },
 
@@ -13585,6 +13548,24 @@ function renderTeamClubView(t, A, tc, th) {
     ['setlog', '📓 훈련 셋로그']
   ]);
   const data = ClubStore.getTeamData(t);
+
+  // 실시간 구글 시트 백그라운드 자동 동기화 (앱 열릴 때 시트의 최신 상태를 즉시 로드)
+  if (ClubStore.getSheetUrl(t) && !ClubStore._isSyncing) {
+    ClubStore._isSyncing = true;
+    setTimeout(() => {
+      ClubStore.fetchFromSheet(t).then(remoteData => {
+        ClubStore._isSyncing = false;
+        if (remoteData) {
+          const localStr = localStorage.getItem(ClubStore.key + t.id);
+          const remoteStr = JSON.stringify(remoteData);
+          if (localStr !== remoteStr) {
+            try { localStorage.setItem(ClubStore.key + t.id, remoteStr); } catch(e) {}
+            const y = window.scrollY; render(); window.scrollTo(0, y);
+          }
+        }
+      }).catch(() => { ClubStore._isSyncing = false; });
+    }, 100);
+  }
   const roster = luRoster(t);
   const me = ClubStore.getMe(t);
 
@@ -13628,6 +13609,7 @@ function renderTeamClubView(t, A, tc, th) {
             <option value="훈련">⚾ 팀 정기 훈련</option>
             <option value="자체경기">🔥 팀 자체 청백전</option>
             <option value="공식대회">🏆 공식 대회 일정</option>
+            <option value="연맹행사">🎓 WBAK 연맹 행사·클리닉</option>
             <option value="모임">🍻 팀 회식·납회식·모임</option>
             <option value="방학">🏖️ 팀 방학·휴식 (확인 투표)</option>
           </select>
@@ -13644,7 +13626,7 @@ function renderTeamClubView(t, A, tc, th) {
       </form>
 
       <div class="grid" style="gap:12px">
-        ${data.events.map(ev => {
+        ${data.events.length ? data.events.map(ev => {
           const rsvp = ev.rsvp || {};
           const isVacation = (ev.type === '방학' || ev.type === '휴식' || ev.type === '방학/휴식' || (ev.title && (ev.title.includes('방학') || ev.title.includes('휴식기') || ev.title.includes('재충전'))));
           const myStatus = rsvp[me] || '';
@@ -13714,7 +13696,7 @@ function renderTeamClubView(t, A, tc, th) {
               </div>
             </div>
           `;
-        }).join('')}
+        }).join('') : '<div class="empty" style="padding:26px 16px;text-align:center;color:var(--ink2);background:var(--card);border:1px dashed var(--line);border-radius:12px">등록된 팀 일정이 없습니다.<br>우측 상단의 <b>[＋ 새 일정·투표 만들기]</b>를 눌러 첫 일정을 등록해보세요!</div>'}
       </div>
     `;
   }
@@ -13752,7 +13734,7 @@ function renderTeamClubView(t, A, tc, th) {
       </form>
 
       <div class="grid" style="gap:12px">
-        ${sortedNotices.map(nt => `
+        ${sortedNotices.length ? sortedNotices.map(nt => `
           <div class="nt-card ${nt.pinned?'pinned':''}">
             <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
               <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
@@ -13778,7 +13760,7 @@ function renderTeamClubView(t, A, tc, th) {
               </div>
             </div>
           </div>
-        `).join('')}
+        `).join('') : '<div class="empty" style="padding:26px 16px;text-align:center;color:var(--ink2);background:var(--card);border:1px dashed var(--line);border-radius:12px">등록된 공지사항이 없습니다.<br><b>[＋ 공지·모임글 작성]</b>을 눌러 첫 글을 남겨보세요!</div>'}
       </div>
     `;
   }
@@ -13822,7 +13804,7 @@ function renderTeamClubView(t, A, tc, th) {
       </form>
 
       <div class="grid" style="gap:10px">
-        ${data.setlogs.map(sl => `
+        ${data.setlogs.length ? data.setlogs.map(sl => `
           <div class="sl-card">
             <div style="display:flex;justify-content:space-between;align-items:center">
               <div style="display:flex;align-items:center;gap:8px">
@@ -13839,7 +13821,7 @@ function renderTeamClubView(t, A, tc, th) {
             </div>
             <div class="nt-body" style="font-size:13.5px;background:var(--chip);color:var(--ink);padding:10px 12px;border-radius:10px;border:1px solid var(--line)">${esc(sl.memo)}</div>
           </div>
-        `).join('')}
+        `).join('') : '<div class="empty" style="padding:26px 16px;text-align:center;color:var(--ink2);background:var(--card);border:1px dashed var(--line);border-radius:12px">등록된 훈련 셋로그가 없습니다.<br><b>[＋ 내 셋로그 기록하기]</b>를 눌러 오늘 훈련을 기록해보세요!</div>'}
       </div>
     `;
   }
