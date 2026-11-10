@@ -7829,6 +7829,545 @@ td .lu-face-thumb,
   display: none !important;
 }
 
+
+/* =========================================================================
+   MASTER RESPONSIVE ARCHITECTURE: BULLETPROOF PC & MOBILE ISOLATION
+   ========================================================================= */
+
+/* --- A. COMMON STYLES --- */
+* {
+  box-sizing: border-box;
+}
+
+.wt-board-topline {
+  display: flex !important;
+  align-items: center !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14) !important;
+}
+
+.p-bat-wrap {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  vertical-align: middle !important;
+  white-space: nowrap !important;
+}
+
+.p-no-chip {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgba(37, 99, 235, 0.08) !important;
+  color: #2563eb !important;
+  border: 1.5px solid rgba(37, 99, 235, 0.3) !important;
+  border-radius: 6px !important;
+  padding: 1px 5px !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  line-height: 1.1 !important;
+  white-space: nowrap !important;
+  letter-spacing: -0.02em !important;
+  flex-shrink: 0 !important;
+}
+html[data-theme="dark"] .p-no-chip {
+  background: rgba(56, 189, 248, 0.15) !important;
+  color: #38bdf8 !important;
+  border-color: rgba(56, 189, 248, 0.4) !important;
+}
+
+td .lu-face-thumb,
+.bl .lu-face-thumb {
+  display: none !important;
+}
+
+/* --- B. DESKTOP ONLY (min-width: 861px) --- */
+@media (min-width: 861px) {
+  /* 1. Global Navigation Bar: Menu Centered between Brand and Controls */
+  .top {
+    height: 60px !important;
+  }
+  .top .in {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    max-width: 1240px !important;
+    margin: 0 auto !important;
+    padding: 0 16px !important;
+    height: 100% !important;
+  }
+  .brand {
+    flex: 0 0 auto !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+  }
+  .brand-emb-wrap {
+    width: 36px !important;
+    height: 36px !important;
+  }
+  .brand span {
+    font-size: 17px !important;
+    font-weight: 900 !important;
+  }
+  #topnav {
+    flex: 1 1 auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 12px !important;
+    margin: 0 24px !important;
+  }
+  #topnav a {
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    padding: 6px 14px !important;
+    border-radius: 8px !important;
+  }
+  .team-nav-box {
+    flex: 0 0 auto !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+  .tabbar {
+    display: none !important;
+  }
+
+  /* 2. Board Desktop Layout */
+  .board {
+    padding: 24px 26px !important;
+    border-radius: 20px !important;
+    margin-bottom: 22px !important;
+  }
+  .wt-board-topline {
+    gap: 12px !important;
+    padding-bottom: 12px !important;
+    margin-bottom: 18px !important;
+  }
+  .wt-board-topline .wt-hero-slogan {
+    font-size: 11.5px !important;
+    padding: 3px 10px !important;
+  }
+  .wt-board-topline .wt-bhead-sub {
+    font-size: 13.5px !important;
+    font-weight: 600 !important;
+    color: #f1f5f9 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+  }
+  .board .bhead {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 28px !important;
+    margin-bottom: 20px !important;
+  }
+  .bhead-info {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+  }
+  .wt-bhead-top {
+    display: flex !important;
+    align-items: center !important;
+    gap: 18px !important;
+  }
+  .wt-bhead-top .badge {
+    width: 84px !important;
+    height: 84px !important;
+    flex-shrink: 0 !important;
+  }
+  .wt-bhead-title-col .tm {
+    font-size: 30px !important;
+    font-weight: 900 !important;
+    line-height: 1.15 !important;
+    white-space: nowrap !important;
+    color: #ffffff !important;
+  }
+  .wt-bhead-desc {
+    font-size: 13.5px !important;
+    color: #f1f5f9 !important;
+    margin-top: 5px !important;
+    font-weight: 600 !important;
+  }
+
+  /* 3. Action Buttons Desktop: 2-Column Equal Grid */
+  .board .vsbtns {
+    flex: 0 0 340px !important;
+    width: 340px !important;
+    max-width: 340px !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+    margin: 0 !important;
+  }
+  .board .vsbtns .vsbtn {
+    width: 100% !important;
+    height: 40px !important;
+    padding: 0 10px !important;
+    font-size: 12.5px !important;
+    font-weight: 700 !important;
+    border-radius: 9px !important;
+    white-space: nowrap !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+  }
+  .board .vsbtns.wt-dugout-btns {
+    grid-template-columns: repeat(2, 1fr) !important;
+    width: 340px !important;
+  }
+
+  /* 4. Stats Row Desktop: 4 Columns */
+  .board .stats.four {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 12px !important;
+    margin-top: 16px !important;
+  }
+  .board .stat.dk {
+    padding: 12px 14px !important;
+  }
+  .board .stat.dk b {
+    font-size: 26px !important;
+  }
+  .board .stat.dk span {
+    font-size: 12.5px !important;
+  }
+
+  /* 5. Mini Bar Desktop */
+  .board .bmini {
+    padding: 10px 14px !important;
+    font-size: 12.5px !important;
+    gap: 14px 20px !important;
+    margin-top: 12px !important;
+  }
+}
+
+/* --- C. MOBILE ONLY (max-width: 860px) --- */
+@media (max-width: 860px) {
+  /* 1. Global Navigation Bar: Compact Brand + Controls (Menu in Bottom Tabbar) */
+  .top {
+    height: 52px !important;
+  }
+  .top .in {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 0 12px !important;
+    height: 100% !important;
+  }
+  .brand {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    min-width: 0 !important;
+  }
+  .brand-emb-wrap {
+    width: 30px !important;
+    height: 30px !important;
+    flex-shrink: 0 !important;
+  }
+  .brand span {
+    font-size: 15px !important;
+    font-weight: 900 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+  .brand small {
+    display: none !important; /* Hide long English subtitle on mobile */
+  }
+  #topnav {
+    display: none !important; /* Hidden on mobile! Bottom tabbar takes over */
+  }
+  .team-nav-box {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    flex-shrink: 0 !important;
+  }
+  .theme-toggle-btn,
+  .admin-auth-btn {
+    padding: 4px 8px !important;
+    font-size: 12px !important;
+    height: 32px !important;
+  }
+  .theme-toggle-btn .theme-lbl,
+  .admin-auth-btn .admin-lbl {
+    display: none !important; /* Icon only on mobile */
+  }
+  .teamsel {
+    display: none !important;
+  }
+
+  /* 2. Board Mobile Layout: NO CUT-OFF, ZERO OVERFLOW */
+  .board {
+    padding: 15px 12px !important;
+    border-radius: 16px !important;
+    margin-bottom: 16px !important;
+    width: 100% !important;
+    overflow: hidden !important;
+  }
+  .wt-board-topline {
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+    padding-bottom: 10px !important;
+    margin-bottom: 12px !important;
+  }
+  .wt-board-topline .wt-hero-slogan {
+    font-size: 10px !important;
+    padding: 2px 7px !important;
+  }
+  .wt-board-topline .wt-bhead-sub {
+    font-size: 11px !important;
+    color: #f1f5f9 !important;
+    line-height: 1.35 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 4px !important;
+  }
+  .wt-board-topline .pill {
+    font-size: 9.5px !important;
+    padding: 1px 5px !important;
+  }
+  .board .bhead {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+    margin-bottom: 12px !important;
+  }
+  .bhead-info {
+    width: 100% !important;
+  }
+  .wt-bhead-top {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+  }
+  .wt-bhead-top .badge {
+    width: 52px !important;
+    height: 52px !important;
+    flex-shrink: 0 !important;
+  }
+  .wt-bhead-title-col {
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
+  }
+  .wt-bhead-title-col .tm {
+    font-size: 18.5px !important; /* Perfect mobile single-line title! */
+    font-weight: 900 !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+    color: #ffffff !important;
+    letter-spacing: -0.02em !important;
+  }
+  .wt-bhead-desc {
+    font-size: 11px !important;
+    color: #f1f5f9 !important;
+    line-height: 1.3 !important;
+    margin-top: 3px !important;
+  }
+
+  /* 3. Action Buttons Mobile: 2-Column Responsive Grid */
+  .board .vsbtns {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 6px !important;
+    margin: 0 !important;
+  }
+  .board .vsbtns .vsbtn {
+    width: 100% !important;
+    height: 36px !important;
+    padding: 0 6px !important;
+    font-size: 11.5px !important;
+    font-weight: 700 !important;
+    border-radius: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+  }
+  .board .vsbtns .vsbtn:first-child {
+    grid-column: 1 / -1 !important; /* Primary CTA takes full width */
+    height: 38px !important;
+    font-size: 12.5px !important;
+    font-weight: 800 !important;
+  }
+
+  /* 4. Stats Row Mobile: Balanced 2x2 Grid */
+  .board .stats.four {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 6px !important;
+    margin-top: 10px !important;
+  }
+  .board .stat.dk {
+    padding: 9px 8px !important;
+    border-radius: 10px !important;
+  }
+  .board .stat.dk b {
+    font-size: 19px !important;
+    color: #fbbf24 !important;
+  }
+  .board .stat.dk span {
+    font-size: 11px !important;
+    color: #f8fafc !important;
+  }
+
+  /* 5. Mini Bar Mobile */
+  .board .bmini {
+    padding: 8px 10px !important;
+    font-size: 11px !important;
+    gap: 6px 10px !important;
+    margin-top: 10px !important;
+    border-radius: 8px !important;
+  }
+
+  /* 6. Mobile Bottom Tabbar */
+  .tabbar {
+    display: flex !important;
+    height: 54px !important;
+  }
+  body {
+    padding-bottom: 60px !important;
+  }
+}
+
+
+/* =========================================================================
+   DEFINITIVE RESPONSIVE TYPOGRAPHY & ZERO OVERFLOW FIX
+   ========================================================================= */
+
+.wt-main-title,
+.wt-dugout-title {
+  color: #ffffff !important;
+  font-weight: 900 !important;
+  line-height: 1.2 !important;
+  margin: 0 !important;
+}
+
+@media (min-width: 861px) {
+  .wt-main-title,
+  .wt-dugout-title {
+    font-size: 28px !important;
+    white-space: nowrap !important;
+  }
+  .wt-dugout-title .wt-sub-tag {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    opacity: 0.85 !important;
+  }
+  .wt-bhead-top .badge {
+    width: 84px !important;
+    height: 84px !important;
+  }
+}
+
+@media (max-width: 860px) {
+  /* Prevent any horizontal cut-off / bleed */
+  .board {
+    max-width: 100% !important;
+    overflow: hidden !important;
+    padding: 14px 12px !important;
+    border-radius: 14px !important;
+  }
+  
+  .wt-board-topline {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 5px !important;
+    padding-bottom: 8px !important;
+    margin-bottom: 10px !important;
+  }
+  .wt-board-topline .wt-hero-slogan {
+    font-size: 9.5px !important;
+    padding: 2px 6px !important;
+  }
+  .wt-board-topline .wt-bhead-sub {
+    font-size: 11px !important;
+    line-height: 1.35 !important;
+    word-break: keep-all !important;
+    white-space: normal !important;
+    color: #f1f5f9 !important;
+  }
+
+  .wt-bhead-top {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+  .wt-bhead-top .badge {
+    width: 50px !important;
+    height: 50px !important;
+    flex-shrink: 0 !important;
+  }
+  .wt-bhead-title-col {
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
+  }
+  .wt-main-title {
+    font-size: 18px !important;
+    white-space: nowrap !important;
+    letter-spacing: -0.02em !important;
+    line-height: 1.15 !important;
+  }
+  .wt-dugout-title {
+    font-size: 17px !important;
+    white-space: nowrap !important;
+    letter-spacing: -0.02em !important;
+    line-height: 1.15 !important;
+  }
+  .wt-dugout-title .wt-sub-tag {
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    opacity: 0.85 !important;
+  }
+  .wt-bhead-desc {
+    font-size: 11px !important;
+    color: #f1f5f9 !important;
+    line-height: 1.3 !important;
+    margin-top: 3px !important;
+    word-break: keep-all !important;
+  }
+
+  /* Dugout: 2 buttons side-by-side in equal 2-column grid */
+  .board .vsbtns.wt-dugout-btns {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 6px !important;
+    width: 100% !important;
+    margin-top: 10px !important;
+  }
+  .board .vsbtns.wt-dugout-btns .vsbtn {
+    grid-column: auto !important;
+    width: 100% !important;
+    height: 38px !important;
+    padding: 0 8px !important;
+    font-size: 12.5px !important;
+    font-weight: 700 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    margin: 0 !important;
+  }
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
 </head>
@@ -7862,6 +8401,9 @@ td .lu-face-thumb,
 <script src="js/wt_assets.js"></script>
 <script src="js/fielding.js"></script>
 <script>
+
+
+
 
 
 /* =========================================================================
@@ -8330,7 +8872,7 @@ V.dugout = () => {
           <div class="wt-bhead-top">
             ${badge(wt, 88)}
             <div class="wt-bhead-title-col">
-              <div class="tm" style="font-size:clamp(22px, 3.5vw, 30px) !important; color:#ffffff !important; white-space:nowrap !important; font-weight:900 !important">🧢 WT프렌즈 덕아웃 (Dugout)</div>
+              <div class="tm wt-dugout-title">🧢 WT프렌즈 덕아웃 <small class="wt-sub-tag">(Dugout)</small></div>
               <div class="wt-bhead-desc" style="color:#f1f5f9;font-size:13px;font-weight:600;margin-top:4px">선수 카드를 클릭하면 세부 타격·투구 분석 및 히트맵을 볼 수 있습니다.</div>
             </div>
           </div>
@@ -8606,7 +9148,13 @@ V.game=(q,id)=>{
   const B=S.batOf(g),P=S.pitOf(g);
   const winner=g.hres==='승'?'h':g.ares==='승'?'a':'';
   const T=subtabs('game',[['sum','요약'],['h',esc(g.home.short)],['a',esc(g.away.short)]]);
-  let body='';
+  
+  let luLink = '';
+  if (g.date === '2026-11-08') {
+    const lId = g.time.includes('11') ? 'L20261108_1' : 'L20261108_2';
+    luLink = `<div style="margin:12px 0;display:flex;justify-content:center"><a class="vsbtn pri" href="#/lineup/aSEa0076/${lId}" style="background:linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);color:#ffffff;font-weight:800;padding:9px 18px;border-radius:10px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;box-shadow:0 3px 10px rgba(37,99,235,0.25)">📋 2026.11.08 왕중왕전 출전 라인업 보기 ›</a></div>`;
+  }
+let body='';
   if(T.cur==='sum'){
     if(!g.boxH&&!g.boxA)body=`<div class="card empty">KBSA에 박스스코어가 등록되지 않은 경기입니다.</div>`;
     else{const sb=t=>S.sumBat(B.filter(b=>b.team.i===t.i)),sp=t=>S.sumPit(P.filter(p=>p.team.i===t.i));const h=sb(g.home),a=sb(g.away),hp=sp(g.home),ap=sp(g.away);
@@ -8635,7 +9183,7 @@ V.game=(q,id)=>{
     <div class="tm r">${badge(g.away,60)}<div>${tlink(g.away)}<small>원정${winner==='a'?' · 승':''}</small></div></div></div>
     <div class="info">${g.date.replace(/-/g,'.')} (${g.dow}) ${g.time} · ${esc(g.comp.name)} · ${esc(g.round)}${divPill(g.round)}</div>
     ${(g.boxH||g.boxA)?`<div style="margin-top:10px;display:flex;justify-content:center"><button class="vsbtn" data-gmvp="${g.id}" style="background:#10B981;color:#042F2E;border:0;cursor:pointer;font-weight:900;padding:7px 14px;border-radius:999px">👑 Today's MVP 카드 만들기 ›</button></div>`:''}</div>
-  ${T.html}${body}`;
+  ${T.html}${luLink}${body}`;
 };
 V.game.bind=()=>{
   const mvpBtn=$app.querySelector('[data-gmvp]');
@@ -9046,7 +9594,7 @@ V.team=(q,id)=>{
         <div class="wt-bhead-top">
           ${badge(t, 88)}
           <div class="wt-bhead-title-col">
-            <div class="tm" style="color:#ffffff !important;font-weight:900 !important;font-size:clamp(24px, 3.2vw, 32px) !important;line-height:1.2 !important">${isWT ? 'WT프렌즈 야구 기록실' : esc(t.name)}</div>
+            <div class="tm wt-main-title">${isWT ? 'WT프렌즈 야구 기록실' : esc(t.name)}</div>
             <div class="wt-bhead-desc" style="color:#f1f5f9;font-size:13px;font-weight:600;margin-top:4px">${isWT ? '2026 KBSA 한국여자야구연맹 공식 클럽하우스 · 등록 선수 22명' : (esc(t.sido) + ' 소속 구단')}</div>
           </div>
         </div>
@@ -10085,6 +10633,16 @@ function luNew(t){
   return {id:'L'+Date.now().toString(36),date:iso,time:'10:00',venue:'',host:'',oppId:'',oppName:'',oppMode:'list',starters:st.slice(0,9),bench:[],sp};
 }
 // 출력 카드 (목록 썸네일과 미리보기·이미지 공용)
+function calcPubTime(timeStr, hoursBefore = 2) {
+  if (!timeStr || !timeStr.includes(':')) return '';
+  const parts = timeStr.split(':').map(Number);
+  if (isNaN(parts[0])) return '';
+  let pubH = parts[0] - hoursBefore;
+  if (pubH < 0) pubH += 24;
+  const mm = isNaN(parts[1]) ? '00' : String(parts[1]).padStart(2, '0');
+  return String(pubH).padStart(2, '0') + ':' + mm;
+}
+
 function luThumb(t,l,th){
   const o=luOpp(l);
   const pubTime = calcPubTime(l.time, 2);
@@ -10150,9 +10708,18 @@ function luDetail(t,l,th,o){
     h+=`<p class="lc-n">2026 맞대결 ${h2h.length?`${W}승 ${Ls}패${D?' '+D+'무':''}`:'없음'}${B?'':' · 상대 경기 기록이 적어 예상 승률은 계산하지 않습니다'}</p>`}
   else if(o.name)h+=`<p class="lc-n">직접 입력한 상대팀은 기록이 없어 예상 승률을 계산하지 않습니다.</p>`;
   return h+'</div>'}
-V.lineup=(q,tid)=>{
-  const S=Store;const myT=localStorage.getItem('kbsa_myteam');const t=S.team(tid)||S.team(myT)||S.teams.find(x=>!x.combined)||S.teams[0];if(!t)return `<div class="card">구단을 찾을 수 없습니다.</div>`;
-  const th=teamTheme(t);const lid=parse().parts[2];
+V.lineup = (q, tid) => {
+  const S = Store;
+  const myT = localStorage.getItem('kbsa_myteam');
+  const parts = parse().parts;
+  let lid = parts[2];
+  if (!lid && parts[1] && parts[1].startsWith('L2026')) {
+    lid = parts[1];
+  }
+  const tidToUse = (tid && !tid.startsWith('L2026')) ? tid : (myT || 'aSEa0076');
+  const t = S.team(tidToUse) || S.team('aSEa0076') || S.teams[0];
+  if (!t) return `<div class="card">구단을 찾을 수 없습니다.</div>`;
+  const th = teamTheme(t);
   const head=`<div class="board lu-b" style="background: linear-gradient(135deg, #0D043D 0%, #172554 60%, #0F5FA4 100%) !important; color: #ffffff !important;"><div class="bhead">${badge(t,76)}<div class="bname">
     <span class="wt-hero-slogan" style="margin-bottom:6px">WINNERS TOGETHER · FRIENDS</span>
     <div class="tm" style="color:#ffffff !important;font-weight:900;font-size:26px !important">${esc(t.short)} 라인업</div>
