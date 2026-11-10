@@ -9419,6 +9419,69 @@ html[data-theme="dark"] .cl-bar-sub {
   border-radius: 10px !important;
 }
 
+
+/* =========================================================================
+   PURE WHITE TEXT ON ALL GREEN BACKGROUNDS (녹색 배경 위 순백색 고대비 글자)
+   ========================================================================= */
+.cl-btn.pri,
+.sc-btn.pri,
+.tmc-act.pri,
+.herobtn,
+.herobtn-pri,
+.chip.on,
+.stabs button.on,
+.tabs button.on,
+.tc-modal-tab.on,
+.lu-save,
+[data-img],
+.admin-auth-btn.on,
+button[class*="pri"],
+button.pri,
+.sc-tab.on,
+.tmc-seg button.on,
+.awd-chip.on,
+#btnToggleEvForm,
+#btnToggleNtForm,
+#btnToggleSlForm,
+.rsvp-b.in.on,
+button#btnTestAndSaveSheet {
+  background: #10b981 !important;
+  color: #ffffff !important; /* PURE WHITE TEXT */
+  font-weight: 800 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25) !important;
+}
+
+.cl-btn.pri:hover,
+#btnToggleEvForm:hover,
+#btnToggleNtForm:hover,
+#btnToggleSlForm:hover {
+  background: #059669 !important;
+  color: #ffffff !important;
+}
+
+/* 닫기 및 삭제 버튼 (✕) 스타일링 강화 */
+[data-ev-del],
+[data-nt-del],
+[data-sl-del] {
+  cursor: pointer !important;
+  color: #ef4444 !important;
+  font-size: 15px !important;
+  font-weight: 900 !important;
+  padding: 4px 10px !important;
+  border-radius: 8px !important;
+  background: #fee2e2 !important;
+  border: 1px solid #fca5a5 !important;
+  transition: all 0.15s ease !important;
+}
+
+[data-ev-del]:hover,
+[data-nt-del]:hover,
+[data-sl-del]:hover {
+  background: #ef4444 !important;
+  color: #ffffff !important;
+  border-color: #ef4444 !important;
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
 </head>
@@ -13048,12 +13111,33 @@ const ClubStore = {
   sheetUrlKey: 'kbsa_sheet_api_url_',
 
   getSheetUrl(team) {
-    try { return localStorage.getItem(this.sheetUrlKey + team.id) || ''; } catch(e) { return ''; }
+    try {
+      // 1. Check URL query parameter (when shared via KakaoTalk)
+      const {q} = parse();
+      if (q && q.surl) {
+        localStorage.setItem(this.sheetUrlKey + team.id, q.surl.trim());
+        localStorage.setItem('kbsa_global_sheet_api_url', q.surl.trim());
+        return q.surl.trim();
+      }
+      // 2. Check team-specific storage
+      const saved = localStorage.getItem(this.sheetUrlKey + team.id);
+      if (saved) return saved;
+      // 3. Check global admin storage
+      const gSaved = localStorage.getItem('kbsa_global_sheet_api_url');
+      if (gSaved) return gSaved;
+      return window.WT_GOOGLE_SHEET_URL || '';
+    } catch(e) { return ''; }
   },
   setSheetUrl(team, url) {
     try {
-      if (!url) localStorage.removeItem(this.sheetUrlKey + team.id);
-      else localStorage.setItem(this.sheetUrlKey + team.id, url.trim());
+      const u = (url || '').trim();
+      if (!u) {
+        localStorage.removeItem(this.sheetUrlKey + team.id);
+        localStorage.removeItem('kbsa_global_sheet_api_url');
+      } else {
+        localStorage.setItem(this.sheetUrlKey + team.id, u);
+        localStorage.setItem('kbsa_global_sheet_api_url', u);
+      }
     } catch(e) {}
   },
 
@@ -13283,6 +13367,52 @@ const ClubStore = {
   }
 };
 
+
+// Global unblockable deletion listener for club events, notices, and setlogs
+document.addEventListener('click', (e) => {
+  const evDelBtn = e.target.closest('[data-ev-del]');
+  if (evDelBtn) {
+    e.preventDefault();
+    e.stopPropagation();
+    const evId = evDelBtn.getAttribute('data-ev-del');
+    const tid = evDelBtn.getAttribute('data-team-id') || localStorage.getItem('kbsa_myteam') || 'aSEa0076';
+    const teamObj = Store.team(tid) || Store.team('aSEa0076') || Store.teams[0];
+    const curData = ClubStore.getTeamData(teamObj);
+    curData.events = (curData.events || []).filter(x => String(x.id) !== String(evId));
+    ClubStore.saveTeamData(teamObj, curData);
+    const y = window.scrollY; render(); window.scrollTo(0, y);
+    return;
+  }
+
+  const ntDelBtn = e.target.closest('[data-nt-del]');
+  if (ntDelBtn) {
+    e.preventDefault();
+    e.stopPropagation();
+    const ntId = ntDelBtn.getAttribute('data-nt-del');
+    const tid = ntDelBtn.getAttribute('data-team-id') || localStorage.getItem('kbsa_myteam') || 'aSEa0076';
+    const teamObj = Store.team(tid) || Store.team('aSEa0076') || Store.teams[0];
+    const curData = ClubStore.getTeamData(teamObj);
+    curData.notices = (curData.notices || []).filter(x => String(x.id) !== String(ntId));
+    ClubStore.saveTeamData(teamObj, curData);
+    const y = window.scrollY; render(); window.scrollTo(0, y);
+    return;
+  }
+
+  const slDelBtn = e.target.closest('[data-sl-del]');
+  if (slDelBtn) {
+    e.preventDefault();
+    e.stopPropagation();
+    const slId = slDelBtn.getAttribute('data-sl-del');
+    const tid = slDelBtn.getAttribute('data-team-id') || localStorage.getItem('kbsa_myteam') || 'aSEa0076';
+    const teamObj = Store.team(tid) || Store.team('aSEa0076') || Store.teams[0];
+    const curData = ClubStore.getTeamData(teamObj);
+    curData.setlogs = (curData.setlogs || []).filter(x => String(x.id) !== String(slId));
+    ClubStore.saveTeamData(teamObj, curData);
+    const y = window.scrollY; render(); window.scrollTo(0, y);
+    return;
+  }
+});
+
 function renderTeamClubView(t, A, tc, th) {
   const S = Store;
   const sub = subtabs('tclub', [
@@ -13306,7 +13436,7 @@ function renderTeamClubView(t, A, tc, th) {
           </select>
         </div>
         <div class="cl-bar-btns">
-          <button type="button" class="cl-btn ghost sm" id="clOpenSheetSync" title="구글 시트 연동 설정">${ClubStore.getSheetUrl(t) ? '🟢 시트 연동 중' : '📊 구글 시트 연동'}</button>
+          <button type="button" class="cl-btn ghost sm" id="clOpenSheetSync" title="관리자 전용 구글 시트 연동 설정">${ClubStore.getSheetUrl(t) ? '🟢 시트 연동 중' : '⚙️ 시트 연동 (관리자)'}</button>
           <button type="button" class="cl-btn ghost sm" id="clCopyTeamLink">🔗 초대 링크 복사</button>
         </div>
       </div>
@@ -13367,7 +13497,7 @@ function renderTeamClubView(t, A, tc, th) {
                   <span class="ev-badge ${isVacation ? 'vacation' : esc(ev.type)}">${isVacation ? '🏖️ 팀 방학·휴식' : esc(ev.type)}</span>
                   <div class="ev-title">${esc(ev.title)}</div>
                 </div>
-                <button type="button" class="cl-btn ghost sm" data-ev-del="${esc(ev.id)}" title="일정 삭제">✕</button>
+                <button type="button" class="cl-btn ghost sm" data-ev-del="${esc(ev.id)}" data-team-id="${esc(t.id)}" title="일정 삭제">✕</button>
               </div>
               <div class="ev-meta">
                 <span>🗓️ ${luDate(ev.date)} (${WD[luDay(ev.date)]||''}) ${esc(ev.time)}</span>
@@ -13466,7 +13596,7 @@ function renderTeamClubView(t, A, tc, th) {
                 <span class="pill">${esc(nt.cat)}</span>
                 <b style="font-size:15.5px">${esc(nt.title)}</b>
               </div>
-              <button type="button" class="cl-btn ghost sm" data-nt-del="${esc(nt.id)}">✕</button>
+              <button type="button" class="cl-btn ghost sm" data-nt-del="${esc(nt.id)}" data-team-id="${esc(t.id)}">✕</button>
             </div>
             <div class="sub">작성자: <b>${esc(nt.author)}</b> · ${esc(nt.date)}</div>
             <div class="nt-body">${esc(nt.body)}</div>
@@ -13536,7 +13666,7 @@ function renderTeamClubView(t, A, tc, th) {
                 <b>${plink(t, sl.author)}</b>
                 <span class="sub">${esc(sl.date)}</span>
               </div>
-              <button type="button" class="cl-btn ghost sm" data-sl-del="${esc(sl.id)}">✕</button>
+              <button type="button" class="cl-btn ghost sm" data-sl-del="${esc(sl.id)}" data-team-id="${esc(t.id)}">✕</button>
             </div>
             <div class="sl-metrics">
               <span class="sl-mchip">📋 ${esc(sl.drill)}</span>
