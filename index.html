@@ -11873,11 +11873,115 @@ html[data-theme="dark"] .ev-edit-btn:hover {
 
 
 /* =========================================================================
-   GALAXY FOLD (INNER SCREEN) & TABLET & MOBILE MASTER LAYOUT (대장님 완벽 맞춤)
+   PERFECT 3-TIER RESPONSIVE ARCHITECTURE (PC 좌우완벽 + 폴드/태블릿 + 모바일)
    ========================================================================= */
 
-/* 1. 폴드 펼침 화면 (541px 이상): 상단 알약 좌우 배치, 엠블럼 84px + 타이틀 25px 씩씩한 좌측 정렬 */
-@media (min-width: 541px) {
+/* [Tier 1] Desktop PC (861px 이상): 좌측 대형 엠블럼&타이틀 + 우측 6개 액션버튼 좌우 와이드 완벽 대칭 */
+@media (min-width: 861px) {
+  .board .wt-board-topline {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin-bottom: 18px !important;
+    padding-bottom: 14px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14) !important;
+    box-sizing: border-box !important;
+  }
+  .board .wt-board-topline .wt-hero-slogan {
+    margin: 0 !important;
+    font-size: 11.5px !important;
+    padding: 5px 16px !important;
+    border-radius: 999px !important;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+    color: #ffffff !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.04em !important;
+    box-shadow: 0 3px 8px rgba(239, 68, 68, 0.45) !important;
+  }
+  .board .wt-board-topline .hero-me-pill {
+    margin: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    background: rgba(15, 23, 42, 0.85) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    border-radius: 999px !important;
+    padding: 3px 12px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
+  }
+  .board .bhead {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 32px !important;
+    width: 100% !important;
+    margin-bottom: 22px !important;
+  }
+  .wt-hero-main-row {
+    flex: 1 1 auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    margin-bottom: 0 !important;
+    gap: 24px !important;
+  }
+  .wt-hero-emb-card {
+    flex: 0 0 104px !important;
+    width: 104px !important;
+    min-height: 104px !important;
+    height: 104px !important;
+    border-radius: 22px !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.22) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4) !important;
+    padding: 10px !important;
+    box-sizing: border-box !important;
+  }
+  .wt-hero-title {
+    font-size: 32px !important;
+    font-weight: 900 !important;
+    letter-spacing: -0.03em !important;
+    line-height: 1.15 !important;
+    color: #ffffff !important;
+  }
+  .wt-hero-sub {
+    font-size: 14px !important;
+    color: rgba(255, 255, 255, 0.85) !important;
+    margin-top: 4px !important;
+  }
+  .wt-hero-badges {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin-top: 6px !important;
+  }
+  .wt-hero-badges .pill {
+    padding: 5px 14px !important;
+    font-size: 13.5px !important;
+    font-weight: 800 !important;
+    border-radius: 999px !important;
+  }
+  /* PC에서는 우측 380px 2열 그리드로 6대 버튼이 꽉 차게 안착! */
+  .board .vsbtns {
+    flex: 0 0 380px !important;
+    width: 380px !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+    margin: 0 !important;
+  }
+  .board .vsbtns .vsbtn {
+    width: 100% !important;
+    height: 42px !important;
+    grid-column: auto !important;
+  }
+}
+
+/* [Tier 2] Galaxy Fold 펼침 & 태블릿 (541px ~ 860px): 상단 좌우 분리, 헤더 좌우 풀 와이드 */
+@media (min-width: 541px) and (max-width: 860px) {
   .board .wt-board-topline {
     display: flex !important;
     flex-direction: row !important;
@@ -11936,6 +12040,7 @@ html[data-theme="dark"] .ev-edit-btn:hover {
     border: 1.5px solid rgba(255, 255, 255, 0.22) !important;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35) !important;
     padding: 8px !important;
+    box-sizing: border-box !important;
   }
   .wt-hero-title {
     font-size: 24px !important;
@@ -11954,7 +12059,6 @@ html[data-theme="dark"] .ev-edit-btn:hover {
     font-size: 12.5px !important;
     font-weight: 800 !important;
   }
-  /* 폴드/태블릿에서 6개 버튼: 2열 x 3행 완전 대칭 균형 */
   .board .vsbtns {
     width: 100% !important;
     display: grid !important;
@@ -11968,7 +12072,7 @@ html[data-theme="dark"] .ev-edit-btn:hover {
   }
 }
 
-/* 2. 일반 좁은 모바일 (540px 이하): 상하 270px 동일너비 알약, 로고+타이틀 가로 꽉 채움 */
+/* [Tier 3] 일반 좁은 모바일 (540px 이하): 상하 270px 알약 대칭 + 풀 와이드 엠블럼&타이틀 */
 @media (max-width: 540px) {
   .board .wt-board-topline {
     display: flex !important;
@@ -12033,6 +12137,7 @@ html[data-theme="dark"] .ev-edit-btn:hover {
     min-height: 74px !important;
     border-radius: 16px !important;
     padding: 6px !important;
+    box-sizing: border-box !important;
   }
   .wt-hero-title {
     font-size: 20px !important;
@@ -12059,7 +12164,6 @@ html[data-theme="dark"] .ev-edit-btn:hover {
     height: 38px !important;
   }
 }
-
 </style>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
 </head>
