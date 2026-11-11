@@ -21,7 +21,7 @@ window.WT_ASSETS = {
 </script>
 <meta charset="utf-8">
 <meta http-equiv="Cache-Control" content="no-cache">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="theme-color" content="#14213D">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -11326,6 +11326,395 @@ html[data-theme="dark"] .ev-edit-btn:hover {
   }
 }
 
+
+/* =========================================================================
+   PERFECT VISUAL & INPUT REFINEMENTS (10대 피드백 전수 완벽 반영)
+   ========================================================================= */
+
+/* 모바일 캘린더 배지: 잘리는 글자 숨기고 직관적인 미니 아이콘으로만 노출 */
+@media (max-width: 640px) {
+  .cal-badge {
+    width: auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 1px 4px !important;
+    height: 18px !important;
+    font-size: 11px !important;
+    margin: 1px 0 !important;
+    border-radius: 4px !important;
+  }
+  .cal-badge-txt {
+    display: none !important;
+  }
+  .cal-events-slot {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 2px !important;
+    justify-content: center !important;
+  }
+}
+@media (min-width: 641px) {
+  .cal-badge-txt {
+    display: inline !important;
+  }
+}
+
+/* 참석자 칩: 가로 1줄 1명 차지 방지 -> 콤팩트 가로 플렉스 태그 */
+.ev-who-grid .ev-pchip,
+.ev-pchip {
+  width: auto !important;
+  max-width: fit-content !important;
+  flex: 0 0 auto !important;
+  min-width: 64px !important;
+  padding: 4px 10px !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  border-radius: 6px !important;
+  white-space: nowrap !important;
+  text-align: center !important;
+  box-sizing: border-box !important;
+}
+
+/* 모바일 입력창 16px 폰트 규격: 갤럭시 폴드 등 가상 키보드 자동 확대 원천 차단 */
+@media (max-width: 860px) {
+  input[type="text"],
+  input[type="search"],
+  input[type="date"],
+  input[type="time"],
+  input[type="number"],
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+
+/* =========================================================================
+   PERFECT RESPONSIVE HERO BOARD (PC 좌우 배치 + 모바일 상하 동일너비 & 비율완벽)
+   ========================================================================= */
+
+/* Desktop PC (769px 이상): 상단버튼 좌우 양끝 분리, 헤더 좌우 풍성한 와이드 배치 */
+@media (min-width: 769px) {
+  .board .wt-board-topline {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    gap: 16px !important;
+    margin-bottom: 18px !important;
+    padding-bottom: 12px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14) !important;
+  }
+  .board .wt-board-topline .wt-hero-slogan {
+    margin: 0 !important;
+    font-size: 11.5px !important;
+    padding: 5px 16px !important;
+    border-radius: 999px !important;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+    color: #ffffff !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.04em !important;
+    box-shadow: 0 3px 8px rgba(239, 68, 68, 0.45) !important;
+  }
+  .board .wt-board-topline .hero-me-pill {
+    margin: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    background: rgba(15, 23, 42, 0.85) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    border-radius: 999px !important;
+    padding: 3px 12px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
+  }
+  .board .bhead {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 32px !important;
+    width: 100% !important;
+    margin-bottom: 16px !important;
+  }
+  .bhead-info {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+  }
+  .wt-bhead-top {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 20px !important;
+    width: 100% !important;
+  }
+  .wt-bhead-top .badge {
+    width: 80px !important;
+    height: 80px !important;
+    flex-shrink: 0 !important;
+    border-radius: 20px !important;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.35) !important;
+  }
+  .wt-bhead-title-col {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+  }
+  .wt-main-title {
+    font-size: 28px !important;
+    font-weight: 900 !important;
+    letter-spacing: -0.02em !important;
+    line-height: 1.2 !important;
+    color: #ffffff !important;
+  }
+  .board .vsbtns {
+    flex: 0 0 350px !important;
+    width: 350px !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+    margin: 0 !important;
+  }
+}
+
+/* Mobile (768px 이하): 상하버튼 동일크기(270px) 대칭, 로고+글자 가로비율 확장 매칭 */
+@media (max-width: 768px) {
+  .board .wt-board-topline {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    gap: 8px !important;
+    margin-bottom: 14px !important;
+    padding-bottom: 0 !important;
+    border-bottom: none !important;
+  }
+  .board .wt-board-topline .wt-hero-slogan {
+    width: 100% !important;
+    max-width: 270px !important;
+    height: 38px !important;
+    margin: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 12px !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.04em !important;
+    border-radius: 999px !important;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 3px 8px rgba(239, 68, 68, 0.45) !important;
+    box-sizing: border-box !important;
+  }
+  .board .wt-board-topline .hero-me-pill {
+    width: 100% !important;
+    max-width: 270px !important;
+    height: 38px !important;
+    margin: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    background: rgba(15, 23, 42, 0.85) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    border-radius: 999px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
+    box-sizing: border-box !important;
+  }
+  .board .wt-board-topline .hero-me-pill span {
+    font-size: 11.5px !important;
+    color: #94a3b8 !important;
+    font-weight: 700 !important;
+  }
+  .board .bhead {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+    width: 100% !important;
+    margin-bottom: 12px !important;
+  }
+  .bhead-info {
+    width: 100% !important;
+  }
+  .wt-bhead-top {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    width: 100% !important;
+    gap: 14px !important;
+    padding: 2px 4px !important;
+    box-sizing: border-box !important;
+  }
+  .wt-bhead-top .badge {
+    width: 66px !important;
+    height: 66px !important;
+    flex-shrink: 0 !important;
+    border-radius: 16px !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25) !important;
+  }
+  .wt-bhead-title-col {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 5px !important;
+  }
+  .wt-main-title {
+    font-size: 22px !important;
+    font-weight: 900 !important;
+    color: #ffffff !important;
+    line-height: 1.25 !important;
+    letter-spacing: -0.02em !important;
+    white-space: nowrap !important;
+  }
+}
+
+
+/* =========================================================================
+   BOLD CENTERED HERO & COMPACT FOOTER GAP (대장님 피드백 전수 완벽 반영)
+   ========================================================================= */
+
+/* 1. 모바일 히어로 헤더: 로고 74px 씩씩하게 확대, 타이틀 24px 확대, 완벽한 좌우 가운데 정렬 */
+@media (max-width: 768px) {
+  .board .bhead {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    margin-bottom: 14px !important;
+  }
+  .board .bhead-info {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+  .wt-bhead-top {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 4px auto 12px !important;
+    width: fit-content !important;
+    max-width: 100% !important;
+    gap: 16px !important;
+    text-align: left !important;
+  }
+  .wt-bhead-top .badge {
+    width: 74px !important;
+    height: 74px !important;
+    flex-shrink: 0 !important;
+    border-radius: 18px !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35) !important;
+  }
+  .wt-bhead-title-col {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    min-width: 0 !important;
+  }
+  .wt-main-title {
+    font-size: 24px !important;
+    font-weight: 900 !important;
+    color: #ffffff !important;
+    line-height: 1.2 !important;
+    letter-spacing: -0.02em !important;
+    white-space: nowrap !important;
+  }
+  .wt-bhead-badges {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    flex-wrap: wrap !important;
+  }
+  .wt-bhead-badges .pill {
+    padding: 4px 11px !important;
+    font-size: 12.5px !important;
+    font-weight: 800 !important;
+    border-radius: 999px !important;
+  }
+}
+
+/* 2. PC 히어로 헤더: 씩씩하고 웅장한 대형 로고(96px)와 타이틀(34px), 풍성한 배지 */
+@media (min-width: 769px) {
+  .board .bhead {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 32px !important;
+    width: 100% !important;
+    margin-bottom: 20px !important;
+  }
+  .board .bhead-info {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+  }
+  .wt-bhead-top {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    margin: 0 !important;
+    gap: 24px !important;
+  }
+  .wt-bhead-top .badge {
+    width: 96px !important;
+    height: 96px !important;
+    flex-shrink: 0 !important;
+    border-radius: 22px !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+    border: 2px solid rgba(255, 255, 255, 0.28) !important;
+  }
+  .wt-bhead-top .badge img {
+    padding: 3px !important;
+  }
+  .wt-bhead-title-col {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+  .wt-main-title {
+    font-size: 34px !important;
+    font-weight: 900 !important;
+    letter-spacing: -0.03em !important;
+    line-height: 1.15 !important;
+    color: #ffffff !important;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
+  }
+  .wt-bhead-badges {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+  }
+  .wt-bhead-badges .pill {
+    padding: 6px 16px !important;
+    font-size: 14.5px !important;
+    font-weight: 800 !important;
+    border-radius: 999px !important;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.25) !important;
+  }
+  .board .vsbtns {
+    flex: 0 0 360px !important;
+    width: 360px !important;
+  }
+}
+
+/* 3. 하단 여백 과다 압축: 마지막 카드와 [홈 화면 바로가기] 버튼 사이의 거대한 빈 공간 해소 */
+#app, main {
+  padding-bottom: 16px !important;
+}
+.foot {
+  margin: 10px auto 0 !important;
+  padding: 0 16px 20px !important;
+  border-top: 1px solid var(--line) !important;
+}
+.foot > div[style*="text-align:center"] {
+  margin: 8px 0 8px !important;
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
 </head>
@@ -12595,30 +12984,25 @@ V.team=(q,id)=>{
   const badgesHtml = divBadges.length ? `<span class="wt-div-badges">${divBadges.join(' ')}</span>` : '';
 
   return `<div class="board" style="background: linear-gradient(135deg, #0D043D 0%, #172554 60%, #0F5FA4 100%) !important; color: #ffffff !important; margin-bottom: 22px !important;">
-    <div class="wt-board-topline" style="display:flex !important;flex-direction:row !important;justify-content:space-between !important;align-items:center !important;width:100% !important;flex-wrap:nowrap !important;margin-bottom:12px !important;box-sizing:border-box !important">
-      <div style="flex-shrink:0 !important;display:flex !important;align-items:center !important">
-        ${isWT ? '<span class="wt-hero-slogan" style="margin:0 !important;font-size:11px !important;padding:3px 9px !important;white-space:nowrap !important;line-height:1.2 !important">WINNERS TOGETHER · FRIENDS</span>' : ''}
-      </div>
-      <div style="flex-shrink:0 !important;margin-left:auto !important;display:flex !important;align-items:center !important">
-        ${isWT ? `
-          <div class="hero-me-pill" style="display:inline-flex !important;align-items:center !important;gap:4px !important;background:rgba(15, 23, 42, 0.85) !important;border:1px solid rgba(255, 255, 255, 0.25) !important;border-radius:999px !important;padding:2px 8px !important;backdrop-filter:blur(8px) !important;box-shadow:0 2px 8px rgba(0,0,0,0.35) !important;white-space:nowrap !important">
-            <span style="font-size:11px !important;color:#94a3b8 !important;font-weight:700 !important;white-space:nowrap !important;flex-shrink:0 !important">👤 내 프로필:</span>
-            <select id="heroMeSel" class="hero-me-select" style="background:#0f172a !important;color:#f8fafc !important;border:1px solid rgba(255,255,255,0.25) !important;border-radius:6px !important;padding:2px 6px !important;font-size:11.5px !important;font-weight:800 !important;cursor:pointer !important;outline:none !important;white-space:nowrap !important;max-width:115px !important">
-              <option value="" style="background:#0f172a;color:#94a3b8">${!ClubStore.getMe(t) ? '선수 선택 (22명) ▾' : '선수 변경 ▾'}</option>
-              ${luRoster(t).map(n => `<option value="${esc(n)}" ${n===ClubStore.getMe(t)?'selected':''} style="background:#0f172a;color:#f8fafc">${esc(n)}</option>`).join('')}
-            </select>
-          </div>
-        ` : ''}
-      </div>
+    <div class="wt-board-topline">
+      ${isWT ? '<span class="wt-hero-slogan">WINNERS TOGETHER · FRIENDS</span>' : ''}
+      ${isWT ? `
+        <div class="hero-me-pill">
+          <span>👤 내 프로필:</span>
+          <select id="heroMeSel" class="hero-me-select" style="background:#0f172a !important;color:#f8fafc !important;border:1px solid rgba(255,255,255,0.25) !important;border-radius:6px !important;padding:2px 8px !important;font-size:12px !important;font-weight:800 !important;cursor:pointer !important;outline:none !important">
+            <option value="" style="background:#0f172a;color:#94a3b8">${!ClubStore.getMe(t) ? '선수 선택 (22명) ▾' : '선수 변경 ▾'}</option>
+            ${luRoster(t).map(n => `<option value="${esc(n)}" ${n===ClubStore.getMe(t)?'selected':''} style="background:#0f172a;color:#f8fafc">${esc(n)}</option>`).join('')}
+          </select>
+        </div>
+      ` : ''}
     </div>
     <div class="bhead">
       <div class="bhead-info">
-        <div class="wt-bhead-top" style="display:flex;align-items:center;gap:12px">
-          ${badge(t, 64)}
+        <div class="wt-bhead-top">
+          ${badge(t, 74)}
           <div class="wt-bhead-title-col">
-            <div class="tm wt-main-title" style="font-size:20px;font-weight:900;color:#ffffff;line-height:1.2">${isWT ? 'WT프렌즈 야구 기록실' : esc(t.name)}</div>
-            <div style="display:flex;align-items:center;gap:6px;margin-top:5px;flex-wrap:wrap">
-              <span style="color:#cbd5e1;font-size:12px;font-weight:600">${isWT ? '서울 노원구 · 창단 18주년 · 등록 22명' : (esc(t.sido) + ' 소속 구단')}</span>
+            <div class="tm wt-main-title">${isWT ? 'WT프렌즈 야구 기록실' : esc(t.name)}</div>
+            <div class="wt-bhead-badges" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
               ${badgesHtml}
             </div>
           </div>
@@ -15504,7 +15888,7 @@ function renderTeamClubView(t, A, tc, th) {
                   <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:5px">
                     <span class="ev-badge ${isVacation ? 'vacation' : esc(ev.type)}" style="font-weight:800">${isVacation ? '🏖️ 팀 방학·휴식' : esc(ev.type)}</span>
                   </div>
-                  <div class="ev-title" style="font-size:16px;font-weight:900;color:var(--ink);line-height:1.35;word-break:keep-all">${esc(ev.title)}</div>
+                  <div class="ev-title" style="font-size:14.5px;font-weight:700;color:var(--ink);line-height:1.35;word-break:keep-all;letter-spacing:-0.01em">${esc(ev.title)}</div>
                 </div>
                 <div style="flex:0 0 auto;display:flex;align-items:center;gap:6px;padding-top:2px">
                   <button type="button" class="ev-edit-btn" data-ev-edit="${esc(ev.id)}" title="일정 내용 수정">✏️ 수정</button>
@@ -15520,21 +15904,34 @@ function renderTeamClubView(t, A, tc, th) {
                   <span> · 👥 참석 <b style="color:#10b981">${inList.length}명</b>${carList.length ? ` (🚗 차량지원 ${carList.length}대)` : ''} · 불참 ${outList.length}명</span>
                 `}
               </div>
-              ${ev.note ? `<div class="sub" style="background:var(--chip);color:var(--ink2);padding:9px 12px;border-radius:8px;border-left:3px solid #3b82f6;margin-bottom:10px;font-size:12.5px;line-height:1.4">💡 <b>공지/메모:</b> ${esc(ev.note)}</div>` : ''}
+              ${ev.note ? `
+              <div class="ev-memo-box" style="background:var(--chip);color:var(--ink);padding:8px 12px;border-radius:8px;border-left:3px solid #3b82f6;margin-bottom:10px;font-size:12px;line-height:1.45">
+                <div style="font-weight:800;color:var(--ink);margin-bottom:3px;display:flex;align-items:center;gap:4px">
+                  <span>💡</span> <span>공지 / 메모</span>
+                </div>
+                <div style="color:var(--sub);word-break:keep-all;line-height:1.4">
+                  ${esc(ev.note)}
+                </div>
+              </div>` : ''}
 
               <div class="ev-rsvp-box" style="background:var(--chip);border:1px solid var(--line);border-radius:10px;padding:12px">
-                <div style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px;font-weight:800;color:var(--ink);margin-bottom:8px">
-                  <span>🙋‍♀️ <b>${me ? esc(me) + '님' : '선수 본인'}</b>의 ${isVacation ? '일정 확인' : '참석 투표 (클릭 시 즉시 반영)'}</span>
-                  <span style="color:#10b981">${isMyConfirmed ? '✓ 확인 완료' : (myStatus ? '✓ 투표 완료' : '미확인')}</span>
+                <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:800;color:var(--ink);margin-bottom:8px;gap:8px">
+                  <div style="display:flex;align-items:center;gap:4px;flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
+                    <span>🙋‍♀️</span>
+                    <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><b>${me ? esc(me) + '님' : '선수 본인'}</b>의 ${isVacation ? '일정 확인' : '참석 투표'}</span>
+                  </div>
+                  <span style="flex:0 0 auto;white-space:nowrap;font-size:11.5px;font-weight:800;color:${isMyConfirmed || myStatus ? '#10b981' : 'var(--mute)'};padding:2px 8px;border-radius:6px;background:${isMyConfirmed || myStatus ? 'rgba(16,185,129,0.1)' : 'var(--chip)'}">
+                    ${isMyConfirmed ? '✓ 확인 완료' : (myStatus ? '✓ 투표 완료' : '미확인')}
+                  </span>
                 </div>
                 ${isVacation ? `
                   <div class="ev-rsvp-btns vacation">
-                    <button type="button" class="rsvp-b in ${isMyConfirmed ? 'on' : ''}" data-rsvp="${esc(ev.id)}:in" style="width:100%;height:42px;font-size:13.5px;font-weight:800">
+                    <button type="button" class="rsvp-b in ${isMyConfirmed ? 'on' : ''}" data-rsvp="${esc(ev.id)}:in" style="width:fit-content;max-width:100%;min-width:180px;height:34px;padding:0 14px;font-size:12px;font-weight:700;border-radius:8px;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(16,185,129,0.25)">
                       ${isMyConfirmed ? '✓ 공지 확인 완료 (충전 중 🏖️)' : '👍 공지 확인했습니다'} (${inList.length}명)
                     </button>
                   </div>
-                  <div class="ev-who-grid">
-                    ${inList.length ? inList.map(([nm]) => `<span class="ev-pchip in">👍 ${esc(nm)}</span>`).join('') : '<span class="sub" style="grid-column:1/-1;text-align:center;padding:8px">아직 확인한 선수가 없습니다. 첫 번째로 확인을 눌러보세요!</span>'}
+                  <div class="ev-who-grid" style="display:flex !important;flex-wrap:wrap !important;gap:6px !important;align-items:center !important;justify-content:center !important;margin-top:6px !important">
+                    ${inList.length ? inList.map(([nm]) => `<span class="ev-pchip in" style="flex:0 0 auto !important;padding:4px 10px !important;font-size:12px !important;font-weight:700 !important;border-radius:6px !important;width:auto !important">👍 ${esc(nm)}</span>`).join('') : '<span class="sub" style="text-align:center;padding:8px;width:100%">아직 확인한 선수가 없습니다. 첫 번째로 확인을 눌러보세요!</span>'}
                   </div>
                 ` : `
                   <div class="ev-rsvp-btns">
@@ -15551,7 +15948,7 @@ function renderTeamClubView(t, A, tc, th) {
 
               <div class="ev-foot" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-top:12px;border-top:1px dashed var(--line);padding-top:10px">
                 ${isVacation ? `
-                  <span class="sub" style="color:#0284c7;font-weight:800">🏖️ 팀 방학·휴식 기간입니다! 푹 쉬고 재충전하세요.</span>
+                  <div class="sub" style="color:#0284c7;font-weight:700;font-size:12px;line-height:1.45;word-break:keep-all">🏖️ 팀 방학·휴식 기간입니다!<br>푹 쉬고 재충전하세요.</div>
                 ` : `
                   <span class="sub" style="font-weight:700">참석 인원 ${inList.length}명${inList.length>=9?' (9명 라인업 구성 가능 ✓)':` (9명까지 ${Math.max(0,9-inList.length)}명 더 필요)`}</span>
                 `}
@@ -15905,10 +16302,10 @@ function renderClubCalendarSection(t, data, tc, me) {
         </div>
       </div>
       <div class="cal-wrap">
-      <div class="cal-nav">
-        <button type="button" class="cl-btn ghost sm" id="btnCalPrevMonth">‹ 이전 달</button>
-        <div class="cal-month-title">${curY}년 ${curM}월 스마트 캘린더</div>
-        <button type="button" class="cl-btn ghost sm" id="btnCalNextMonth">다음 달 ›</button>
+      <div class="cal-nav" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:8px">
+        <button type="button" class="cl-btn ghost sm cal-nav-btn" id="btnCalPrevMonth" title="이전 달" style="min-width:36px;height:34px;padding:0 8px;font-size:16px;font-weight:800;border-radius:8px">‹</button>
+        <div class="cal-month-title" style="font-size:16px;font-weight:800;color:var(--ink);letter-spacing:-0.02em;white-space:nowrap;text-align:center">2026 WT 캘린더</div>
+        <button type="button" class="cl-btn ghost sm cal-nav-btn" id="btnCalNextMonth" title="다음 달" style="min-width:36px;height:34px;padding:0 8px;font-size:16px;font-weight:800;border-radius:8px">›</button>
       </div>
 
       <div class="cal-grid">
@@ -15947,7 +16344,10 @@ function renderClubCalendarSection(t, data, tc, me) {
               </div>
               <div class="cal-events-slot">
                 ${visibleItems.map(it => `
-                  <span class="cal-badge ${it.type}" title="${esc(it.fullLabel || it.label)}">${esc(it.shortLabel || it.label)}</span>
+                  <span class="cal-badge ${it.type}" title="${esc(it.fullLabel || it.label)}">
+                    <span class="cal-badge-icon">${(it.shortLabel || it.label).slice(0, 2)}</span>
+                    <span class="cal-badge-txt">${esc((it.shortLabel || it.label).slice(2).trim())}</span>
+                  </span>
                 `).join('')}
                 ${moreCount > 0 ? `<span class="cal-badge more">+${moreCount}개</span>` : ''}
               </div>
