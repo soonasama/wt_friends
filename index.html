@@ -10281,6 +10281,86 @@ html[data-theme="light"] .card table thead tr th:first-child {
   border-bottom: 2px solid #cbd5e1 !important;
 }
 
+
+/* =========================================================================
+   모바일 최적화 (글자 세로 깨짐 방지 / 4대 탭 2x2 완전 노출 / 영수증 반토막 방지)
+   ========================================================================= */
+/* 1. 타이틀 바 프로필 선택 알약 */
+.hero-me-pill {
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+}
+.hero-me-pill span {
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+}
+
+/* 2. 클럽하우스 4대 탭: 모바일에서 4개 탭 모두 화면 100% 폭 안에 쏙 들어오는 2x2 그리드 */
+@media (max-width: 600px) {
+  .club-subtabs-wrap .stabs {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 6px !important;
+    width: 100% !important;
+    overflow-x: visible !important;
+    padding: 0 !important;
+    margin: 6px 0 14px !important;
+  }
+  .club-subtabs-wrap .stabs button {
+    width: 100% !important;
+    padding: 9px 4px !important;
+    font-size: 12.5px !important;
+    font-weight: 800 !important;
+    text-align: center !important;
+    justify-content: center !important;
+    display: flex !important;
+    align-items: center !important;
+    border-radius: 10px !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* 3. 정산서 상세/편집 화면: PC는 2열, 모바일은 1열(100% 폭) 수직 스택 전환 */
+.st-editor-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 20px;
+  align-items: start;
+  width: 100%;
+}
+@media (max-width: 768px) {
+  .st-editor-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+    width: 100% !important;
+  }
+  .st-editor-grid > div {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  .receipt-paper {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    margin: 0 0 16px !important;
+    padding: 16px 12px !important;
+  }
+  /* 모바일 행 입력 필드 가로 스크롤 방지 */
+  .st-income-row, .st-expense-row, .st-spon-row {
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+    background: var(--chip) !important;
+    padding: 8px !important;
+    border-radius: 8px !important;
+    border: 1px solid var(--line) !important;
+  }
+  .st-income-row input, .st-expense-row input, .st-expense-row select, .st-spon-row input {
+    min-width: 0 !important;
+  }
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
 </head>
@@ -11591,16 +11671,16 @@ V.team=(q,id)=>{
 
   return `<div class="board" style="background: linear-gradient(135deg, #0D043D 0%, #172554 60%, #0F5FA4 100%) !important; color: #ffffff !important; margin-bottom: 22px !important;">
     <div class="wt-board-topline" style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px">
-      <!-- 1열 (최상단): 좌측 슬로건 & 우측 내 프로필 선택 (다크톤 매칭 & 챔프/퓨처 박스 바로 위에 정렬) -->
-      <div style="display:flex;justify-content:space-between;align-items:center;width:100%">
-        <div>
+      <!-- 1열 (최상단): 모바일 가로폭 대응 flex-wrap & white-space nowrap 적용 (글자 세로 찌그러짐 0%) -->
+      <div class="wt-topline-row1" style="display:flex;justify-content:space-between;align-items:center;width:100%;flex-wrap:wrap;gap:6px">
+        <div style="flex-shrink:0">
           ${isWT ? '<span class="wt-hero-slogan">WINNERS TOGETHER · FRIENDS</span>' : ''}
         </div>
-        <div>
+        <div style="flex-shrink:0;margin-left:auto">
           ${isWT ? `
-            <div class="hero-me-pill" style="display:inline-flex;align-items:center;gap:6px;background:rgba(15, 23, 42, 0.7);border:1px solid rgba(255, 255, 255, 0.22);border-radius:999px;padding:3px 10px;backdrop-filter:blur(8px);box-shadow:0 2px 8px rgba(0,0,0,0.35)">
-              <span style="font-size:12px;color:#94a3b8;font-weight:700">👤 내 프로필:</span>
-              <select id="heroMeSel" class="hero-me-select" style="background:#0f172a !important;color:#f8fafc !important;border:1px solid rgba(255,255,255,0.2) !important;border-radius:6px !important;padding:2px 8px !important;font-size:12px !important;font-weight:800 !important;cursor:pointer;outline:none">
+            <div class="hero-me-pill" style="display:inline-flex;align-items:center;gap:6px;background:rgba(15, 23, 42, 0.85);border:1px solid rgba(255, 255, 255, 0.25);border-radius:999px;padding:3px 10px;backdrop-filter:blur(8px);box-shadow:0 2px 8px rgba(0,0,0,0.35);white-space:nowrap">
+              <span style="font-size:11.5px;color:#94a3b8;font-weight:700;white-space:nowrap;flex-shrink:0">👤 내 프로필:</span>
+              <select id="heroMeSel" class="hero-me-select" style="background:#0f172a !important;color:#f8fafc !important;border:1px solid rgba(255,255,255,0.25) !important;border-radius:6px !important;padding:2px 8px !important;font-size:12px !important;font-weight:800 !important;cursor:pointer;outline:none;white-space:nowrap">
                 <option value="" style="background:#0f172a;color:#94a3b8">${!ClubStore.getMe(t) ? '선수 선택 (22명) ▾' : '선수 변경 ▾'}</option>
                 ${luRoster(t).map(n => `<option value="${esc(n)}" ${n===ClubStore.getMe(t)?'selected':''} style="background:#0f172a;color:#f8fafc">${esc(n)}</option>`).join('')}
               </select>
@@ -14377,7 +14457,7 @@ function renderTeamClubView(t, A, tc, th) {
         <button type="button" class="cl-btn ghost sm" id="clOpenSheetSync" title="구글 시트 연동" style="font-size:11.5px;padding:3px 8px">⚙️ 시트 연동</button>
       </div>
     </div>
-    ${sub.html}
+    <div class="club-subtabs-wrap">${sub.html}</div>
   `;
 
   if (sub.cur === 'sched') {
@@ -15217,7 +15297,7 @@ function renderClubSettlementView(t, data, tc, me) {
         </div>
       </div>
 
-      <div class="grid g2" style="gap:20px; align-items:start">
+      <div class="st-editor-grid">
         <!-- 왼쪽: 실시간 영수증 카드 미리보기 (화이트 영수증 용지) -->
         <div>
           <div style="font-size:14px; font-weight:800; color:var(--ink); margin-bottom:10px; height:24px; display:flex; align-items:center">
@@ -16020,11 +16100,60 @@ function bindTeamClubView() {
     };
   });
 
-  // 출석상 상장 출력 바인딩
+  // 출석상 공식 상장 카드 모달 & 이미지 출력 바인딩
   const btnAward = document.getElementById('btnExportAttendAward');
   if (btnAward) {
     btnAward.onclick = () => {
-      alert('🏅 올해의 출석왕 어워드 카드가 준비되었습니다!');
+      let modal = document.getElementById('attendAwardModal');
+      if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'attendAwardModal';
+        modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;backdrop-filter:blur(6px)';
+        document.body.appendChild(modal);
+      }
+      modal.innerHTML = `
+        <div style="background:#ffffff;color:#0f172a;max-width:440px;width:100%;border-radius:18px;padding:24px 20px;box-shadow:0 12px 40px rgba(0,0,0,0.5);border:3px solid #eab308;position:relative;text-align:center;font-family:'Pretendard',sans-serif" id="awardCertCard">
+          <div style="font-size:12px;font-weight:800;color:#0f5fa4;letter-spacing:1px;margin-bottom:6px">WINNERS TOGETHER · FRIENDS</div>
+          <h2 style="font-size:22px;font-weight:900;color:#0f172a;margin:0 0 10px">🏅 2026 올해의 출석왕 상장</h2>
+          <div style="font-size:14px;color:#eab308;font-weight:900;margin-bottom:14px">🥇 최우수 성실상 (출석률 100%)</div>
+          
+          <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:14px;margin-bottom:16px;text-align:left;font-size:13.5px;color:#334155;line-height:1.6">
+            <div style="margin-bottom:6px">성명: <b style="font-size:16px;color:#0f172a">서 희 숙</b> (#31, 내야수)</div>
+            <div style="margin-bottom:6px">출석: <b>12회 전회 출석</b> (카풀 지원 4회)</div>
+            <div style="font-size:12.5px;color:#64748b;margin-top:10px;border-top:1px dashed #cbd5e1;padding-top:8px">
+              위 선수는 2026 시즌 동안 비가 오나 눈이 오나 한결같은 열정과 헌신으로 전 훈련과 경기에 100% 출석하여 원팀의 귀감이 되었기에 이 상장을 수여합니다.
+            </div>
+          </div>
+          
+          <div style="font-size:13px;color:#475569;margin-bottom:18px">
+            <b>2026년 WT프렌즈 감독 전 순 아</b> 🧢
+          </div>
+
+          <div style="display:flex;gap:8px;justify-content:center">
+            <button type="button" class="cl-btn ghost sm" id="btnCloseAwardModal">닫기</button>
+            <button type="button" class="cl-btn pri sm btn-action-green" id="btnDownloadAwardImg" style="background:#10b981 !important;color:#ffffff !important;font-weight:800">📸 상장 이미지 저장</button>
+          </div>
+        </div>
+      `;
+      modal.style.display = 'flex';
+
+      modal.querySelector('#btnCloseAwardModal').onclick = () => { modal.style.display = 'none'; };
+      modal.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
+
+      modal.querySelector('#btnDownloadAwardImg').onclick = () => {
+        const certEl = modal.querySelector('#awardCertCard');
+        luLoadH2C().then(() => html2canvas(certEl, { scale: 2.5, backgroundColor: '#ffffff', useCORS: true })).then(cv => {
+          const fn = `WT_2026_올해의출석왕_서희숙.png`;
+          cv.toBlob(blob => {
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = fn;
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+          }, 'image/png');
+        });
+      };
     };
   }
 
