@@ -387,7 +387,7 @@ td.plays{text-align:left;color:var(--ink2);font-size:12px;white-space:normal;min
 .cal-detail-row {
   display: flex !important;
   justify-content: space-between !important;
-  align-items: center !important;
+  align-items: flex-start !important; /* 본문 내용 길이에 무관하게 버튼 위치 항상 상단 고정! */
   background: var(--card) !important;
   border: 1px solid var(--line) !important;
   padding: 12px 14px !important;
@@ -432,6 +432,8 @@ td.plays{text-align:left;color:var(--ink2);font-size:12px;white-space:normal;min
   align-items: center !important;
   gap: 6px !important;
   margin-left: auto !important;
+  align-self: flex-start !important; /* 우측 상단 고정으로 내용이 길어져도 버튼 위치 절대 불변! */
+  padding-top: 1px !important;
 }
 
 @media (max-width: 640px) {
@@ -1071,7 +1073,7 @@ th.col-val, td.col-val,
 
 /* 일정 & 참석 투표 카드 */
 .ev-card{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--tc,var(--ink));border-radius:var(--r);padding:15px 16px;display:grid;gap:10px}
-.ev-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.ev-top{display:flex !important;align-items:flex-start !important;justify-content:space-between !important;gap:10px !important}
 .ev-badge{display:inline-block;padding:3px 9px;border-radius:999px;font-size:11.5px;font-weight:800}
 .ev-badge.훈련{background:#DCEBFF;color:#1450A8}
 .ev-badge.교류전{background:#D9F2E4;color:#0B6A3C}
@@ -11155,6 +11157,71 @@ th.col-val, td.col-val {
   padding: 10px 8px !important;
   font-weight: 800 !important;
 }
+
+/* 콤팩트하고 단정한 삭제 버튼 규격 (다른 칩들과 완벽한 크기 조화) */
+.ev-del-btn {
+  background: transparent !important;
+  border: 1px solid #fca5a5 !important;
+  color: #ef4444 !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  padding: 2px 8px !important;
+  height: 24px !important;
+  line-height: 20px !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 3px !important;
+  transition: all 0.15s ease !important;
+  box-sizing: border-box !important;
+  white-space: nowrap !important;
+}
+.ev-del-btn:hover {
+  background: #fef2f2 !important;
+  border-color: #ef4444 !important;
+}
+html[data-theme="dark"] .ev-del-btn {
+  border-color: rgba(239, 68, 68, 0.45) !important;
+  color: #f87171 !important;
+}
+html[data-theme="dark"] .ev-del-btn:hover {
+  background: rgba(239, 68, 68, 0.15) !important;
+}
+
+/* 콤팩트하고 단정한 수정 버튼 (.ev-edit-btn) */
+.ev-edit-btn {
+  background: transparent !important;
+  border: 1px solid var(--line) !important;
+  color: var(--ink) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  padding: 2px 8px !important;
+  height: 24px !important;
+  line-height: 20px !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 3px !important;
+  transition: all 0.15s ease !important;
+  box-sizing: border-box !important;
+  white-space: nowrap !important;
+}
+.ev-edit-btn:hover {
+  background: var(--chip) !important;
+  border-color: #3b82f6 !important;
+  color: #3b82f6 !important;
+}
+html[data-theme="dark"] .ev-edit-btn {
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: #e2e8f0 !important;
+}
+html[data-theme="dark"] .ev-edit-btn:hover {
+  background: rgba(59, 130, 246, 0.15) !important;
+  border-color: #60a5fa !important;
+  color: #60a5fa !important;
+}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
 </head>
@@ -15262,8 +15329,8 @@ function renderTeamClubView(t, A, tc, th) {
         <button type="button" class="cl-btn pri" id="btnToggleEvForm">＋ 새 일정·투표 만들기</button>
       </div>
 
-      <form class="cl-form" id="evFormBox" style="display:${UI.showEvForm?'grid':'none'}">
-        <b style="font-size:15px">📅 새로운 팀 일정 & 참석 투표 등록</b>
+      <form class="cl-form" id="evFormBox" style="display:${UI.showEvForm?'grid':'none'};border:1.5px solid #10b981;border-radius:12px;padding:16px;background:var(--card)">
+        <b style="font-size:15px;color:#10b981" id="evFormBoxTitle">${UI.editingEvId ? '✏️ 일정 내용 수정하기' : '📅 새로운 팀 일정 & 참석 투표 등록'}</b>
         <div class="cl-form-row">
           <select id="evInType">
             <option value="훈련">⚾ 팀 정기 훈련</option>
@@ -15303,7 +15370,10 @@ function renderTeamClubView(t, A, tc, th) {
                   <span class="ev-badge ${isVacation ? 'vacation' : esc(ev.type)}" style="font-weight:800">${isVacation ? '🏖️ 팀 방학·휴식' : esc(ev.type)}</span>
                   <div class="ev-title" style="font-size:16px;font-weight:900;color:var(--ink)">${esc(ev.title)}</div>
                 </div>
-                <button type="button" class="cl-btn ghost sm" data-ev-del="${esc(ev.id)}" data-team-id="${esc(t.id)}" style="color:#ef4444;font-weight:700;font-size:11.5px;padding:4px 8px;border-radius:6px" title="일정 삭제">🗑️ 삭제</button>
+                <div style="display:flex;align-items:center;gap:6px">
+                  <button type="button" class="ev-edit-btn" data-ev-edit="${esc(ev.id)}" title="일정 내용 수정">✏️ 수정</button>
+                  <button type="button" class="ev-del-btn" data-ev-del="${esc(ev.id)}" data-team-id="${esc(t.id)}" title="일정 삭제">🗑️ 삭제</button>
+                </div>
               </div>
               <div class="ev-meta" style="font-size:13px;color:var(--mute);margin-bottom:8px">
                 <span>🗓️ ${luDate(ev.date)} (${WD[luDay(ev.date)]||''}) ${esc(ev.time)}</span>
@@ -15768,7 +15838,7 @@ function renderClubCalendarSection(t, data, tc, me) {
                         <div class="cal-detail-actions">
                           ${isTeamEvent ? `
                             <button type="button" class="cl-btn sm ghost" data-cal-ev-edit="${esc(it.ev.id)}" style="font-size:11.5px;padding:4px 8px;font-weight:700">✏️ 수정</button>
-                            <button type="button" class="cl-btn sm ghost" data-cal-ev-del="${esc(it.ev.id)}" style="font-size:11.5px;padding:4px 8px;color:#ef4444;font-weight:700">🗑️ 삭제</button>
+                            <button type="button" class="ev-del-btn" data-cal-ev-del="${esc(it.ev.id)}" title="일정 삭제">🗑️ 삭제</button>
                           ` : (it.type === 'game' ? `
                             <span class="st-badge" style="background:#0284c7;color:#ffffff;border:none;font-size:11px;padding:4px 8px;font-weight:700">🏆 KBSA 공식 시합</span>
                           ` : `
@@ -17661,33 +17731,96 @@ function bindTeamClubView() {
     setTimeout(() => copyBtn.textContent = '🔗 팀 라운지 초대 링크 복사', 1800);
   };
 
-  // 일정 폼 및 RSVP 바인딩
+  // 일정 폼 및 RSVP 바인딩 (등록 & 수정 완벽 지원)
   const btnEv = document.getElementById('btnToggleEvForm');
-  if (btnEv) btnEv.onclick = () => { UI.showEvForm = !UI.showEvForm; re(); };
+  if (btnEv) btnEv.onclick = () => {
+    UI.editingEvId = null;
+    UI.showEvForm = !UI.showEvForm;
+    re();
+  };
   const cancelEv = document.getElementById('btnCancelEv');
-  if (cancelEv) cancelEv.onclick = () => { UI.showEvForm = false; re(); };
+  if (cancelEv) cancelEv.onclick = () => {
+    UI.editingEvId = null;
+    UI.showEvForm = false;
+    re();
+  };
+
+  // 일정 카드 [✏️ 수정] 버튼 클릭 이벤트
+  $app.querySelectorAll('[data-ev-edit]').forEach(btn => {
+    btn.onclick = () => {
+      const evId = btn.dataset.evEdit;
+      const curData = ClubStore.getTeamData(t);
+      const ev = (curData.events || []).find(x => String(x.id) === String(evId));
+      if (!ev) return;
+
+      UI.editingEvId = evId;
+      UI.showEvForm = true;
+      re();
+
+      setTimeout(() => {
+        const formBox = document.getElementById('evFormBox');
+        if (formBox) {
+          formBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          const selType = document.getElementById('evInType');
+          const inDate = document.getElementById('evInDate');
+          const inTime = document.getElementById('evInTime');
+          const inVenue = document.getElementById('evInVenue');
+          const inTitle = document.getElementById('evInTitle');
+          const inNote = document.getElementById('evInNote');
+          const submitBtn = formBox.querySelector('button[type="submit"]');
+
+          if (selType) selType.value = ev.type || '훈련';
+          if (inDate) inDate.value = ev.date || '';
+          if (inTime) inTime.value = ev.time || '10:00';
+          if (inVenue) inVenue.value = ev.venue || '';
+          if (inTitle) inTitle.value = ev.title || '';
+          if (inNote) inNote.value = ev.note || '';
+          if (submitBtn) submitBtn.textContent = '✓ 수정 완료 저장';
+        }
+      }, 50);
+    };
+  });
+
   const evForm = document.getElementById('evFormBox');
   if (evForm) evForm.onsubmit = (e) => {
     e.preventDefault();
     const curData = ClubStore.getTeamData(t);
-    const curMe = ClubStore.getMe(t);
-    if (!curMe) {
-      alert('먼저 상단에서 본인 선수 프로필을 선택해 주세요!');
-      document.getElementById('clMeSel')?.focus();
-      return;
-    }
     const evType = document.getElementById('evInType').value;
     const isVac = (evType === '방학' || evType === '휴식');
-    curData.events.unshift({
-      id: 'ev' + Date.now().toString(36),
-      type: evType,
-      date: document.getElementById('evInDate').value,
-      time: document.getElementById('evInTime').value,
-      venue: document.getElementById('evInVenue').value.trim() || (isVac ? '각자 휴식' : ''),
-      title: document.getElementById('evInTitle').value.trim(),
-      note: document.getElementById('evInNote').value.trim(),
-      rsvp: {} // 새 일정 생성 시 기본값으로 0명에서 시작 (작성자 강제 참석 방지)
-    });
+    const inDate = document.getElementById('evInDate').value;
+    const inTime = document.getElementById('evInTime').value;
+    const inVenue = document.getElementById('evInVenue').value.trim() || (isVac ? '각자 휴식' : '');
+    const inTitle = document.getElementById('evInTitle').value.trim();
+    const inNote = document.getElementById('evInNote').value.trim();
+
+    curData.events = curData.events || [];
+
+    if (UI.editingEvId) {
+      const ev = curData.events.find(x => String(x.id) === String(UI.editingEvId));
+      if (ev) {
+        ev.type = evType;
+        ev.date = inDate;
+        ev.time = inTime;
+        ev.venue = inVenue;
+        ev.title = inTitle;
+        ev.note = inNote;
+      }
+      UI.editingEvId = null;
+      alert('일정이 성공적으로 수정되었습니다!');
+    } else {
+      curData.events.unshift({
+        id: 'ev' + Date.now().toString(36),
+        type: evType,
+        date: inDate,
+        time: inTime,
+        venue: inVenue,
+        title: inTitle,
+        note: inNote,
+        rsvp: {}
+      });
+      alert('새 일정이 성공적으로 등록되었습니다!');
+    }
+
     ClubStore.saveTeamData(t, curData);
     UI.showEvForm = false;
     re();
