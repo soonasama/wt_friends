@@ -281,6 +281,393 @@ td.plays{text-align:left;color:var(--ink2);font-size:12px;white-space:normal;min
   }
 }
 
+
+/* =========================================================================
+   상단 슬로건 뱃지와 내 프로필 완벽한 양옆(좌우) 가로 1열 배치 강제 고정
+   ========================================================================= */
+.wt-board-topline {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: 100% !important;
+  gap: 8px !important;
+  flex-wrap: nowrap !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14) !important;
+  padding-bottom: 10px !important;
+  margin-bottom: 14px !important;
+  box-sizing: border-box !important;
+}
+@media (max-width: 860px) {
+  .wt-board-topline {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    flex-wrap: nowrap !important;
+  }
+}
+@media (max-width: 600px) {
+  .wt-board-topline {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    flex-wrap: nowrap !important;
+  }
+}
+@media (max-width: 480px) {
+  .wt-board-topline {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    flex-wrap: nowrap !important;
+  }
+}
+
+/* 캘린더 및 레이더 카드 내용 들여쓰기 & PC 1열 배치 */
+.cal-detail-item-header {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.cal-detail-item-title {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--ink);
+  line-height: 1.35;
+  word-break: keep-all;
+}
+.cal-detail-item-sub {
+  font-size: 12px;
+  color: var(--mute);
+  line-height: 1.35;
+  word-break: keep-all;
+  padding-left: 24px; /* 모바일: 제목 아이콘 아래로 깔끔한 들여쓰기 */
+}
+.cal-detail-item-note {
+  font-size: 11.5px;
+  color: var(--sub);
+  line-height: 1.35;
+  word-break: keep-all;
+  padding-left: 24px; /* 모바일: 세부 메모도 들여쓰기 */
+  margin-top: 2px;
+}
+
+@media (min-width: 641px) {
+  .cal-detail-item-header {
+    flex-direction: row !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+  .cal-detail-item-sub {
+    padding-left: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+  }
+  .cal-detail-item-sub::before {
+    content: "·";
+    margin-right: 8px;
+    color: var(--mute);
+    font-weight: 700;
+  }
+}
+
+
+/* =========================================================================
+   전체 UI 완벽 검수: 버튼 위치 통일 & RSVP 그리드 & 1열/들여쓰기 완벽화
+   ========================================================================= */
+
+/* 1. calDayDetailCard 행 구조 (PC는 1줄 인라인 + 우측 액션버튼 정렬, 모바일은 2줄 들여쓰기) */
+.cal-detail-row {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  background: var(--card) !important;
+  border: 1px solid var(--line) !important;
+  padding: 12px 14px !important;
+  border-radius: 10px !important;
+  gap: 12px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+.cal-detail-left {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex-wrap: wrap !important;
+}
+.cal-detail-title {
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  color: var(--ink) !important;
+  line-height: 1.35 !important;
+  word-break: keep-all !important;
+}
+.cal-detail-meta {
+  font-size: 12.5px !important;
+  color: var(--mute) !important;
+  line-height: 1.35 !important;
+  word-break: keep-all !important;
+}
+.cal-detail-note {
+  width: 100% !important;
+  font-size: 12px !important;
+  color: var(--sub) !important;
+  margin-top: 4px !important;
+  padding-left: 24px !important;
+  line-height: 1.35 !important;
+  word-break: keep-all !important;
+}
+.cal-detail-actions {
+  flex: 0 0 auto !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  margin-left: auto !important;
+}
+
+@media (max-width: 640px) {
+  .cal-detail-left {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 3px !important;
+  }
+  .cal-detail-meta {
+    padding-left: 24px !important; /* 모바일: 제목 아이콘 아래로 깔끔한 들여쓰기 */
+  }
+  .cal-detail-actions {
+    align-self: flex-start !important;
+    margin-top: 4px !important;
+  }
+}
+
+/* 2. RSVP 투표 카드: 균등 4열 그리드 버튼 & 선수단 대칭 그리드 */
+.ev-rsvp-btns {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 8px !important;
+  width: 100% !important;
+  margin: 10px 0 !important;
+}
+@media (max-width: 600px) {
+  .ev-rsvp-btns {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+.ev-rsvp-btns .rsvp-b {
+  width: 100% !important;
+  height: 42px !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  border-radius: 8px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  white-space: nowrap !important;
+}
+
+/* 선수단 명단: 뭉쳐있지 않고 정갈한 반응형 대칭 그리드 */
+.ev-who-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(95px, 1fr)) !important;
+  gap: 6px !important;
+  width: 100% !important;
+  margin-top: 10px !important;
+  box-sizing: border-box !important;
+}
+.ev-pchip {
+  width: 100% !important;
+  height: 32px !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px !important;
+  border-radius: 8px !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  margin: 0 !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+}
+.ev-pchip.in {
+  border: 1.5px solid #10b981 !important;
+  color: #065f46 !important;
+  background: #ecfdf5 !important;
+}
+.ev-pchip.car {
+  border: 1.5px solid #0284c7 !important;
+  color: #0369a1 !important;
+  background: #f0f9ff !important;
+}
+
+
+/* =========================================================================
+   테이블 헤더(th)와 데이터 셀(td) 수평 정렬 완벽 일치 (좌측/우측/중앙 정렬 통일)
+   ========================================================================= */
+th.n, td.n,
+.tw th.n, .tw td.n {
+  text-align: right !important;
+  font-variant-numeric: tabular-nums !important;
+}
+th.l, td.l,
+.tw th.l, .tw td.l {
+  text-align: left !important;
+}
+th.col-rk, td.col-rk,
+.tw th.col-rk, .tw td.col-rk {
+  text-align: center !important;
+  width: 44px !important;
+}
+th.col-name, td.col-name,
+.tw th.col-name, .tw td.col-name {
+  text-align: left !important;
+}
+th.col-team, td.col-team,
+.tw th.col-team, .tw td.col-team {
+  text-align: left !important;
+}
+th.col-g, td.col-g,
+.tw th.col-g, .tw td.col-g {
+  text-align: right !important;
+}
+th.col-pa, td.col-pa,
+.tw th.col-pa, .tw td.col-pa {
+  text-align: right !important;
+}
+th.col-val, td.col-val,
+.tw th.col-val, .tw td.col-val {
+  text-align: right !important;
+}
+.tw th, .tw td {
+  padding: 10px 14px !important;
+  box-sizing: border-box !important;
+}
+
+
+/* =========================================================================
+   선수 순위표 고정 그리드 & 헤더-데이터 완벽 일치 (탭 이동 시 0px 흔들림 보장)
+   ========================================================================= */
+.tw-fixed-wrap {
+  width: 100% !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  background: var(--card) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: var(--r) !important;
+}
+.tw-fixed-wrap table {
+  table-layout: fixed !important;
+  width: 100% !important;
+  min-width: 680px !important;
+  border-collapse: collapse !important;
+}
+
+/* 1열: 순위 (#) */
+.tw-fixed-wrap th:nth-child(1),
+.tw-fixed-wrap td:nth-child(1) {
+  width: 50px !important;
+  min-width: 50px !important;
+  max-width: 50px !important;
+  text-align: center !important;
+  padding: 10px 4px !important;
+}
+
+/* 2열: 선수명 */
+.tw-fixed-wrap th:nth-child(2),
+.tw-fixed-wrap td:nth-child(2) {
+  width: 130px !important;
+  min-width: 130px !important;
+  max-width: 130px !important;
+  text-align: left !important;
+  padding: 10px 8px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* 3열: 구단명 */
+.tw-fixed-wrap th:nth-child(3),
+.tw-fixed-wrap td:nth-child(3) {
+  width: 180px !important;
+  min-width: 180px !important;
+  max-width: 180px !important;
+  text-align: left !important;
+  padding: 10px 8px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* 4열: 경기수 */
+.tw-fixed-wrap th:nth-child(4),
+.tw-fixed-wrap td:nth-child(4) {
+  width: 80px !important;
+  min-width: 80px !important;
+  max-width: 80px !important;
+  text-align: center !important;
+  padding: 10px 6px !important;
+}
+
+/* 5열: 타석 / 이닝 */
+.tw-fixed-wrap th:nth-child(5),
+.tw-fixed-wrap td:nth-child(5) {
+  width: 80px !important;
+  min-width: 80px !important;
+  max-width: 80px !important;
+  text-align: center !important;
+  padding: 10px 6px !important;
+}
+
+/* 6열: 핵심 지표 (타자 wRC+, 안타, 최근 상승세, 종합 지수 등) */
+.tw-fixed-wrap th:nth-child(6),
+.tw-fixed-wrap td:nth-child(6) {
+  width: 160px !important;
+  min-width: 160px !important;
+  max-width: 160px !important;
+  text-align: center !important;
+  padding: 10px 8px !important;
+  font-weight: 800 !important;
+}
+
+
+/* 360px/375px 모바일 화면에서도 완벽하게 한 줄에 들어가는 슬로건 & 프로필 알약 */
+@media (max-width: 480px) {
+  .wt-board-topline {
+    padding-bottom: 8px !important;
+    margin-bottom: 10px !important;
+    gap: 4px !important;
+  }
+  .wt-board-topline .wt-hero-slogan {
+    font-size: 10px !important;
+    padding: 2.5px 6px !important;
+    letter-spacing: -0.2px !important;
+  }
+  .hero-me-pill {
+    padding: 2px 6px !important;
+    gap: 3px !important;
+  }
+  .hero-me-pill span {
+    font-size: 10px !important;
+  }
+  .hero-me-select {
+    font-size: 10.5px !important;
+    padding: 1.5px 4px !important;
+    max-width: 95px !important;
+  }
+}
+
 /* scoreboard */
 .vsbtns{display:flex;flex-direction:column;gap:6px;margin-left:auto}
 .board{background:var(--ink);color:#fff;border-radius:18px;padding:18px}
@@ -10911,8 +11298,8 @@ function table(cols,rows,opt={}){
        +(show.length<rs.length?`<button class="more-btn" data-call>전체 ${rs.length}개 보기 ▾</button>`:'');
       return;
     }
-    const th=cols.map(c=>`<th class="${c.l?'l':'n'} ${st.k===c.k?'sorted':''}" data-k="${c.k}">${c.t}${st.k===c.k?(st.d<0?' ↓':' ↑'):''}</th>`).join('');
-    const tb=rs.map((r,i)=>`<tr class="${opt.rowClass?opt.rowClass(r):''}">${cols.map(c=>`<td class="${c.cls||(c.l?'l':'n')}">${fmt(c,r,i)}</td>`).join('')}</tr>`).join('');
+    const th=cols.map(c=>`<th class="${c.cls||''} ${c.l?'l':'n'} ${st.k===c.k?'sorted':''}" data-k="${c.k}">${c.t}${st.k===c.k?(st.d<0?' ↓':' ↑'):''}</th>`).join('');
+    const tb=rs.map((r,i)=>`<tr class="${opt.rowClass?opt.rowClass(r):''}">${cols.map(c=>`<td class="${c.cls||''} ${c.l?'l':'n'}">${fmt(c,r,i)}</td>`).join('')}</tr>`).join('');
     el.innerHTML=`<div class="tw"><table><thead><tr>${th}</tr></thead><tbody>${tb}</tbody></table></div>`;};
   setTimeout(()=>{render();const el=document.getElementById(id);if(!el)return;
     el.addEventListener('click',e=>{
@@ -11829,15 +12216,15 @@ V.team=(q,id)=>{
   const badgesHtml = divBadges.length ? `<span class="wt-div-badges">${divBadges.join(' ')}</span>` : '';
 
   return `<div class="board" style="background: linear-gradient(135deg, #0D043D 0%, #172554 60%, #0F5FA4 100%) !important; color: #ffffff !important; margin-bottom: 22px !important;">
-    <div class="wt-board-topline" style="display:flex !important;justify-content:space-between !important;align-items:center !important;margin-bottom:12px !important;width:100% !important;flex-wrap:nowrap !important">
-      <div>
-        ${isWT ? '<span class="wt-hero-slogan">WINNERS TOGETHER · FRIENDS</span>' : ''}
+    <div class="wt-board-topline" style="display:flex !important;flex-direction:row !important;justify-content:space-between !important;align-items:center !important;width:100% !important;flex-wrap:nowrap !important;margin-bottom:12px !important;box-sizing:border-box !important">
+      <div style="flex-shrink:0 !important;display:flex !important;align-items:center !important">
+        ${isWT ? '<span class="wt-hero-slogan" style="margin:0 !important;font-size:11px !important;padding:3px 9px !important;white-space:nowrap !important;line-height:1.2 !important">WINNERS TOGETHER · FRIENDS</span>' : ''}
       </div>
-      <div>
+      <div style="flex-shrink:0 !important;margin-left:auto !important;display:flex !important;align-items:center !important">
         ${isWT ? `
-          <div class="hero-me-pill" style="display:inline-flex;align-items:center;gap:6px;background:rgba(15, 23, 42, 0.85);border:1px solid rgba(255, 255, 255, 0.25);border-radius:999px;padding:3px 10px;backdrop-filter:blur(8px);box-shadow:0 2px 8px rgba(0,0,0,0.35);white-space:nowrap">
-            <span style="font-size:11.5px;color:#94a3b8;font-weight:700;white-space:nowrap;flex-shrink:0">👤 내 프로필:</span>
-            <select id="heroMeSel" class="hero-me-select" style="background:#0f172a !important;color:#f8fafc !important;border:1px solid rgba(255,255,255,0.25) !important;border-radius:6px !important;padding:2px 8px !important;font-size:12px !important;font-weight:800 !important;cursor:pointer;outline:none;white-space:nowrap">
+          <div class="hero-me-pill" style="display:inline-flex !important;align-items:center !important;gap:4px !important;background:rgba(15, 23, 42, 0.85) !important;border:1px solid rgba(255, 255, 255, 0.25) !important;border-radius:999px !important;padding:2px 8px !important;backdrop-filter:blur(8px) !important;box-shadow:0 2px 8px rgba(0,0,0,0.35) !important;white-space:nowrap !important">
+            <span style="font-size:11px !important;color:#94a3b8 !important;font-weight:700 !important;white-space:nowrap !important;flex-shrink:0 !important">👤 내 프로필:</span>
+            <select id="heroMeSel" class="hero-me-select" style="background:#0f172a !important;color:#f8fafc !important;border:1px solid rgba(255,255,255,0.25) !important;border-radius:6px !important;padding:2px 6px !important;font-size:11.5px !important;font-weight:800 !important;cursor:pointer !important;outline:none !important;white-space:nowrap !important;max-width:115px !important">
               <option value="" style="background:#0f172a;color:#94a3b8">${!ClubStore.getMe(t) ? '선수 선택 (22명) ▾' : '선수 변경 ▾'}</option>
               ${luRoster(t).map(n => `<option value="${esc(n)}" ${n===ClubStore.getMe(t)?'selected':''} style="background:#0f172a;color:#f8fafc">${esc(n)}</option>`).join('')}
             </select>
@@ -14703,60 +15090,60 @@ function renderTeamClubView(t, A, tc, th) {
 
           return `
             <div class="ev-card" style="--tc:${isVacation ? '#0284c7' : tc}">
-              <div class="ev-top">
-                <div>
-                  <span class="ev-badge ${isVacation ? 'vacation' : esc(ev.type)}">${isVacation ? '🏖️ 팀 방학·휴식' : esc(ev.type)}</span>
-                  <div class="ev-title">${esc(ev.title)}</div>
+              <div class="ev-top" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+                  <span class="ev-badge ${isVacation ? 'vacation' : esc(ev.type)}" style="font-weight:800">${isVacation ? '🏖️ 팀 방학·휴식' : esc(ev.type)}</span>
+                  <div class="ev-title" style="font-size:16px;font-weight:900;color:var(--ink)">${esc(ev.title)}</div>
                 </div>
-                <button type="button" class="cl-btn ghost sm" data-ev-del="${esc(ev.id)}" data-team-id="${esc(t.id)}" title="일정 삭제">✕</button>
+                <button type="button" class="cl-btn ghost sm" data-ev-del="${esc(ev.id)}" data-team-id="${esc(t.id)}" style="color:#ef4444;font-weight:700;font-size:11.5px;padding:4px 8px;border-radius:6px" title="일정 삭제">🗑️ 삭제</button>
               </div>
-              <div class="ev-meta">
+              <div class="ev-meta" style="font-size:13px;color:var(--mute);margin-bottom:8px">
                 <span>🗓️ ${luDate(ev.date)} (${WD[luDay(ev.date)]||''}) ${esc(ev.time)}</span>
-                <span>📍 ${esc(ev.venue || '각자 휴식')}</span>
+                <span> · 📍 ${esc(ev.venue || '각자 휴식')}</span>
                 ${isVacation ? `
-                  <span>👥 공지 확인 <b>${inList.length}명</b> 완료</span>
+                  <span> · 👥 공지 확인 <b>${inList.length}명</b> 완료</span>
                 ` : `
-                  <span>👥 참석 <b>${inList.length}명</b> (🚗 차량지원 ${carList.length}대) · 불참 ${outList.length}명 · 미정 ${tbdList.length}명</span>
+                  <span> · 👥 참석 <b style="color:#10b981">${inList.length}명</b>${carList.length ? ` (🚗 차량지원 ${carList.length}대)` : ''} · 불참 ${outList.length}명</span>
                 `}
               </div>
-              ${ev.note ? `<div class="sub" style="background:var(--chip);color:var(--ink2);padding:8px 11px;border-radius:8px;border:1px dashed var(--line)">💡 ${esc(ev.note)}</div>` : ''}
+              ${ev.note ? `<div class="sub" style="background:var(--chip);color:var(--ink2);padding:9px 12px;border-radius:8px;border-left:3px solid #3b82f6;margin-bottom:10px;font-size:12.5px;line-height:1.4">💡 <b>공지/메모:</b> ${esc(ev.note)}</div>` : ''}
 
-              <div class="ev-rsvp-box">
-                <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:800;color:var(--ink2)">
+              <div class="ev-rsvp-box" style="background:var(--chip);border:1px solid var(--line);border-radius:10px;padding:12px">
+                <div style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px;font-weight:800;color:var(--ink);margin-bottom:8px">
                   <span>🙋‍♀️ <b>${me ? esc(me) + '님' : '선수 본인'}</b>의 ${isVacation ? '일정 확인' : '참석 투표 (클릭 시 즉시 반영)'}</span>
-                  <span>${isMyConfirmed ? '✓ 확인 완료' : (myStatus ? '✓ 투표 완료' : '미확인')}</span>
+                  <span style="color:#10b981">${isMyConfirmed ? '✓ 확인 완료' : (myStatus ? '✓ 투표 완료' : '미확인')}</span>
                 </div>
                 ${isVacation ? `
                   <div class="ev-rsvp-btns vacation">
-                    <button type="button" class="rsvp-b in ${isMyConfirmed ? 'on' : ''}" data-rsvp="${esc(ev.id)}:in" style="width:auto;min-width:210px;padding:9px 18px;font-size:13.5px">
+                    <button type="button" class="rsvp-b in ${isMyConfirmed ? 'on' : ''}" data-rsvp="${esc(ev.id)}:in" style="width:100%;height:42px;font-size:13.5px;font-weight:800">
                       ${isMyConfirmed ? '✓ 공지 확인 완료 (충전 중 🏖️)' : '👍 공지 확인했습니다'} (${inList.length}명)
                     </button>
                   </div>
-                  <div class="ev-who-list">
-                    ${inList.length ? inList.map(([nm]) => `<span class="ev-pchip in">👍 ${esc(nm)}</span>`).join('') : '<span class="sub">아직 확인한 선수가 없습니다. 첫 번째로 확인을 눌러보세요!</span>'}
+                  <div class="ev-who-grid">
+                    ${inList.length ? inList.map(([nm]) => `<span class="ev-pchip in">👍 ${esc(nm)}</span>`).join('') : '<span class="sub" style="grid-column:1/-1;text-align:center;padding:8px">아직 확인한 선수가 없습니다. 첫 번째로 확인을 눌러보세요!</span>'}
                   </div>
                 ` : `
                   <div class="ev-rsvp-btns">
                     <button type="button" class="rsvp-b in ${myStatus==='in'?'on':''}" data-rsvp="${esc(ev.id)}:in">⭕ 참석 (${inList.length - carList.length})</button>
-                    <button type="button" class="rsvp-b car ${myStatus==='car'?'on':''}" data-rsvp="${esc(ev.id)}:car">🚗 참석+차량지원 (${carList.length})</button>
+                    <button type="button" class="rsvp-b car ${myStatus==='car'?'on':''}" data-rsvp="${esc(ev.id)}:car">🚗 차량지원 (${carList.length})</button>
                     <button type="button" class="rsvp-b out ${myStatus==='out'?'on':''}" data-rsvp="${esc(ev.id)}:out">❌ 불참 (${outList.length})</button>
                     <button type="button" class="rsvp-b tbd ${myStatus==='tbd'?'on':''}" data-rsvp="${esc(ev.id)}:tbd">❓ 미정 (${tbdList.length})</button>
                   </div>
-                  <div class="ev-who-list">
-                    ${inList.length ? inList.map(([nm, st]) => `<span class="ev-pchip ${st}">${st==='car'?'🚗':'⚾'} ${esc(nm)}</span>`).join('') : '<span class="sub">아직 참석 투표한 선수가 없습니다. 첫 번째로 참석을 눌러보세요!</span>'}
+                  <div class="ev-who-grid">
+                    ${inList.length ? inList.map(([nm, st]) => `<span class="ev-pchip ${st}">${st==='car'?'🚗':'✓'} ${esc(nm)}</span>`).join('') : '<span class="sub" style="grid-column:1/-1;text-align:center;padding:8px">아직 참석 투표한 선수가 없습니다. 첫 번째로 참석을 눌러보세요!</span>'}
                   </div>
                 `}
               </div>
 
-              <div class="ev-foot">
+              <div class="ev-foot" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-top:12px;border-top:1px dashed var(--line);padding-top:10px">
                 ${isVacation ? `
                   <span class="sub" style="color:#0284c7;font-weight:800">🏖️ 팀 방학·휴식 기간입니다! 푹 쉬고 재충전하세요.</span>
                 ` : `
-                  <span class="sub">참석 인원 ${inList.length}명${inList.length>=9?' (9명 라인업 구성 가능 ✓)':` (9명까지 ${Math.max(0,9-inList.length)}명 더 필요)`}</span>
+                  <span class="sub" style="font-weight:700">참석 인원 ${inList.length}명${inList.length>=9?' (9명 라인업 구성 가능 ✓)':` (9명까지 ${Math.max(0,9-inList.length)}명 더 필요)`}</span>
                 `}
                 <div style="display:flex;gap:6px;flex-wrap:wrap">
                   <button type="button" class="cl-btn ghost sm" data-ev-share="${esc(ev.id)}">💬 카톡 공지 문구 복사</button>
-                  ${!isVacation ? `<button type="button" class="cl-btn sm" style="background:${tc};color:${th.fg}" data-ev-lineup="${esc(ev.id)}">📋 참석자로 라인업 바로 짜기 ›</button>` : ''}
+                  ${!isVacation ? `<button type="button" class="cl-btn sm pri btn-action-green" style="background:#10b981 !important;color:#ffffff !important;font-weight:800" data-ev-lineup="${esc(ev.id)}">📋 참석자로 라인업 바로 짜기 ›</button>` : ''}
                 </div>
               </div>
             </div>
@@ -15047,10 +15434,10 @@ function renderClubCalendarSection(t, data, tc, me) {
         ${thisWeekItems.length ? thisWeekItems.map(it => `
           <div class="radar-item ${it.type}" style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:10px;margin-bottom:8px;gap:10px;background:var(--card);border:1px solid var(--line)">
             <div style="flex:1;min-width:0">
-              <div style="font-size:13.5px;font-weight:800;color:var(--ink);line-height:1.35;word-break:keep-all">
-                ${esc(it.mainTitle || it.label)}
+              <div class="cal-detail-item-header">
+                <span class="cal-detail-item-title">${esc(it.mainTitle || it.label)}</span>
+                ${it.subMeta ? `<span class="cal-detail-item-sub">${esc(it.subMeta)}</span>` : ''}
               </div>
-              ${it.subMeta ? `<div style="font-size:11.5px;color:var(--mute);margin-top:3px;line-height:1.3;word-break:keep-all">${esc(it.subMeta)}</div>` : ''}
             </div>
             <div style="flex-shrink:0;text-align:right">
               <span class="r-date" style="font-size:12px;font-weight:800;padding:3px 8px;border-radius:6px;background:var(--chip);color:var(--ink)">${it.date.slice(5).replace('-','.')}</span>
@@ -15067,10 +15454,10 @@ function renderClubCalendarSection(t, data, tc, me) {
         ${nextWeekItems.length ? nextWeekItems.map(it => `
           <div class="radar-item ${it.type}" style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:10px;margin-bottom:8px;gap:10px;background:var(--card);border:1px solid var(--line)">
             <div style="flex:1;min-width:0">
-              <div style="font-size:13.5px;font-weight:800;color:var(--ink);line-height:1.35;word-break:keep-all">
-                ${esc(it.mainTitle || it.label)}
+              <div class="cal-detail-item-header">
+                <span class="cal-detail-item-title">${esc(it.mainTitle || it.label)}</span>
+                ${it.subMeta ? `<span class="cal-detail-item-sub">${esc(it.subMeta)}</span>` : ''}
               </div>
-              ${it.subMeta ? `<div style="font-size:11.5px;color:var(--mute);margin-top:3px;line-height:1.3;word-break:keep-all">${esc(it.subMeta)}</div>` : ''}
             </div>
             <div style="flex-shrink:0;text-align:right">
               <span class="r-date" style="font-size:12px;font-weight:800;padding:3px 8px;border-radius:6px;background:var(--chip);color:var(--ink)">${it.date.slice(5).replace('-','.')}</span>
@@ -15139,7 +15526,7 @@ function renderClubCalendarSection(t, data, tc, me) {
         <span style="color:#7e22ce">● 🍻 모임/이벤트</span>
       </div>
       
-      <!-- 선택한 날짜의 상세 일정 카드 & 실시간 일정 등록 시스템 (건수 제거 & 중복 트로피 제거) -->
+      <!-- 선택한 날짜의 상세 일정 카드 & 실시간 일정 등록 시스템 (건수 제거 & 완벽한 정렬) -->
       <div id="calDayDetailCard" style="margin-top:14px;padding:16px;background:var(--chip);border:1px solid var(--line);border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.04)">
         ${(()=>{
           const selDate = UI.selectedCalDate || todayStr;
@@ -15157,27 +15544,29 @@ function renderClubCalendarSection(t, data, tc, me) {
               </button>
             </div>
 
-            <!-- 해당 일자 등록된 일정 목록 (중복 아이콘 제거 & 2줄 정리) -->
+            <!-- 해당 일자 등록된 일정 목록 (PC: 1줄 인라인 + 우측 버튼 정렬, 모바일: 들여쓰기) -->
             <div style="margin-bottom:${isFormOpen ? '14px' : '4px'}">
               ${dayItems.length ? `
                 <div style="display:grid;gap:8px">
                   ${dayItems.map(it => {
                     const isTeamEvent = !!it.ev;
                     return `
-                      <div style="display:flex;justify-content:space-between;align-items:center;background:var(--card);border:1px solid var(--line);padding:10px 12px;border-radius:10px;gap:10px">
-                        <div style="flex:1;min-width:0">
-                          <div style="font-size:13.5px;font-weight:800;color:var(--ink);line-height:1.35;word-break:keep-all">
-                            ${esc(it.mainTitle || it.label)}
-                          </div>
-                          ${it.subMeta ? `<div style="font-size:12px;color:var(--mute);margin-top:3px;line-height:1.3;word-break:keep-all">${esc(it.subMeta)}</div>` : ''}
-                          ${(it.ev && it.ev.note) ? `<div style="font-size:11.5px;color:var(--sub);margin-top:3px">📝 ${esc(it.ev.note)}</div>` : ''}
+                      <div class="cal-detail-row">
+                        <div class="cal-detail-left">
+                          <span class="cal-detail-title">${esc(it.mainTitle || it.label)}</span>
+                          ${it.subMeta ? `<span class="cal-detail-meta" style="color:var(--mute)">· ${esc(it.subMeta)}</span>` : ''}
+                          ${(it.ev && it.ev.note) ? `<div class="cal-detail-note">📝 ${esc(it.ev.note)}</div>` : ''}
                         </div>
-                        ${isTeamEvent ? `
-                          <div style="display:flex;gap:6px;flex-shrink:0">
-                            <button type="button" class="cl-btn sm ghost" data-cal-ev-edit="${esc(it.ev.id)}" style="font-size:11.5px;padding:4px 8px">✏️ 수정</button>
-                            <button type="button" class="cl-btn sm ghost" data-cal-ev-del="${esc(it.ev.id)}" style="font-size:11.5px;padding:4px 8px;color:#ef4444">🗑️ 삭제</button>
-                          </div>
-                        ` : ''}
+                        <div class="cal-detail-actions">
+                          ${isTeamEvent ? `
+                            <button type="button" class="cl-btn sm ghost" data-cal-ev-edit="${esc(it.ev.id)}" style="font-size:11.5px;padding:4px 8px;font-weight:700">✏️ 수정</button>
+                            <button type="button" class="cl-btn sm ghost" data-cal-ev-del="${esc(it.ev.id)}" style="font-size:11.5px;padding:4px 8px;color:#ef4444;font-weight:700">🗑️ 삭제</button>
+                          ` : (it.type === 'game' ? `
+                            <span class="st-badge" style="background:#0284c7;color:#ffffff;border:none;font-size:11px;padding:4px 8px;font-weight:700">🏆 KBSA 공식 시합</span>
+                          ` : `
+                            <span class="st-badge" style="background:#f43f5e;color:#ffffff;border:none;font-size:11px;padding:4px 8px;font-weight:700">🎂 생일 축하</span>
+                          `)}
+                        </div>
                       </div>
                     `;
                   }).join('')}
