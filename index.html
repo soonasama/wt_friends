@@ -11222,6 +11222,110 @@ html[data-theme="dark"] .ev-edit-btn:hover {
   border-color: #60a5fa !important;
   color: #60a5fa !important;
 }
+
+/* =========================================================================
+   WT CLUB SECTIONS & MODERN GROUPING ARCHITECTURE (모바일/PC 완벽 분리)
+   ========================================================================= */
+.wt-club-section {
+  background: var(--card) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 16px !important;
+  padding: 20px 20px 24px !important;
+  margin-bottom: 28px !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03) !important;
+  box-sizing: border-box !important;
+  overflow: visible !important;
+}
+@media (max-width: 640px) {
+  .wt-club-section {
+    padding: 14px 12px 18px !important;
+    margin-bottom: 20px !important;
+    border-radius: 14px !important;
+  }
+}
+.wt-sec-header {
+  margin-bottom: 16px !important;
+  padding-bottom: 12px !important;
+  border-bottom: 1px solid var(--line) !important;
+}
+.wt-sec-title-wrap {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+}
+.wt-sec-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  width: fit-content !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  padding: 3px 8px !important;
+  border-radius: 6px !important;
+  letter-spacing: -0.01em !important;
+}
+.wt-sec-title {
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  color: var(--ink) !important;
+  letter-spacing: -0.02em !important;
+}
+.wt-sec-desc {
+  font-size: 12px !important;
+  color: var(--mute) !important;
+  line-height: 1.4 !important;
+}
+
+/* 참석 투표자 명단 칩: 짝 맞추기 flex-wrap 균형 정렬 (홀수 인원 시에도 덜렁거림 없이 정돈) */
+.ev-who-grid {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 7px !important;
+  align-items: center !important;
+  width: 100% !important;
+  margin-top: 10px !important;
+  box-sizing: border-box !important;
+}
+.ev-who-grid .ev-pchip {
+  flex: 0 0 auto !important;
+  min-width: 76px !important;
+  padding: 6px 12px !important;
+  font-size: 12.5px !important;
+  font-weight: 700 !important;
+  border-radius: 8px !important;
+  white-space: nowrap !important;
+  text-align: center !important;
+  box-sizing: border-box !important;
+}
+
+/* 모바일/폴드 키보드 입력 시 화면 자동 확대 방지 (입력 튕김 및 깨짐 원천 방지) */
+@media (max-width: 860px) {
+  input[type="text"],
+  input[type="search"],
+  input[type="date"],
+  input[type="time"],
+  input[type="number"],
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+  .wt-board-topline {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+}
+
+/* 히어로 보드 버튼 그리드: 2x3 완전 대칭 균형 */
+@media (max-width: 768px) {
+  .board .vsbtns {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 7px !important;
+  }
+  .board .vsbtns .vsbtn {
+    grid-column: auto !important;
+  }
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
 </head>
@@ -12521,7 +12625,7 @@ V.team=(q,id)=>{
         </div>
       </div>
       <span class="vsbtns">
-        <button class="vsbtn pri-club" data-go-club="${t.id}" style="background:linear-gradient(135deg, #10b981 0%, #059669 100%) !important;color:#ffffff !important;border:1px solid #34d399 !important;cursor:pointer;font-weight:800;box-shadow:0 3px 10px rgba(16,185,129,0.35)">🧢 WT 클럽하우스 ›</button>
+        <button type="button" class="vsbtn pri-sum" data-go-sum="${t.id}" style="background:linear-gradient(135deg, #10b981 0%, #059669 100%) !important;color:#ffffff !important;border:1px solid #34d399 !important;cursor:pointer;font-weight:800;box-shadow:0 3px 10px rgba(16,185,129,0.35)">📈 시즌요약 분석 ›</button>
         <a class="vsbtn pri" href="#/lineup/${t.id}" onclick="go('#/lineup/' + t.id);return false;" style="background:linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;color:#ffffff !important;border:1px solid #f87171 !important;cursor:pointer;font-weight:800;box-shadow:0 3px 10px rgba(239,68,68,0.35)">📋 라인업 짜기 ›</a>
         ${isWT ? '<a class="vsbtn" href="#/dugout" style="color:#ffffff !important;background:rgba(255,255,255,0.12) !important;border:1px solid rgba(255,255,255,0.25) !important;font-weight:700">👥 덕아웃 선수단 ›</a>' : ''}
         <button type="button" class="vsbtn" data-sheet-db style="color:#38bdf8 !important;background:rgba(56,189,248,0.18) !important;border:1px solid rgba(56,189,248,0.5) !important;cursor:pointer;font-weight:800">☁️ 구단 통합 DB ↗</button>
@@ -12584,6 +12688,7 @@ V.team.bind=()=>{
   const tmcBtn=$app.querySelector('[data-tmcard]');if(tmcBtn)tmcBtn.onclick=()=>openTeamAndMvpStudio(tmcBtn.dataset.tmcard);
   const awdBtn=$app.querySelector('[data-awdcard]');if(awdBtn)awdBtn.onclick=()=>openClubAwardStudio(awdBtn.dataset.awdcard);
   const goclub=$app.querySelector('[data-go-club]');if(goclub)goclub.onclick=()=>{UI.teamTab='club';render()};
+  const gosum=$app.querySelector('[data-go-sum]');if(gosum)gosum.onclick=()=>{UI.teamTab='sum';render()};
   $app.querySelectorAll('[data-tt]').forEach(b=>b.onclick=()=>{UI.teamTab=b.dataset.tt;const y=window.scrollY;render();window.scrollTo(0,y)});
   if(UI.teamTab==='club')bindTeamClubView();
   $app.querySelectorAll('[data-pp]').forEach(b=>b.onclick=()=>{UI.teamPitcher=b.dataset.pp;const y=window.scrollY;render();window.scrollTo(0,y)});
@@ -12645,7 +12750,32 @@ V.players = () => {
 };
 V.players.bind=()=>{
   $app.querySelectorAll('[data-cat]').forEach(b=>b.onclick=()=>{UI.rankCat=b.dataset.cat;render()});
-  const q=document.getElementById('q');let tm;q.oninput=()=>{clearTimeout(tm);tm=setTimeout(()=>{UI.rankQ=q.value;render();const n=document.getElementById('q');n.focus();n.setSelectionRange(n.value.length,n.value.length)},250)};
+  const q = document.getElementById('q');
+  if (q) {
+    let tm;
+    let isComposing = false;
+    q.addEventListener('compositionstart', () => { isComposing = true; });
+    q.addEventListener('compositionend', () => {
+      isComposing = false;
+      UI.rankQ = q.value;
+      clearTimeout(tm);
+      tm = setTimeout(() => {
+        render();
+        const n = document.getElementById('q');
+        if (n) { n.focus(); n.setSelectionRange(n.value.length, n.value.length); }
+      }, 120);
+    });
+    q.addEventListener('input', () => {
+      if (isComposing) return;
+      clearTimeout(tm);
+      tm = setTimeout(() => {
+        UI.rankQ = q.value;
+        render();
+        const n = document.getElementById('q');
+        if (n) { n.focus(); n.setSelectionRange(n.value.length, n.value.length); }
+      }, 350);
+    });
+  }
 };
 
 /* =========================================================================
@@ -15321,12 +15451,16 @@ function renderTeamClubView(t, A, tc, th) {
   if (sub.cur === 'sched') {
     html += renderClubCalendarSection(t, data, tc, me);
     html += `
-      <div style="display:flex;justify-content:space-between;align-items:center;margin:10px 0">
-        <div>
-          <b style="font-size:16px">${esc(t.short)} 팀 일정 & 참석 투표 (RSVP)</b>
-          <div class="sub">참석 투표한 선수 명단을 클릭 한 번으로 <b>시합 라인업 작성기</b>로 바로 보낼 수 있습니다.</div>
+    <div class="wt-club-section" style="margin-top:24px">
+      <div class="wt-sec-header" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+        <div class="wt-sec-title-wrap">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="wt-sec-badge" style="background:#dcfce7;color:#15803d">⚾ 참석 투표 (RSVP)</span>
+            <span class="wt-sec-title">${esc(t.short)} 팀 활동 일정 및 라인업 투표</span>
+          </div>
+          <span class="wt-sec-desc">참석 투표 결과를 클릭 한 번으로 <b>시합 라인업 작성기</b>로 즉시 전송할 수 있습니다.</span>
         </div>
-        <button type="button" class="cl-btn pri" id="btnToggleEvForm">＋ 새 일정·투표 만들기</button>
+        <button type="button" class="cl-btn pri" id="btnToggleEvForm" style="background:#10b981 !important;color:#ffffff !important;font-weight:800;border-radius:10px;padding:8px 14px;box-shadow:0 3px 10px rgba(16,185,129,0.3)">＋ 새 일정·투표 만들기</button>
       </div>
 
       <form class="cl-form" id="evFormBox" style="display:${UI.showEvForm?'grid':'none'};border:1.5px solid #10b981;border-radius:12px;padding:16px;background:var(--card)">
@@ -15365,12 +15499,14 @@ function renderTeamClubView(t, A, tc, th) {
 
           return `
             <div class="ev-card" style="--tc:${isVacation ? '#0284c7' : tc}">
-              <div class="ev-top" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-                  <span class="ev-badge ${isVacation ? 'vacation' : esc(ev.type)}" style="font-weight:800">${isVacation ? '🏖️ 팀 방학·휴식' : esc(ev.type)}</span>
-                  <div class="ev-title" style="font-size:16px;font-weight:900;color:var(--ink)">${esc(ev.title)}</div>
+              <div class="ev-top" style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px">
+                <div style="flex:1 1 auto;min-width:0">
+                  <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:5px">
+                    <span class="ev-badge ${isVacation ? 'vacation' : esc(ev.type)}" style="font-weight:800">${isVacation ? '🏖️ 팀 방학·휴식' : esc(ev.type)}</span>
+                  </div>
+                  <div class="ev-title" style="font-size:16px;font-weight:900;color:var(--ink);line-height:1.35;word-break:keep-all">${esc(ev.title)}</div>
                 </div>
-                <div style="display:flex;align-items:center;gap:6px">
+                <div style="flex:0 0 auto;display:flex;align-items:center;gap:6px;padding-top:2px">
                   <button type="button" class="ev-edit-btn" data-ev-edit="${esc(ev.id)}" title="일정 내용 수정">✏️ 수정</button>
                   <button type="button" class="ev-del-btn" data-ev-del="${esc(ev.id)}" data-team-id="${esc(t.id)}" title="일정 삭제">🗑️ 삭제</button>
                 </div>
@@ -15702,8 +15838,18 @@ function renderClubCalendarSection(t, data, tc, me) {
   }
 
   return `
-    <!-- 주간 레이더 섹션 (건수 텍스트 제거 및 2줄 깔끔 분리 정렬) -->
-    <div class="radar-wrap" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:14px; margin-bottom:16px">
+    <!-- 1. 주간 브리핑 레이더 섹션 (독립 카드 그룹핑) -->
+    <div class="wt-club-section" style="margin-top:14px">
+      <div class="wt-sec-header">
+        <div class="wt-sec-title-wrap">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="wt-sec-badge" style="background:#e0f2fe;color:#0369a1">📅 주간 브리핑</span>
+            <span class="wt-sec-title">이번 주 & 다음 주 팀 일정 레이더</span>
+          </div>
+          <span class="wt-sec-desc">가장 가까운 주요 훈련 및 공식 시합 일정을 빠르게 브리핑합니다.</span>
+        </div>
+      </div>
+      <div class="radar-wrap" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:14px">
       <!-- 이번 주 레이더 -->
       <div class="radar-card" style="padding:14px;background:var(--chip);border:1px solid var(--line);border-radius:12px">
         <div class="radar-head" style="margin-bottom:10px">
@@ -15744,8 +15890,21 @@ function renderClubCalendarSection(t, data, tc, me) {
         `).join('') : '<div style="font-size:12px;color:var(--mute);padding:8px 0">다음 주 예정된 일정이 없습니다.</div>'}
       </div>
     </div>
-    <!-- 월간 스마트 캘린더 -->
-    <div class="cal-wrap">
+    </div>
+    </div>
+
+    <!-- 2. 월간 통합 캘린더 섹션 (독립 카드 그룹핑) -->
+    <div class="wt-club-section">
+      <div class="wt-sec-header">
+        <div class="wt-sec-title-wrap">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="wt-sec-badge" style="background:#fef3c7;color:#b45309">🗓️ 월간 달력</span>
+            <span class="wt-sec-title">2026 시즌 통합 캘린더</span>
+          </div>
+          <span class="wt-sec-desc">KBSA 공식 경기, 구단 훈련, 선수단 경조사 및 생일 일정을 달력에서 한눈에 확인합니다.</span>
+        </div>
+      </div>
+      <div class="cal-wrap">
       <div class="cal-nav">
         <button type="button" class="cl-btn ghost sm" id="btnCalPrevMonth">‹ 이전 달</button>
         <div class="cal-month-title">${curY}년 ${curM}월 스마트 캘린더</div>
@@ -15908,6 +16067,7 @@ function renderClubCalendarSection(t, data, tc, me) {
         })()}
       </div>
     </div>
+  </div>
   `;
 }
 // 2. 주간 미션 & 스탬프북 렌더러
@@ -18312,7 +18472,24 @@ document.addEventListener('click', e => {
 });
 
 window.addEventListener('hashchange',render);
-let _mob=isMobile();window.addEventListener('resize',()=>{if(isMobile()!==_mob){_mob=isMobile();const y=window.scrollY;render();window.scrollTo(0,y)}});
+let _mob = isMobile();
+let _lastW = window.innerWidth;
+window.addEventListener('resize', () => {
+  const active = document.activeElement;
+  if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.tagName === 'SELECT' || active.isContentEditable)) {
+    return; // 폴드 등 가상 키보드 입력 중에는 절대 DOM 재렌더링 방지 (입력 먹통/초기화 원천 차단)
+  }
+  if (Math.abs(window.innerWidth - _lastW) < 35) {
+    return; // 키보드 표시로 인한 높이 변화 무시
+  }
+  _lastW = window.innerWidth;
+  if (isMobile() !== _mob) {
+    _mob = isMobile();
+    const y = window.scrollY;
+    render();
+    window.scrollTo(0, y);
+  }
+});
 render();
 </script>
 
