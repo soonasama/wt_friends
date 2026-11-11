@@ -1,17 +1,12 @@
 /**
- * ⚾ 2026 WT프렌즈 통합 데이터베이스(DB) - 통합 Apps Script (라인업 DB + 클럽하우스 연동)
- * 
- * [설명]
- * 기존 '라인업_관리_DB' 저장 기능과
- * 새로 추가된 'WT_일정_참석투표_DB', 'WT_공지_커뮤니티_DB', 'WT_훈련_셋로그_DB'의 
- * 실시간 양방향 연동 기능이 하나로 통합된 마스터 스크립트입니다.
+ * ⚾ 2026 WT프렌즈 통합 데이터베이스(DB) - 마스터 Google Apps Script
+ * (라인업_관리_DB + WT_일정_참석투표_DB + WT_공지_커뮤니티_DB + WT_훈련_셋로그_DB + WT_정산_회계_DB)
  */
 
 function doGet(e) {
   var params = e ? (e.parameter || {}) : {};
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   
-  // 1. 클럽하우스 일정·투표·공지·셋로그 데이터 조회 (action: 'get' 또는 기본값)
   if (params.action === 'get' || params.action === 'club' || !params.sheet) {
     var rawSheet = getOrCreateSheet(ss, '_CLUB_RAW');
     var rawJson = rawSheet.getRange('A1').getValue();
@@ -31,7 +26,6 @@ function doGet(e) {
       .setMimeType(ContentService.MimeType.JSON);
   }
   
-  // 2. 기존 특정 시트 데이터 조회 (sheet 파라미터가 있을 때)
   var sheetName = params.sheet || '라인업_관리_DB';
   var sheet = ss.getSheetByName(sheetName);
   if (!sheet) {
@@ -60,7 +54,7 @@ function doPost(e) {
       try { data = JSON.parse(rawContents); } catch(err) { data = {}; }
     }
     
-    // 분기 A: 기존 라인업 저장 요청 (data.batters 또는 data.opp 등이 전달된 경우)
+    // 분기 A: 라인업 저장
     if (data.batters && Array.isArray(data.batters)) {
       var luSheet = getOrCreateSheet(ss, '라인업_관리_DB');
       luSheet.appendRow([
@@ -84,20 +78,17 @@ function doPost(e) {
         data.notes || "웹앱에서 저장됨",
         "확정"
       ]);
-      
       return ContentService.createTextOutput(JSON.stringify({ status: "success", message: "라인업 저장 완료" }))
         .setMimeType(ContentService.MimeType.JSON);
     }
     
-    // 분기 B: 클럽하우스 일정·참석투표·공지·셋로그 저장 (data.data 또는 data.events가 전달된 경우)
+    // 분기 B: 클럽하우스 데이터 저장 (일정, 공지, 셋로그, 정산실)
     var clubData = data.data || data;
     
-    // 1) RAW JSON 저장
     var rawSheet = getOrCreateSheet(ss, '_CLUB_RAW');
     rawSheet.getRange('A1').setValue(JSON.stringify(clubData));
     rawSheet.getRange('B1').setValue('마지막 업데이트: ' + Utilities.formatDate(new Date(), 'Asia/Seoul', 'yyyy-MM-dd HH:mm:ss'));
     
-    // 2) 구단 DB 스타일 한글 시트 실시간 자동 갱신
     if (clubData.events && Array.isArray(clubData.events)) {
       updateEventsSheet(ss, clubData.events);
     }
@@ -107,8 +98,11 @@ function doPost(e) {
     if (clubData.setlogs && Array.isArray(clubData.setlogs)) {
       updateSetlogsSheet(ss, clubData.setlogs);
     }
+    if (clubData.settlements && Array.isArray(clubData.settlements)) {
+      updateSettlementsSheet(ss, clubData.settlements);
+    }
     
-    return ContentService.createTextOutput(JSON.stringify({ status: "success", message: "클럽하우스 동기화 완료" }))
+    return ContentService.createTextOutput(JSON.stringify({ status: "success", message: "클럽하우스 통합 동기화 완료" }))
       .setMimeType(ContentService.MimeType.JSON);
 
   } catch(err) {
@@ -128,94 +122,103 @@ function getOrCreateSheet(ss, name) {
 function updateEventsSheet(ss, events) {
   var sheet = getOrCreateSheet(ss, 'WT_일정_참석투표_DB');
   sheet.clear();
-  
-  var headers = ['일정 구분', '일정 제목', '날짜', '시간', '구장/장소', '참석 명단 (차량)', '불참 명단', '미정 명단', '공지 및 준비물 메모'];
-  var rows = [headers];
-  
-  if (events && Array.isArray(events)) {
+  sheet.appendRow(['일정ID', '일정제목', '일정구분', '일시', '장소', '참석수', '불참수', '미정수', '참석자명단', '비고']);
+  if (events && events.length) {
     events.forEach(function(ev) {
       var rsvp = ev.rsvp || {};
-      var inList = [];
-      var carList = [];
-      var outList = [];
-      var tbdList = [];
-      
-      Object.keys(rsvp).forEach(function(player) {
-        var st = rsvp[player];
-        if (st === 'car') { inList.push(player + '(🚗차량)'); carList.push(player); }
-        else if (st === 'in' || st === 'ok') { inList.push(player); }
-        else if (st === 'out') { outList.push(player); }
-        else if (st === 'tbd') { tbdList.push(player); }
+      var ins = [], outs = [], tbds = [];
+      Object.keys(rsvp).forEach(function(p) {
+        if (rsvp[p] === 'in' || rsvp[p] === 'car' || rsvp[p] === 'ok') ins.push(p);
+        else if (rsvp[p] === 'out') outs.push(p);
+        else if (rsvp[p] === 'tbd') tbds.push(p);
       });
-      
-      rows.push([
-        ev.type || '훈련',
+      sheet.appendRow([
+        ev.id || '',
         ev.title || '',
-        ev.date || '',
-        ev.time || '',
+        ev.type || '',
+        (ev.date || '') + ' ' + (ev.time || ''),
         ev.venue || '',
-        inList.join(', ') + (inList.length ? ' [총 ' + inList.length + '명]' : '없음'),
-        outList.join(', ') + (outList.length ? ' [총 ' + outList.length + '명]' : '없음'),
-        tbdList.join(', ') + (tbdList.length ? ' [총 ' + tbdList.length + '명]' : '없음'),
+        ins.length,
+        outs.length,
+        tbds.length,
+        ins.join(', '),
         ev.note || ''
       ]);
     });
   }
-  
-  sheet.getRange(1, 1, rows.length, headers.length).setValues(rows);
-  var headerRange = sheet.getRange(1, 1, 1, headers.length);
-  headerRange.setBackground('#172554').setFontColor('#ffffff').setFontWeight('bold');
-  sheet.setFrozenRows(1);
-  sheet.autoResizeColumns(1, headers.length);
 }
 
 function updateNoticesSheet(ss, notices) {
   var sheet = getOrCreateSheet(ss, 'WT_공지_커뮤니티_DB');
   sheet.clear();
-  var headers = ['구분', '고정 여부', '작성자', '작성일', '제목', '공지 내용', '팀원 댓글'];
-  var rows = [headers];
-  if (notices && Array.isArray(notices)) {
+  sheet.appendRow(['공지ID', '작성자', '제목', '내용', '작성일시', '댓글수', '댓글목록']);
+  if (notices && notices.length) {
     notices.forEach(function(nt) {
       var cmtTexts = (nt.comments || []).map(function(c) { return c.author + ': ' + c.text + ' (' + c.date + ')'; }).join('\n');
-      rows.push([
-        nt.cat || '공지',
-        nt.pinned ? '📌 고정' : '일반',
+      sheet.appendRow([
+        nt.id || '',
         nt.author || '',
-        nt.date || '',
         nt.title || '',
         nt.body || '',
-        cmtTexts || '댓글 없음'
+        nt.date || '',
+        (nt.comments || []).length,
+        cmtTexts
       ]);
     });
   }
-  sheet.getRange(1, 1, rows.length, headers.length).setValues(rows);
-  var headerRange = sheet.getRange(1, 1, 1, headers.length);
-  headerRange.setBackground('#172554').setFontColor('#ffffff').setFontWeight('bold');
-  sheet.setFrozenRows(1);
-  sheet.autoResizeColumns(1, headers.length);
 }
 
 function updateSetlogsSheet(ss, setlogs) {
   var sheet = getOrCreateSheet(ss, 'WT_훈련_셋로그_DB');
   sheet.clear();
-  var headers = ['작성자', '훈련일', '카테고리', '배팅 스윙수', '투구수', '훈련 드릴 내용', '훈련 메모 및 코멘트'];
-  var rows = [headers];
-  if (setlogs && Array.isArray(setlogs)) {
+  sheet.appendRow(['작성일시', '선수명', '훈련분류', '스윙타격수', '투구수', '핵심루틴훈련', '훈련메모_피드백', '고유ID']);
+  if (setlogs && setlogs.length) {
     setlogs.forEach(function(sl) {
-      rows.push([
-        sl.author || '',
+      sheet.appendRow([
         sl.date || '',
-        sl.cat || '타격',
+        sl.author || '',
+        sl.cat || '',
         sl.swings || 0,
         sl.pitches || 0,
         sl.drill || '',
-        sl.memo || ''
+        sl.memo || '',
+        sl.id || ''
       ]);
     });
   }
-  sheet.getRange(1, 1, rows.length, headers.length).setValues(rows);
-  var headerRange = sheet.getRange(1, 1, 1, headers.length);
-  headerRange.setBackground('#172554').setFontColor('#ffffff').setFontWeight('bold');
-  sheet.setFrozenRows(1);
-  sheet.autoResizeColumns(1, headers.length);
+}
+
+function updateSettlementsSheet(ss, settlements) {
+  var sheet = getOrCreateSheet(ss, 'WT_정산_회계_DB');
+  sheet.clear();
+  sheet.appendRow([
+    '정산ID', '정산제목', '행사구분', '시작일', '종료일', '장소', 
+    '참석인원수', '참석자명단', '총수입금액', '총지출금액', '최종잔액', 
+    '지출상세내역(JSON)', '찬조및협찬내역', '비고'
+  ]);
+  if (settlements && settlements.length) {
+    settlements.forEach(function(st) {
+      var partStr = (st.participants || []).join(', ');
+      var totalInc = (st.incomes || []).reduce(function(a, b){ return a + (Number(b.amount)||0); }, 0);
+      var totalExp = (st.expenses || []).reduce(function(a, b){ return a + (Number(b.amount)||0); }, 0);
+      var bal = totalInc - totalExp;
+      var sponStr = (st.sponsorships || []).map(function(s){ return s.person + ': ' + s.item; }).join('\n');
+      sheet.appendRow([
+        st.id || ('ST_' + Utilities.formatDate(new Date(), 'GMT+9', 'yyyyMMdd_HHmmss')),
+        st.title || '',
+        st.type || '공식대회',
+        st.startDate || '',
+        st.endDate || '',
+        st.venue || '',
+        (st.participants || []).length,
+        partStr,
+        totalInc,
+        totalExp,
+        bal,
+        JSON.stringify(st.expenses || []),
+        sponStr,
+        st.notes || ''
+      ]);
+    });
+  }
 }

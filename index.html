@@ -9687,6 +9687,190 @@ html[data-theme="dark"] .cl-form b {
   color: #ffffff !important;
 }
 
+
+/* =========================================================================
+   WT 정산실 & 영수증 카드 스타일 (고대비 / 이미지 출력 최적화)
+   ========================================================================= */
+.st-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 14px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+.st-card:hover {
+  border-color: rgba(16, 185, 129, 0.4);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+.st-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.st-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--ink);
+}
+.st-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+.st-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--sub);
+  margin-bottom: 12px;
+}
+.st-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.st-chip {
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  background: var(--chip);
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+.st-chip.income { color: #38bdf8; border-color: rgba(56, 189, 248, 0.3); }
+.st-chip.expense { color: #f87171; border-color: rgba(248, 113, 113, 0.3); }
+.st-chip.balance { color: #10b981; font-weight: 800; border-color: rgba(16, 185, 129, 0.4); }
+
+/* 영수증 미리보기 카드 (화이트 영수증 용지 디자인 - 카톡/인스타 공유 및 캡처 최적화) */
+.receipt-paper {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border-radius: 16px;
+  padding: 24px 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  border: 1px solid #e2e8f0;
+  font-family: 'Pretendard', sans-serif;
+  max-width: 520px;
+  margin: 0 auto 20px;
+  position: relative;
+}
+.receipt-header {
+  text-align: center;
+  border-bottom: 2px dashed #cbd5e1;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+}
+.receipt-logo {
+  font-size: 13px;
+  font-weight: 800;
+  color: #0f5fa4;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+.receipt-title {
+  font-size: 18.5px;
+  font-weight: 900;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+.receipt-sub {
+  font-size: 12px;
+  color: #64748b;
+  line-height: 1.4;
+}
+.receipt-section {
+  margin-bottom: 16px;
+}
+.receipt-sec-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: #334155;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 4px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+}
+.receipt-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: #1e293b;
+  padding: 3px 0;
+}
+.receipt-row.bold {
+  font-weight: 800;
+  font-size: 14.5px;
+  border-top: 1px dashed #cbd5e1;
+  padding-top: 8px;
+  margin-top: 4px;
+}
+.receipt-summary-box {
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  margin: 14px 0;
+}
+.receipt-thanks-box {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 10px;
+  padding: 12px;
+  margin-top: 14px;
+}
+.receipt-thanks-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: #166534;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.receipt-thanks-item {
+  font-size: 12.5px;
+  color: #14532d;
+  line-height: 1.5;
+}
+.receipt-footer {
+  text-align: center;
+  border-top: 2px dashed #cbd5e1;
+  padding-top: 14px;
+  margin-top: 16px;
+  font-size: 11.5px;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+/* Green Action Button 고대비 필수 (글자색 순백색 강제) */
+.cl-btn.pri, .vsbtn.pri, .btn-action-green {
+  background: #10b981 !important;
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  border: none !important;
+  box-shadow: 0 3px 10px rgba(16, 185, 129, 0.3) !important;
+}
+.cl-btn.pri:hover, .btn-action-green:hover {
+  background: #059669 !important;
+  color: #ffffff !important;
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
 </head>
@@ -9742,9 +9926,38 @@ const Store = (() => {
   const comps = RAW.comps.map((name,i)=>({i,name,short:shortComp(name)}));
   const games = RAW.games.map((g,i)=>({i,id:g[0],date:g[1],dow:g[2],time:g[3],comp:comps[g[4]],round:g[5],
       home:teams[g[6]],away:teams[g[7]],hs:g[8],as:g[9],hres:g[10],ares:g[11],status:g[12],boxH:!!g[13],boxA:!!g[14]}));
+  // 2026.11.08 왕중왕전 창원플러스전(19910) & 아레스전(19911) 공식 기록 주입
+  const _wtT = teams.find(t=>t.id==='aSEa0076') || teams[26];
+  const _cwT = teams.find(t=>t.id==='aKNa0162');
+  const _arT = teams.find(t=>t.id==='aDGa0028');
+  const _cChamp = comps.find(c=>c.name.includes('왕중왕')||c.name.includes('선수협회장')) || comps[0];
+  if (!games.some(g=>String(g.id)==='19910') && _cwT && _wtT) {
+    games.push({
+      i: games.length, id: '19910', date: '2026-11-08', dow: '일', time: '11:00',
+      comp: _cChamp, round: '왕중왕전 (조별예선)', home: _cwT, away: _wtT,
+      hs: 9, as: 7, hres: '승', ares: '패', status: '종료', boxH: true, boxA: true
+    });
+  }
+  if (!games.some(g=>String(g.id)==='19911') && _arT && _wtT) {
+    games.push({
+      i: games.length, id: '19911', date: '2026-11-08', dow: '일', time: '14:30',
+      comp: _cChamp, round: '왕중왕전 (조별예선)', home: _arT, away: _wtT,
+      hs: 12, as: 2, hres: '승', ares: '패', status: '종료', boxH: true, boxA: true
+    });
+  }
   const bat = RAW.bat.map(r=>{const o={game:games[r[0]],team:teams[r[1]],order:r[2],pos:r[3],starter:!!r[4],name:r[5],no:r[6]};
       BK.forEach((k,j)=>o[k]=r[7+j]); o.plays=r[25]; o.EO=r[26]||0; o.T2PA=r[27]||0; o.T2OB=r[28]||0; o.B1=Math.max(o.H-o.B2-o.B3-o.HR,0); o.TB=o.B1+2*o.B2+3*o.B3+4*o.HR; return o;});
   const pit = RAW.pit.map(r=>{const o={game:games[r[0]],team:teams[r[1]],seq:r[2],name:r[3],dec:r[4]};PK.forEach((k,j)=>o[k]=r[5+j]);return o;});
+  const _g19910 = games.find(g=>String(g.id)==='19910');
+  if (_g19910 && !pit.some(p=>p.game===_g19910)) {
+    pit.push({ game: _g19910, team: _cwT, seq: 1, name: '문근영', dec: '승', outs: 15, BF: 26, AB: 22, pitches: 85, H: 7, HR: 0, BB: 3, HBP: 1, SO: 5, WP: 0, BK: 0, SF: 0, SH: 0, R: 7, ER: 5 });
+    pit.push({ game: _g19910, team: _wtT, seq: 1, name: '이선희', dec: '패', outs: 12, BF: 28, AB: 23, pitches: 92, H: 9, HR: 0, BB: 4, HBP: 1, SO: 4, WP: 1, BK: 0, SF: 0, SH: 0, R: 9, ER: 6 });
+  }
+  const _g19911 = games.find(g=>String(g.id)==='19911');
+  if (_g19911 && !pit.some(p=>p.game===_g19911)) {
+    pit.push({ game: _g19911, team: _arT, seq: 1, name: '여상희', dec: '승', outs: 12, BF: 20, AB: 16, pitches: 70, H: 3, HR: 0, BB: 3, HBP: 1, SO: 6, WP: 0, BK: 0, SF: 0, SH: 0, R: 2, ER: 1 });
+    pit.push({ game: _g19911, team: _wtT, seq: 1, name: '민정현', dec: '패', outs: 9, BF: 24, AB: 19, pitches: 80, H: 11, HR: 1, BB: 4, HBP: 1, SO: 2, WP: 2, BK: 0, SF: 0, SH: 0, R: 12, ER: 9 });
+  }
 
   const byGameBat=new Map(), byGamePit=new Map(), byTeamGames=new Map();
   bat.forEach(b=>push(byGameBat,b.game.i,b)); pit.forEach(p=>push(byGamePit,p.game.i,p));
@@ -10839,11 +11052,18 @@ V.team=(q,id)=>{
       ${note('matchup','types')}`;}
   }
   if(tab==='games'){
-    body=table([{k:'date',t:'날짜',l:1,v:x=>x.g.date+x.g.time,f:x=>`<a href="#/game/${x.g.id}">${md(x.g.date)}</a>`},{k:'opp',t:'상대',l:1,cls:'name',v:x=>x.opp.short,f:x=>`<span class="tcell">${badge(x.opp,22)}${tlink(x.opp)}</span>`},
-      {k:'res',t:'결과',l:1,f:x=>x.res?`<b class="res r-${x.res}">${x.res}</b>`:'-'},{k:'comp',t:'대회',l:1,v:x=>x.g.comp.short,f:x=>esc(x.g.comp.short)},
-      {k:'sc',t:'스코어',v:x=>(x.rf??-1)-(x.ra??0),f:x=>x.rf==null?'-':`${x.rf} : ${x.ra}`},{k:'sp',t:'우리 선발',l:1,v:x=>x.sp?.name||'',f:x=>x.sp?pBat(x.sp.name):'-'},
-      {k:'osp',t:'상대 선발',l:1,v:x=>x.osp?.name||'',f:x=>x.osp?plink(x.osp.team,x.osp.name):'-'},{k:'avg',t:'팀 타율',f:x=>f3(x.avg)},{k:'obp',t:'팀 출루율',f:x=>f3(x.obp)},
-      {k:'bidx',t:'타격 효율',f:x=>idxCell(x.bidx)}],A.games.slice().reverse(),{})+note('gameEff','box');
+    body=table([
+      {k:'gameLink',t:'경기 (상세 기록지)',l:1,cls:'name',v:x=>x.g.date+x.g.time,f:x=>`<a class="game-box-link" href="#/game/${x.g.id}" style="color:var(--ink);font-weight:800;text-decoration:none;display:inline-flex;align-items:center;gap:6px"><span>⚾ vs ${esc(x.opp.short)}</span> <small style="color:var(--mute);font-weight:600">(${md(x.g.date)}${x.res?` · <b class="res r-${x.res}" style="padding:1px 5px;border-radius:4px;font-size:11px">${x.res}</b>`:''})</small> <span style="color:#10b981;font-size:12px;font-weight:700">기록지 ›</span></a>`},
+      {k:'opp',t:'상대 구단',l:1,v:x=>x.opp.short,f:x=>`<span class="tcell">${badge(x.opp,20)}<a href="#/team/${x.opp.id}" style="color:var(--mute);font-size:12px;margin-left:4px" title="${esc(x.opp.short)} 구단 전력 보기">[상대팀]</a></span>`},
+      {k:'res',t:'결과',l:1,f:x=>x.res?`<b class="res r-${x.res}">${x.res}</b>`:'-'},
+      {k:'comp',t:'대회',l:1,v:x=>x.g.comp.short,f:x=>esc(x.g.comp.short)},
+      {k:'sc',t:'스코어',v:x=>(x.rf??-1)-(x.ra??0),f:x=>x.rf==null?'-':`<a href="#/game/${x.g.id}" style="font-weight:800;color:var(--ink);text-decoration:underline">${x.rf} : ${x.ra}</a>`},
+      {k:'sp',t:'우리 선발',l:1,v:x=>x.sp?.name||'',f:x=>x.sp?pBat(x.sp.name):'-'},
+      {k:'osp',t:'상대 선발',l:1,v:x=>x.osp?.name||'',f:x=>x.osp?plink(x.osp.team,x.osp.name):'-'},
+      {k:'avg',t:'팀 타율',f:x=>f3(x.avg)},
+      {k:'obp',t:'팀 출루율',f:x=>f3(x.obp)},
+      {k:'bidx',t:'타격 효율',f:x=>idxCell(x.bidx)}
+    ],A.games.slice().reverse(),{})+note('gameEff','box');
   }
   if(tab==='bat'){
     const s=subtabs('tbat',[['chart','그래프'],['table','기록표'],['trend','최근 추세']]);body=s.html;
@@ -12226,6 +12446,10 @@ V.lineup = (q, tid) => {
     const im=$app.querySelector('[data-img]');if(im)im.onclick=()=>luSaveImage(l,t,im);
     const gs=$app.querySelector('[data-sheet-sync]');if(gs)gs.onclick=()=>saveLineupToGoogleSheet(l,t,gs);
   };
+  if (sub.cur === 'settlement') {
+    html += renderClubSettlementView(t, data, tc, me);
+  }
+
   return html;
 };
 /* =========================================================================
@@ -13378,6 +13602,7 @@ const ClubStore = {
         d.events = Array.isArray(d.events) ? d.events : [];
         d.notices = Array.isArray(d.notices) ? d.notices : [];
         d.setlogs = Array.isArray(d.setlogs) ? d.setlogs : [];
+        d.settlements = Array.isArray(d.settlements) ? d.settlements : [];
         try { localStorage.setItem(this.key + team.id, JSON.stringify(d)); } catch(e) {}
         return d;
       }
@@ -13400,7 +13625,14 @@ const ClubStore = {
   getTeamData(team) {
     try {
       const raw = localStorage.getItem(this.key + team.id);
-      if (raw) return JSON.parse(raw);
+      if (raw) {
+        const d = JSON.parse(raw);
+        if (!d.settlements || !d.settlements.length) {
+          d.settlements = this.seedTeamData(team).settlements;
+          try { localStorage.setItem(this.key + team.id, JSON.stringify(d)); } catch (e) {}
+        }
+        return d;
+      }
     } catch (e) {}
     return this.seedTeamData(team);
   },
@@ -13414,7 +13646,42 @@ const ClubStore = {
       initialized: true,
       events: [],
       notices: [],
-      setlogs: []
+      setlogs: [],
+      settlements: [
+        {
+          id: 'ST_20261108_01',
+          title: '2026 프로야구선수협회장기 밀양 대회 정산서',
+          type: '공식대회',
+          startDate: '2026-11-07',
+          endDate: '2026-11-08',
+          venue: '경남 밀양시 (밀양 스포츠파크)',
+          participants: [
+            '사나', '은경', '은숙', '장우', '희숙', '정현', '수정',
+            '문희(#59)', '지민', '민경', '이슬', '광숙', '선희', '보영', '오드리(#OLD00)'
+          ],
+          incomes: [
+            { item: '대회 참가 선수 회비 (15명 전원 납부)', amount: 1372300, note: '수납 완료' }
+          ],
+          expenses: [
+            { cat: '점심', item: '강가네 김밥', amount: 66000 },
+            { cat: '간식', item: '치킨·닭똥집', amount: 34000 },
+            { cat: '식사', item: '쌈밥', amount: 244000 },
+            { cat: '식사', item: '국밥', amount: 118000 },
+            { cat: '숙박', item: '밀양 숙소', amount: 350000 },
+            { cat: '음료', item: '커피', amount: 59000 },
+            { cat: '약품', item: '쌍화탕', amount: 12300 },
+            { cat: '교통', item: '교통지원 (차량 3대 지원비)', amount: 489000 }
+          ],
+          sponsorships: [
+            { person: '서희숙', item: '마트 장보기, 샤인머스캣 🍇' },
+            { person: '류이슬', item: '바나나, 카스타드 🍌' },
+            { person: '구민경', item: '귤 한 박스 🍊' },
+            { person: '안장우', item: '태산만두(군만두, 무침만두, 찐교스) 🥟' },
+            { person: '황지민', item: '일요일 저녁 홈런빵, 탕수육 파티 ⚾' }
+          ],
+          notes: '수입 1,372,300원 / 지출 1,372,300원 잔액 0원으로 투명하게 정산 완료되었습니다.'
+        }
+      ]
     };
     try { localStorage.setItem(this.key + team.id, JSON.stringify(data)); } catch (e) {}
     return data;
@@ -13538,6 +13805,22 @@ document.addEventListener('click', (e) => {
     const y = window.scrollY; render(); window.scrollTo(0, y);
     return;
   }
+
+  const stDelBtn = e.target.closest('[data-st-del]');
+  if (stDelBtn) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!confirm('정말 이 정산서를 삭제하시겠습니까?')) return;
+    const stId = stDelBtn.getAttribute('data-st-del');
+    const tid = stDelBtn.getAttribute('data-team-id') || localStorage.getItem('kbsa_myteam') || 'aSEa0076';
+    const teamObj = Store.team(tid) || Store.team('aSEa0076') || Store.teams[0];
+    const curData = ClubStore.getTeamData(teamObj);
+    curData.settlements = (curData.settlements || []).filter(x => String(x.id) !== String(stId));
+    ClubStore.saveTeamData(teamObj, curData);
+    if (UI.curSettlementId === stId) UI.curSettlementId = null;
+    const y = window.scrollY; render(); window.scrollTo(0, y);
+    return;
+  }
 });
 
 function renderTeamClubView(t, A, tc, th) {
@@ -13545,7 +13828,8 @@ function renderTeamClubView(t, A, tc, th) {
   const sub = subtabs('tclub', [
     ['sched', '📅 일정·참석투표'],
     ['notice', '📣 공지·그룹모임'],
-    ['setlog', '📓 훈련 셋로그']
+    ['setlog', '📓 훈련 셋로그'],
+    ['settlement', '💰 WT 정산실']
   ]);
   const data = ClubStore.getTeamData(t);
 
@@ -13830,6 +14114,256 @@ function renderTeamClubView(t, A, tc, th) {
 }
 
 
+
+/* =========================================================================
+   💰 [WT 정산실] - 라인업 작성기 스타일 뷰 & 실시간 영수증 발행 스튜디오
+   ========================================================================= */
+function renderClubSettlementView(t, data, tc, me) {
+  const S = Store;
+  const settlements = data.settlements || [];
+  const curId = UI.curSettlementId;
+
+  // 1. 상세 / 편집 모드 (curId가 지정되었거나 'new'인 경우)
+  if (curId) {
+    const isNew = curId === 'new';
+    let st = settlements.find(x => x.id === curId);
+    if (!st || isNew) {
+      st = {
+        id: isNew ? ('ST_' + Date.now().toString(36)) : curId,
+        title: isNew ? '새 팀 일정 정산서' : '',
+        type: '공식대회',
+        startDate: new Date().toISOString().slice(0, 10),
+        endDate: new Date().toISOString().slice(0, 10),
+        venue: '밀양 스포츠파크',
+        participants: ['사나', '은경', '은숙', '장우', '희숙', '정현', '수정', '문희(#59)', '지민', '민경', '이슬', '광숙', '선희', '보영', '오드리(#OLD00)'],
+        incomes: [{ item: '회비 수납', amount: 0, note: '' }],
+        expenses: [
+          { cat: '식사', item: '점심 식대', amount: 0 },
+          { cat: '숙박', item: '숙소 예약', amount: 0 }
+        ],
+        sponsorships: [],
+        notes: ''
+      };
+    }
+
+    const totalIncome = (st.incomes || []).reduce((acc, cur) => acc + (Number(cur.amount) || 0), 0);
+    const totalExpense = (st.expenses || []).reduce((acc, cur) => acc + (Number(cur.amount) || 0), 0);
+    const balance = totalIncome - totalExpense;
+
+    return `
+      <div style="margin: 14px 0 10px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px">
+        <button type="button" class="cl-btn ghost" id="btnStBack" style="font-weight:700">‹ 정산서 목록으로 돌아가기</button>
+        <div style="display:flex; gap:8px">
+          <button type="button" class="cl-btn ghost sm" id="btnStCopyKakao" style="font-weight:700">📋 카톡 문구 복사</button>
+          <button type="button" class="cl-btn pri sm btn-action-green" id="btnStExportImg" style="font-weight:800;background:#10b981 !important;color:#ffffff !important">📸 영수증 이미지 출력 / 저장</button>
+        </div>
+      </div>
+
+      <div class="grid g2" style="gap:20px; align-items:start">
+        <!-- 왼쪽: 실시간 영수증 카드 미리보기 (출력 타겟) -->
+        <div>
+          <div style="font-size:13px; font-weight:800; color:var(--mute); margin-bottom:8px">🧾 실시간 영수증 미리보기 (이미지 출력용)</div>
+          <div class="receipt-paper" id="settlementReceiptCard">
+            <div class="receipt-header">
+              <div class="receipt-logo">⚾ ${esc(t.short)} OFFICIAL RECEIPT</div>
+              <div class="receipt-title">${esc(st.title || '팀 활동 정산 영수증')}</div>
+              <div class="receipt-sub">
+                <span>🗓️ ${esc(st.startDate)} ${st.endDate && st.endDate !== st.startDate ? '~ ' + esc(st.endDate) : ''}</span>
+                <span> · 📍 ${esc(st.venue || '대회 구장')}</span>
+              </div>
+            </div>
+
+            <div class="receipt-section">
+              <div class="receipt-sec-title">
+                <span>👥 참석 선수 명단</span>
+                <span>총 ${(st.participants || []).length}명</span>
+              </div>
+              <div style="font-size:12.5px; color:#334155; line-height:1.6; word-break:keep-all; background:#f8fafc; padding:8px 10px; border-radius:8px">
+                ${(st.participants || []).map(p => `<span style="display:inline-block; margin-right:6px">✓ <b>${esc(p)}</b></span>`).join('')}
+              </div>
+            </div>
+
+            <div class="receipt-section">
+              <div class="receipt-sec-title">
+                <span>🧾 지출 상세 내역 (Expenses)</span>
+                <span>금액</span>
+              </div>
+              ${(st.expenses || []).map((ex, i) => `
+                <div class="receipt-row">
+                  <span>${i+1}. [${esc(ex.cat || '항목')}] ${esc(ex.item)}</span>
+                  <b>₩${(Number(ex.amount) || 0).toLocaleString()}</b>
+                </div>
+              `).join('')}
+              <div class="receipt-row bold">
+                <span>총 지출 합계</span>
+                <span style="color:#e11d48; font-size:15px">₩${totalExpense.toLocaleString()}</span>
+              </div>
+            </div>
+
+            <div class="receipt-section">
+              <div class="receipt-sec-title">
+                <span>💰 수입 및 회비 내역 (Income)</span>
+                <span>금액</span>
+              </div>
+              ${(st.incomes || []).map(inc => `
+                <div class="receipt-row">
+                  <span>• ${esc(inc.item)}</span>
+                  <b>₩${(Number(inc.amount) || 0).toLocaleString()}</b>
+                </div>
+              `).join('')}
+              <div class="receipt-row bold">
+                <span>총 수입 합계</span>
+                <span style="color:#0284c7; font-size:15px">₩${totalIncome.toLocaleString()}</span>
+              </div>
+            </div>
+
+            <div class="receipt-summary-box">
+              <div style="display:flex; justify-content:space-between; align-items:center; font-size:15px; font-weight:900">
+                <span>최종 잔액 (Balance)</span>
+                <span style="color:${balance === 0 ? '#10b981' : (balance > 0 ? '#0284c7' : '#e11d48')}">
+                  ₩${balance.toLocaleString()} ${balance === 0 ? '(0원 완료 ✓)' : ''}
+                </span>
+              </div>
+              <div style="font-size:11.5px; color:#64748b; margin-top:4px">
+                ${balance === 0 ? '✓ 수입과 지출이 정확히 일치하여 잔액 0원으로 정산 완료되었습니다.' : (balance > 0 ? '남은 잔액은 차기 팀 회비로 이월됩니다.' : '초과 지출분 정산이 필요합니다.')}
+              </div>
+            </div>
+
+            ${(st.sponsorships && st.sponsorships.length) ? `
+              <div class="receipt-thanks-box">
+                <div class="receipt-thanks-title">
+                  <span>🎁 따뜻한 찬조 & 후원 감사 (Special Thanks)</span>
+                </div>
+                ${st.sponsorships.map(sp => `
+                  <div class="receipt-thanks-item">• <b>${esc(sp.person)}</b>: ${esc(sp.item)}</div>
+                `).join('')}
+              </div>
+            ` : ''}
+
+            <div class="receipt-footer">
+              야구를 향한 열정으로 함께 뛰는 <b>${esc(t.short)}</b> 선수단 여러분 감사합니다!<br>
+              투명하고 정직한 운영으로 최고의 팀을 만들어갑니다. 🧢🔥
+            </div>
+          </div>
+        </div>
+
+        <!-- 오른쪽: 정산서 편집 폼 -->
+        <div>
+          <form class="cl-form" id="stEditForm" style="display:grid; gap:12px; margin-top:0">
+            <b style="font-size:16px; color:var(--ink)">✏️ 정산서 항목 편집</b>
+            <div>
+              <label style="font-size:12px; color:var(--mute); font-weight:700">정산서 제목</label>
+              <input type="text" id="stInTitle" value="${esc(st.title)}" required style="width:100%;margin-top:4px">
+            </div>
+            <div class="cl-form-row">
+              <div>
+                <label style="font-size:12px; color:var(--mute); font-weight:700">시작일</label>
+                <input type="date" id="stInStartDate" value="${esc(st.startDate)}" required style="width:100%">
+              </div>
+              <div>
+                <label style="font-size:12px; color:var(--mute); font-weight:700">종료일</label>
+                <input type="date" id="stInEndDate" value="${esc(st.endDate)}" required style="width:100%">
+              </div>
+              <div>
+                <label style="font-size:12px; color:var(--mute); font-weight:700">장소/구장</label>
+                <input type="text" id="stInVenue" value="${esc(st.venue)}" placeholder="구장명" required style="width:100%">
+              </div>
+            </div>
+
+            <div>
+              <label style="font-size:12px; color:var(--mute); font-weight:700">참석자 명단 (쉼표로 구분)</label>
+              <textarea id="stInParticipants" rows="2" style="width:100%;margin-top:4px" placeholder="사나, 은경, 은숙, ...">${esc((st.participants || []).join(', '))}</textarea>
+            </div>
+
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px">
+                <label style="font-size:12px; color:var(--mute); font-weight:700">지출 내역 목록 (분류 | 항목명 | 금액)</label>
+              </div>
+              <textarea id="stInExpensesText" rows="6" style="width:100%;font-family:monospace;font-size:12.5px" placeholder="점심 | 강가네 김밥 | 66000
+간식 | 치킨·닭똥집 | 34000">${esc((st.expenses || []).map(e => `${e.cat || '기타'} | ${e.item} | ${e.amount}`).join('\n'))}</textarea>
+              <div style="font-size:11.5px; color:var(--mute); margin-top:2px">한 줄에 하나씩: <b>분류 | 항목명 | 금액</b> 형식으로 입력하세요.</div>
+            </div>
+
+            <div>
+              <label style="font-size:12px; color:var(--mute); font-weight:700">수입 / 회비 내역 (항목명 | 금액)</label>
+              <textarea id="stInIncomesText" rows="2" style="width:100%;font-family:monospace;font-size:12.5px;margin-top:4px" placeholder="대회 회비 (15명) | 1372300">${esc((st.incomes || []).map(inc => `${inc.item} | ${inc.amount}`).join('\n'))}</textarea>
+              <div style="font-size:11.5px; color:var(--mute); margin-top:2px">한 줄에 하나씩: <b>항목명 | 금액</b> 형식으로 입력하세요.</div>
+            </div>
+
+            <div>
+              <label style="font-size:12px; color:var(--mute); font-weight:700">찬조 & 후원 물품 (찬조자 | 찬조물품)</label>
+              <textarea id="stInSponsText" rows="4" style="width:100%;font-family:monospace;font-size:12.5px;margin-top:4px" placeholder="희숙 | 마트, 샤인머스캣
+민경 | 귤 한 박스">${esc((st.sponsorships || []).map(sp => `${sp.person} | ${sp.item}`).join('\n'))}</textarea>
+              <div style="font-size:11.5px; color:var(--mute); margin-top:2px">한 줄에 하나씩: <b>찬조자 | 찬조물품</b> 형식으로 입력하세요.</div>
+            </div>
+
+            <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:10px">
+              <button type="button" class="cl-btn ghost" id="btnStCancelEdit">취소</button>
+              <button type="submit" class="cl-btn pri btn-action-green" style="background:#10b981 !important;color:#ffffff !important;font-weight:800">✓ 정산서 저장 및 반영</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    `;
+  }
+
+  // 2. 목록 뷰 (정산서 리스트 모드)
+  return `
+    <div style="display:flex; justify-content:space-between; align-items:center; margin:10px 0 16px; flex-wrap:wrap; gap:10px">
+      <div>
+        <b style="font-size:16px; color:var(--ink)">💰 ${esc(t.short)} 팀 정산실 & 회계 관리</b>
+        <div class="sub">대회 원정 및 행사 지출·찬조·회비를 투명하게 정산하고, 영수증 카드로 출력해 카톡에 공유하세요.</div>
+      </div>
+      <button type="button" class="cl-btn pri btn-action-green" id="btnNewSettlement" style="background:#10b981 !important;color:#ffffff !important;font-weight:800">＋ 새 정산서 작성</button>
+    </div>
+
+    <div class="grid" style="gap:14px">
+      ${settlements.length ? settlements.map(st => {
+        const totalInc = (st.incomes || []).reduce((a, b) => a + (Number(b.amount) || 0), 0);
+        const totalExp = (st.expenses || []).reduce((a, b) => a + (Number(b.amount) || 0), 0);
+        const bal = totalInc - totalExp;
+        const partCount = (st.participants || []).length;
+
+        return `
+          <div class="st-card">
+            <div class="st-top">
+              <div>
+                <span class="st-badge">✓ 정산 완료</span>
+                <div class="st-title" style="margin-top:6px">${esc(st.title)}</div>
+              </div>
+              <div style="display:flex; gap:6px">
+                <button type="button" class="cl-btn ghost sm" data-st-edit="${esc(st.id)}" style="font-weight:700">🧾 영수증 보기 / 편집</button>
+                <button type="button" class="cl-btn ghost sm" data-st-del="${esc(st.id)}" data-team-id="${esc(t.id)}" title="정산서 삭제" style="color:var(--mute)">✕</button>
+              </div>
+            </div>
+            <div class="st-meta">
+              <span>🗓️ ${esc(st.startDate)} ${st.endDate && st.endDate !== st.startDate ? '~ ' + esc(st.endDate) : ''}</span>
+              <span>📍 ${esc(st.venue)}</span>
+              <span>👥 참석 ${partCount}명</span>
+            </div>
+            <div class="st-metrics">
+              <span class="st-chip income">수입 ₩${totalInc.toLocaleString()}</span>
+              <span class="st-chip expense">지출 ₩${totalExp.toLocaleString()}</span>
+              <span class="st-chip balance">잔액 ₩${bal.toLocaleString()}</span>
+            </div>
+            ${st.sponsorships && st.sponsorships.length ? `
+              <div style="font-size:12.5px; color:var(--ink2); background:var(--chip); border:1px solid var(--line); padding:8px 12px; border-radius:8px">
+                🎁 <b>찬조 감사:</b> ${st.sponsorships.map(s => `${esc(s.person)}(${esc(s.item)})`).join(', ')}
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }).join('') : `
+        <div class="empty" style="padding:28px 16px; text-align:center; color:var(--ink2); background:var(--card); border:1px dashed var(--line); border-radius:12px">
+          등록된 정산서가 없습니다.<br>
+          <b>[＋ 새 정산서 작성]</b>을 눌러 원정 대회나 팀 행사 정산서를 작성해보세요!
+        </div>
+      `}
+    </div>
+  `;
+}
+
+
 const GOOGLE_APPS_SCRIPT_SAMPLE = `/**
  * ⚾ 2026 WT프렌즈 통합 데이터베이스(DB) - 통합 Apps Script (라인업 DB + 클럽하우스 연동)
  * 
@@ -13938,6 +14472,9 @@ function doPost(e) {
     }
     if (clubData.setlogs && Array.isArray(clubData.setlogs)) {
       updateSetlogsSheet(ss, clubData.setlogs);
+    }
+    if (clubData.settlements && Array.isArray(clubData.settlements)) {
+      updateSettlementsSheet(ss, clubData.settlements);
     }
     
     return ContentService.createTextOutput(JSON.stringify({ status: "success", message: "클럽하우스 동기화 완료" }))
@@ -14193,6 +14730,183 @@ function openClubSheetSyncModal(t) {
 
 function bindTeamClubView() {
   const {parts} = parse();
+
+  // --- WT 정산실 전용 이벤트 바인딩 ---
+  const btnNewSt = document.getElementById('btnNewSettlement');
+  if (btnNewSt) {
+    btnNewSt.onclick = () => { UI.curSettlementId = 'new'; const y = window.scrollY; render(); window.scrollTo(0, y); };
+  }
+  const btnStBack = document.getElementById('btnStBack');
+  if (btnStBack) {
+    btnStBack.onclick = () => { UI.curSettlementId = null; const y = window.scrollY; render(); window.scrollTo(0, y); };
+  }
+  const btnStCancel = document.getElementById('btnStCancelEdit');
+  if (btnStCancel) {
+    btnStCancel.onclick = () => { UI.curSettlementId = null; const y = window.scrollY; render(); window.scrollTo(0, y); };
+  }
+  $app.querySelectorAll('[data-st-edit]').forEach(btn => {
+    btn.onclick = () => { UI.curSettlementId = btn.dataset.stEdit; const y = window.scrollY; render(); window.scrollTo(0, y); };
+  });
+
+  // 카톡 정산 문구 복사 바인딩
+  const btnCopyKakao = document.getElementById('btnStCopyKakao');
+  if (btnCopyKakao) {
+    btnCopyKakao.onclick = () => {
+      const card = document.getElementById('settlementReceiptCard');
+      if (!card) return;
+      const myT = localStorage.getItem('kbsa_myteam') || 'aSEa0076';
+      const curT = Store.team(myT) || Store.teams[0];
+      const curData = ClubStore.getTeamData(curT);
+      const st = (curData.settlements || []).find(x => x.id === UI.curSettlementId) || curData.settlements[0];
+      if (!st) return;
+
+      const totalInc = (st.incomes || []).reduce((a, b) => a + (Number(b.amount) || 0), 0);
+      const totalExp = (st.expenses || []).reduce((a, b) => a + (Number(b.amount) || 0), 0);
+      const bal = totalInc - totalExp;
+
+      let msg = `⚾ [${curT.short}] ${st.title || '팀 정산 안내'}\n\n`;
+      msg += `🗓️ 기간: ${st.startDate || ''} ${st.endDate && st.endDate !== st.startDate ? '~ ' + st.endDate : ''}\n`;
+      msg += `📍 장소: ${st.venue || '대회 구장'}\n`;
+      msg += `👥 참석(${(st.participants || []).length}명): ${(st.participants || []).join(', ')}\n\n`;
+      msg += `💰 [회계 요약]\n`;
+      msg += `- 총 수입: ₩${totalInc.toLocaleString()}\n`;
+      msg += `- 총 지출: ₩${totalExp.toLocaleString()}\n`;
+      msg += `- 최종 잔액: ₩${bal.toLocaleString()} ${bal === 0 ? '(0원 정산 완료 ✓)' : ''}\n\n`;
+      msg += `🧾 [지출 상세 내역]\n`;
+      (st.expenses || []).forEach((e, idx) => {
+        msg += `• [${e.cat || '지출'}] ${e.item}: ₩${(Number(e.amount) || 0).toLocaleString()}\n`;
+      });
+      msg += `────────────────\n`;
+      msg += `총 지출 합계: ₩${totalExp.toLocaleString()}\n\n`;
+      if (st.sponsorships && st.sponsorships.length) {
+        msg += `🎁 [따뜻한 찬조 & 후원 감사]\n`;
+        st.sponsorships.forEach(sp => {
+          msg += `• ${sp.person}: ${sp.item}\n`;
+        });
+        msg += `\n`;
+      }
+      msg += `팀원분들의 적극적인 협조와 정성에 감사드립니다! ${curT.short} 파이팅! 🧢🔥`;
+
+      navigator.clipboard?.writeText(msg).then(() => {
+        const origText = btnCopyKakao.textContent;
+        btnCopyKakao.textContent = '✓ 카톡 문구 복사 완료!';
+        setTimeout(() => { btnCopyKakao.textContent = origText; }, 2000);
+      });
+    };
+  }
+
+  // 영수증 이미지 출력 / 저장 (html2canvas)
+  const btnExportImg = document.getElementById('btnStExportImg');
+  if (btnExportImg) {
+    btnExportImg.onclick = () => {
+      const card = document.getElementById('settlementReceiptCard');
+      if (!card) return;
+      const origText = btnExportImg.textContent;
+      btnExportImg.textContent = '📸 영수증 이미지 생성 중…';
+
+      luLoadH2C().then(() => html2canvas(card, {
+        scale: 2.5,
+        backgroundColor: '#ffffff',
+        useCORS: true
+      })).then(cv => {
+        const fn = `WT_정산영수증_${new Date().toISOString().slice(0, 10).replace(/-/g, '')}.png`;
+        cv.toBlob(blob => {
+          const file = new File([blob], fn, { type: 'image/png' });
+          const dl = () => {
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = fn;
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+          };
+          if (navigator.canShare && navigator.canShare({ files: [file] }) && /Android|iPhone|iPad/i.test(navigator.userAgent)) {
+            navigator.share({ files: [file], title: fn }).catch(dl);
+          } else {
+            dl();
+          }
+          btnExportImg.textContent = '✓ 출력 완료!';
+          setTimeout(() => { btnExportImg.textContent = origText; }, 2000);
+        }, 'image/png');
+      }).catch(err => {
+        console.error('Receipt export error:', err);
+        btnExportImg.textContent = '출력 실패 — 다시 시도';
+        setTimeout(() => { btnExportImg.textContent = origText; }, 2500);
+      });
+    };
+  }
+
+  // 정산서 폼 저장 바인딩
+  const stForm = document.getElementById('stEditForm');
+  if (stForm) {
+    stForm.onsubmit = (e) => {
+      e.preventDefault();
+      const myT = localStorage.getItem('kbsa_myteam') || 'aSEa0076';
+      const curT = Store.team(myT) || Store.teams[0];
+      const curData = ClubStore.getTeamData(curT);
+
+      const title = document.getElementById('stInTitle').value.trim();
+      const startDate = document.getElementById('stInStartDate').value;
+      const endDate = document.getElementById('stInEndDate').value;
+      const venue = document.getElementById('stInVenue').value.trim();
+      const rawParts = document.getElementById('stInParticipants').value;
+      const participants = rawParts.split(/[,\n]+/).map(x => x.trim()).filter(Boolean);
+
+      // Parse expenses
+      const rawExp = document.getElementById('stInExpensesText').value;
+      const expenses = rawExp.split('\n').map(line => {
+        const parts = line.split('|').map(x => x.trim());
+        if (parts.length >= 3) return { cat: parts[0], item: parts[1], amount: Number(parts[2].replace(/[^0-9]/g, '')) || 0 };
+        if (parts.length === 2) return { cat: '기타', item: parts[0], amount: Number(parts[1].replace(/[^0-9]/g, '')) || 0 };
+        return null;
+      }).filter(Boolean);
+
+      // Parse incomes
+      const rawInc = document.getElementById('stInIncomesText').value;
+      const incomes = rawInc.split('\n').map(line => {
+        const parts = line.split('|').map(x => x.trim());
+        if (parts.length >= 2) return { item: parts[0], amount: Number(parts[1].replace(/[^0-9]/g, '')) || 0 };
+        return null;
+      }).filter(Boolean);
+
+      // Parse sponsorships
+      const rawSpon = document.getElementById('stInSponsText').value;
+      const sponsorships = rawSpon.split('\n').map(line => {
+        const parts = line.split('|').map(x => x.trim());
+        if (parts.length >= 2) return { person: parts[0], item: parts[1] };
+        return null;
+      }).filter(Boolean);
+
+      const curId = UI.curSettlementId === 'new' ? ('ST_' + Date.now().toString(36)) : UI.curSettlementId;
+      const newSt = {
+        id: curId,
+        title,
+        type: '공식대회',
+        startDate,
+        endDate,
+        venue,
+        participants,
+        incomes,
+        expenses,
+        sponsorships,
+        notes: '정상 정산 완료'
+      };
+
+      curData.settlements = curData.settlements || [];
+      const existIdx = curData.settlements.findIndex(x => x.id === curId);
+      if (existIdx >= 0) {
+        curData.settlements[existIdx] = newSt;
+      } else {
+        curData.settlements.unshift(newSt);
+      }
+
+      ClubStore.saveTeamData(curT, curData);
+      UI.curSettlementId = curId;
+      alert('정산서가 성공적으로 저장되었습니다! 구글 시트와도 실시간 동기화됩니다.');
+      const y = window.scrollY; render(); window.scrollTo(0, y);
+    };
+  }
+  // --- WT 정산실 전용 이벤트 바인딩 끝 ---
   const myT = localStorage.getItem('kbsa_myteam') || 'aSEa0076';
   const tid = (parts[0] === 'team' && parts[1]) ? parts[1] : (parts[1] || myT);
   const t = Store.team(tid) || Store.team('aSEa0076') || Store.teams[0];
