@@ -10929,7 +10929,20 @@ function subtabs(key,items,def){
   const cur=items.some(i=>i[0]===UI.sub[key])?UI.sub[key]:(def||items[0][0]);
   return {cur,html:`<div class="stabs">${items.map(([k,l])=>`<button data-st="${key}:${k}" class="${k===cur?'on':''}">${l}</button>`).join('')}</div>`};
 }
-document.addEventListener('click',e=>{const b=e.target.closest('[data-st]');if(!b)return;const i=b.dataset.st.indexOf(':');UI.sub[b.dataset.st.slice(0,i)]=b.dataset.st.slice(i+1);const y=window.scrollY;render();window.scrollTo(0,y)});
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-st]');
+  if(!b) return;
+  const i=b.dataset.st.indexOf(':');
+  const key=b.dataset.st.slice(0,i);
+  const val=b.dataset.st.slice(i+1);
+  UI.sub[key]=val;
+  if(key==='tclub' && val==='settlement') {
+    UI.curSettlementId = null; // 정산실 클릭 시 항상 목록(보관함)부터 열림!
+  }
+  const y=window.scrollY;
+  render();
+  window.scrollTo(0,y);
+});
 const GRADES=[[120,'특급 활약','gr5'],[105,'우수 활약','gr4'],[95,'안정적','gr3'],[80,'성장 중','gr2'],[-1e9,'도약 기대','gr1']];
 const grade=v=>v==null?'':(([,l,c])=>`<span class="grade ${c}">${l}</span>`)(GRADES.find(g=>v>=g[0]));
 const NOTES={
@@ -11816,7 +11829,7 @@ V.team=(q,id)=>{
   const badgesHtml = divBadges.length ? `<span class="wt-div-badges">${divBadges.join(' ')}</span>` : '';
 
   return `<div class="board" style="background: linear-gradient(135deg, #0D043D 0%, #172554 60%, #0F5FA4 100%) !important; color: #ffffff !important; margin-bottom: 22px !important;">
-    <div class="wt-board-topline" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;width:100%;gap:6px;flex-wrap:wrap">
+    <div class="wt-board-topline" style="display:flex !important;justify-content:space-between !important;align-items:center !important;margin-bottom:12px !important;width:100% !important;flex-wrap:nowrap !important">
       <div>
         ${isWT ? '<span class="wt-hero-slogan">WINNERS TOGETHER · FRIENDS</span>' : ''}
       </div>
@@ -14932,34 +14945,36 @@ function renderClubCalendarSection(t, data, tc, me) {
   const getDayItems = (dateStr) => {
     const md = dateStr.slice(5);
     const items = [];
-    // 생일 (셀 안에는 컴팩트하게 '🎂 이름'만 넣어 모바일에서도 글자 넘침 방지)
+    // 1. 생일
     rosterPlayers.forEach(p => {
       if (p.birth && p.birth.slice(5) === md) {
-        const bdayDesc = `🎂 ${p.name}(#${p.no||''}) 생일 축하!`;
         items.push({
           type: 'bday',
-          label: bdayDesc,
+          mainTitle: `🎂 ${p.name}(#${p.no||''}) 생일 축하!`,
+          subMeta: `생일 축하 메시지와 따뜻한 응원을 전해주세요 🎉`,
+          label: `🎂 ${p.name}(#${p.no||''}) 생일 축하!`,
           shortLabel: `🎂 ${p.name}`,
-          fullLabel: bdayDesc,
+          fullLabel: `🎂 ${p.name}(#${p.no||''}) 생일 축하!`,
           date: dateStr
         });
       }
     });
-    // 시합 (KBSA 정규 경기)
+    // 2. 시합 (KBSA 정규 경기)
     games.forEach(g => {
       if (g.date === dateStr) {
         const oppName = g.home.i === t.i ? g.away.short : g.home.short;
-        const gameDesc = `🏆 [시합] vs ${oppName} (${g.time || '11:00'})`;
         items.push({
           type: 'game',
-          label: gameDesc,
+          mainTitle: `🏆 vs ${oppName} (${g.time || '11:00'})`,
+          subMeta: `KBSA 공식 경기 · ${g.round || '정규 시즌'}${g.venue ? ' · 📍 ' + g.venue : ''}`,
+          label: `🏆 [시합] vs ${oppName} (${g.time || '11:00'})`,
           shortLabel: `🏆 vs ${oppName.slice(0, 3)}`,
-          fullLabel: gameDesc,
+          fullLabel: `🏆 [시합] vs ${oppName} (${g.time || '11:00'})`,
           date: dateStr
         });
       }
     });
-    // 구단 일정 (훈련, 모임, 대회, 연맹행사, 자체경기, 공지 등)
+    // 3. 구단 일정 (훈련, 모임, 대회, 연맹행사, 자체경기, 공지 등)
     events.forEach(e => {
       if (e.date === dateStr) {
         let icon = '⚾';
@@ -14972,12 +14987,13 @@ function renderClubCalendarSection(t, data, tc, me) {
         else if (e.type === '공지') { icon = '📢'; badgeType = 'notice'; shortText = '공지'; }
         else { shortText = e.title.slice(0, 4); }
 
-        const drillDesc = `${icon} [${e.type || '훈련'}] ${e.title} (${e.time || '10:00'})${e.venue ? ' - ' + e.venue : ''}`;
         items.push({
           type: badgeType,
-          label: drillDesc,
+          mainTitle: `${icon} [${e.type || '훈련'}] ${e.title}`,
+          subMeta: `⏰ ${e.time || '10:00'}${e.venue ? ' · 📍 ' + e.venue : ''}`,
+          label: `${icon} [${e.type || '훈련'}] ${e.title} (${e.time || '10:00'})`,
           shortLabel: `${icon} ${shortText}`,
-          fullLabel: drillDesc,
+          fullLabel: `${icon} [${e.type || '훈련'}] ${e.title} (${e.time || '10:00'})${e.venue ? ' - ' + e.venue : ''}`,
           date: dateStr,
           ev: e
         });
@@ -15021,37 +15037,48 @@ function renderClubCalendarSection(t, data, tc, me) {
   }
 
   return `
-    <!-- 주간 레이더 섹션 -->
+    <!-- 주간 레이더 섹션 (건수 텍스트 제거 및 2줄 깔끔 분리 정렬) -->
     <div class="radar-wrap" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:14px; margin-bottom:16px">
       <!-- 이번 주 레이더 -->
-      <div class="radar-card">
-        <div class="radar-head">
-          <div class="radar-title">📅 이번 주 주요 일정 (${thisWeekDates[0].slice(5).replace('-','.')} ~ ${thisWeekDates[6].slice(5).replace('-','.')})</div>
-          <span class="radar-count">${thisWeekItems.length}건</span>
+      <div class="radar-card" style="padding:14px;background:var(--chip);border:1px solid var(--line);border-radius:12px">
+        <div class="radar-head" style="margin-bottom:10px">
+          <div class="radar-title" style="font-size:14px;font-weight:800;color:var(--ink)">📅 이번 주 주요 일정 (${thisWeekDates[0].slice(5).replace('-','.')} ~ ${thisWeekDates[6].slice(5).replace('-','.')})</div>
         </div>
         ${thisWeekItems.length ? thisWeekItems.map(it => `
-          <div class="radar-item ${it.type}">
-            <span>${esc(it.label)}</span>
-            <span class="r-date">${it.date.slice(5).replace('-','.')}</span>
+          <div class="radar-item ${it.type}" style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:10px;margin-bottom:8px;gap:10px;background:var(--card);border:1px solid var(--line)">
+            <div style="flex:1;min-width:0">
+              <div style="font-size:13.5px;font-weight:800;color:var(--ink);line-height:1.35;word-break:keep-all">
+                ${esc(it.mainTitle || it.label)}
+              </div>
+              ${it.subMeta ? `<div style="font-size:11.5px;color:var(--mute);margin-top:3px;line-height:1.3;word-break:keep-all">${esc(it.subMeta)}</div>` : ''}
+            </div>
+            <div style="flex-shrink:0;text-align:right">
+              <span class="r-date" style="font-size:12px;font-weight:800;padding:3px 8px;border-radius:6px;background:var(--chip);color:var(--ink)">${it.date.slice(5).replace('-','.')}</span>
+            </div>
           </div>
         `).join('') : '<div style="font-size:12px;color:var(--mute);padding:8px 0">이번 주 예정된 일정이 없습니다.</div>'}
       </div>
 
       <!-- 다음 주 레이더 -->
-      <div class="radar-card">
-        <div class="radar-head">
-          <div class="radar-title">📅 다음 주 주요 일정 (${nextWeekDates[0].slice(5).replace('-','.')} ~ ${nextWeekDates[6].slice(5).replace('-','.')})</div>
-          <span class="radar-count">${nextWeekItems.length}건</span>
+      <div class="radar-card" style="padding:14px;background:var(--chip);border:1px solid var(--line);border-radius:12px">
+        <div class="radar-head" style="margin-bottom:10px">
+          <div class="radar-title" style="font-size:14px;font-weight:800;color:var(--ink)">📅 다음 주 주요 일정 (${nextWeekDates[0].slice(5).replace('-','.')} ~ ${nextWeekDates[6].slice(5).replace('-','.')})</div>
         </div>
         ${nextWeekItems.length ? nextWeekItems.map(it => `
-          <div class="radar-item ${it.type}">
-            <span>${esc(it.label)}</span>
-            <span class="r-date">${it.date.slice(5).replace('-','.')}</span>
+          <div class="radar-item ${it.type}" style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:10px;margin-bottom:8px;gap:10px;background:var(--card);border:1px solid var(--line)">
+            <div style="flex:1;min-width:0">
+              <div style="font-size:13.5px;font-weight:800;color:var(--ink);line-height:1.35;word-break:keep-all">
+                ${esc(it.mainTitle || it.label)}
+              </div>
+              ${it.subMeta ? `<div style="font-size:11.5px;color:var(--mute);margin-top:3px;line-height:1.3;word-break:keep-all">${esc(it.subMeta)}</div>` : ''}
+            </div>
+            <div style="flex-shrink:0;text-align:right">
+              <span class="r-date" style="font-size:12px;font-weight:800;padding:3px 8px;border-radius:6px;background:var(--chip);color:var(--ink)">${it.date.slice(5).replace('-','.')}</span>
+            </div>
           </div>
         `).join('') : '<div style="font-size:12px;color:var(--mute);padding:8px 0">다음 주 예정된 일정이 없습니다.</div>'}
       </div>
     </div>
-
     <!-- 월간 스마트 캘린더 -->
     <div class="cal-wrap">
       <div class="cal-nav">
@@ -15112,7 +15139,7 @@ function renderClubCalendarSection(t, data, tc, me) {
         <span style="color:#7e22ce">● 🍻 모임/이벤트</span>
       </div>
       
-      <!-- 선택한 날짜의 상세 일정 카드 & 실시간 일정 등록 시스템 -->
+      <!-- 선택한 날짜의 상세 일정 카드 & 실시간 일정 등록 시스템 (건수 제거 & 중복 트로피 제거) -->
       <div id="calDayDetailCard" style="margin-top:14px;padding:16px;background:var(--chip);border:1px solid var(--line);border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.04)">
         ${(()=>{
           const selDate = UI.selectedCalDate || todayStr;
@@ -15124,32 +15151,31 @@ function renderClubCalendarSection(t, data, tc, me) {
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
               <div>
                 <b style="font-size:15px;color:var(--ink)">🗓️ ${selDate.replace(/-/g, '.')} 일정 및 행사 관리</b>
-                <span style="font-size:12px;color:var(--mute);margin-left:6px">(총 ${dayItems.length}건)</span>
               </div>
               <button type="button" class="cl-btn sm ${isFormOpen ? 'ghost' : 'pri btn-action-green'}" id="btnToggleCalEventForm" style="font-size:12px;font-weight:800;${isFormOpen ? '' : 'background:#10b981 !important;color:#ffffff !important'}">
                 ${isFormOpen ? '✕ 입력창 닫기' : '＋ 이 날짜에 새 일정/행사 등록'}
               </button>
             </div>
 
-            <!-- 해당 일자 등록된 일정 목록 -->
+            <!-- 해당 일자 등록된 일정 목록 (중복 아이콘 제거 & 2줄 정리) -->
             <div style="margin-bottom:${isFormOpen ? '14px' : '4px'}">
               ${dayItems.length ? `
                 <div style="display:grid;gap:8px">
                   ${dayItems.map(it => {
                     const isTeamEvent = !!it.ev;
                     return `
-                      <div style="display:flex;justify-content:space-between;align-items:center;background:var(--card);border:1px solid var(--line);padding:10px 12px;border-radius:8px;flex-wrap:wrap;gap:8px">
-                        <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:200px">
-                          <span style="font-size:18px">${it.type === 'bday' ? '🎂' : (it.type === 'game' ? '🏆' : (it.type === 'fed' ? '🎓' : (it.type === 'notice' ? '📢' : (it.type === 'event' ? '🍻' : '⚾'))))}</span>
-                          <div>
-                            <div style="font-size:13px;font-weight:800;color:var(--ink)">${esc(it.fullLabel || it.label)}</div>
-                            ${(it.ev && it.ev.note) ? `<div style="font-size:11.5px;color:var(--sub);margin-top:2px">📝 ${esc(it.ev.note)}</div>` : ''}
+                      <div style="display:flex;justify-content:space-between;align-items:center;background:var(--card);border:1px solid var(--line);padding:10px 12px;border-radius:10px;gap:10px">
+                        <div style="flex:1;min-width:0">
+                          <div style="font-size:13.5px;font-weight:800;color:var(--ink);line-height:1.35;word-break:keep-all">
+                            ${esc(it.mainTitle || it.label)}
                           </div>
+                          ${it.subMeta ? `<div style="font-size:12px;color:var(--mute);margin-top:3px;line-height:1.3;word-break:keep-all">${esc(it.subMeta)}</div>` : ''}
+                          ${(it.ev && it.ev.note) ? `<div style="font-size:11.5px;color:var(--sub);margin-top:3px">📝 ${esc(it.ev.note)}</div>` : ''}
                         </div>
                         ${isTeamEvent ? `
-                          <div style="display:flex;gap:6px">
-                            <button type="button" class="cl-btn sm ghost" data-cal-ev-edit="${esc(it.ev.id)}" style="font-size:11.5px;padding:3px 8px">✏️ 수정</button>
-                            <button type="button" class="cl-btn sm ghost" data-cal-ev-del="${esc(it.ev.id)}" style="font-size:11.5px;padding:3px 8px;color:#ef4444">🗑️ 삭제</button>
+                          <div style="display:flex;gap:6px;flex-shrink:0">
+                            <button type="button" class="cl-btn sm ghost" data-cal-ev-edit="${esc(it.ev.id)}" style="font-size:11.5px;padding:4px 8px">✏️ 수정</button>
+                            <button type="button" class="cl-btn sm ghost" data-cal-ev-del="${esc(it.ev.id)}" style="font-size:11.5px;padding:4px 8px;color:#ef4444">🗑️ 삭제</button>
                           </div>
                         ` : ''}
                       </div>
