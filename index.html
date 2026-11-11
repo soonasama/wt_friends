@@ -9967,20 +9967,23 @@ html[data-theme="dark"] .cl-form b {
   text-align: center;
 }
 .cal-head {
-  font-size: 11.5px;
-  font-weight: 700;
+  font-size: 12px;
+  font-weight: 800;
   color: var(--sub);
   padding: 6px 0;
 }
 .cal-head.sun { color: #f43f5e; }
 .cal-head.sat { color: #3b82f6; }
+/* 균등한 높이와 대칭 정렬을 위한 캘린더 날짜 셀 (글자 유무와 무관하게 모든 셀 높이 66px 고정) */
 .cal-day {
-  min-height: 58px;
+  height: 66px;
+  min-height: 66px;
+  max-height: 66px;
+  box-sizing: border-box;
   background: var(--chip);
   border: 1px solid var(--line);
   border-radius: 8px;
-  padding: 4px 2px;
-  font-size: 12px;
+  padding: 3px 2px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -9988,6 +9991,7 @@ html[data-theme="dark"] .cl-form b {
   position: relative;
   transition: all 0.15s ease;
   cursor: pointer;
+  overflow: hidden;
 }
 .cal-day:hover {
   background: var(--bg-hover);
@@ -9995,33 +9999,72 @@ html[data-theme="dark"] .cl-form b {
 }
 .cal-day.today {
   border: 1.5px solid #10b981;
-  background: rgba(16, 185, 129, 0.1);
+  background: rgba(16, 185, 129, 0.08);
+}
+.cal-day.selected {
+  border: 2px solid #3b82f6 !important;
+  background: rgba(59, 130, 246, 0.12) !important;
 }
 .cal-day.other-month {
-  opacity: 0.35;
+  opacity: 0.3;
+}
+/* 모든 날짜 숫자가 한 줄로 정확히 수평 정렬되도록 전용 헤더 바 고정 */
+.cal-date-row {
+  height: 18px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2px;
 }
 .cal-num {
   font-weight: 700;
-  font-size: 12px;
-  margin-bottom: 2px;
+  font-size: 11.5px;
+  line-height: 1;
+}
+.cal-num.sun { color: #f43f5e; }
+.cal-num.sat { color: #3b82f6; }
+.cal-num-today {
+  background: #10b981;
+  color: #ffffff;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10.5px;
+  font-weight: 800;
+}
+/* 이벤트 뱃지 슬롯 영역: 고정 높이 40px로 텍스트가 넘치거나 없어도 박스가 찌그러지지 않음 */
+.cal-events-slot {
+  width: 100%;
+  height: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
 }
 .cal-badge {
   display: block;
-  width: calc(100% - 4px);
-  font-size: 10px;
-  padding: 1px 3px;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 9.5px;
+  line-height: 14px;
+  height: 15px;
+  padding: 0 3px;
   border-radius: 4px;
-  margin-top: 2px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-weight: 700;
+  font-weight: 800;
   text-align: left;
+  letter-spacing: -0.3px;
 }
 .cal-badge.bday { background: #f43f5e; color: #ffffff; }
 .cal-badge.game { background: #10b981; color: #ffffff; }
 .cal-badge.drill { background: #3b82f6; color: #ffffff; }
-.cal-badge.event { background: #8b5cf6; color: #ffffff; }
+.cal-badge.more { background: rgba(255,255,255,0.12); color: var(--mute); font-size: 9px; text-align: center; }
 
 /* 출석부 명예의 전당 (Podium) */
 .podium-wrap {
@@ -11446,7 +11489,16 @@ V.team=(q,id)=>{
         ${isWT ? '<span class="wt-hero-slogan">WINNERS TOGETHER · FRIENDS</span>' : ''}
         <span class="wt-bhead-sub">${subLine}</span>
       </div>
-      <div class="wt-topline-right">
+      <div class="wt-topline-right" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end">
+        ${isWT ? `
+          <div class="hero-me-pill" style="display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.35);border-radius:999px;padding:3px 10px;backdrop-filter:blur(8px);box-shadow:0 2px 8px rgba(0,0,0,0.25)">
+            <span style="font-size:12px;color:#f8fafc;font-weight:700">👤 내 프로필:</span>
+            <select id="heroMeSel" style="background:transparent;color:#ffffff;border:none;outline:none;font-size:12.5px;font-weight:800;cursor:pointer">
+              <option value="" style="background:#0f172a;color:#fff">${!ClubStore.getMe(t) ? '선수 선택 (22명) ▾' : '선수 변경 ▾'}</option>
+              ${luRoster(t).map(n => `<option value="${esc(n)}" ${n===ClubStore.getMe(t)?'selected':''} style="background:#0f172a;color:#fff">${esc(n)}</option>`).join('')}
+            </select>
+          </div>
+        ` : ''}
         ${badgesHtml}
       </div>
     </div>
@@ -11513,7 +11565,14 @@ function oppDetail(A,o){
     <p class="note">선발 경기 전체 타석 기준입니다 (구원 투수 이후 타석 포함).</p></div>`;
 }
 V.team.bind=()=>{
-  const _p=parse(); const _t=Store.team(_p.parts[1]); if(_t){ $app.querySelectorAll('[data-open-chart]').forEach(el => { el.onclick = () => openTeamChartModal(_t.id, el.dataset.openChart); }); }
+  const _p=parse(); const _t=Store.team(_p.parts[1]);
+  const heroSel = document.getElementById('heroMeSel');
+  if (heroSel && _t) {
+    heroSel.onchange = () => {
+      ClubStore.setMe(_t, heroSel.value);
+      const y = window.scrollY; render(); window.scrollTo(0, y);
+    };
+  } if(_t){ $app.querySelectorAll('[data-open-chart]').forEach(el => { el.onclick = () => openTeamChartModal(_t.id, el.dataset.openChart); }); }
   const tmcBtn=$app.querySelector('[data-tmcard]');if(tmcBtn)tmcBtn.onclick=()=>openTeamAndMvpStudio(tmcBtn.dataset.tmcard);
   const awdBtn=$app.querySelector('[data-awdcard]');if(awdBtn)awdBtn.onclick=()=>openClubAwardStudio(awdBtn.dataset.awdcard);
   const goclub=$app.querySelector('[data-go-club]');if(goclub)goclub.onclick=()=>{UI.teamTab='club';render()};
@@ -14189,20 +14248,15 @@ function renderTeamClubView(t, A, tc, th) {
   const roster = luRoster(t);
   const me = ClubStore.getMe(t);
 
-  // 상단 슬림 유틸 바 (헤더를 시원하게 비우고 글쓰기/투표 시 간편 프로필 선택)
+  // 중간 선택 바 제거 -> 타이틀 박스 우측 상단으로 이동 완료, 클럽하우스 서브탭만 깔끔하게 노출
   let html = `
-    <div class="cl-slim-header">
-      <div class="cl-slim-left">
-        <span>🏆 <b>${esc(t.short)}</b> 클럽하우스</span>
-        <span style="font-size:12px;color:var(--mute)">· 2008.03.03 창단</span>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin:4px 0 12px;flex-wrap:wrap;gap:8px">
+      <div style="font-size:13px;color:var(--sub);font-weight:700">
+        🏆 <b>${esc(t.short)}</b> 공식 클럽하우스 <small style="color:var(--mute)">(2008.03.03 창단)</small>
       </div>
-      <div class="cl-slim-right">
-        <select id="clMeSel" class="cl-who-select" style="padding:4px 8px;font-size:12.5px;border-radius:8px;background:var(--chip);color:var(--ink);border:1px solid var(--line)">
-          <option value="" ${!me ? 'selected' : ''}>👤 선수 선택 (${roster.length}명)</option>
-          ${roster.map(n => `<option value="${esc(n)}" ${n===me?'selected':''}>${esc(n)}</option>`).join('')}
-        </select>
-        <button type="button" class="cl-btn ghost sm" id="clCopyTeamLink" style="font-size:12px">🔗 초대</button>
-        <button type="button" class="cl-btn ghost sm" id="clOpenSheetSync" title="구글 시트 연동" style="padding:4px 8px;font-size:12px">⚙️</button>
+      <div style="display:flex;gap:6px">
+        <button type="button" class="cl-btn ghost sm" id="clCopyTeamLink" style="font-size:11.5px;padding:3px 8px">🔗 초대 링크</button>
+        <button type="button" class="cl-btn ghost sm" id="clOpenSheetSync" title="구글 시트 연동" style="font-size:11.5px;padding:3px 8px">⚙️ 시트 연동</button>
       </div>
     </div>
     ${sub.html}
@@ -14498,22 +14552,40 @@ function renderClubCalendarSection(t, data, tc, me) {
   const getDayItems = (dateStr) => {
     const md = dateStr.slice(5);
     const items = [];
-    // 생일
+    // 생일 (셀 안에는 컴팩트하게 '🎂 이름'만 넣어 넘치지 않게 단정 정렬)
     rosterPlayers.forEach(p => {
       if (p.birth && p.birth.slice(5) === md) {
-        items.push({ type: 'bday', label: `🎂 ${p.name}(#${p.no||''}) 생일`, date: dateStr });
+        items.push({
+          type: 'bday',
+          shortLabel: `🎂 ${p.name}`,
+          fullLabel: `🎂 ${p.name}(#${p.no||''}) 생일 축하!`,
+          date: dateStr
+        });
       }
     });
     // 시합
     games.forEach(g => {
       if (g.date === dateStr) {
-        items.push({ type: 'game', label: `🏆 vs ${g.home.i === t.i ? g.away.short : g.home.short} (${g.time})`, date: dateStr });
+        const oppName = g.home.i === t.i ? g.away.short : g.home.short;
+        items.push({
+          type: 'game',
+          shortLabel: `🏆 vs ${oppName}`,
+          fullLabel: `🏆 [시합] vs ${oppName} (${g.time || '11:00'})`,
+          date: dateStr
+        });
       }
     });
-    // 팀 일정
+    // 팀 일정 (훈련, 회식, 대회)
     events.forEach(e => {
       if (e.date === dateStr) {
-        items.push({ type: 'drill', label: `⚾ ${e.title} (${e.time})`, date: dateStr, ev: e });
+        const icon = e.type === '모임' ? '🍻' : (e.type === '공식대회' ? '🏆' : '⚾');
+        items.push({
+          type: e.type === '모임' ? 'event' : (e.type === '공식대회' ? 'game' : 'drill'),
+          shortLabel: `${icon} ${e.type || '훈련'}`,
+          fullLabel: `${icon} ${e.title} (${e.time || '10:00'}) - ${e.venue || ''}`,
+          date: dateStr,
+          ev: e
+        });
       }
     });
     return items;
@@ -14595,25 +14667,65 @@ function renderClubCalendarSection(t, data, tc, me) {
         <div class="cal-head">금</div>
         <div class="cal-head sat">토</div>
 
-        ${calCells.map(c => {
+        ${calCells.map((c, idx) => {
+          const colIdx = idx % 7;
+          const isSun = colIdx === 0;
+          const isSat = colIdx === 6;
+          const numClass = isSun ? 'sun' : (isSat ? 'sat' : '');
+
           if (!c.isCur) {
-            return `<div class="cal-day other-month"><span class="cal-num">${c.dayNum}</span></div>`;
+            return `
+              <div class="cal-day other-month">
+                <div class="cal-date-row"><span class="cal-num ${numClass}">${c.dayNum}</span></div>
+                <div class="cal-events-slot"></div>
+              </div>
+            `;
           }
           const isToday = c.dateStr === todayStr;
+          const isSel = UI.selectedCalDate === c.dateStr;
+          const items = c.items || [];
+          const visibleItems = items.slice(0, 2);
+          const moreCount = items.length - visibleItems.length;
+
           return `
-            <div class="cal-day ${isToday ? 'today' : ''}" data-cal-date="${c.dateStr}">
-              <span class="cal-num">${c.dayNum}</span>
-              ${(c.items || []).map(it => `
-                <span class="cal-badge ${it.type}" title="${esc(it.label)}">${esc(it.label)}</span>
-              `).join('')}
+            <div class="cal-day ${isToday ? 'today' : ''} ${isSel ? 'selected' : ''}" data-cal-date="${c.dateStr}">
+              <div class="cal-date-row">
+                ${isToday ? `<span class="cal-num-today">${c.dayNum}</span>` : `<span class="cal-num ${numClass}">${c.dayNum}</span>`}
+              </div>
+              <div class="cal-events-slot">
+                ${visibleItems.map(it => `
+                  <span class="cal-badge ${it.type}" title="${esc(it.fullLabel || it.label)}">${esc(it.shortLabel || it.label)}</span>
+                `).join('')}
+                ${moreCount > 0 ? `<span class="cal-badge more">+${moreCount}개</span>` : ''}
+              </div>
             </div>
           `;
         }).join('')}
       </div>
       <div style="display:flex;gap:12px;margin-top:10px;font-size:11.5px;color:var(--sub);justify-content:flex-end">
-        <span>🎂 생일</span>
+        <span style="color:#f43f5e">● 🎂 생일</span>
         <span style="color:#10b981">● 🏆 시합</span>
         <span style="color:#3b82f6">● ⚾ 훈련</span>
+      </div>
+      
+      <!-- 선택한 날짜의 상세 일정 카드 -->
+      <div id="calDayDetailCard" style="margin-top:12px;padding:12px 14px;background:var(--chip);border:1px solid var(--line);border-radius:10px">
+        ${(()=>{
+          const selDate = UI.selectedCalDate || todayStr;
+          const dayItems = getDayItems(selDate);
+          return `
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+              <b style="font-size:13.5px;color:var(--ink)">🗓️ ${selDate.replace(/-/g, '.')} 일정 상세</b>
+              <span style="font-size:12px;color:var(--mute)">총 ${dayItems.length}건</span>
+            </div>
+            ${dayItems.length ? dayItems.map(it => `
+              <div style="font-size:12.5px;color:var(--ink);padding:4px 0;display:flex;align-items:center;gap:6px">
+                <span>${it.type === 'bday' ? '🎂' : (it.type === 'game' ? '🏆' : '⚾')}</span>
+                <span>${esc(it.fullLabel || it.label)}</span>
+              </div>
+            `).join('') : '<div style="font-size:12px;color:var(--mute);padding:4px 0">이 날에는 등록된 일정이 없습니다.</div>'}
+          `;
+        })()}
       </div>
     </div>
   `;
@@ -15534,6 +15646,14 @@ function bindTeamClubView() {
       re();
     };
   }
+  // 날짜 클릭 시 상세 일정 갱신
+  $app.querySelectorAll('[data-cal-date]').forEach(cell => {
+    cell.onclick = () => {
+      UI.selectedCalDate = cell.dataset.calDate;
+      re();
+    };
+  });
+
   const btnNextM = document.getElementById('btnCalNextMonth');
   if (btnNextM) {
     btnNextM.onclick = () => {
