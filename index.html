@@ -8831,7 +8831,10 @@ td .lu-face-thumb,
   
   .wt-board-topline {
     display: flex !important;
-    flex-wrap: wrap !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
     gap: 5px !important;
     padding-bottom: 8px !important;
     margin-bottom: 10px !important;
@@ -9145,17 +9148,19 @@ button[data-img] {
   }
 }
 
-/* (2) 모바일 환경: 컴팩트 2줄 단정 배치 */
+/* (2) 모바일 환경: 무조건 100% 수평 양옆(좌우) 나란히 배치 */
 @media (max-width: 860px) {
   .wt-board-topline {
     display: flex !important;
-    flex-direction: column !important;
-    align-items: flex-start !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
     gap: 8px !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
     padding-bottom: 10px !important;
     margin-bottom: 12px !important;
     width: 100% !important;
+    flex-wrap: nowrap !important;
   }
   .wt-topline-left {
     display: flex !important;
@@ -10947,6 +10952,85 @@ html[data-theme="light"] .card table thead tr th:first-child {
   }
 }
 
+
+/* =========================================================================
+   [최종 종결] 상단 빨간 뱃지(슬로건)와 내 프로필 알약: 어떤 기기/해상도에서도 무조건 양옆 가로 1열 배치
+   ========================================================================= */
+.wt-board-topline,
+.board .wt-board-topline {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: 100% !important;
+  flex-wrap: nowrap !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14) !important;
+  padding-bottom: 10px !important;
+  margin-bottom: 12px !important;
+  box-sizing: border-box !important;
+}
+@media (max-width: 1200px) {
+  .wt-board-topline, .board .wt-board-topline {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    flex-wrap: nowrap !important;
+  }
+}
+@media (max-width: 860px) {
+  .wt-board-topline, .board .wt-board-topline {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    flex-wrap: nowrap !important;
+  }
+}
+@media (max-width: 600px) {
+  .wt-board-topline, .board .wt-board-topline {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    flex-wrap: nowrap !important;
+  }
+}
+@media (max-width: 480px) {
+  .wt-board-topline, .board .wt-board-topline {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    flex-wrap: nowrap !important;
+    gap: 4px !important;
+  }
+  .wt-board-topline .wt-hero-slogan {
+    font-size: 10px !important;
+    padding: 2.5px 6px !important;
+    letter-spacing: -0.2px !important;
+    margin: 0 !important;
+    flex-shrink: 0 !important;
+  }
+  .hero-me-pill {
+    padding: 2px 6px !important;
+    gap: 3px !important;
+    margin: 0 !important;
+    flex-shrink: 0 !important;
+  }
+  .hero-me-pill span {
+    font-size: 10px !important;
+  }
+  .hero-me-select {
+    font-size: 10.5px !important;
+    padding: 1.5px 4px !important;
+    max-width: 95px !important;
+  }
+}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
 </head>
