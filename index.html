@@ -11746,7 +11746,7 @@ const TABS=[
 ];
 const V={};
 const $app=document.getElementById('app');
-window.UI=null;var UI={sub:{},standComp:null,standDiv:'',gamesComp:'',gamesTeam:'',gamesMonth:'',gamesDiv:'',teamsSido:'',teamsDiv:'',rankCat:'TOT',rankQ:'',teamTab:'sum',teamPitcher:'',teamOpp:'',gameTab:'h',playerTab:'bat'};
+window.UI=null;var UI={sub:{},standComp:null,standDiv:'',gamesComp:'',gamesTeam:'',gamesMonth:'',gamesDiv:'',teamsSido:'',teamsDiv:'',rankCat:'TOT',rankQ:'',teamTab:'club',teamPitcher:'',teamOpp:'',gameTab:'h',playerTab:'bat'};
 
 V.home = (q) => {
   return V.team(q || {}, 'aSEa0076');
@@ -12370,7 +12370,7 @@ function openTeamChartModal(teamId, initialType) {
 
 V.team=(q,id)=>{
   const S=Store,t=S.team(id);if(!t)return '<div class="empty">구단을 찾을 수 없습니다</div>';
-  const A=analyzeTeam(t),r=A.rec,tab=UI.teamTab,th=teamTheme(t),tc=th.bg;let body='';
+  const A=analyzeTeam(t),r=A.rec,tab=(q&&q.tab)||UI.teamTab,th=teamTheme(t),tc=th.bg;let body='';
   const pBat = n => {
     let noChip = '';
     try {
@@ -12543,7 +12543,7 @@ V.team=(q,id)=>{
       <span>최근 ${formDots(r.form)}</span>
     </div>
   </div>
-  <div class="tabs scroll">${[['sum','요약'],['club','🧢 WT 클럽하우스'],['games','경기'],['bat','타자'],['order','타순'],['pit','투수'],['opp','상대 투수']].map(([k,l])=>`<button data-tt="${k}" class="${tab===k?'on':''}">${l}</button>`).join('')}</div>${body}`;
+  <div class="tabs scroll">${[[ 'club', isWT ? '🧢 WT 클럽하우스' : '🧢 클럽하우스' ], [ 'sum', '시즌요약' ], [ 'games', '경기' ], [ 'bat', '타자' ], [ 'order', '타순' ], [ 'pit', '투수' ], [ 'opp', '상대 투수' ]].map(([k,l])=>`<button data-tt="${k}" class="${tab===k?'on':''}">${l}</button>`).join('')}</div>${body}`;
 };
 
 function pitcherDetail(A,p){
@@ -12573,7 +12573,7 @@ function oppDetail(A,o){
     <p class="note">선발 경기 전체 타석 기준입니다 (구원 투수 이후 타석 포함).</p></div>`;
 }
 V.team.bind=()=>{
-  const _p=parse(); const _t=Store.team(_p.parts[1]);
+  const _p=parse(); const _t=Store.team(_p.parts[1]) || Store.team('aSEa0076');
   const heroSel = document.getElementById('heroMeSel');
   if (heroSel && _t) {
     heroSel.onchange = () => {
@@ -18087,7 +18087,7 @@ function render(){
   const {parts,q}=parse();const name=parts[0]||'home';const view=V[name]||V.home;
   const top={home:'home',standings:'standings',games:'games',game:'games',teams:'teams',team:'home',dugout:'dugout',players:'players',player:'dugout',match:'home',lineup:'lineup'}[name]||'home';
   const route=parts.join('/');
-  if(route!==lastRoute){ if(name==='game'&&!lastRoute.startsWith('game/'))UI.gameTab='h'; if(name==='team'&&route!==lastRoute){UI.teamTab=q.tab||'sum';UI.teamPitcher='';UI.teamOpp='';} if(name==='games'&&!q.c&&!q.t&&!q.m&&!q.div){UI.gamesComp='';UI.gamesTeam='';UI.gamesMonth='';UI.gamesDiv='';} }
+  if(route!==lastRoute){ if(name==='game'&&!lastRoute.startsWith('game/'))UI.gameTab='h'; if((name==='team'||name==='home')&&route!==lastRoute){UI.teamTab=q.tab||'club';UI.teamPitcher='';UI.teamOpp='';} if(name==='games'&&!q.c&&!q.t&&!q.m&&!q.div){UI.gamesComp='';UI.gamesTeam='';UI.gamesMonth='';UI.gamesDiv='';} }
   const changed=route!==lastRoute;if(changed){window.scrollTo(0,0);}lastRoute=route;
   $app.onclick=null;$app.innerHTML=view(q,parts[1]);view.bind&&view.bind();
   const nav=TABS.map(t=>`<a href="${t.h}" class="${t.k===top?'on':''}">${t.t}</a>`).join('');
