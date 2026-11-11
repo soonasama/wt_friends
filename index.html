@@ -3131,10 +3131,15 @@ html[data-theme="light"] td {
   color: #0f172a !important;
   border-top: 1px solid #f1f5f9 !important;
 }
-html[data-theme="light"] td.name,
-html[data-theme="light"] th:first-child {
+html[data-theme="light"] td.name {
   background: #ffffff !important;
   color: #0f172a !important;
+}
+html[data-theme="light"] table th,
+html[data-theme="light"] th,
+html[data-theme="light"] th:first-child {
+  background: #f1f5f9 !important;
+  color: #334155 !important;
 }
 html[data-theme="light"] tbody tr:hover {
   background: #f8fafc !important;
@@ -4192,9 +4197,14 @@ html[data-theme="light"] td {
   color: #0f172a !important;
   border-bottom: 1px solid #e2e8f0 !important;
 }
-html[data-theme="light"] td.name,
-html[data-theme="light"] th:first-child {
+html[data-theme="light"] td.name {
   background: #ffffff !important;
+  color: #0f172a !important;
+}
+html[data-theme="light"] table th,
+html[data-theme="light"] th,
+html[data-theme="light"] th:first-child {
+  background: #f1f5f9 !important;
   color: #0f172a !important;
 }
 html[data-theme="light"] tbody tr:hover td {
@@ -9976,14 +9986,14 @@ html[data-theme="dark"] .cl-form b {
 .cal-head.sat { color: #3b82f6; }
 /* 균등한 높이와 대칭 정렬을 위한 캘린더 날짜 셀 (글자 유무와 무관하게 모든 셀 높이 66px 고정) */
 .cal-day {
-  height: 66px;
-  min-height: 66px;
-  max-height: 66px;
+  height: 74px;
+  min-height: 74px;
+  max-height: 74px;
   box-sizing: border-box;
   background: var(--chip);
   border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 3px 2px;
+  border-radius: 10px;
+  padding: 4px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -9998,7 +10008,7 @@ html[data-theme="dark"] .cl-form b {
   border-color: rgba(16, 185, 129, 0.4);
 }
 .cal-day.today {
-  border: 1.5px solid #10b981;
+  border: 2px solid #10b981;
   background: rgba(16, 185, 129, 0.08);
 }
 .cal-day.selected {
@@ -10006,20 +10016,19 @@ html[data-theme="dark"] .cl-form b {
   background: rgba(59, 130, 246, 0.12) !important;
 }
 .cal-day.other-month {
-  opacity: 0.3;
+  opacity: 0.25;
 }
-/* 모든 날짜 숫자가 한 줄로 정확히 수평 정렬되도록 전용 헤더 바 고정 */
 .cal-date-row {
-  height: 18px;
+  height: 20px;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 2px;
+  margin-bottom: 3px;
 }
 .cal-num {
   font-weight: 700;
-  font-size: 11.5px;
+  font-size: 12px;
   line-height: 1;
 }
 .cal-num.sun { color: #f43f5e; }
@@ -10027,44 +10036,74 @@ html[data-theme="dark"] .cl-form b {
 .cal-num-today {
   background: #10b981;
   color: #ffffff;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 10.5px;
+  font-size: 11px;
   font-weight: 800;
 }
-/* 이벤트 뱃지 슬롯 영역: 고정 높이 40px로 텍스트가 넘치거나 없어도 박스가 찌그러지지 않음 */
+/* 이벤트 칩 슬롯 영역: 칩(capsule pill)들이 중앙에 단정하게 정렬되도록 구성 */
 .cal-events-slot {
   width: 100%;
-  height: 40px;
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 3px;
   overflow: hidden;
 }
+/* 넓게 늘어지던 사각형 막대를 귀엽고 통통한 캡슐 칩(Pill Chip) 형태로 대변신 */
 .cal-badge {
-  display: block;
-  width: 100%;
-  box-sizing: border-box;
-  font-size: 9.5px;
-  line-height: 14px;
-  height: 15px;
-  padding: 0 3px;
-  border-radius: 4px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-weight: 800;
-  text-align: left;
-  letter-spacing: -0.3px;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: auto !important;
+  max-width: 94% !important;
+  height: 20px !important;
+  line-height: 20px !important;
+  padding: 0 9px !important;
+  border-radius: 999px !important; /* 동글동글 캡슐 알약 형태 칩 */
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12) !important;
+  margin: 0 auto !important;
+  letter-spacing: -0.2px !important;
 }
-.cal-badge.bday { background: #f43f5e; color: #ffffff; }
-.cal-badge.game { background: #10b981; color: #ffffff; }
-.cal-badge.drill { background: #3b82f6; color: #ffffff; }
-.cal-badge.more { background: rgba(255,255,255,0.12); color: var(--mute); font-size: 9px; text-align: center; }
+.cal-badge.bday {
+  background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+.cal-badge.game {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+.cal-badge.drill {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+.cal-badge.event {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+.cal-badge.more {
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: var(--ink) !important;
+  font-size: 10px !important;
+  height: 16px !important;
+  line-height: 16px !important;
+  padding: 0 6px !important;
+}
 
 /* 출석부 명예의 전당 (Podium) */
 .podium-wrap {
@@ -10173,6 +10212,21 @@ html[data-theme="dark"] .cl-form b {
   font-size: 14px;
   font-weight: 800;
   color: #fecdd3;
+}
+
+
+/* 새로 만든 표(출석부, 주간미션 등)의 헤더 전체(첫 번째 컬럼 포함) 균일한 배경색 통일 */
+.card table thead tr th,
+.card table thead tr th:first-child {
+  background: var(--chip) !important;
+  color: var(--mute) !important;
+  border-bottom: 1.5px solid var(--line) !important;
+}
+html[data-theme="light"] .card table thead tr th,
+html[data-theme="light"] .card table thead tr th:first-child {
+  background: #f1f5f9 !important;
+  color: #475569 !important;
+  border-bottom: 2px solid #cbd5e1 !important;
 }
 
 </style>
@@ -11484,22 +11538,31 @@ V.team=(q,id)=>{
   const badgesHtml = divBadges.length ? `<span class="wt-div-badges">${divBadges.join(' ')}</span>` : '';
 
   return `<div class="board" style="background: linear-gradient(135deg, #0D043D 0%, #172554 60%, #0F5FA4 100%) !important; color: #ffffff !important; margin-bottom: 22px !important;">
-    <div class="wt-board-topline">
-      <div class="wt-topline-left">
-        ${isWT ? '<span class="wt-hero-slogan">WINNERS TOGETHER · FRIENDS</span>' : ''}
-        <span class="wt-bhead-sub">${subLine}</span>
+    <div class="wt-board-topline" style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px">
+      <!-- 1열 (최상단): 좌측 슬로건 & 우측 내 프로필 선택 (다크톤 매칭 & 챔프/퓨처 박스 바로 위에 정렬) -->
+      <div style="display:flex;justify-content:space-between;align-items:center;width:100%">
+        <div>
+          ${isWT ? '<span class="wt-hero-slogan">WINNERS TOGETHER · FRIENDS</span>' : ''}
+        </div>
+        <div>
+          ${isWT ? `
+            <div class="hero-me-pill" style="display:inline-flex;align-items:center;gap:6px;background:rgba(15, 23, 42, 0.7);border:1px solid rgba(255, 255, 255, 0.22);border-radius:999px;padding:3px 10px;backdrop-filter:blur(8px);box-shadow:0 2px 8px rgba(0,0,0,0.35)">
+              <span style="font-size:12px;color:#94a3b8;font-weight:700">👤 내 프로필:</span>
+              <select id="heroMeSel" class="hero-me-select" style="background:#0f172a !important;color:#f8fafc !important;border:1px solid rgba(255,255,255,0.2) !important;border-radius:6px !important;padding:2px 8px !important;font-size:12px !important;font-weight:800 !important;cursor:pointer;outline:none">
+                <option value="" style="background:#0f172a;color:#94a3b8">${!ClubStore.getMe(t) ? '선수 선택 (22명) ▾' : '선수 변경 ▾'}</option>
+                ${luRoster(t).map(n => `<option value="${esc(n)}" ${n===ClubStore.getMe(t)?'selected':''} style="background:#0f172a;color:#f8fafc">${esc(n)}</option>`).join('')}
+              </select>
+            </div>
+          ` : ''}
+        </div>
       </div>
-      <div class="wt-topline-right" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end">
-        ${isWT ? `
-          <div class="hero-me-pill" style="display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.35);border-radius:999px;padding:3px 10px;backdrop-filter:blur(8px);box-shadow:0 2px 8px rgba(0,0,0,0.25)">
-            <span style="font-size:12px;color:#f8fafc;font-weight:700">👤 내 프로필:</span>
-            <select id="heroMeSel" style="background:transparent;color:#ffffff;border:none;outline:none;font-size:12.5px;font-weight:800;cursor:pointer">
-              <option value="" style="background:#0f172a;color:#fff">${!ClubStore.getMe(t) ? '선수 선택 (22명) ▾' : '선수 변경 ▾'}</option>
-              ${luRoster(t).map(n => `<option value="${esc(n)}" ${n===ClubStore.getMe(t)?'selected':''} style="background:#0f172a;color:#fff">${esc(n)}</option>`).join('')}
-            </select>
-          </div>
-        ` : ''}
-        ${badgesHtml}
+
+      <!-- 2열: 좌측 클럽하우스 설명 & 우측 챔프/퓨처 뱃지 -->
+      <div style="display:flex;justify-content:space-between;align-items:center;width:100%;flex-wrap:wrap;gap:6px">
+        <span class="wt-bhead-sub">${subLine}</span>
+        <div class="wt-topline-right" style="display:flex;align-items:center;gap:6px">
+          ${badgesHtml}
+        </div>
       </div>
     </div>
     <div class="bhead">
@@ -13992,8 +14055,9 @@ const ClubStore = {
       const raw = localStorage.getItem(this.key + team.id);
       if (raw) {
         const d = JSON.parse(raw);
-        if (!d.settlements || !d.settlements.length) {
-          d.settlements = this.seedTeamData(team).settlements;
+        const seedSt = this.seedTeamData(team).settlements;
+        if (!d.settlements || !d.settlements.length || !d.settlements[0].incomes || d.settlements[0].incomes.length < 2 || (d.settlements[0].participants && d.settlements[0].participants.includes('사나'))) {
+          d.settlements = seedSt;
           try { localStorage.setItem(this.key + team.id, JSON.stringify(d)); } catch (e) {}
         }
         return d;
@@ -14051,28 +14115,30 @@ const ClubStore = {
           endDate: '2026-11-08',
           venue: '경남 밀양시 (밀양 스포츠파크)',
           participants: [
-            '사나', '은경', '은숙', '장우', '희숙', '정현', '수정',
-            '문희(#59)', '지민', '민경', '이슬', '광숙', '선희', '보영', '오드리(#OLD00)'
+            '전순아', '정은경', '이은숙', '안장우', '서희숙', '민정현', '이수정',
+            '이문희', '황지민', '구민경', '류이슬', '전광숙', '이선희', '조보영', '임은아'
           ],
           incomes: [
-            { item: '대회 참가 선수 회비 (15명 전원 납부)', amount: 1372300, note: '수납 완료' }
+            { item: '대회 지원금', amount: 1000000, note: '연맹 지원금' },
+            { item: '위로금(레이크호텔)', amount: 150000, note: '숙소 위로금' },
+            { item: '팀회비 지원', amount: 222300, note: '구단 회비 지원' }
           ],
           expenses: [
-            { cat: '점심', item: '강가네 김밥', amount: 66000 },
-            { cat: '간식', item: '치킨·닭똥집', amount: 34000 },
+            { cat: '숙소', item: '숙소(7개)', amount: 350000 },
             { cat: '식사', item: '쌈밥', amount: 244000 },
             { cat: '식사', item: '국밥', amount: 118000 },
-            { cat: '숙박', item: '밀양 숙소', amount: 350000 },
-            { cat: '음료', item: '커피', amount: 59000 },
+            { cat: '점심', item: '강가네 김밥', amount: 66000 },
+            { cat: '간식', item: '치킨 닭똥집', amount: 34000 },
+            { cat: '음료', item: '커피 (2번)', amount: 59000 },
             { cat: '약품', item: '쌍화탕', amount: 12300 },
-            { cat: '교통', item: '교통지원 (차량 3대 지원비)', amount: 489000 }
+            { cat: '교통', item: '교통지원', amount: 489000 }
           ],
           sponsorships: [
-            { person: '서희숙', item: '마트 장보기, 샤인머스캣 🍇' },
-            { person: '류이슬', item: '바나나, 카스타드 🍌' },
-            { person: '구민경', item: '귤 한 박스 🍊' },
-            { person: '안장우', item: '태산만두(군만두, 무침만두, 찐교스) 🥟' },
-            { person: '황지민', item: '일요일 저녁 홈런빵, 탕수육 파티 ⚾' }
+            { person: '희숙', item: '마트, 샤인머스캣 🍇' },
+            { person: '이슬', item: '바나나, 카스타드 🍌' },
+            { person: '민경', item: '귤 한 박스 🍊' },
+            { person: '장우', item: '태산만두(군만두, 무침만두, 찐교스) 🥟' },
+            { person: '지민', item: '일요일 저녁 홈런빵, 탕수육 파티 ⚾' }
           ],
           notes: '수입 1,372,300원 / 지출 1,372,300원 잔액 0원으로 투명하게 정산 완료되었습니다.'
         }
@@ -14555,10 +14621,12 @@ function renderClubCalendarSection(t, data, tc, me) {
     // 생일 (셀 안에는 컴팩트하게 '🎂 이름'만 넣어 넘치지 않게 단정 정렬)
     rosterPlayers.forEach(p => {
       if (p.birth && p.birth.slice(5) === md) {
+        const bdayDesc = `🎂 ${p.name}(#${p.no||''}) 생일 축하!`;
         items.push({
           type: 'bday',
+          label: bdayDesc,
           shortLabel: `🎂 ${p.name}`,
-          fullLabel: `🎂 ${p.name}(#${p.no||''}) 생일 축하!`,
+          fullLabel: bdayDesc,
           date: dateStr
         });
       }
@@ -14567,10 +14635,12 @@ function renderClubCalendarSection(t, data, tc, me) {
     games.forEach(g => {
       if (g.date === dateStr) {
         const oppName = g.home.i === t.i ? g.away.short : g.home.short;
+        const gameDesc = `🏆 [시합] vs ${oppName} (${g.time || '11:00'})`;
         items.push({
           type: 'game',
+          label: gameDesc,
           shortLabel: `🏆 vs ${oppName}`,
-          fullLabel: `🏆 [시합] vs ${oppName} (${g.time || '11:00'})`,
+          fullLabel: gameDesc,
           date: dateStr
         });
       }
@@ -14579,10 +14649,12 @@ function renderClubCalendarSection(t, data, tc, me) {
     events.forEach(e => {
       if (e.date === dateStr) {
         const icon = e.type === '모임' ? '🍻' : (e.type === '공식대회' ? '🏆' : '⚾');
+        const drillDesc = `${icon} ${e.title} (${e.time || '10:00'})${e.venue ? ' - ' + e.venue : ''}`;
         items.push({
           type: e.type === '모임' ? 'event' : (e.type === '공식대회' ? 'game' : 'drill'),
+          label: drillDesc,
           shortLabel: `${icon} ${e.type || '훈련'}`,
-          fullLabel: `${icon} ${e.title} (${e.time || '10:00'}) - ${e.venue || ''}`,
+          fullLabel: drillDesc,
           date: dateStr,
           ev: e
         });
@@ -14630,8 +14702,8 @@ function renderClubCalendarSection(t, data, tc, me) {
         </div>
         ${thisWeekItems.length ? thisWeekItems.map(it => `
           <div class="radar-item ${it.type}">
-            <span>${esc(it.label)}</span>
-            <span style="font-size:11.5px;color:var(--mute)">${it.date.slice(5).replace('-','.')}</span>
+            <span style="font-weight:700">${esc(it.fullLabel || it.label)}</span>
+            <span style="font-size:11.5px;color:var(--mute);font-weight:600">${it.date.slice(5).replace('-','.')}</span>
           </div>
         `).join('') : '<div style="font-size:12.5px;color:var(--mute);padding:8px 0">이번 주 예정된 일정이 없습니다.</div>'}
       </div>
@@ -14643,8 +14715,8 @@ function renderClubCalendarSection(t, data, tc, me) {
         </div>
         ${nextWeekItems.length ? nextWeekItems.map(it => `
           <div class="radar-item ${it.type}">
-            <span>${esc(it.label)}</span>
-            <span style="font-size:11.5px;color:var(--mute)">${it.date.slice(5).replace('-','.')}</span>
+            <span style="font-weight:700">${esc(it.fullLabel || it.label)}</span>
+            <span style="font-size:11.5px;color:var(--mute);font-weight:600">${it.date.slice(5).replace('-','.')}</span>
           </div>
         `).join('') : '<div style="font-size:12.5px;color:var(--mute);padding:8px 0">다음 주 예정된 일정이 없습니다.</div>'}
       </div>
@@ -14734,7 +14806,8 @@ function renderClubCalendarSection(t, data, tc, me) {
 // 2. 주간 미션 & 스탬프북 렌더러
 function renderClubMissionSection(t, data, tc, me) {
   const S = Store;
-  const roster = luRoster(t);
+  // 체력훈련 미션 대상에서 코칭스태프(김현우, 김성현) 제외하고 순수 선수단 기준으로 설정
+  const roster = luRoster(t).filter(n => n !== '김현우' && n !== '김성현');
   const missions = data.missions || [
     {
       id: 'm_202611_w2',
@@ -14873,7 +14946,8 @@ function renderClubMissionSection(t, data, tc, me) {
 function renderClubAttendanceSection(t, data, tc, me) {
   const S = Store;
   const events = data.events || [];
-  const roster = luRoster(t);
+  // 출석부 통계 대상에서 코칭스태프(김현우, 김성현) 제외하고 순수 출전 선수단 기준으로 집계
+  const roster = luRoster(t).filter(n => n !== '김현우' && n !== '김성현');
 
   // 현재 출석 체크를 진행할 활성 일정 (UI.activeAttendEvId)
   if (!UI.activeAttendEvId && events.length) {
@@ -15028,6 +15102,14 @@ function renderClubSettlementView(t, data, tc, me) {
   const settlements = data.settlements || [];
   const curId = UI.curSettlementId;
 
+  // 전체 등록 선수 및 게스트 명단 풀
+  // 실명 기반 팀원 명단 풀 + 이문희, 임은아, 오현경 포함
+  const allRosterPool = [
+    '전순아', '정은경', '이은숙', '안장우', '서희숙', '민정현', '이수정',
+    '이문희', '황지민', '구민경', '류이슬', '전광숙', '이선희', '조보영', '임은아',
+    '오현경', '조우림', '최수남', '이정은', '송백설', '원미리', '박세영', '김설빈'
+  ];
+
   // 1. 상세 / 편집 모드 (curId가 지정되었거나 'new'인 경우)
   if (curId) {
     const isNew = curId === 'new';
@@ -15035,19 +15117,38 @@ function renderClubSettlementView(t, data, tc, me) {
     if (!st || isNew) {
       st = {
         id: isNew ? ('ST_' + Date.now().toString(36)) : curId,
-        title: isNew ? '새 팀 일정 정산서' : '',
+        title: isNew ? '2026 프로야구선수협회장기 밀양 대회' : '',
         type: '공식대회',
-        startDate: new Date().toISOString().slice(0, 10),
-        endDate: new Date().toISOString().slice(0, 10),
+        startDate: '2026-11-07',
+        endDate: '2026-11-08',
         venue: '밀양 스포츠파크',
-        participants: ['사나', '은경', '은숙', '장우', '희숙', '정현', '수정', '문희(#59)', '지민', '민경', '이슬', '광숙', '선희', '보영', '오드리(#OLD00)'],
-        incomes: [{ item: '회비 수납', amount: 0, note: '' }],
-        expenses: [
-          { cat: '식사', item: '점심 식대', amount: 0 },
-          { cat: '숙박', item: '숙소 예약', amount: 0 }
+        participants: [
+          '전순아', '정은경', '이은숙', '안장우', '서희숙', '민정현', '이수정',
+          '이문희', '황지민', '구민경', '류이슬', '전광숙', '이선희', '조보영', '임은아'
         ],
-        sponsorships: [],
-        notes: ''
+        incomes: [
+          { item: '대회 지원금', amount: 1000000, note: '연맹 지원금' },
+          { item: '위로금(레이크호텔)', amount: 150000, note: '숙소 위로금' },
+          { item: '팀회비 지원', amount: 222300, note: '구단 회비 지원' }
+        ],
+        expenses: [
+          { cat: '숙소', item: '숙소(7개)', amount: 350000 },
+          { cat: '식사', item: '쌈밥', amount: 244000 },
+          { cat: '식사', item: '국밥', amount: 118000 },
+          { cat: '점심', item: '강가네 김밥', amount: 66000 },
+          { cat: '간식', item: '치킨 닭똥집', amount: 34000 },
+          { cat: '음료', item: '커피 (2번)', amount: 59000 },
+          { cat: '약품', item: '쌍화탕', amount: 12300 },
+          { cat: '교통', item: '교통지원', amount: 489000 }
+        ],
+        sponsorships: [
+          { person: '희숙', item: '마트, 샤인머스캣 🍇' },
+          { person: '이슬', item: '바나나, 카스타드 🍌' },
+          { person: '민경', item: '귤 한 박스 🍊' },
+          { person: '장우', item: '태산만두(군만두, 무침만두, 찐교스) 🥟' },
+          { person: '지민', item: '일요일 저녁 홈런빵, 탕수육 파티 ⚾' }
+        ],
+        notes: '수입 1,372,300원 / 지출 1,372,300원 잔액 0원으로 정산 완료'
       };
     }
 
@@ -15056,7 +15157,7 @@ function renderClubSettlementView(t, data, tc, me) {
     const balance = totalIncome - totalExpense;
 
     return `
-      <div style="margin: 14px 0 10px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px">
+      <div style="margin: 10px 0 14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px">
         <button type="button" class="cl-btn ghost" id="btnStBack" style="font-weight:700">‹ 정산서 목록으로 돌아가기</button>
         <div style="display:flex; gap:8px">
           <button type="button" class="cl-btn ghost sm" id="btnStCopyKakao" style="font-weight:700">📋 카톡 문구 복사</button>
@@ -15065,13 +15166,16 @@ function renderClubSettlementView(t, data, tc, me) {
       </div>
 
       <div class="grid g2" style="gap:20px; align-items:start">
-        <!-- 왼쪽: 실시간 영수증 카드 미리보기 (출력 타겟) -->
+        <!-- 왼쪽: 실시간 영수증 카드 미리보기 (화이트 영수증 용지) -->
         <div>
-          <div style="font-size:13px; font-weight:800; color:var(--mute); margin-bottom:8px">🧾 실시간 영수증 미리보기 (이미지 출력용)</div>
-          <div class="receipt-paper" id="settlementReceiptCard">
+          <div style="font-size:14px; font-weight:800; color:var(--ink); margin-bottom:10px; height:24px; display:flex; align-items:center">
+            <span>🧾 실시간 영수증 미리보기</span>
+            <small style="color:var(--mute); font-size:11.5px; margin-left:6px">(이미지 출력용)</small>
+          </div>
+          <div class="receipt-paper" id="settlementReceiptCard" style="margin-top:0">
             <div class="receipt-header">
               <div class="receipt-logo">⚾ ${esc(t.short)} OFFICIAL RECEIPT</div>
-              <div class="receipt-title">${esc(st.title || '팀 활동 정산 영수증')}</div>
+              <div class="receipt-title">${esc(st.title || '대회 정산 영수증')}</div>
               <div class="receipt-sub">
                 <span>🗓️ ${esc(st.startDate)} ${st.endDate && st.endDate !== st.startDate ? '~ ' + esc(st.endDate) : ''}</span>
                 <span> · 📍 ${esc(st.venue || '대회 구장')}</span>
@@ -15080,11 +15184,28 @@ function renderClubSettlementView(t, data, tc, me) {
 
             <div class="receipt-section">
               <div class="receipt-sec-title">
-                <span>👥 참석 선수 명단</span>
-                <span>총 ${(st.participants || []).length}명</span>
+                <span>👥 참석 선수 (${(st.participants || []).length}명)</span>
+                <span>정산 완료</span>
               </div>
               <div style="font-size:12.5px; color:#334155; line-height:1.6; word-break:keep-all; background:#f8fafc; padding:8px 10px; border-radius:8px">
                 ${(st.participants || []).map(p => `<span style="display:inline-block; margin-right:6px">✓ <b>${esc(p)}</b></span>`).join('')}
+              </div>
+            </div>
+
+            <div class="receipt-section">
+              <div class="receipt-sec-title">
+                <span>💰 수입 내역 (Income)</span>
+                <span>금액</span>
+              </div>
+              ${(st.incomes || []).map((inc, i) => `
+                <div class="receipt-row">
+                  <span>${i+1}. ${esc(inc.item)} ${inc.note ? `<small style="color:#64748b">(${esc(inc.note)})</small>` : ''}</span>
+                  <b>₩${(Number(inc.amount) || 0).toLocaleString()}</b>
+                </div>
+              `).join('')}
+              <div class="receipt-row bold">
+                <span>총 수입 합계</span>
+                <span style="color:#0284c7; font-size:15px">₩${totalIncome.toLocaleString()}</span>
               </div>
             </div>
 
@@ -15105,39 +15226,19 @@ function renderClubSettlementView(t, data, tc, me) {
               </div>
             </div>
 
-            <div class="receipt-section">
-              <div class="receipt-sec-title">
-                <span>💰 수입 및 회비 내역 (Income)</span>
-                <span>금액</span>
-              </div>
-              ${(st.incomes || []).map(inc => `
-                <div class="receipt-row">
-                  <span>• ${esc(inc.item)}</span>
-                  <b>₩${(Number(inc.amount) || 0).toLocaleString()}</b>
-                </div>
-              `).join('')}
-              <div class="receipt-row bold">
-                <span>총 수입 합계</span>
-                <span style="color:#0284c7; font-size:15px">₩${totalIncome.toLocaleString()}</span>
-              </div>
-            </div>
-
-            <div class="receipt-summary-box">
-              <div style="display:flex; justify-content:space-between; align-items:center; font-size:15px; font-weight:900">
-                <span>최종 잔액 (Balance)</span>
-                <span style="color:${balance === 0 ? '#10b981' : (balance > 0 ? '#0284c7' : '#e11d48')}">
-                  ₩${balance.toLocaleString()} ${balance === 0 ? '(0원 완료 ✓)' : ''}
+            <div class="receipt-summary-box" style="padding:10px 14px">
+              <div style="display:flex; justify-content:space-between; align-items:center; font-size:14.5px; font-weight:900; flex-wrap:nowrap">
+                <span style="white-space:nowrap; flex-shrink:0">최종 잔액</span>
+                <span style="white-space:nowrap; color:${balance === 0 ? '#10b981' : '#e11d48'}; font-size:15px">
+                  ₩${balance.toLocaleString()} ${balance === 0 ? '(0원 정산 완료 ✓)' : ''}
                 </span>
-              </div>
-              <div style="font-size:11.5px; color:#64748b; margin-top:4px">
-                ${balance === 0 ? '✓ 수입과 지출이 정확히 일치하여 잔액 0원으로 정산 완료되었습니다.' : (balance > 0 ? '남은 잔액은 차기 팀 회비로 이월됩니다.' : '초과 지출분 정산이 필요합니다.')}
               </div>
             </div>
 
             ${(st.sponsorships && st.sponsorships.length) ? `
               <div class="receipt-thanks-box">
                 <div class="receipt-thanks-title">
-                  <span>🎁 따뜻한 찬조 & 후원 감사 (Special Thanks)</span>
+                  <span>🎁 따뜻한 후원 & 찬조 감사 (Special Thanks)</span>
                 </div>
                 ${st.sponsorships.map(sp => `
                   <div class="receipt-thanks-item">• <b>${esc(sp.person)}</b>: ${esc(sp.item)}</div>
@@ -15152,14 +15253,19 @@ function renderClubSettlementView(t, data, tc, me) {
           </div>
         </div>
 
-        <!-- 오른쪽: 정산서 편집 폼 -->
+        <!-- 오른쪽: 칩 선택 & 항목별 동적 행 입력 폼 -->
         <div>
-          <form class="cl-form" id="stEditForm" style="display:grid; gap:12px; margin-top:0">
-            <b style="font-size:16px; color:var(--ink)">✏️ 정산서 항목 편집</b>
+          <div style="font-size:14px; font-weight:800; color:var(--ink); margin-bottom:10px; height:24px; display:flex; align-items:center">
+            <span>✏️ 정산서 상세 및 항목 입력</span>
+            <small style="color:var(--mute); font-size:11.5px; margin-left:6px">(실시간 반영)</small>
+          </div>
+          <form class="cl-form" id="stEditForm" style="display:grid; gap:14px; margin-top:0">
+            
             <div>
-              <label style="font-size:12px; color:var(--mute); font-weight:700">정산서 제목</label>
+              <label style="font-size:12px; color:var(--mute); font-weight:700">대회/행사 제목</label>
               <input type="text" id="stInTitle" value="${esc(st.title)}" required style="width:100%;margin-top:4px">
             </div>
+
             <div class="cl-form-row">
               <div>
                 <label style="font-size:12px; color:var(--mute); font-weight:700">시작일</label>
@@ -15175,36 +15281,94 @@ function renderClubSettlementView(t, data, tc, me) {
               </div>
             </div>
 
+            <!-- 1. 참석자 칩 선택 시스템 -->
             <div>
-              <label style="font-size:12px; color:var(--mute); font-weight:700">참석자 명단 (쉼표로 구분)</label>
-              <textarea id="stInParticipants" rows="2" style="width:100%;margin-top:4px" placeholder="사나, 은경, 은숙, ...">${esc((st.participants || []).join(', '))}</textarea>
-            </div>
-
-            <div>
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px">
-                <label style="font-size:12px; color:var(--mute); font-weight:700">지출 내역 목록 (분류 | 항목명 | 금액)</label>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px">
+                <label style="font-size:12.5px; color:var(--ink); font-weight:800">
+                  👥 참석자 선택 칩 (<span id="stPartCountDisplay" style="color:#10b981">${(st.participants || []).length}명 선택됨</span>)
+                </label>
+                <div style="display:flex; gap:6px">
+                  <button type="button" class="cl-btn ghost sm" id="btnStSelectAllParts" style="font-size:11px;padding:2px 6px">15명 기본선택</button>
+                  <button type="button" class="cl-btn ghost sm" id="btnStClearAllParts" style="font-size:11px;padding:2px 6px">초기화</button>
+                </div>
               </div>
-              <textarea id="stInExpensesText" rows="6" style="width:100%;font-family:monospace;font-size:12.5px" placeholder="점심 | 강가네 김밥 | 66000
-간식 | 치킨·닭똥집 | 34000">${esc((st.expenses || []).map(e => `${e.cat || '기타'} | ${e.item} | ${e.amount}`).join('\n'))}</textarea>
-              <div style="font-size:11.5px; color:var(--mute); margin-top:2px">한 줄에 하나씩: <b>분류 | 항목명 | 금액</b> 형식으로 입력하세요.</div>
+              <div class="st-parts-chip-grid" style="display:flex; flex-wrap:wrap; gap:6px; background:var(--chip); padding:10px; border-radius:10px; border:1px solid var(--line)">
+                ${allRosterPool.map(name => {
+                  const isSel = (st.participants || []).includes(name);
+                  return `
+                    <button type="button" class="st-part-chip ${isSel ? 'active' : ''}" data-part-name="${esc(name)}" style="background:${isSel ? '#10b981' : 'var(--card)'}; color:${isSel ? '#ffffff' : 'var(--ink)'}; border:1px solid ${isSel ? '#10b981' : 'var(--line)'}; border-radius:999px; padding:4px 10px; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.15s">
+                      ${isSel ? '✓ ' : ''}${esc(name)}
+                    </button>
+                  `;
+                }).join('')}
+              </div>
             </div>
 
-            <div>
-              <label style="font-size:12px; color:var(--mute); font-weight:700">수입 / 회비 내역 (항목명 | 금액)</label>
-              <textarea id="stInIncomesText" rows="2" style="width:100%;font-family:monospace;font-size:12.5px;margin-top:4px" placeholder="대회 회비 (15명) | 1372300">${esc((st.incomes || []).map(inc => `${inc.item} | ${inc.amount}`).join('\n'))}</textarea>
-              <div style="font-size:11.5px; color:var(--mute); margin-top:2px">한 줄에 하나씩: <b>항목명 | 금액</b> 형식으로 입력하세요.</div>
+            <!-- 2. 수입 내역 항목별 입력 테이블 -->
+            <div style="background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px">
+                <b style="font-size:13px; color:var(--ink)">💰 수입 항목 입력 (<span style="color:#0284c7">총 ₩${totalIncome.toLocaleString()}</span>)</b>
+                <button type="button" class="cl-btn sm ghost" id="btnAddIncomeRow" style="font-size:11.5px">＋ 항목 추가</button>
+              </div>
+              <div id="stIncomesRowContainer" style="display:grid; gap:6px">
+                ${(st.incomes || []).map((inc, idx) => `
+                  <div class="st-income-row" style="display:flex; gap:6px; align-items:center">
+                    <input type="text" class="st-inc-name" value="${esc(inc.item)}" placeholder="항목명 (예: 대회 지원금)" required style="flex:2">
+                    <input type="number" class="st-inc-amt" value="${inc.amount}" placeholder="금액" required style="flex:1.5">
+                    <input type="text" class="st-inc-note" value="${esc(inc.note||'')}" placeholder="비고" style="flex:1.2">
+                    <button type="button" class="cl-btn sm ghost btn-del-row" style="color:#ef4444;padding:4px 8px">✕</button>
+                  </div>
+                `).join('')}
+              </div>
             </div>
 
-            <div>
-              <label style="font-size:12px; color:var(--mute); font-weight:700">찬조 & 후원 물품 (찬조자 | 찬조물품)</label>
-              <textarea id="stInSponsText" rows="4" style="width:100%;font-family:monospace;font-size:12.5px;margin-top:4px" placeholder="희숙 | 마트, 샤인머스캣
-민경 | 귤 한 박스">${esc((st.sponsorships || []).map(sp => `${sp.person} | ${sp.item}`).join('\n'))}</textarea>
-              <div style="font-size:11.5px; color:var(--mute); margin-top:2px">한 줄에 하나씩: <b>찬조자 | 찬조물품</b> 형식으로 입력하세요.</div>
+            <!-- 3. 지출 내역 항목별 입력 테이블 -->
+            <div style="background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px">
+                <b style="font-size:13px; color:var(--ink)">🧾 지출 내역 입력 (<span style="color:#e11d48">총 ₩${totalExpense.toLocaleString()}</span>)</b>
+                <button type="button" class="cl-btn sm ghost" id="btnAddExpenseRow" style="font-size:11.5px">＋ 항목 추가</button>
+              </div>
+              <div id="stExpensesRowContainer" style="display:grid; gap:6px">
+                ${(st.expenses || []).map((ex, idx) => `
+                  <div class="st-expense-row" style="display:flex; gap:6px; align-items:center">
+                    <select class="st-exp-cat" style="flex:1;padding:6px;border-radius:6px;background:var(--chip);color:var(--ink);border:1px solid var(--line);font-size:12px">
+                      <option value="숙소" ${ex.cat==='숙소'?'selected':''}>숙소</option>
+                      <option value="식사" ${ex.cat==='식사'?'selected':''}>식사</option>
+                      <option value="점심" ${ex.cat==='점심'?'selected':''}>점심</option>
+                      <option value="간식" ${ex.cat==='간식'?'selected':''}>간식</option>
+                      <option value="음료" ${ex.cat==='음료'?'selected':''}>음료</option>
+                      <option value="약품" ${ex.cat==='약품'?'selected':''}>약품</option>
+                      <option value="교통" ${ex.cat==='교통'?'selected':''}>교통</option>
+                      <option value="기타" ${ex.cat==='기타'?'selected':''}>기타</option>
+                    </select>
+                    <input type="text" class="st-exp-name" value="${esc(ex.item)}" placeholder="지출 내용 (예: 쌈밥, 김밥)" required style="flex:2">
+                    <input type="number" class="st-exp-amt" value="${ex.amount}" placeholder="금액" required style="flex:1.5">
+                    <button type="button" class="cl-btn sm ghost btn-del-row" style="color:#ef4444;padding:4px 8px">✕</button>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+
+            <!-- 4. 후원/찬조 항목별 입력 테이블 -->
+            <div style="background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px">
+                <b style="font-size:13px; color:var(--ink)">🎁 후원 & 찬조 물품 입력</b>
+                <button type="button" class="cl-btn sm ghost" id="btnAddSponRow" style="font-size:11.5px">＋ 항목 추가</button>
+              </div>
+              <div id="stSponRowContainer" style="display:grid; gap:6px">
+                ${(st.sponsorships || []).map((sp, idx) => `
+                  <div class="st-spon-row" style="display:flex; gap:6px; align-items:center">
+                    <input type="text" class="st-spon-person" value="${esc(sp.person)}" placeholder="후원자 (예: 희숙, 장우)" required style="flex:1.5">
+                    <input type="text" class="st-spon-item" value="${esc(sp.item)}" placeholder="물품 (예: 마트, 샤인머스캣)" required style="flex:3">
+                    <button type="button" class="cl-btn sm ghost btn-del-row" style="color:#ef4444;padding:4px 8px">✕</button>
+                  </div>
+                `).join('')}
+              </div>
             </div>
 
             <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:10px">
               <button type="button" class="cl-btn ghost" id="btnStCancelEdit">취소</button>
-              <button type="submit" class="cl-btn pri btn-action-green" style="background:#10b981 !important;color:#ffffff !important;font-weight:800">✓ 정산서 저장 및 반영</button>
+              <button type="submit" class="cl-btn pri btn-action-green" style="background:#10b981 !important;color:#ffffff !important;font-weight:800;padding:9px 20px">✓ 정산서 저장 및 반영</button>
             </div>
           </form>
         </div>
@@ -15212,62 +15376,74 @@ function renderClubSettlementView(t, data, tc, me) {
     `;
   }
 
-  // 2. 목록 뷰 (정산서 리스트 모드)
+  // 2. 목록 뷰 (라인업 목록 .clips 카드 그리드 스타일 완벽 적용!)
   return `
     <div style="display:flex; justify-content:space-between; align-items:center; margin:10px 0 16px; flex-wrap:wrap; gap:10px">
       <div>
-        <b style="font-size:16px; color:var(--ink)">💰 ${esc(t.short)} 팀 정산실 & 회계 관리</b>
-        <div class="sub">대회 원정 및 행사 지출·찬조·회비를 투명하게 정산하고, 영수증 카드로 출력해 카톡에 공유하세요.</div>
+        <b style="font-size:16px; color:var(--ink)">💰 ${esc(t.short)} 대회 정산서 보관함</b>
+        <div class="sub">대회 원정 수입·지출 내역을 라인업 카드 형식으로 관리하고, 영수증 카드를 출력해 카톡에 공유하세요.</div>
       </div>
-      <button type="button" class="cl-btn pri btn-action-green" id="btnNewSettlement" style="background:#10b981 !important;color:#ffffff !important;font-weight:800">＋ 새 정산서 작성</button>
     </div>
 
-    <div class="grid" style="gap:14px">
-      ${settlements.length ? settlements.map(st => {
+    <!-- 라인업 카드 목록 형태의 .clips 그리드 컨테이너 -->
+    <div class="clips" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:16px">
+      ${settlements.map(st => {
         const totalInc = (st.incomes || []).reduce((a, b) => a + (Number(b.amount) || 0), 0);
         const totalExp = (st.expenses || []).reduce((a, b) => a + (Number(b.amount) || 0), 0);
         const bal = totalInc - totalExp;
-        const partCount = (st.participants || []).length;
+        const partList = st.participants || [];
+        const partStr = partList.slice(0, 5).join(' ') + (partList.length > 5 ? ` 외 ${partList.length - 5}명` : '');
 
         return `
-          <div class="st-card">
-            <div class="st-top">
-              <div>
-                <span class="st-badge">✓ 정산 완료</span>
-                <div class="st-title" style="margin-top:6px">${esc(st.title)}</div>
+          <div class="clip" style="--tc:#2563eb; cursor:pointer; padding:0; overflow:hidden">
+            <div class="paper" style="padding:16px">
+              <div class="ph" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:8px">
+                <span class="ph-badge" style="background:#2563eb; color:#ffffff; font-size:11px; font-weight:800; padding:2px 8px; border-radius:4px">${esc(t.short)}</span>
+                <span style="font-size:12px; font-weight:800; color:#10b981; background:rgba(16,185,129,0.15); padding:2px 8px; border-radius:6px">✓ 정산 완료 (잔액 0원)</span>
               </div>
-              <div style="display:flex; gap:6px">
-                <button type="button" class="cl-btn ghost sm" data-st-edit="${esc(st.id)}" style="font-weight:700">🧾 영수증 보기 / 편집</button>
-                <button type="button" class="cl-btn ghost sm" data-st-del="${esc(st.id)}" data-team-id="${esc(t.id)}" title="정산서 삭제" style="color:var(--mute)">✕</button>
+              <dl style="margin:0; font-size:13px; display:grid; grid-template-columns:auto 1fr; gap:6px 12px; line-height:1.4">
+                <dt style="color:var(--mute); font-weight:700">대회</dt>
+                <dd style="color:var(--ink); font-weight:800; margin:0">${esc(st.title)}</dd>
+                <dt style="color:var(--mute); font-weight:700">일시</dt>
+                <dd style="color:var(--ink); font-weight:700; margin:0">${esc(st.startDate)} ~ ${esc(st.endDate)}</dd>
+                <dt style="color:var(--mute); font-weight:700">장소</dt>
+                <dd style="color:var(--ink); margin:0">${esc(st.venue)}</dd>
+                <dt style="color:var(--mute); font-weight:700">참석</dt>
+                <dd style="color:var(--ink); margin:0"><b>${partList.length}명</b> <small style="color:var(--sub)">(${partStr})</small></dd>
+                <dt style="color:var(--mute); font-weight:700">수입</dt>
+                <dd style="color:#38bdf8; font-weight:800; margin:0">₩ ${totalInc.toLocaleString()}</dd>
+                <dt style="color:var(--mute); font-weight:700">지출</dt>
+                <dd style="color:#f43f5e; font-weight:800; margin:0">₩ ${totalExp.toLocaleString()}</dd>
+                <dt style="color:var(--mute); font-weight:700">잔액</dt>
+                <dd style="color:#10b981; font-weight:900; margin:0">₩ ${bal.toLocaleString()} (0원 일치 ✓)</dd>
+              </dl>
+              ${st.sponsorships && st.sponsorships.length ? `
+                <div style="font-size:11.5px; color:var(--ink2); background:var(--chip); border:1px solid var(--line); padding:6px 10px; border-radius:6px; margin-top:10px; line-height:1.4">
+                  🎁 <b>후원:</b> ${st.sponsorships.map(s => `${esc(s.person)}(${esc(s.item)})`).join(', ')}
+                </div>
+              ` : ''}
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px; pt-2; border-top:1px dashed var(--line); padding-top:10px">
+                <button type="button" class="cl-btn sm pri btn-action-green" data-st-edit="${esc(st.id)}" style="background:#10b981 !important; color:#ffffff !important; font-weight:800">
+                  🧾 영수증 상세 / 편집 ›
+                </button>
+                <button type="button" class="cl-btn sm ghost" data-st-del="${esc(st.id)}" data-team-id="${esc(t.id)}" style="color:var(--mute); font-size:11px">
+                  ✕ 삭제
+                </button>
               </div>
             </div>
-            <div class="st-meta">
-              <span>🗓️ ${esc(st.startDate)} ${st.endDate && st.endDate !== st.startDate ? '~ ' + esc(st.endDate) : ''}</span>
-              <span>📍 ${esc(st.venue)}</span>
-              <span>👥 참석 ${partCount}명</span>
-            </div>
-            <div class="st-metrics">
-              <span class="st-chip income">수입 ₩${totalInc.toLocaleString()}</span>
-              <span class="st-chip expense">지출 ₩${totalExp.toLocaleString()}</span>
-              <span class="st-chip balance">잔액 ₩${bal.toLocaleString()}</span>
-            </div>
-            ${st.sponsorships && st.sponsorships.length ? `
-              <div style="font-size:12.5px; color:var(--ink2); background:var(--chip); border:1px solid var(--line); padding:8px 12px; border-radius:8px">
-                🎁 <b>찬조 감사:</b> ${st.sponsorships.map(s => `${esc(s.person)}(${esc(s.item)})`).join(', ')}
-              </div>
-            ` : ''}
           </div>
         `;
-      }).join('') : `
-        <div class="empty" style="padding:28px 16px; text-align:center; color:var(--ink2); background:var(--card); border:1px dashed var(--line); border-radius:12px">
-          등록된 정산서가 없습니다.<br>
-          <b>[＋ 새 정산서 작성]</b>을 눌러 원정 대회나 팀 행사 정산서를 작성해보세요!
-        </div>
-      `}
+      }).join('')}
+
+      <!-- 라인업 작성기의 '+ 새 라인업 만들기'와 완벽히 동일한 카드 버튼 -->
+      <a class="clip add" id="btnNewSettlementCard" href="javascript:void(0)" style="--tc:#2563eb; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:260px; border:2px dashed rgba(37,99,235,0.4); border-radius:16px; background:rgba(37,99,235,0.05); text-decoration:none; transition:all 0.2s">
+        <div style="font-size:36px; color:#2563eb; margin-bottom:8px">＋</div>
+        <span style="font-size:16px; font-weight:900; color:var(--ink)">새 정산서 만들기</span>
+        <span style="font-size:12px; color:var(--mute); margin-top:4px">새로운 원정 대회 및 모임 정산서 작성</span>
+      </a>
     </div>
   `;
 }
-
 
 const GOOGLE_APPS_SCRIPT_SAMPLE = `/**
  * ⚾ 2026 WT프렌즈 통합 데이터베이스(DB) - 통합 Apps Script (라인업 DB + 클럽하우스 연동)
@@ -15795,10 +15971,151 @@ function bindTeamClubView() {
   }
 
   // --- WT 정산실 전용 이벤트 바인딩 ---
+  const btnNewStCard = document.getElementById('btnNewSettlementCard');
+  if (btnNewStCard) {
+    btnNewStCard.onclick = () => { UI.curSettlementId = 'new'; const y = window.scrollY; render(); window.scrollTo(0, y); };
+  }
   const btnNewSt = document.getElementById('btnNewSettlement');
   if (btnNewSt) {
     btnNewSt.onclick = () => { UI.curSettlementId = 'new'; const y = window.scrollY; render(); window.scrollTo(0, y); };
   }
+
+  // 1. 참석자 칩 클릭 토글 이벤트
+  $app.querySelectorAll('.st-part-chip').forEach(btn => {
+    btn.onclick = (e) => {
+      e.preventDefault();
+      const isActive = btn.classList.contains('active');
+      if (isActive) {
+        btn.classList.remove('active');
+        btn.style.background = 'var(--card)';
+        btn.style.color = 'var(--ink)';
+        btn.style.borderColor = 'var(--line)';
+        btn.textContent = btn.dataset.partName;
+      } else {
+        btn.classList.add('active');
+        btn.style.background = '#10b981';
+        btn.style.color = '#ffffff';
+        btn.style.borderColor = '#10b981';
+        btn.textContent = '✓ ' + btn.dataset.partName;
+      }
+      const count = $app.querySelectorAll('.st-part-chip.active').length;
+      const countDisplay = document.getElementById('stPartCountDisplay');
+      if (countDisplay) countDisplay.textContent = count + '명 선택됨';
+    };
+  });
+
+  const btnSelectAllParts = document.getElementById('btnStSelectAllParts');
+  if (btnSelectAllParts) {
+    btnSelectAllParts.onclick = () => {
+      const default15 = ['전순아', '정은경', '이은숙', '안장우', '서희숙', '민정현', '이수정', '이문희', '황지민', '구민경', '류이슬', '전광숙', '이선희', '조보영', '임은아'];
+      $app.querySelectorAll('.st-part-chip').forEach(btn => {
+        if (default15.includes(btn.dataset.partName)) {
+          btn.classList.add('active');
+          btn.style.background = '#10b981';
+          btn.style.color = '#ffffff';
+          btn.style.borderColor = '#10b981';
+          btn.textContent = '✓ ' + btn.dataset.partName;
+        } else {
+          btn.classList.remove('active');
+          btn.style.background = 'var(--card)';
+          btn.style.color = 'var(--ink)';
+          btn.style.borderColor = 'var(--line)';
+          btn.textContent = btn.dataset.partName;
+        }
+      });
+      const count = $app.querySelectorAll('.st-part-chip.active').length;
+      const countDisplay = document.getElementById('stPartCountDisplay');
+      if (countDisplay) countDisplay.textContent = count + '명 선택됨';
+    };
+  }
+
+  const btnClearAllParts = document.getElementById('btnStClearAllParts');
+  if (btnClearAllParts) {
+    btnClearAllParts.onclick = () => {
+      $app.querySelectorAll('.st-part-chip').forEach(btn => {
+        btn.classList.remove('active');
+        btn.style.background = 'var(--card)';
+        btn.style.color = 'var(--ink)';
+        btn.style.borderColor = 'var(--line)';
+        btn.textContent = btn.dataset.partName;
+      });
+      const countDisplay = document.getElementById('stPartCountDisplay');
+      if (countDisplay) countDisplay.textContent = '0명 선택됨';
+    };
+  }
+
+  // 2. 수입 행 추가
+  const btnAddInc = document.getElementById('btnAddIncomeRow');
+  if (btnAddInc) {
+    btnAddInc.onclick = () => {
+      const container = document.getElementById('stIncomesRowContainer');
+      if (!container) return;
+      const row = document.createElement('div');
+      row.className = 'st-income-row';
+      row.style.cssText = 'display:flex;gap:6px;align-items:center';
+      row.innerHTML = `
+        <input type="text" class="st-inc-name" placeholder="항목명 (예: 추가 후원금)" required style="flex:2">
+        <input type="number" class="st-inc-amt" value="0" placeholder="금액" required style="flex:1.5">
+        <input type="text" class="st-inc-note" placeholder="비고" style="flex:1.2">
+        <button type="button" class="cl-btn sm ghost btn-del-row" style="color:#ef4444;padding:4px 8px">✕</button>
+      `;
+      row.querySelector('.btn-del-row').onclick = () => row.remove();
+      container.appendChild(row);
+    };
+  }
+
+  // 3. 지출 행 추가
+  const btnAddExp = document.getElementById('btnAddExpenseRow');
+  if (btnAddExp) {
+    btnAddExp.onclick = () => {
+      const container = document.getElementById('stExpensesRowContainer');
+      if (!container) return;
+      const row = document.createElement('div');
+      row.className = 'st-expense-row';
+      row.style.cssText = 'display:flex;gap:6px;align-items:center';
+      row.innerHTML = `
+        <select class="st-exp-cat" style="flex:1;padding:6px;border-radius:6px;background:var(--chip);color:var(--ink);border:1px solid var(--line);font-size:12px">
+          <option value="식사">식사</option>
+          <option value="간식">간식</option>
+          <option value="점심">점심</option>
+          <option value="숙소">숙소</option>
+          <option value="음료">음료</option>
+          <option value="약품">약품</option>
+          <option value="교통">교통</option>
+          <option value="기타">기타</option>
+        </select>
+        <input type="text" class="st-exp-name" placeholder="지출 내용" required style="flex:2">
+        <input type="number" class="st-exp-amt" value="0" placeholder="금액" required style="flex:1.5">
+        <button type="button" class="cl-btn sm ghost btn-del-row" style="color:#ef4444;padding:4px 8px">✕</button>
+      `;
+      row.querySelector('.btn-del-row').onclick = () => row.remove();
+      container.appendChild(row);
+    };
+  }
+
+  // 4. 후원 행 추가
+  const btnAddSpon = document.getElementById('btnAddSponRow');
+  if (btnAddSpon) {
+    btnAddSpon.onclick = () => {
+      const container = document.getElementById('stSponRowContainer');
+      if (!container) return;
+      const row = document.createElement('div');
+      row.className = 'st-spon-row';
+      row.style.cssText = 'display:flex;gap:6px;align-items:center';
+      row.innerHTML = `
+        <input type="text" class="st-spon-person" placeholder="후원자 이름" required style="flex:1.5">
+        <input type="text" class="st-spon-item" placeholder="후원 물품 내용" required style="flex:3">
+        <button type="button" class="cl-btn sm ghost btn-del-row" style="color:#ef4444;padding:4px 8px">✕</button>
+      `;
+      row.querySelector('.btn-del-row').onclick = () => row.remove();
+      container.appendChild(row);
+    };
+  }
+
+  // 삭제 버튼들 기본 바인딩
+  $app.querySelectorAll('.btn-del-row').forEach(b => {
+    b.onclick = () => b.closest('div').remove();
+  });
   const btnStBack = document.getElementById('btnStBack');
   if (btnStBack) {
     btnStBack.onclick = () => { UI.curSettlementId = null; const y = window.scrollY; render(); window.scrollTo(0, y); };
@@ -15912,32 +16229,32 @@ function bindTeamClubView() {
       const startDate = document.getElementById('stInStartDate').value;
       const endDate = document.getElementById('stInEndDate').value;
       const venue = document.getElementById('stInVenue').value.trim();
-      const rawParts = document.getElementById('stInParticipants').value;
-      const participants = rawParts.split(/[,\n]+/).map(x => x.trim()).filter(Boolean);
+// participants collected from active chips below
 
-      // Parse expenses
-      const rawExp = document.getElementById('stInExpensesText').value;
-      const expenses = rawExp.split('\n').map(line => {
-        const parts = line.split('|').map(x => x.trim());
-        if (parts.length >= 3) return { cat: parts[0], item: parts[1], amount: Number(parts[2].replace(/[^0-9]/g, '')) || 0 };
-        if (parts.length === 2) return { cat: '기타', item: parts[0], amount: Number(parts[1].replace(/[^0-9]/g, '')) || 0 };
-        return null;
+      // 1. 참석자 칩에서 선택된 선수들 수집
+      const participants = Array.from($app.querySelectorAll('.st-part-chip.active')).map(btn => btn.dataset.partName);
+
+      // 2. 수입 행들에서 수집
+      const incomes = Array.from($app.querySelectorAll('.st-income-row')).map(row => {
+        const item = row.querySelector('.st-inc-name')?.value.trim();
+        const amount = Number(row.querySelector('.st-inc-amt')?.value) || 0;
+        const note = row.querySelector('.st-inc-note')?.value.trim() || '';
+        return item ? { item, amount, note } : null;
       }).filter(Boolean);
 
-      // Parse incomes
-      const rawInc = document.getElementById('stInIncomesText').value;
-      const incomes = rawInc.split('\n').map(line => {
-        const parts = line.split('|').map(x => x.trim());
-        if (parts.length >= 2) return { item: parts[0], amount: Number(parts[1].replace(/[^0-9]/g, '')) || 0 };
-        return null;
+      // 3. 지출 행들에서 수집
+      const expenses = Array.from($app.querySelectorAll('.st-expense-row')).map(row => {
+        const cat = row.querySelector('.st-exp-cat')?.value || '기타';
+        const item = row.querySelector('.st-exp-name')?.value.trim();
+        const amount = Number(row.querySelector('.st-exp-amt')?.value) || 0;
+        return item ? { cat, item, amount } : null;
       }).filter(Boolean);
 
-      // Parse sponsorships
-      const rawSpon = document.getElementById('stInSponsText').value;
-      const sponsorships = rawSpon.split('\n').map(line => {
-        const parts = line.split('|').map(x => x.trim());
-        if (parts.length >= 2) return { person: parts[0], item: parts[1] };
-        return null;
+      // 4. 후원 행들에서 수집
+      const sponsorships = Array.from($app.querySelectorAll('.st-spon-row')).map(row => {
+        const person = row.querySelector('.st-spon-person')?.value.trim();
+        const item = row.querySelector('.st-spon-item')?.value.trim();
+        return (person && item) ? { person, item } : null;
       }).filter(Boolean);
 
       const curId = UI.curSettlementId === 'new' ? ('ST_' + Date.now().toString(36)) : UI.curSettlementId;
