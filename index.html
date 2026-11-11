@@ -12756,16 +12756,6 @@ V.lineup = (q, tid) => {
     const im=$app.querySelector('[data-img]');if(im)im.onclick=()=>luSaveImage(l,t,im);
     const gs=$app.querySelector('[data-sheet-sync]');if(gs)gs.onclick=()=>saveLineupToGoogleSheet(l,t,gs);
   };
-  if (sub.cur === 'mission') {
-    html += renderClubMissionSection(t, data, tc, me);
-  }
-  if (sub.cur === 'attend') {
-    html += renderClubAttendanceSection(t, data, tc, me);
-  }
-  if (sub.cur === 'settlement') {
-    html += renderClubSettlementView(t, data, tc, me);
-  }
-
   return html;
 };
 /* =========================================================================
@@ -13960,7 +13950,37 @@ const ClubStore = {
   seedTeamData(team) {
     const data = {
       initialized: true,
-      events: [],
+      events: [
+        {
+          id: 'ev_20261114',
+          type: '훈련',
+          date: '2026-11-14',
+          time: '10:00',
+          venue: '살곶이 야구장',
+          title: '토요일 오전 정기 훈련 & 내야 펑고·수비 포메이션',
+          note: '유니폼 착용, 9:50까지 구장 집결',
+          rsvp: {
+            '전순아': 'in', '정은경': 'in', '안장우': 'car', '민정현': 'in',
+            '서희숙': 'in', '황지민': 'car', '이은숙': 'in', '구민경': 'in',
+            '이수정': 'in', '류이슬': 'in', '조우림': 'out', '이선희': 'in'
+          }
+        },
+        {
+          id: 'ev_20261108',
+          type: '공식대회',
+          date: '2026-11-08',
+          time: '11:00',
+          venue: '밀양 스포츠파크',
+          title: '2026 선수협회장기 밀양 대회 (왕중왕전)',
+          note: '공식 대회 출전 라인업 경기',
+          rsvp: {
+            '전순아': 'in', '정은경': 'in', '안장우': 'car', '민정현': 'in',
+            '서희숙': 'in', '황지민': 'car', '이은숙': 'in', '구민경': 'in',
+            '이수정': 'in', '류이슬': 'in', '전광숙': 'in', '이선희': 'in',
+            '조보영': 'in'
+          }
+        }
+      ],
       notices: [],
       setlogs: [],
       settlements: [
@@ -14423,6 +14443,16 @@ function renderTeamClubView(t, A, tc, th) {
     `;
   }
 
+  if (sub.cur === 'mission') {
+    html += renderClubMissionSection(t, data, tc, me);
+  }
+  if (sub.cur === 'attend') {
+    html += renderClubAttendanceSection(t, data, tc, me);
+  }
+  if (sub.cur === 'settlement') {
+    html += renderClubSettlementView(t, data, tc, me);
+  }
+
   return html;
 }
 
@@ -14591,99 +14621,153 @@ function renderClubCalendarSection(t, data, tc, me) {
 
 // 2. 주간 미션 & 스탬프북 렌더러
 function renderClubMissionSection(t, data, tc, me) {
+  const S = Store;
+  const roster = luRoster(t);
   const missions = data.missions || [
     {
       id: 'm_202611_w2',
       weekTitle: '2026 시즌 11월 2주차 주간 미션',
       dateRange: '11.09 ~ 11.15',
       tasks: [
-        { id: 't1', title: '하체 밸런스 훈련', goal: '스쿼트 50회 3세트 & 런지 20회', icon: '🏋️' },
-        { id: 't2', title: '코어 & 어깨 보강', goal: '플랭크 1분 3세트 & 튜빙 밴드 회전근개', icon: '🧘' },
-        { id: 't3', title: '야구 기술 루틴', goal: '티배팅/빈스윙 100개 또는 섀도우 피칭 50구', icon: '⚾' }
+        { id: 't1', title: '하체 밸런스', goal: '스쿼트 50회 3세트 & 런지 20회', icon: '🏋️' },
+        { id: 't2', title: '코어 & 어깨 보강', goal: '플랭크 1분 3세트 & 튜빙 밴드', icon: '🧘' },
+        { id: 't3', title: '야구 기술 루틴', goal: '티배팅/빈스윙 100개 또는 섀도우 50구', icon: '⚾' }
       ],
       stamps: {
         '전순아': ['t1', 't2', 't3'],
         '정은경': ['t1', 't2', 't3'],
+        '서희숙': ['t1', 't2', 't3'],
         '안장우': ['t1', 't3'],
         '민정현': ['t1', 't2'],
-        '서희숙': ['t1', 't2', 't3'],
         '황지민': ['t1', 't3'],
-        '이은숙': ['t1', 't2']
+        '이은숙': ['t1', 't2'],
+        '구민경': ['t1', 't2', 't3']
       }
     }
   ];
 
   const curMission = missions[0];
-  const myStamps = (me && curMission.stamps[me]) || [];
-  const stampedMembers = Object.keys(curMission.stamps || {});
-  const completionPct = Math.round((stampedMembers.length / 22) * 100);
+  curMission.stamps = curMission.stamps || {};
+  const stampedMembers = Object.keys(curMission.stamps);
+  const totalStamps = Object.values(curMission.stamps).reduce((acc, cur) => acc + (cur || []).length, 0);
+  const completionPct = Math.round((stampedMembers.length / roster.length) * 100);
 
   return `
     <div style="display:flex; justify-content:space-between; align-items:center; margin:10px 0 16px; flex-wrap:wrap; gap:10px">
       <div>
         <b style="font-size:16px; color:var(--ink)">🎯 ${esc(t.short)} 주간 체력 & 기술 훈련 미션</b>
-        <div class="sub">선수 스스로 홈트레이닝과 기술 훈련을 수행하고, 야구공 스탬프를 적립해 원팀의 체력을 길러보세요!</div>
+        <div class="sub">선수 스스로 홈트레이닝을 수행하고 체크하거나, 감독님이 선수별 미션을 체크해 스탬프를 부여할 수 있습니다.</div>
       </div>
-      <div style="font-size:13px; font-weight:800; color:#10b981">
-        🔥 팀 달성률 ${completionPct}% (${stampedMembers.length}명 인증)
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="st-badge" style="background:#10b981;color:#ffffff;border:none;padding:5px 12px;font-size:13px">
+          🔥 팀 달성률 ${completionPct}% (${stampedMembers.length}/${roster.length}명 인증)
+        </span>
       </div>
     </div>
 
-    <!-- 이번 주 공식 미션 카드 -->
-    <div class="mission-card" style="border:2px solid rgba(16, 185, 129, 0.4)">
-      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px">
+    <!-- 이번 주 공식 미션 과제 카드 -->
+    <div class="mission-card" style="border:2px solid rgba(16, 185, 129, 0.4); margin-bottom:16px">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; flex-wrap:wrap; gap:8px">
         <div>
-          <span class="st-badge" style="background:#10b981;color:#ffffff;border:none">이번 주 미션</span>
-          <h3 style="font-size:17px; font-weight:900; color:var(--ink); margin-top:6px">${esc(curMission.weekTitle)}</h3>
+          <span class="st-badge" style="background:#10b981;color:#ffffff;border:none">공식 주간 과제</span>
+          <h3 style="font-size:17px; font-weight:900; color:var(--ink); margin-top:4px">${esc(curMission.weekTitle)}</h3>
           <span style="font-size:12.5px; color:var(--sub)">🗓️ 기간: ${esc(curMission.dateRange)} · 대상: WT프렌즈 선수단 전원</span>
         </div>
         <div style="text-align:right">
-          <div style="font-size:12px; color:var(--mute)">내 도장 현황</div>
-          <b style="font-size:18px; color:#ef4444">${myStamps.length} / 3 개</b>
+          <span style="font-size:12px;color:var(--mute)">적립된 스탬프 총계</span>
+          <div style="font-size:20px;font-weight:900;color:#ef4444">💮 ${totalStamps}개 적립</div>
         </div>
       </div>
 
-      <div class="grid g3" style="gap:12px; margin-top:14px">
-        ${curMission.tasks.map(tTask => {
-          const isDone = myStamps.includes(tTask.id);
-          return `
-            <div style="background:var(--chip);border:1px solid ${isDone ? '#10b981' : 'var(--line)'};border-radius:12px;padding:14px;position:relative">
-              <div style="font-size:24px;margin-bottom:6px">${tTask.icon}</div>
-              <b style="font-size:14.5px;color:var(--ink)">${esc(tTask.title)}</b>
-              <div style="font-size:12px;color:var(--sub);margin:6px 0 12px">${esc(tTask.goal)}</div>
-              <button type="button" class="cl-btn ${isDone ? 'ghost' : 'pri btn-action-green'}" data-stamp-task="${tTask.id}" style="width:100%;font-size:12.5px;font-weight:800">
-                ${isDone ? '✓ 도장 완료' : '💮 스탬프 찍기'}
-              </button>
-            </div>
-          `;
-        }).join('')}
+      <div class="grid g3" style="gap:10px">
+        ${curMission.tasks.map(tsk => `
+          <div style="background:var(--chip);border:1px solid var(--line);border-radius:10px;padding:12px">
+            <div style="font-size:20px">${tsk.icon}</div>
+            <b style="font-size:14px;color:var(--ink)">${esc(tsk.title)}</b>
+            <div style="font-size:12px;color:var(--sub);margin-top:4px">${esc(tsk.goal)}</div>
+          </div>
+        `).join('')}
       </div>
     </div>
 
-    <!-- 스탬프 획득 현황판 -->
-    <div class="mission-card">
-      <b style="font-size:15px; color:var(--ink)">⚾ 팀원 스탬프 인증 현황판 (${stampedMembers.length}명 참여 중)</b>
-      <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:12px">
-        ${stampedMembers.map(name => {
-          const count = (curMission.stamps[name] || []).length;
-          return `
-            <span class="st-chip" style="display:inline-flex;align-items:center;gap:6px">
-              <b>${esc(name)}</b>
-              <span style="color:#ef4444;font-weight:800">💮 × ${count}</span>
-            </span>
-          `;
-        }).join('')}
+    <!-- 선수별 미션 체크 & 스탬프 부여 체크리스트 테이블 -->
+    <div class="card" style="padding:16px; margin-bottom:16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+        <b style="font-size:15px; color:var(--ink)">📋 선수단 22명 미션 체크 & 스탬프북</b>
+        <span style="font-size:12px; color:var(--mute)">선수 본인 또는 감독님이 버튼을 눌러 미션을 체크해 주세요!</span>
+      </div>
+
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:13px">
+          <thead>
+            <tr style="border-bottom:1.5px solid var(--line);color:var(--mute);text-align:left">
+              <th style="padding:8px">선수명</th>
+              <th style="padding:8px">1. 하체 밸런스 🏋️</th>
+              <th style="padding:8px">2. 코어 & 어깨 🧘</th>
+              <th style="padding:8px">3. 기술 루틴 ⚾</th>
+              <th style="padding:8px">스탬프 현황</th>
+              <th style="padding:8px;text-align:right">원클릭 전체완료</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${roster.map(pName => {
+              const myTasks = curMission.stamps[pName] || [];
+              const t1 = myTasks.includes('t1');
+              const t2 = myTasks.includes('t2');
+              const t3 = myTasks.includes('t3');
+              const isAll = t1 && t2 && t3;
+
+              return `
+                <tr style="border-bottom:1px solid var(--line)">
+                  <td style="padding:10px 8px;font-weight:800;color:var(--ink)">
+                    ${esc(pName)}
+                    ${pName === me ? '<span style="font-size:11px;color:#10b981;margin-left:4px">(나)</span>' : ''}
+                  </td>
+                  <td style="padding:10px 8px">
+                    <button type="button" class="cl-btn sm ${t1 ? 'pri btn-action-green' : 'ghost'}" data-toggle-task="${esc(pName)}:t1" style="font-size:11.5px">
+                      ${t1 ? '✓ 완료' : '미완료'}
+                    </button>
+                  </td>
+                  <td style="padding:10px 8px">
+                    <button type="button" class="cl-btn sm ${t2 ? 'pri btn-action-green' : 'ghost'}" data-toggle-task="${esc(pName)}:t2" style="font-size:11.5px">
+                      ${t2 ? '✓ 완료' : '미완료'}
+                    </button>
+                  </td>
+                  <td style="padding:10px 8px">
+                    <button type="button" class="cl-btn sm ${t3 ? 'pri btn-action-green' : 'ghost'}" data-toggle-task="${esc(pName)}:t3" style="font-size:11.5px">
+                      ${t3 ? '✓ 완료' : '미완료'}
+                    </button>
+                  </td>
+                  <td style="padding:10px 8px">
+                    <span style="font-weight:800;color:${isAll ? '#ef4444' : (myTasks.length ? '#10b981' : 'var(--mute)')}">
+                      ${isAll ? '💮 3/3 완벽달성!' : (myTasks.length ? `⚾ ${myTasks.length}/3 달성` : '미시작')}
+                    </span>
+                  </td>
+                  <td style="padding:10px 8px;text-align:right">
+                    <button type="button" class="cl-btn sm ${isAll ? 'ghost' : 'pri btn-action-green'}" data-stamp-all="${esc(pName)}" style="font-size:11.5px;font-weight:800">
+                      ${isAll ? '✓ 인증완료' : '💮 도장 쾅!'}
+                    </button>
+                  </td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
       </div>
     </div>
   `;
 }
 
-// 3. 출석부 & 올해의 출석상 통계 렌더러
 function renderClubAttendanceSection(t, data, tc, me) {
   const S = Store;
   const events = data.events || [];
-  const games = S.gamesOf(t) || [];
   const roster = luRoster(t);
+
+  // 현재 출석 체크를 진행할 활성 일정 (UI.activeAttendEvId)
+  if (!UI.activeAttendEvId && events.length) {
+    UI.activeAttendEvId = events[0].id;
+  }
+  const curEvent = events.find(e => e.id === UI.activeAttendEvId) || events[0];
 
   // 선수별 출석 통계 계산
   const stats = roster.map(name => {
@@ -14698,60 +14782,94 @@ function renderClubAttendanceSection(t, data, tc, me) {
       else if (r === 'out') absent++;
     });
 
-    // 기본 출석 데이터 보정 (시즌 전체 활성도 반영)
-    const baseTotal = events.length || 1;
-    const rate = Math.round((attended / baseTotal) * 100);
+    const totalEv = events.length || 1;
+    const rate = Math.round((attended / totalEv) * 100);
 
-    return {
-      name,
-      attended,
-      carpool,
-      absent,
-      total: baseTotal,
-      rate
-    };
+    return { name, attended, carpool, absent, total: totalEv, rate };
   }).sort((a, b) => b.rate - a.rate || b.attended - a.attended);
 
-  const top1 = stats[0] || { name: '서희숙', rate: 100, attended: 12 };
-  const top2 = stats[1] || { name: '안장우', rate: 92, attended: 11 };
-  const top3 = stats[2] || { name: '황지민', rate: 92, attended: 11 };
+  const top1 = stats[0] || { name: '서희숙', rate: 100, attended: 12, carpool: 4 };
+  const top2 = stats[1] || { name: '안장우', rate: 92, attended: 11, carpool: 5 };
+  const top3 = stats[2] || { name: '황지민', rate: 92, attended: 11, carpool: 2 };
 
   return `
     <div style="display:flex; justify-content:space-between; align-items:center; margin:10px 0 16px; flex-wrap:wrap; gap:10px">
       <div>
         <b style="font-size:16px; color:var(--ink)">📊 2026 WT프렌즈 공식 출석부 & 성실상</b>
-        <div class="sub">팀 훈련 및 대회 참석 투표(RSVP)를 누적 집계하여 연말 출석왕 시상으로 이어집니다.</div>
+        <div class="sub">선수단 출석을 실시간으로 체크하고, 누적 통계로 연말 올해의 출석왕을 선정합니다.</div>
       </div>
       <button type="button" class="cl-btn pri sm btn-action-green" id="btnExportAttendAward" style="background:#10b981 !important;color:#ffffff !important;font-weight:800">
         🏅 올해의 출석왕 상장 카드 출력
       </button>
     </div>
 
-    <!-- 출석 명예의 전당 포디엄 -->
+    <!-- 1. 일정별 실시간 출석 체크 관리기 -->
+    <div class="card" style="padding:16px; margin-bottom:20px; border:2px solid rgba(59, 130, 246, 0.4)">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px">
+        <div>
+          <span class="st-badge" style="background:#3b82f6;color:#ffffff;border:none">실시간 출석 체크 모드</span>
+          <b style="font-size:15px; color:var(--ink); margin-left:6px">일정 선택 후 선수별 출석 상태를 클릭하세요:</b>
+        </div>
+        <select id="attendEvSelect" style="padding:6px 10px;font-size:13px;border-radius:8px;background:var(--chip);color:var(--ink);border:1px solid var(--line);font-weight:700">
+          ${events.map(ev => `<option value="${esc(ev.id)}" ${curEvent && curEvent.id === ev.id ? 'selected' : ''}>[${esc(ev.type)}] ${esc(ev.date)} ${esc(ev.title)}</option>`).join('')}
+        </select>
+      </div>
+
+      ${curEvent ? `
+        <div style="background:var(--chip);padding:10px 14px;border-radius:10px;border:1px solid var(--line);margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+          <div>
+            <b>${esc(curEvent.title)}</b>
+            <span style="font-size:12px;color:var(--mute);margin-left:8px">🗓️ ${esc(curEvent.date)} ${esc(curEvent.time)} · 📍 ${esc(curEvent.venue)}</span>
+          </div>
+          <div style="font-size:12.5px;color:var(--sub)">
+            참석: <b style="color:#10b981">${Object.values(curEvent.rsvp || {}).filter(v => v==='in'||v==='car').length}명</b>
+            · 불참: <b style="color:#ef4444">${Object.values(curEvent.rsvp || {}).filter(v => v==='out').length}명</b>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:10px">
+          ${roster.map(pName => {
+            const st = (curEvent.rsvp || {})[pName] || '';
+            return `
+              <div style="background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px;display:flex;justify-content:space-between;align-items:center">
+                <b style="font-size:13.5px;color:var(--ink)">${esc(pName)}</b>
+                <div style="display:flex;gap:4px">
+                  <button type="button" class="cl-btn sm ${st === 'in' ? 'pri btn-action-green' : 'ghost'}" data-attend-chk="${esc(curEvent.id)}:${esc(pName)}:in" style="font-size:11px;padding:3px 7px" title="참석">✓참석</button>
+                  <button type="button" class="cl-btn sm ${st === 'car' ? 'pri' : 'ghost'}" data-attend-chk="${esc(curEvent.id)}:${esc(pName)}:car" style="font-size:11px;padding:3px 7px;background:${st === 'car' ? '#0284c7' : ''};color:${st === 'car' ? '#fff' : ''}" title="카풀지원">🚗카풀</button>
+                  <button type="button" class="cl-btn sm ${st === 'out' ? 'pri' : 'ghost'}" data-attend-chk="${esc(curEvent.id)}:${esc(pName)}:out" style="font-size:11px;padding:3px 7px;background:${st === 'out' ? '#e11d48' : ''};color:${st === 'out' ? '#fff' : ''}" title="불참">✕불참</button>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      ` : '<div class="empty">등록된 팀 일정이 없습니다.</div>'}
+    </div>
+
+    <!-- 2. 출석 명예의 전당 포디엄 -->
     <div class="podium-wrap">
       <div class="podium-card silver">
         <div class="podium-rank">🥈 2위</div>
         <div class="podium-name">${esc(top2.name)}</div>
-        <div class="podium-sub">출석 ${top2.attended}회</div>
+        <div class="podium-sub">출석 ${top2.attended}회 · 카풀 ${top2.carpool}회</div>
         <div class="podium-pct" style="color:#94a3b8">${top2.rate}%</div>
       </div>
 
       <div class="podium-card gold" style="transform:translateY(-8px)">
         <div class="podium-rank">🥇 1위 (출석왕)</div>
         <div class="podium-name" style="font-size:18px">${esc(top1.name)}</div>
-        <div class="podium-sub">출석 ${top1.attended}회 · 카풀지원 ${top1.carpool}회</div>
+        <div class="podium-sub">출석 ${top1.attended}회 · 카풀 ${top1.carpool}회</div>
         <div class="podium-pct" style="color:#eab308">${top1.rate}%</div>
       </div>
 
       <div class="podium-card bronze">
         <div class="podium-rank">🥉 3위</div>
         <div class="podium-name">${esc(top3.name)}</div>
-        <div class="podium-sub">출석 ${top3.attended}회</div>
+        <div class="podium-sub">출석 ${top3.attended}회 · 카풀 ${top3.carpool}회</div>
         <div class="podium-pct" style="color:#d97706">${top3.rate}%</div>
       </div>
     </div>
 
-    <!-- 선수단 전체 출석부 테이블 -->
+    <!-- 3. 선수단 전체 누적 출석부 테이블 -->
     <div class="card" style="padding:14px;overflow-x:auto">
       <table style="width:100%;border-collapse:collapse;font-size:13px">
         <thead>
@@ -14793,10 +14911,6 @@ function renderClubAttendanceSection(t, data, tc, me) {
   `;
 }
 
-
-/* =========================================================================
-   💰 [WT 정산실] - 라인업 작성기 스타일 뷰 & 실시간 영수증 발행 스튜디오
-   ========================================================================= */
 function renderClubSettlementView(t, data, tc, me) {
   const S = Store;
   const settlements = data.settlements || [];
@@ -15429,6 +15543,87 @@ function bindTeamClubView() {
       re();
     };
   }
+
+  // 출석 체크 모드: 일정 선택 변경
+  const evSel = document.getElementById('attendEvSelect');
+  if (evSel) {
+    evSel.onchange = () => {
+      UI.activeAttendEvId = evSel.value;
+      re();
+    };
+  }
+
+  // 출석 체크 버튼 클릭 (참석/카풀/불참)
+  $app.querySelectorAll('[data-attend-chk]').forEach(btn => {
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      const [evId, pName, status] = btn.dataset.attendChk.split(':');
+      const curData = ClubStore.getTeamData(t);
+      const ev = (curData.events || []).find(x => x.id === evId);
+      if (ev) {
+        ev.rsvp = ev.rsvp || {};
+        ev.rsvp[pName] = status;
+        ClubStore.saveTeamData(t, curData);
+        re();
+      }
+    };
+  });
+
+  // 주간 미션: 개별 과제 토글
+  $app.querySelectorAll('[data-toggle-task]').forEach(btn => {
+    btn.onclick = () => {
+      const [pName, taskId] = btn.dataset.toggleTask.split(':');
+      const curData = ClubStore.getTeamData(t);
+      curData.missions = curData.missions || [
+        {
+          id: 'm_202611_w2',
+          weekTitle: '2026 시즌 11월 2주차 주간 미션',
+          dateRange: '11.09 ~ 11.15',
+          tasks: [
+            { id: 't1', title: '하체 밸런스', goal: '스쿼트 50회 3세트 & 런지 20회', icon: '🏋️' },
+            { id: 't2', title: '코어 & 어깨 보강', goal: '플랭크 1분 3세트 & 튜빙 밴드', icon: '🧘' },
+            { id: 't3', title: '야구 기술 루틴', goal: '티배팅/빈스윙 100개 또는 섀도우 50구', icon: '⚾' }
+          ],
+          stamps: {}
+        }
+      ];
+      const curM = curData.missions[0];
+      curM.stamps = curM.stamps || {};
+      curM.stamps[pName] = curM.stamps[pName] || [];
+      const idx = curM.stamps[pName].indexOf(taskId);
+      if (idx >= 0) curM.stamps[pName].splice(idx, 1);
+      else curM.stamps[pName].push(taskId);
+      ClubStore.saveTeamData(t, curData);
+      re();
+    };
+  });
+
+  // 주간 미션: 원클릭 전체 완료 스탬프
+  $app.querySelectorAll('[data-stamp-all]').forEach(btn => {
+    btn.onclick = () => {
+      const pName = btn.dataset.stampAll;
+      const curData = ClubStore.getTeamData(t);
+      curData.missions = curData.missions || [
+        {
+          id: 'm_202611_w2',
+          weekTitle: '2026 시즌 11월 2주차 주간 미션',
+          dateRange: '11.09 ~ 11.15',
+          tasks: [
+            { id: 't1', title: '하체 밸런스', goal: '스쿼트 50회 3세트 & 런지 20회', icon: '🏋️' },
+            { id: 't2', title: '코어 & 어깨 보강', goal: '플랭크 1분 3세트 & 튜빙 밴드', icon: '🧘' },
+            { id: 't3', title: '야구 기술 루틴', goal: '티배팅/빈스윙 100개 또는 섀도우 50구', icon: '⚾' }
+          ],
+          stamps: {}
+        }
+      ];
+      const curM = curData.missions[0];
+      curM.stamps = curM.stamps || {};
+      curM.stamps[pName] = ['t1', 't2', 't3'];
+      ClubStore.saveTeamData(t, curData);
+      alert(`${pName} 선수, 3대 주간 미션 완벽 달성! 💮 야구공 스탬프가 적립되었습니다!`);
+      re();
+    };
+  });
 
   // 주간 미션 스탬프 바인딩
   $app.querySelectorAll('[data-stamp-task]').forEach(btn => {
