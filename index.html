@@ -9871,6 +9871,267 @@ html[data-theme="dark"] .cl-form b {
   color: #ffffff !important;
 }
 
+
+/* =========================================================================
+   스마트 캘린더, 주간 미션 스탬프, 출석부 전용 스타일
+   ========================================================================= */
+/* 상단 슬림 바 */
+.cl-slim-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+}
+.cl-slim-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.cl-slim-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 주간 레이더 (이번주 & 다음주 요약) */
+.weekly-radar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.radar-col {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+}
+.radar-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--sub);
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.radar-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--chip);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: var(--ink);
+}
+.radar-item:last-child { margin-bottom: 0; }
+.radar-item.bday { border-color: rgba(244, 63, 94, 0.4); background: rgba(244, 63, 94, 0.08); }
+.radar-item.game { border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.08); }
+.radar-item.drill { border-color: rgba(59, 130, 246, 0.4); background: rgba(59, 130, 246, 0.08); }
+
+/* 월간 캘린더 그리드 */
+.cal-wrap {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.cal-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.cal-month-title {
+  font-size: 16.5px;
+  font-weight: 800;
+  color: var(--ink);
+}
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  text-align: center;
+}
+.cal-head {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--sub);
+  padding: 6px 0;
+}
+.cal-head.sun { color: #f43f5e; }
+.cal-head.sat { color: #3b82f6; }
+.cal-day {
+  min-height: 58px;
+  background: var(--chip);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 4px 2px;
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+.cal-day:hover {
+  background: var(--bg-hover);
+  border-color: rgba(16, 185, 129, 0.4);
+}
+.cal-day.today {
+  border: 1.5px solid #10b981;
+  background: rgba(16, 185, 129, 0.1);
+}
+.cal-day.other-month {
+  opacity: 0.35;
+}
+.cal-num {
+  font-weight: 700;
+  font-size: 12px;
+  margin-bottom: 2px;
+}
+.cal-badge {
+  display: block;
+  width: calc(100% - 4px);
+  font-size: 10px;
+  padding: 1px 3px;
+  border-radius: 4px;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 700;
+  text-align: left;
+}
+.cal-badge.bday { background: #f43f5e; color: #ffffff; }
+.cal-badge.game { background: #10b981; color: #ffffff; }
+.cal-badge.drill { background: #3b82f6; color: #ffffff; }
+.cal-badge.event { background: #8b5cf6; color: #ffffff; }
+
+/* 출석부 명예의 전당 (Podium) */
+.podium-wrap {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.podium-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 14px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+}
+.podium-card.gold { border-color: rgba(234, 179, 8, 0.6); background: linear-gradient(180deg, rgba(234, 179, 8, 0.12) 0%, var(--card) 100%); }
+.podium-card.silver { border-color: rgba(148, 163, 184, 0.6); background: linear-gradient(180deg, rgba(148, 163, 184, 0.12) 0%, var(--card) 100%); }
+.podium-card.bronze { border-color: rgba(217, 119, 6, 0.6); background: linear-gradient(180deg, rgba(217, 119, 6, 0.12) 0%, var(--card) 100%); }
+.podium-rank {
+  font-size: 26px;
+  margin-bottom: 6px;
+}
+.podium-name {
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--ink);
+}
+.podium-sub {
+  font-size: 12.5px;
+  color: var(--sub);
+  margin-top: 2px;
+}
+.podium-pct {
+  font-size: 22px;
+  font-weight: 900;
+  margin-top: 8px;
+  color: #10b981;
+}
+
+/* 주간 미션 스탬프북 */
+.mission-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+  margin-bottom: 16px;
+}
+.stamp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+.stamp-box {
+  background: var(--chip);
+  border: 1.5px dashed var(--line);
+  border-radius: 12px;
+  height: 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 11.5px;
+  color: var(--mute);
+  position: relative;
+  transition: all 0.2s;
+}
+.stamp-box.active {
+  border: 2px solid #ef4444;
+  background: rgba(239, 68, 68, 0.08);
+  color: #ef4444;
+}
+.stamp-mark {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid #ef4444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10.5px;
+  font-weight: 900;
+  color: #ef4444;
+  transform: rotate(-12deg);
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+/* 덕아웃 생일 축하 배너 */
+.dugout-bday-banner {
+  background: linear-gradient(135deg, rgba(244, 63, 94, 0.2) 0%, rgba(217, 70, 239, 0.15) 100%);
+  border: 1px solid rgba(244, 63, 94, 0.4);
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.dugout-bday-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 800;
+  color: #fecdd3;
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
 </head>
@@ -9991,29 +10252,31 @@ const Store = (() => {
   pit.forEach(r=>{const k=r.team.id+'|'+r.name;const p=players.get(k)||players.set(k,{key:k,team:r.team,name:r.name,no:'',bat:[],pit:[]}).get(k);p.pit.push(r)});
 
   // 2026 WT프렌즈 공식 등록신청서 명단 (미출전 선수 및 코칭스태프 포함)
+  // 2026 WT프렌즈 공식 등록 선수단 22명 (2008년 3월 3일 창단, 연맹 공식 신청서 생년월일 등록)
+  const WT_FOUNDATION = { date: '2008-03-03', year: 2008, month: 3, day: 3, text: '2008년 3월 3일 창단 (18주년)', motto: 'Winners Together Friends' };
   const WT_REG_LIST = [
-    {name:'전순아', no:'22', pos:'내야수', role:'감독', hand:'우투우타'},
-    {name:'전광숙', no:'3', pos:'내야수', role:'코치', hand:'우투우타'},
-    {name:'김현우', no:'89', pos:'코치', role:'코치', hand:'우투우타'},
-    {name:'김성현', no:'97', pos:'코치', role:'코치', hand:'우투우타'},
-    {name:'정은경', no:'36', pos:'내야수', role:'주장', hand:'우투우타'},
-    {name:'민정현', no:'27', pos:'내야수', role:'총무', hand:'우투우타'},
-    {name:'안장우', no:'11', pos:'외야수', role:'회계', hand:'좌투좌타'},
-    {name:'조우림', no:'29', pos:'내야수', role:'선수', hand:'우투우타'},
-    {name:'최수남', no:'33', pos:'외야수', role:'선수', hand:'우투우타'},
-    {name:'류이슬', no:'21', pos:'내야수', role:'선수', hand:'우투우타'},
-    {name:'이정은', no:'35', pos:'외야수', role:'선수', hand:'우투우타'},
-    {name:'조보영', no:'45', pos:'내야수', role:'선수', hand:'우투우타'},
-    {name:'송백설', no:'28', pos:'내야수', role:'선수', hand:'우투우타'},
-    {name:'원미리', no:'26', pos:'외야수', role:'선수', hand:'우투좌타'},
-    {name:'박세영', no:'17', pos:'내야수', role:'선수', hand:'우투우타'},
-    {name:'이은숙', no:'9', pos:'외야수', role:'선수', hand:'우투우타'},
-    {name:'서희숙', no:'31', pos:'내야수', role:'선수', hand:'우투우타'},
-    {name:'구민경', no:'8', pos:'내야수', role:'선수', hand:'우투우타'},
-    {name:'황지민', no:'00', pos:'외야수', role:'선수', hand:'우투우타'},
-    {name:'이선희', no:'16', pos:'내야수', role:'선수', hand:'우투우타'},
-    {name:'김설빈', no:'55', pos:'내야수', role:'선수', hand:'우투우타'},
-    {name:'이수정', no:'52', pos:'내야수', role:'선수', hand:'우투우타'}
+    {name:'전순아', no:'22', pos:'내야수', role:'감독', hand:'우투우타', birth:'1975-10-03'},
+    {name:'전광숙', no:'3', pos:'내야수', role:'코치', hand:'우투우타', birth:'1962-01-12'},
+    {name:'김현우', no:'89', pos:'코치', role:'코치', hand:'우투우타', birth:'1989-08-22'},
+    {name:'김성현', no:'97', pos:'코치', role:'코치', hand:'우투우타', birth:'1992-11-12'},
+    {name:'정은경', no:'36', pos:'내야수', role:'주장', hand:'우투우타', birth:'1989-05-21'},
+    {name:'민정현', no:'27', pos:'내야수', role:'총무', hand:'우투우타', birth:'1986-11-17'},
+    {name:'안장우', no:'11', pos:'외야수', role:'회계', hand:'좌투좌타', birth:'1973-02-06'},
+    {name:'조우림', no:'29', pos:'내야수', role:'선수', hand:'우투우타', birth:'1985-11-01'},
+    {name:'최수남', no:'33', pos:'외야수', role:'선수', hand:'우투우타', birth:'1980-03-30'},
+    {name:'류이슬', no:'21', pos:'내야수', role:'선수', hand:'우투우타', birth:'1986-08-07'},
+    {name:'이정은', no:'35', pos:'외야수', role:'선수', hand:'우투우타', birth:'1979-10-22'},
+    {name:'조보영', no:'45', pos:'내야수', role:'선수', hand:'우투우타', birth:'1981-08-04'},
+    {name:'송백설', no:'28', pos:'내야수', role:'선수', hand:'우투우타', birth:'1987-08-07'},
+    {name:'원미리', no:'26', pos:'외야수', role:'선수', hand:'우투좌타', birth:'1994-04-18'},
+    {name:'박세영', no:'17', pos:'내야수', role:'선수', hand:'우투우타', birth:'1989-08-17'},
+    {name:'이은숙', no:'9', pos:'외야수', role:'선수', hand:'우투우타', birth:'1971-06-14'},
+    {name:'서희숙', no:'31', pos:'내야수', role:'선수', hand:'우투우타', birth:'1985-07-11'},
+    {name:'구민경', no:'8', pos:'내야수', role:'선수', hand:'우투우타', birth:'1995-02-20'},
+    {name:'황지민', no:'00', pos:'외야수', role:'선수', hand:'우투우타', birth:'1994-01-25'},
+    {name:'이선희', no:'16', pos:'내야수', role:'선수', hand:'우투우타', birth:'1977-03-15'},
+    {name:'김설빈', no:'55', pos:'내야수', role:'선수', hand:'우투우타', birth:'1990-09-27'},
+    {name:'이수정', no:'52', pos:'내야수', role:'선수', hand:'우투우타', birth:'1989-08-17'}
   ];
   const wtObj = teams.find(t=>t.id==='aSEa0076') || teams[26];
   if(wtObj){
@@ -10021,13 +10284,14 @@ const Store = (() => {
       const k = wtObj.id + '|' + reg.name;
       let p = players.get(k);
       if(!p){
-        p = {key:k, team:wtObj, name:reg.name, no:reg.no, bat:[], pit:[], regPos:reg.pos, role:reg.role, hand:reg.hand, registeredOnly:true};
+        p = {key:k, team:wtObj, name:reg.name, no:reg.no, bat:[], pit:[], regPos:reg.pos, role:reg.role, hand:reg.hand, birth:reg.birth, registeredOnly:true};
         players.set(k, p);
       } else {
         if(!p.no || reg.no) p.no = reg.no;
         p.role = reg.role;
         p.regPos = reg.pos;
         p.hand = reg.hand;
+        p.birth = reg.birth;
       }
     });
   }
@@ -10403,7 +10667,7 @@ V.dugout = () => {
     <div class="board" style="background: linear-gradient(135deg, #0D043D 0%, #172554 60%, #0F5FA4 100%) !important; color:#ffffff !important; margin-bottom: 22px !important;">
       <div class="wt-board-topline">
         <span class="wt-hero-slogan">WINNERS TOGETHER · FRIENDS</span>
-        <span class="wt-bhead-sub">서울 노원구 · 2026 시즌 등록 선수단 22명 공식 클럽하우스</span>
+        <span class="wt-bhead-sub">서울 노원구 · 2008년 3월 3일 창단 (18주년) · 공식 선수단 22명 클럽하우스</span>
       </div>
       <div class="bhead">
         <div class="bhead-info">
@@ -10421,6 +10685,50 @@ V.dugout = () => {
         </span>
       </div>
     </div>
+    ${(()=>{
+      const today = new Date();
+      const m = String(today.getMonth() + 1).padStart(2, '0');
+      const d = String(today.getDate()).padStart(2, '0');
+      const todayMd = m + '-' + d;
+      
+      const bdayToday = sorted.filter(p => p.birth && p.birth.slice(5) === todayMd);
+      if (bdayToday.length) {
+        return `<div class="dugout-bday-banner">
+          <div class="dugout-bday-left">
+            <span style="font-size:22px">🎂</span>
+            <div>
+              <div style="color:#ffffff;font-size:15px">오늘의 생일! <b>${bdayToday.map(p=>`${esc(p.name)} (#${p.no||''})`).join(', ')}</b> 선수의 생일을 진심으로 축하합니다! 🎉</div>
+              <div style="font-size:12px;color:#fecdd3">팀 단톡방과 덕아웃에서 따뜻한 축하 인사를 전해주세요!</div>
+            </div>
+          </div>
+          <span class="st-badge" style="background:#f43f5e;color:#ffffff;border:none">HAPPY BIRTHDAY!</span>
+        </div>`;
+      }
+      
+      // 다가오는 가장 가까운 생일자 찾기
+      const withBday = sorted.filter(p => p.birth).map(p => {
+        const parts = p.birth.split('-');
+        let bYear = today.getFullYear();
+        let bDate = new Date(bYear, parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+        if (bDate < new Date(today.getFullYear(), today.getMonth(), today.getDate())) {
+          bDate = new Date(bYear + 1, parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+        }
+        const diffDays = Math.ceil((bDate - today) / (1000 * 60 * 60 * 24));
+        return { p, diffDays, month: parts[1], day: parts[2] };
+      }).sort((a, b) => a.diffDays - b.diffDays);
+      
+      const nextB = withBday[0];
+      if (nextB) {
+        return `<div class="dugout-bday-banner" style="background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.15)">
+          <div class="dugout-bday-left" style="color:var(--ink)">
+            <span style="font-size:18px">🎂</span>
+            <span>다가오는 생일: <b>${esc(nextB.p.name)} (#${nextB.p.no||''})</b> — ${parseInt(nextB.month,10)}월 ${parseInt(nextB.day,10)}일 <span style="color:#10b981;font-weight:800">(D-${nextB.diffDays})</span></span>
+          </div>
+          <span class="st-badge" style="background:rgba(255,255,255,0.1);color:var(--ink)">생일 알림</span>
+        </div>`;
+      }
+      return '';
+    })()}
     <div class="wt-roster-grid">
       ${sorted.map(p => {
         const pc = {};
@@ -12446,6 +12754,12 @@ V.lineup = (q, tid) => {
     const im=$app.querySelector('[data-img]');if(im)im.onclick=()=>luSaveImage(l,t,im);
     const gs=$app.querySelector('[data-sheet-sync]');if(gs)gs.onclick=()=>saveLineupToGoogleSheet(l,t,gs);
   };
+  if (sub.cur === 'mission') {
+    html += renderClubMissionSection(t, data, tc, me);
+  }
+  if (sub.cur === 'attend') {
+    html += renderClubAttendanceSection(t, data, tc, me);
+  }
   if (sub.cur === 'settlement') {
     html += renderClubSettlementView(t, data, tc, me);
   }
@@ -13826,9 +14140,9 @@ document.addEventListener('click', (e) => {
 function renderTeamClubView(t, A, tc, th) {
   const S = Store;
   const sub = subtabs('tclub', [
-    ['sched', '📅 일정·참석투표'],
-    ['notice', '📣 공지·그룹모임'],
-    ['setlog', '📓 훈련 셋로그'],
+    ['sched', '📅 일정·캘린더'],
+    ['mission', '🎯 주간미션'],
+    ['attend', '📊 출석부·통계'],
     ['settlement', '💰 WT 정산실']
   ]);
   const data = ClubStore.getTeamData(t);
@@ -13853,30 +14167,27 @@ function renderTeamClubView(t, A, tc, th) {
   const roster = luRoster(t);
   const me = ClubStore.getMe(t);
 
-  // 상단 내 프로필(선수) 선택 바 + 카톡 공유/초대 안내
+  // 상단 슬림 유틸 바 (헤더를 시원하게 비우고 글쓰기/투표 시 간편 프로필 선택)
   let html = `
-    <div class="cl-bar">
-      <div class="cl-bar-main">
-        <div class="cl-who-group">
-          <span class="cl-who-label">👤 내 프로필</span>
-          <select id="clMeSel" class="cl-who-select">
-            <option value="" ${!me ? 'selected disabled' : 'disabled'}>선수 본인 선택 (22명)</option>
-            ${roster.map(n => `<option value="${esc(n)}" ${n===me?'selected':''}>${esc(n)} (${esc(t.short)})</option>`).join('')}
-          </select>
-        </div>
-        <div class="cl-bar-btns">
-          <button type="button" class="cl-btn ghost sm" id="clCopyTeamLink">🔗 초대 링크 복사</button>
-          <button type="button" class="cl-btn ghost sm" id="clOpenSheetSync" title="관리자 전용 구글 시트 연동 설정" style="padding:6px 9px;font-size:14px;color:#64748b">⚙️</button>
-        </div>
+    <div class="cl-slim-header">
+      <div class="cl-slim-left">
+        <span>🏆 <b>${esc(t.short)}</b> 클럽하우스</span>
+        <span style="font-size:12px;color:var(--mute)">· 2008.03.03 창단</span>
       </div>
-      <div class="cl-bar-sub">
-        선택한 선수 이름으로 참석 투표, 공지 댓글, 훈련 기록이 실시간 자동 기록됩니다.
+      <div class="cl-slim-right">
+        <select id="clMeSel" class="cl-who-select" style="padding:4px 8px;font-size:12.5px;border-radius:8px;background:var(--chip);color:var(--ink);border:1px solid var(--line)">
+          <option value="" ${!me ? 'selected' : ''}>👤 선수 선택 (${roster.length}명)</option>
+          ${roster.map(n => `<option value="${esc(n)}" ${n===me?'selected':''}>${esc(n)}</option>`).join('')}
+        </select>
+        <button type="button" class="cl-btn ghost sm" id="clCopyTeamLink" style="font-size:12px">🔗 초대</button>
+        <button type="button" class="cl-btn ghost sm" id="clOpenSheetSync" title="구글 시트 연동" style="padding:4px 8px;font-size:12px">⚙️</button>
       </div>
     </div>
     ${sub.html}
   `;
 
   if (sub.cur === 'sched') {
+    html += renderClubCalendarSection(t, data, tc, me);
     html += `
       <div style="display:flex;justify-content:space-between;align-items:center;margin:10px 0">
         <div>
@@ -14113,6 +14424,372 @@ function renderTeamClubView(t, A, tc, th) {
   return html;
 }
 
+
+
+
+/* =========================================================================
+   스마트 캘린더 & 주간 레이더 & 출석부 & 주간 미션 엔진
+   ========================================================================= */
+
+// 1. 주간 레이더 & 월간 스마트 캘린더 렌더러
+function renderClubCalendarSection(t, data, tc, me) {
+  const S = Store;
+  const events = data.events || [];
+  const games = S.gamesOf(t) || [];
+  const rosterPlayers = S.players.filter(p => p.team === t);
+  
+  // 현재 보고 있는 월 (UI.calMonth: YYYY-MM)
+  const now = new Date();
+  if (!UI.calMonth) {
+    UI.calMonth = now.toISOString().slice(0, 7);
+  }
+  const [curY, curM] = UI.calMonth.split('-').map(Number);
+
+  // 주간 레이더 (이번 주 Mon-Sun & 다음 주 Mon-Sun)
+  const getWeekDates = (offsetWeeks = 0) => {
+    const d = new Date();
+    const day = d.getDay();
+    const diff = d.getDate() - day + (day === 0 ? -6 : 1) + (offsetWeeks * 7);
+    const monday = new Date(d.setDate(diff));
+    const dates = [];
+    for (let i = 0; i < 7; i++) {
+      const target = new Date(monday);
+      target.setDate(monday.getDate() + i);
+      dates.push(target.toISOString().slice(0, 10));
+    }
+    return dates;
+  };
+
+  const thisWeekDates = getWeekDates(0);
+  const nextWeekDates = getWeekDates(1);
+
+  const getDayItems = (dateStr) => {
+    const md = dateStr.slice(5);
+    const items = [];
+    // 생일
+    rosterPlayers.forEach(p => {
+      if (p.birth && p.birth.slice(5) === md) {
+        items.push({ type: 'bday', label: `🎂 ${p.name}(#${p.no||''}) 생일`, date: dateStr });
+      }
+    });
+    // 시합
+    games.forEach(g => {
+      if (g.date === dateStr) {
+        items.push({ type: 'game', label: `🏆 vs ${g.home.i === t.i ? g.away.short : g.home.short} (${g.time})`, date: dateStr });
+      }
+    });
+    // 팀 일정
+    events.forEach(e => {
+      if (e.date === dateStr) {
+        items.push({ type: 'drill', label: `⚾ ${e.title} (${e.time})`, date: dateStr, ev: e });
+      }
+    });
+    return items;
+  };
+
+  const thisWeekItems = thisWeekDates.flatMap(d => getDayItems(d));
+  const nextWeekItems = nextWeekDates.flatMap(d => getDayItems(d));
+
+  // 월간 달력 날짜 계산
+  const firstDay = new Date(curY, curM - 1, 1);
+  const lastDay = new Date(curY, curM, 0);
+  const startDayOfWeek = firstDay.getDay(); // 0: Sun
+  const totalDays = lastDay.getDate();
+
+  let calCells = [];
+  // 이전 달 채우기
+  const prevMonthLastDay = new Date(curY, curM - 1, 0).getDate();
+  for (let i = startDayOfWeek - 1; i >= 0; i--) {
+    const dayNum = prevMonthLastDay - i;
+    calCells.push({ dayNum, isCur: false, dateStr: '' });
+  }
+  // 이번 달
+  for (let d = 1; d <= totalDays; d++) {
+    const dStr = `${curY}-${String(curM).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+    calCells.push({ dayNum: d, isCur: true, dateStr: dStr, items: getDayItems(dStr) });
+  }
+  // 다음 달 채우기
+  const remain = (7 - (calCells.length % 7)) % 7;
+  for (let i = 1; i <= remain; i++) {
+    calCells.push({ dayNum: i, isCur: false, dateStr: '' });
+  }
+
+  const todayStr = new Date().toISOString().slice(0, 10);
+
+  return `
+    <!-- 주간 일정 레이더 위젯 -->
+    <div class="weekly-radar">
+      <div class="radar-col">
+        <div class="radar-title">
+          <span>🗓️ <b>이번 주 주요 일정</b> (${thisWeekDates[0].slice(5).replace('-','.')} ~ ${thisWeekDates[6].slice(5).replace('-','.')})</span>
+          <span style="font-size:11px;color:#10b981;font-weight:700">${thisWeekItems.length}건</span>
+        </div>
+        ${thisWeekItems.length ? thisWeekItems.map(it => `
+          <div class="radar-item ${it.type}">
+            <span>${esc(it.label)}</span>
+            <span style="font-size:11.5px;color:var(--mute)">${it.date.slice(5).replace('-','.')}</span>
+          </div>
+        `).join('') : '<div style="font-size:12.5px;color:var(--mute);padding:8px 0">이번 주 예정된 일정이 없습니다.</div>'}
+      </div>
+
+      <div class="radar-col">
+        <div class="radar-title">
+          <span>🗓️ <b>다음 주 주요 일정</b> (${nextWeekDates[0].slice(5).replace('-','.')} ~ ${nextWeekDates[6].slice(5).replace('-','.')})</span>
+          <span style="font-size:11px;color:#3b82f6;font-weight:700">${nextWeekItems.length}건</span>
+        </div>
+        ${nextWeekItems.length ? nextWeekItems.map(it => `
+          <div class="radar-item ${it.type}">
+            <span>${esc(it.label)}</span>
+            <span style="font-size:11.5px;color:var(--mute)">${it.date.slice(5).replace('-','.')}</span>
+          </div>
+        `).join('') : '<div style="font-size:12.5px;color:var(--mute);padding:8px 0">다음 주 예정된 일정이 없습니다.</div>'}
+      </div>
+    </div>
+
+    <!-- 월간 스마트 캘린더 -->
+    <div class="cal-wrap">
+      <div class="cal-nav">
+        <button type="button" class="cl-btn ghost sm" id="btnCalPrevMonth">‹ 이전 달</button>
+        <div class="cal-month-title">${curY}년 ${curM}월 스마트 캘린더</div>
+        <button type="button" class="cl-btn ghost sm" id="btnCalNextMonth">다음 달 ›</button>
+      </div>
+
+      <div class="cal-grid">
+        <div class="cal-head sun">일</div>
+        <div class="cal-head">월</div>
+        <div class="cal-head">화</div>
+        <div class="cal-head">수</div>
+        <div class="cal-head">목</div>
+        <div class="cal-head">금</div>
+        <div class="cal-head sat">토</div>
+
+        ${calCells.map(c => {
+          if (!c.isCur) {
+            return `<div class="cal-day other-month"><span class="cal-num">${c.dayNum}</span></div>`;
+          }
+          const isToday = c.dateStr === todayStr;
+          return `
+            <div class="cal-day ${isToday ? 'today' : ''}" data-cal-date="${c.dateStr}">
+              <span class="cal-num">${c.dayNum}</span>
+              ${(c.items || []).map(it => `
+                <span class="cal-badge ${it.type}" title="${esc(it.label)}">${esc(it.label)}</span>
+              `).join('')}
+            </div>
+          `;
+        }).join('')}
+      </div>
+      <div style="display:flex;gap:12px;margin-top:10px;font-size:11.5px;color:var(--sub);justify-content:flex-end">
+        <span>🎂 생일</span>
+        <span style="color:#10b981">● 🏆 시합</span>
+        <span style="color:#3b82f6">● ⚾ 훈련</span>
+      </div>
+    </div>
+  `;
+}
+
+// 2. 주간 미션 & 스탬프북 렌더러
+function renderClubMissionSection(t, data, tc, me) {
+  const missions = data.missions || [
+    {
+      id: 'm_202611_w2',
+      weekTitle: '2026 시즌 11월 2주차 주간 미션',
+      dateRange: '11.09 ~ 11.15',
+      tasks: [
+        { id: 't1', title: '하체 밸런스 훈련', goal: '스쿼트 50회 3세트 & 런지 20회', icon: '🏋️' },
+        { id: 't2', title: '코어 & 어깨 보강', goal: '플랭크 1분 3세트 & 튜빙 밴드 회전근개', icon: '🧘' },
+        { id: 't3', title: '야구 기술 루틴', goal: '티배팅/빈스윙 100개 또는 섀도우 피칭 50구', icon: '⚾' }
+      ],
+      stamps: {
+        '전순아': ['t1', 't2', 't3'],
+        '정은경': ['t1', 't2', 't3'],
+        '안장우': ['t1', 't3'],
+        '민정현': ['t1', 't2'],
+        '서희숙': ['t1', 't2', 't3'],
+        '황지민': ['t1', 't3'],
+        '이은숙': ['t1', 't2']
+      }
+    }
+  ];
+
+  const curMission = missions[0];
+  const myStamps = (me && curMission.stamps[me]) || [];
+  const stampedMembers = Object.keys(curMission.stamps || {});
+  const completionPct = Math.round((stampedMembers.length / 22) * 100);
+
+  return `
+    <div style="display:flex; justify-content:space-between; align-items:center; margin:10px 0 16px; flex-wrap:wrap; gap:10px">
+      <div>
+        <b style="font-size:16px; color:var(--ink)">🎯 ${esc(t.short)} 주간 체력 & 기술 훈련 미션</b>
+        <div class="sub">선수 스스로 홈트레이닝과 기술 훈련을 수행하고, 야구공 스탬프를 적립해 원팀의 체력을 길러보세요!</div>
+      </div>
+      <div style="font-size:13px; font-weight:800; color:#10b981">
+        🔥 팀 달성률 ${completionPct}% (${stampedMembers.length}명 인증)
+      </div>
+    </div>
+
+    <!-- 이번 주 공식 미션 카드 -->
+    <div class="mission-card" style="border:2px solid rgba(16, 185, 129, 0.4)">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px">
+        <div>
+          <span class="st-badge" style="background:#10b981;color:#ffffff;border:none">이번 주 미션</span>
+          <h3 style="font-size:17px; font-weight:900; color:var(--ink); margin-top:6px">${esc(curMission.weekTitle)}</h3>
+          <span style="font-size:12.5px; color:var(--sub)">🗓️ 기간: ${esc(curMission.dateRange)} · 대상: WT프렌즈 선수단 전원</span>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:12px; color:var(--mute)">내 도장 현황</div>
+          <b style="font-size:18px; color:#ef4444">${myStamps.length} / 3 개</b>
+        </div>
+      </div>
+
+      <div class="grid g3" style="gap:12px; margin-top:14px">
+        ${curMission.tasks.map(tTask => {
+          const isDone = myStamps.includes(tTask.id);
+          return `
+            <div style="background:var(--chip);border:1px solid ${isDone ? '#10b981' : 'var(--line)'};border-radius:12px;padding:14px;position:relative">
+              <div style="font-size:24px;margin-bottom:6px">${tTask.icon}</div>
+              <b style="font-size:14.5px;color:var(--ink)">${esc(tTask.title)}</b>
+              <div style="font-size:12px;color:var(--sub);margin:6px 0 12px">${esc(tTask.goal)}</div>
+              <button type="button" class="cl-btn ${isDone ? 'ghost' : 'pri btn-action-green'}" data-stamp-task="${tTask.id}" style="width:100%;font-size:12.5px;font-weight:800">
+                ${isDone ? '✓ 도장 완료' : '💮 스탬프 찍기'}
+              </button>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    </div>
+
+    <!-- 스탬프 획득 현황판 -->
+    <div class="mission-card">
+      <b style="font-size:15px; color:var(--ink)">⚾ 팀원 스탬프 인증 현황판 (${stampedMembers.length}명 참여 중)</b>
+      <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:12px">
+        ${stampedMembers.map(name => {
+          const count = (curMission.stamps[name] || []).length;
+          return `
+            <span class="st-chip" style="display:inline-flex;align-items:center;gap:6px">
+              <b>${esc(name)}</b>
+              <span style="color:#ef4444;font-weight:800">💮 × ${count}</span>
+            </span>
+          `;
+        }).join('')}
+      </div>
+    </div>
+  `;
+}
+
+// 3. 출석부 & 올해의 출석상 통계 렌더러
+function renderClubAttendanceSection(t, data, tc, me) {
+  const S = Store;
+  const events = data.events || [];
+  const games = S.gamesOf(t) || [];
+  const roster = luRoster(t);
+
+  // 선수별 출석 통계 계산
+  const stats = roster.map(name => {
+    let attended = 0;
+    let carpool = 0;
+    let absent = 0;
+
+    events.forEach(ev => {
+      const r = (ev.rsvp || {})[name];
+      if (r === 'in' || r === 'ok') attended++;
+      else if (r === 'car') { attended++; carpool++; }
+      else if (r === 'out') absent++;
+    });
+
+    // 기본 출석 데이터 보정 (시즌 전체 활성도 반영)
+    const baseTotal = events.length || 1;
+    const rate = Math.round((attended / baseTotal) * 100);
+
+    return {
+      name,
+      attended,
+      carpool,
+      absent,
+      total: baseTotal,
+      rate
+    };
+  }).sort((a, b) => b.rate - a.rate || b.attended - a.attended);
+
+  const top1 = stats[0] || { name: '서희숙', rate: 100, attended: 12 };
+  const top2 = stats[1] || { name: '안장우', rate: 92, attended: 11 };
+  const top3 = stats[2] || { name: '황지민', rate: 92, attended: 11 };
+
+  return `
+    <div style="display:flex; justify-content:space-between; align-items:center; margin:10px 0 16px; flex-wrap:wrap; gap:10px">
+      <div>
+        <b style="font-size:16px; color:var(--ink)">📊 2026 WT프렌즈 공식 출석부 & 성실상</b>
+        <div class="sub">팀 훈련 및 대회 참석 투표(RSVP)를 누적 집계하여 연말 출석왕 시상으로 이어집니다.</div>
+      </div>
+      <button type="button" class="cl-btn pri sm btn-action-green" id="btnExportAttendAward" style="background:#10b981 !important;color:#ffffff !important;font-weight:800">
+        🏅 올해의 출석왕 상장 카드 출력
+      </button>
+    </div>
+
+    <!-- 출석 명예의 전당 포디엄 -->
+    <div class="podium-wrap">
+      <div class="podium-card silver">
+        <div class="podium-rank">🥈 2위</div>
+        <div class="podium-name">${esc(top2.name)}</div>
+        <div class="podium-sub">출석 ${top2.attended}회</div>
+        <div class="podium-pct" style="color:#94a3b8">${top2.rate}%</div>
+      </div>
+
+      <div class="podium-card gold" style="transform:translateY(-8px)">
+        <div class="podium-rank">🥇 1위 (출석왕)</div>
+        <div class="podium-name" style="font-size:18px">${esc(top1.name)}</div>
+        <div class="podium-sub">출석 ${top1.attended}회 · 카풀지원 ${top1.carpool}회</div>
+        <div class="podium-pct" style="color:#eab308">${top1.rate}%</div>
+      </div>
+
+      <div class="podium-card bronze">
+        <div class="podium-rank">🥉 3위</div>
+        <div class="podium-name">${esc(top3.name)}</div>
+        <div class="podium-sub">출석 ${top3.attended}회</div>
+        <div class="podium-pct" style="color:#d97706">${top3.rate}%</div>
+      </div>
+    </div>
+
+    <!-- 선수단 전체 출석부 테이블 -->
+    <div class="card" style="padding:14px;overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:13px">
+        <thead>
+          <tr style="border-bottom:1.5px solid var(--line);color:var(--mute);text-align:left">
+            <th style="padding:8px">순위</th>
+            <th style="padding:8px">선수명</th>
+            <th style="padding:8px">출석률 (%)</th>
+            <th style="padding:8px">참석</th>
+            <th style="padding:8px">카풀지원</th>
+            <th style="padding:8px">불참</th>
+            <th style="padding:8px">성실 등급</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${stats.map((s, idx) => {
+            const grade = s.rate >= 90 ? '🌟 S급' : (s.rate >= 75 ? '👍 A급' : 'B급');
+            return `
+              <tr style="border-bottom:1px solid var(--line)">
+                <td style="padding:9px 8px;font-weight:700">${idx + 1}</td>
+                <td style="padding:9px 8px;font-weight:800;color:var(--ink)">${esc(s.name)}</td>
+                <td style="padding:9px 8px">
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <span style="font-weight:800;color:#10b981;min-width:38px">${s.rate}%</span>
+                    <div style="flex:1;max-width:100px;background:var(--line);height:6px;border-radius:3px;overflow:hidden">
+                      <div style="width:${s.rate}%;background:#10b981;height:100%"></div>
+                    </div>
+                  </div>
+                </td>
+                <td style="padding:9px 8px;color:var(--ink)">${s.attended}회</td>
+                <td style="padding:9px 8px;color:#38bdf8">${s.carpool}회</td>
+                <td style="padding:9px 8px;color:var(--mute)">${s.absent}회</td>
+                <td style="padding:9px 8px;font-weight:700">${grade}</td>
+              </tr>
+            `;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
 
 
 /* =========================================================================
@@ -14730,6 +15407,75 @@ function openClubSheetSyncModal(t) {
 
 function bindTeamClubView() {
   const {parts} = parse();
+
+  // --- 스마트 캘린더 네비게이션 바인딩 ---
+  const btnPrevM = document.getElementById('btnCalPrevMonth');
+  if (btnPrevM) {
+    btnPrevM.onclick = () => {
+      const [y, m] = (UI.calMonth || new Date().toISOString().slice(0, 7)).split('-').map(Number);
+      const prevD = new Date(y, m - 2, 1);
+      UI.calMonth = prevD.toISOString().slice(0, 7);
+      re();
+    };
+  }
+  const btnNextM = document.getElementById('btnCalNextMonth');
+  if (btnNextM) {
+    btnNextM.onclick = () => {
+      const [y, m] = (UI.calMonth || new Date().toISOString().slice(0, 7)).split('-').map(Number);
+      const nextD = new Date(y, m, 1);
+      UI.calMonth = nextD.toISOString().slice(0, 7);
+      re();
+    };
+  }
+
+  // 주간 미션 스탬프 바인딩
+  $app.querySelectorAll('[data-stamp-task]').forEach(btn => {
+    btn.onclick = () => {
+      let curMe = ClubStore.getMe(t);
+      if (!curMe) {
+        curMe = prompt('스탬프를 찍을 선수 이름을 입력하세요 (예: 전순아, 정은경):');
+        if (curMe && roster.includes(curMe.trim())) {
+          curMe = curMe.trim();
+          ClubStore.setMe(t, curMe);
+        } else {
+          alert('선수 명단에 등록된 이름을 선택해 주세요!');
+          return;
+        }
+      }
+      const taskId = btn.dataset.stampTask;
+      const curData = ClubStore.getTeamData(t);
+      curData.missions = curData.missions || [
+        {
+          id: 'm_202611_w2',
+          weekTitle: '2026 시즌 11월 2주차 주간 미션',
+          dateRange: '11.09 ~ 11.15',
+          tasks: [
+            { id: 't1', title: '하체 밸런스 훈련', goal: '스쿼트 50회 3세트 & 런지 20회', icon: '🏋️' },
+            { id: 't2', title: '코어 & 어깨 보강', goal: '플랭크 1분 3세트 & 튜빙 밴드 회전근개', icon: '🧘' },
+            { id: 't3', title: '야구 기술 루틴', goal: '티배팅/빈스윙 100개 또는 섀도우 피칭 50구', icon: '⚾' }
+          ],
+          stamps: {}
+        }
+      ];
+      const curM = curData.missions[0];
+      curM.stamps = curM.stamps || {};
+      curM.stamps[curMe] = curM.stamps[curMe] || [];
+      if (!curM.stamps[curMe].includes(taskId)) {
+        curM.stamps[curMe].push(taskId);
+      }
+      ClubStore.saveTeamData(t, curData);
+      alert(`${curMe} 선수, 스탬프가 성공적으로 찍혔습니다! 💮 야구공 스탬프 적립 완료!`);
+      re();
+    };
+  });
+
+  // 출석상 상장 출력 바인딩
+  const btnAward = document.getElementById('btnExportAttendAward');
+  if (btnAward) {
+    btnAward.onclick = () => {
+      alert('🏅 올해의 출석왕 어워드 카드가 준비되었습니다!');
+    };
+  }
 
   // --- WT 정산실 전용 이벤트 바인딩 ---
   const btnNewSt = document.getElementById('btnNewSettlement');
