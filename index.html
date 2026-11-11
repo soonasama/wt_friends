@@ -9985,124 +9985,176 @@ html[data-theme="dark"] .cl-form b {
 .cal-head.sun { color: #f43f5e; }
 .cal-head.sat { color: #3b82f6; }
 /* 균등한 높이와 대칭 정렬을 위한 캘린더 날짜 셀 (글자 유무와 무관하게 모든 셀 높이 66px 고정) */
+/* =========================================================================
+   시원하고 가독성 높은 프리미엄 캘린더 UI (높이 105px 이상 넉넉한 공간 확보)
+   ========================================================================= */
 .cal-day {
-  height: 74px;
-  min-height: 74px;
-  max-height: 74px;
-  box-sizing: border-box;
-  background: var(--chip);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 4px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  position: relative;
-  transition: all 0.15s ease;
-  cursor: pointer;
-  overflow: hidden;
+  min-height: 102px !important;
+  height: 102px !important;
+  max-height: 102px !important;
+  box-sizing: border-box !important;
+  background: var(--chip) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 12px !important;
+  padding: 6px 5px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  align-items: stretch !important;
+  position: relative !important;
+  transition: all 0.2s ease !important;
+  cursor: pointer !important;
+  overflow: hidden !important;
+}
+html[data-theme="light"] .cal-day {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02) !important;
 }
 .cal-day:hover {
-  background: var(--bg-hover);
-  border-color: rgba(16, 185, 129, 0.4);
+  border-color: rgba(16, 185, 129, 0.5) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
 }
 .cal-day.today {
-  border: 2px solid #10b981;
-  background: rgba(16, 185, 129, 0.08);
+  border: 2px solid #10b981 !important;
+  background: rgba(16, 185, 129, 0.05) !important;
+}
+html[data-theme="light"] .cal-day.today {
+  background: #f0fdf4 !important;
 }
 .cal-day.selected {
   border: 2px solid #3b82f6 !important;
-  background: rgba(59, 130, 246, 0.12) !important;
+  background: rgba(59, 130, 246, 0.1) !important;
 }
 .cal-day.other-month {
-  opacity: 0.25;
+  opacity: 0.3 !important;
+  background: transparent !important;
 }
+
+/* 상단 날짜 숫자 행: 좌측 정렬 및 또렷한 폰트 */
 .cal-date-row {
-  height: 20px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 3px;
+  height: 22px !important;
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  margin-bottom: 4px !important;
 }
 .cal-num {
-  font-weight: 700;
-  font-size: 12px;
-  line-height: 1;
+  font-weight: 800 !important;
+  font-size: 13px !important;
+  color: var(--ink) !important;
+  padding-left: 2px !important;
 }
-.cal-num.sun { color: #f43f5e; }
-.cal-num.sat { color: #3b82f6; }
+html[data-theme="light"] .cal-num {
+  color: #1e293b !important;
+}
+.cal-num.sun { color: #f43f5e !important; }
+.cal-num.sat { color: #2563eb !important; }
 .cal-num-today {
-  background: #10b981;
-  color: #ffffff;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  font-weight: 800;
-}
-/* 이벤트 칩 슬롯 영역: 칩(capsule pill)들이 중앙에 단정하게 정렬되도록 구성 */
-.cal-events-slot {
-  width: 100%;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 3px;
-  overflow: hidden;
-}
-/* 넓게 늘어지던 사각형 막대를 귀엽고 통통한 캡슐 칩(Pill Chip) 형태로 대변신 */
-.cal-badge {
+  background: #10b981 !important;
+  color: #ffffff !important;
+  width: 22px !important;
+  height: 22px !important;
+  border-radius: 50% !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  width: auto !important;
-  max-width: 94% !important;
-  height: 20px !important;
-  line-height: 20px !important;
-  padding: 0 9px !important;
-  border-radius: 999px !important; /* 동글동글 캡슐 알약 형태 칩 */
+  font-size: 11.5px !important;
+  font-weight: 900 !important;
+  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.35) !important;
+}
+
+/* 이벤트 칩 슬롯: 24px 높이의 넉넉한 카드 칩 배치 */
+.cal-events-slot {
+  width: 100% !important;
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  gap: 4px !important;
+  overflow: hidden !important;
+}
+
+/* 가독성을 살린 세련된 라운드 칩 (Round Banner Pill) */
+.cal-badge {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  height: 22px !important;
+  line-height: 22px !important;
+  padding: 0 6px !important;
+  border-radius: 6px !important;
   font-size: 11px !important;
-  font-weight: 800 !important;
+  font-weight: 700 !important;
   white-space: nowrap !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12) !important;
-  margin: 0 auto !important;
-  letter-spacing: -0.2px !important;
+  letter-spacing: -0.3px !important;
+  transition: all 0.15s ease !important;
 }
+/* 생일 칩: 화사하고 눈에 확 띄는 핑크/로즈 테마 */
 .cal-badge.bday {
-  background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%) !important;
-  color: #ffffff !important;
-  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  background: #ffe4e6 !important;
+  color: #be123c !important;
+  border: 1px solid #fecdd3 !important;
 }
+html[data-theme="dark"] .cal-badge.bday {
+  background: rgba(244, 63, 94, 0.22) !important;
+  color: #fda4af !important;
+  border: 1px solid rgba(244, 63, 94, 0.45) !important;
+}
+/* 시합 칩: 승리와 활력의 에메랄드 그린 테마 */
 .cal-badge.game {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
-  color: #ffffff !important;
-  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  background: #dcfce7 !important;
+  color: #15803d !important;
+  border: 1px solid #bbf7d0 !important;
 }
+html[data-theme="dark"] .cal-badge.game {
+  background: rgba(16, 185, 129, 0.22) !important;
+  color: #86efac !important;
+  border: 1px solid rgba(16, 185, 129, 0.45) !important;
+}
+/* 훈련 칩: 청량하고 스포티한 블루 테마 */
 .cal-badge.drill {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
-  color: #ffffff !important;
-  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  background: #dbeafe !important;
+  color: #1d4ed8 !important;
+  border: 1px solid #bfdbfe !important;
 }
+html[data-theme="dark"] .cal-badge.drill {
+  background: rgba(59, 130, 246, 0.22) !important;
+  color: #93c5fd !important;
+  border: 1px solid rgba(59, 130, 246, 0.45) !important;
+}
+/* 모임 칩: 부드러운 퍼플 테마 */
 .cal-badge.event {
-  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%) !important;
-  color: #ffffff !important;
-  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  background: #f3e8ff !important;
+  color: #7e22ce !important;
+  border: 1px solid #e9d5ff !important;
+}
+html[data-theme="dark"] .cal-badge.event {
+  background: rgba(139, 92, 246, 0.22) !important;
+  color: #d8b4fe !important;
+  border: 1px solid rgba(139, 92, 246, 0.45) !important;
 }
 .cal-badge.more {
-  background: rgba(255, 255, 255, 0.15) !important;
-  color: var(--ink) !important;
+  background: #f1f5f9 !important;
+  color: #64748b !important;
+  border: 1px solid #cbd5e1 !important;
   font-size: 10px !important;
-  height: 16px !important;
-  line-height: 16px !important;
-  padding: 0 6px !important;
+  height: 18px !important;
+  line-height: 18px !important;
+  justify-content: center !important;
+  font-weight: 800 !important;
+}
+html[data-theme="dark"] .cal-badge.more {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: var(--mute) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
 }
 
 /* 출석부 명예의 전당 (Podium) */
@@ -14625,7 +14677,7 @@ function renderClubCalendarSection(t, data, tc, me) {
         items.push({
           type: 'bday',
           label: bdayDesc,
-          shortLabel: `🎂 ${p.name}`,
+          shortLabel: `🎂 ${p.name} 생일`,
           fullLabel: bdayDesc,
           date: dateStr
         });
@@ -14639,7 +14691,7 @@ function renderClubCalendarSection(t, data, tc, me) {
         items.push({
           type: 'game',
           label: gameDesc,
-          shortLabel: `🏆 vs ${oppName}`,
+          shortLabel: `🏆 vs ${oppName} (${g.time || '11:00'})`,
           fullLabel: gameDesc,
           date: dateStr
         });
@@ -14653,7 +14705,7 @@ function renderClubCalendarSection(t, data, tc, me) {
         items.push({
           type: e.type === '모임' ? 'event' : (e.type === '공식대회' ? 'game' : 'drill'),
           label: drillDesc,
-          shortLabel: `${icon} ${e.type || '훈련'}`,
+          shortLabel: `${icon} ${e.title}`,
           fullLabel: drillDesc,
           date: dateStr,
           ev: e
@@ -14756,7 +14808,7 @@ function renderClubCalendarSection(t, data, tc, me) {
           const isToday = c.dateStr === todayStr;
           const isSel = UI.selectedCalDate === c.dateStr;
           const items = c.items || [];
-          const visibleItems = items.slice(0, 2);
+          const visibleItems = items.slice(0, 3);
           const moreCount = items.length - visibleItems.length;
 
           return `
