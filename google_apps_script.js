@@ -1,12 +1,22 @@
 /**
  * ⚾ 2026 WT프렌즈 통합 데이터베이스(DB) - 마스터 Google Apps Script
- * (라인업_관리_DB + WT_일정_참석투표_DB + WT_공지_커뮤니티_DB + WT_훈련_셋로그_DB + WT_정산_회계_DB)
+ * 
+ * [연동 시트 전체 목록]
+ * 1. 라인업_관리_DB : 출전 라인업 및 오더 기록
+ * 2. WT_일정_참석투표_DB : 훈련·시합·행사 일정 및 RSVP 투표 현황
+ * 3. WT_공지_커뮤니티_DB : 구단 공지사항 및 댓글 소통
+ * 4. WT_훈련_셋로그_DB : 선수별 개인 훈련 로그
+ * 5. WT_주간미션_스탬프_DB : 주간 홈트·기술 훈련 과제 및 스탬프 인증 내역
+ * 6. WT_출석부_통계_DB : 2026 시즌 선수단 출석률 및 올해의 출석왕 랭킹
+ * 7. WT_정산_회계_DB : 대회 원정 및 행사 지출·찬조·회비 정산서
+ * 8. _CLUB_RAW : 클럽하우스 전체 데이터 백업 JSON
  */
 
 function doGet(e) {
   var params = e ? (e.parameter || {}) : {};
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   
+  // 1. 클럽하우스 전체 데이터 백업 조회 (기본값)
   if (params.action === 'get' || params.action === 'club' || !params.sheet) {
     var rawSheet = getOrCreateSheet(ss, '_CLUB_RAW');
     var rawJson = rawSheet.getRange('A1').getValue();
@@ -26,6 +36,7 @@ function doGet(e) {
       .setMimeType(ContentService.MimeType.JSON);
   }
   
+  // 2. 특정 시트 데이터 조회
   var sheetName = params.sheet || '라인업_관리_DB';
   var sheet = ss.getSheetByName(sheetName);
   if (!sheet) {
@@ -54,7 +65,7 @@ function doPost(e) {
       try { data = JSON.parse(rawContents); } catch(err) { data = {}; }
     }
     
-    // 분기 A: 라인업 저장
+    // 분기 A: 라인업 저장 요청
     if (data.batters && Array.isArray(data.batters)) {
       var luSheet = getOrCreateSheet(ss, '라인업_관리_DB');
       luSheet.appendRow([
@@ -82,15 +93,18 @@ function doPost(e) {
         .setMimeType(ContentService.MimeType.JSON);
     }
     
-    // 분기 B: 클럽하우스 데이터 저장 (일정, 공지, 셋로그, 정산실)
+    // 분기 B: 클럽하우스 데이터 전체 동기화
     var clubData = data.data || data;
     
+    // 1) RAW JSON 백업
     var rawSheet = getOrCreateSheet(ss, '_CLUB_RAW');
     rawSheet.getRange('A1').setValue(JSON.stringify(clubData));
     rawSheet.getRange('B1').setValue('마지막 업데이트: ' + Utilities.formatDate(new Date(), 'Asia/Seoul', 'yyyy-MM-dd HH:mm:ss'));
     
+    // 2) 개별 DB 시트 실시간 자동 갱신
     if (clubData.events && Array.isArray(clubData.events)) {
       updateEventsSheet(ss, clubData.events);
+      updateAttendanceSheet(ss, clubData.events);
     }
     if (clubData.notices && Array.isArray(clubData.notices)) {
       updateNoticesSheet(ss, clubData.notices);
@@ -98,11 +112,14 @@ function doPost(e) {
     if (clubData.setlogs && Array.isArray(clubData.setlogs)) {
       updateSetlogsSheet(ss, clubData.setlogs);
     }
+    if (clubData.missions && Array.isArray(clubData.missions)) {
+      updateMissionsSheet(ss, clubData.missions);
+    }
     if (clubData.settlements && Array.isArray(clubData.settlements)) {
       updateSettlementsSheet(ss, clubData.settlements);
     }
     
-    return ContentService.createTextOutput(JSON.stringify({ status: "success", message: "클럽하우스 통합 동기화 완료" }))
+    return ContentService.createTextOutput(JSON.stringify({ status: "success", message: "WT프렌즈 클럽하우스 전체 DB 동기화 완료" }))
       .setMimeType(ContentService.MimeType.JSON);
 
   } catch(err) {
@@ -119,6 +136,7 @@ function getOrCreateSheet(ss, name) {
   return sheet;
 }
 
+// 1. 일정 및 참석투표 시트
 function updateEventsSheet(ss, events) {
   var sheet = getOrCreateSheet(ss, 'WT_일정_참석투표_DB');
   sheet.clear();
@@ -148,6 +166,7 @@ function updateEventsSheet(ss, events) {
   }
 }
 
+// 2. 공지 커뮤니티 시트
 function updateNoticesSheet(ss, notices) {
   var sheet = getOrCreateSheet(ss, 'WT_공지_커뮤니티_DB');
   sheet.clear();
@@ -168,6 +187,7 @@ function updateNoticesSheet(ss, notices) {
   }
 }
 
+// 3. 훈련 셋로그 시트
 function updateSetlogsSheet(ss, setlogs) {
   var sheet = getOrCreateSheet(ss, 'WT_훈련_셋로그_DB');
   sheet.clear();
@@ -188,6 +208,74 @@ function updateSetlogsSheet(ss, setlogs) {
   }
 }
 
+// 4. 주간 미션 스탬프 시트
+function updateMissionsSheet(ss, missions) {
+  var sheet = getOrCreateSheet(ss, 'WT_주간미션_스탬프_DB');
+  sheet.clear();
+  sheet.appendRow(['주차/미션ID', '미션제목', '기간', '훈련항목', '인증완료선수수', '달성선수명단', '달성률']);
+  if (missions && missions.length) {
+    missions.forEach(function(m) {
+      var stamps = m.stamps || {};
+      var members = Object.keys(stamps);
+      var taskDesc = (m.tasks || []).map(function(t){ return t.title + '(' + t.goal + ')'; }).join(' | ');
+      var mList = members.map(function(name){ return name + '(' + (stamps[name]||[]).length + ')'; }).join(', ');
+      var pct = Math.round((members.length / 22) * 100) + '%';
+      sheet.appendRow([
+        m.id || '',
+        m.weekTitle || '',
+        m.dateRange || '',
+        taskDesc,
+        members.length,
+        mList,
+        pct
+      ]);
+    });
+  }
+}
+
+// 5. 출석부 통계 시트 (RSVP 누적 기반)
+function updateAttendanceSheet(ss, events) {
+  var sheet = getOrCreateSheet(ss, 'WT_출석부_통계_DB');
+  sheet.clear();
+  sheet.appendRow(['순위', '선수명', '총일정수', '참석횟수', '카풀지원', '불참', '출석률(%)', '성실등급', '수상구분']);
+  
+  var roster = [
+    '전순아', '전광숙', '김현우', '김성현', '정은경', '민정현', '안장우', '조우림',
+    '최수남', '류이슬', '이정은', '조보영', '송백설', '원미리', '박세영', '이은숙',
+    '서희숙', '구민경', '황지민', '이선희', '김설빈', '이수정'
+  ];
+  
+  var totalEv = events ? events.length : 1;
+  if (!totalEv) totalEv = 1;
+  
+  var stats = roster.map(function(name) {
+    var att = 0, car = 0, abs = 0;
+    (events || []).forEach(function(ev) {
+      var r = (ev.rsvp || {})[name];
+      if (r === 'in' || r === 'ok') att++;
+      else if (r === 'car') { att++; car++; }
+      else if (r === 'out') abs++;
+    });
+    var rate = Math.round((att / totalEv) * 100);
+    return { name: name, att: att, car: car, abs: abs, rate: rate };
+  }).sort(function(a, b){ return b.rate - a.rate || b.att - a.att; });
+  
+  stats.forEach(function(s, idx) {
+    var rank = idx + 1;
+    var grade = s.rate >= 90 ? 'S급' : (s.rate >= 75 ? 'A급' : 'B급');
+    var award = '';
+    if (rank === 1) award = '🥇 올해의 출석왕 (1위)';
+    else if (rank === 2) award = '🥈 성실상 (2위)';
+    else if (rank === 3) award = '🥉 성실상 (3위)';
+    else if (s.rate >= 80) award = '우수출석';
+    
+    sheet.appendRow([
+      rank, s.name, totalEv, s.att, s.car, s.abs, s.rate, grade, award
+    ]);
+  });
+}
+
+// 6. 정산 회계 DB 시트
 function updateSettlementsSheet(ss, settlements) {
   var sheet = getOrCreateSheet(ss, 'WT_정산_회계_DB');
   sheet.clear();

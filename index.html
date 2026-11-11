@@ -10995,11 +10995,8 @@ V.game=(q,id)=>{
   const winner=g.hres==='승'?'h':g.ares==='승'?'a':'';
   const T=subtabs('game',[['sum','요약'],['h',esc(g.home.short)],['a',esc(g.away.short)]]);
   
-  let luLink = '';
-  if (g.date === '2026-11-08') {
-    const lId = g.time.includes('11') ? 'L20261108_1' : 'L20261108_2';
-    luLink = `<div style="margin:12px 0;display:flex;justify-content:center"><a class="vsbtn pri" href="#/lineup/aSEa0076/${lId}" style="background:linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);color:#ffffff;font-weight:800;padding:9px 18px;border-radius:10px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;box-shadow:0 3px 10px rgba(37,99,235,0.25)">📋 2026.11.08 왕중왕전 출전 라인업 보기 ›</a></div>`;
-  }
+  // 라인업 이동 버튼 대신 경기 목록으로 돌아가는 버튼 제공
+  const backToListHtml = `<div style="margin:14px 0 10px;display:flex;justify-content:center"><button type="button" class="vsbtn" id="btnBackToGamesList" style="background:rgba(255,255,255,0.12);color:var(--ink);font-weight:800;padding:9px 20px;border-radius:10px;border:1px solid var(--border);cursor:pointer;display:inline-flex;align-items:center;gap:6px">‹ 경기 목록으로 돌아가기</button></div>`;
 let body='';
   if(T.cur==='sum'){
     if(!g.boxH&&!g.boxA)body=`<div class="card empty">KBSA에 박스스코어가 등록되지 않은 경기입니다.</div>`;
@@ -11029,11 +11026,16 @@ let body='';
     <div class="tm r">${badge(g.away,60)}<div>${tlink(g.away)}<small>원정${winner==='a'?' · 승':''}</small></div></div></div>
     <div class="info">${g.date.replace(/-/g,'.')} (${g.dow}) ${g.time} · ${esc(g.comp.name)} · ${esc(g.round)}${divPill(g.round)}</div>
     ${(g.boxH||g.boxA)?`<div style="margin-top:10px;display:flex;justify-content:center"><button class="vsbtn" data-gmvp="${g.id}" style="background:#10B981;color:#042F2E;border:0;cursor:pointer;font-weight:900;padding:7px 14px;border-radius:999px">👑 Today's MVP 카드 만들기 ›</button></div>`:''}</div>
-  ${T.html}${luLink}${body}`;
+  ${T.html}${backToListHtml}${body}`;
 };
 V.game.bind=()=>{
   const mvpBtn=$app.querySelector('[data-gmvp]');
   if(mvpBtn)mvpBtn.onclick=()=>openGameMvpStudio(mvpBtn.dataset.gmvp);
+  const backBtn=$app.querySelector('#btnBackToGamesList');
+  if(backBtn)backBtn.onclick=()=>{
+    if(history.length>1){history.back();}
+    else{go('#/games');}
+  };
 };
 
 V.teams=()=>{
