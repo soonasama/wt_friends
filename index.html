@@ -179,6 +179,108 @@ td.plays{text-align:left;color:var(--ink2);font-size:12px;white-space:normal;min
 .trend{font-size:12px;font-weight:700}
 .trend.up{color:var(--up)} .trend.down{color:var(--down)} .trend.flat{color:var(--mute)}
 
+
+/* =========================================================================
+   모바일 최적화: 히어로 버튼 2x3 대칭 그리드 & 캘린더 모바일 최적화
+   ========================================================================= */
+@media (max-width: 768px) {
+  .board .vsbtns {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-top: 14px !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+  }
+  .board .vsbtns .vsbtn:first-child {
+    grid-column: auto !important;
+  }
+  .board .vsbtns .vsbtn {
+    width: 100% !important;
+    height: 42px !important;
+    justify-content: center !important;
+    text-align: center !important;
+    margin: 0 !important;
+    padding: 0 8px !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    box-sizing: border-box !important;
+    border-radius: 10px !important;
+    display: flex !important;
+    align-items: center !important;
+    white-space: nowrap !important;
+  }
+}
+
+/* 캘린더 모바일 전용 가독성 최적화 */
+@media (max-width: 600px) {
+  .cal-wrap {
+    padding: 12px 6px !important;
+    border-radius: 12px !important;
+  }
+  .cal-grid {
+    gap: 3px !important;
+  }
+  .cal-head {
+    font-size: 11px !important;
+    padding: 4px 0 !important;
+  }
+  .cal-day {
+    min-height: 64px !important;
+    height: auto !important;
+    max-height: none !important;
+    padding: 4px 2px !important;
+    border-radius: 8px !important;
+  }
+  .cal-date-row {
+    height: 18px !important;
+    margin-bottom: 2px !important;
+  }
+  .cal-num {
+    font-size: 11.5px !important;
+    padding-left: 2px !important;
+  }
+  .cal-num-today {
+    width: 18px !important;
+    height: 18px !important;
+    font-size: 11px !important;
+    line-height: 18px !important;
+  }
+  .cal-badge {
+    height: 18px !important;
+    line-height: 18px !important;
+    font-size: 9.5px !important;
+    padding: 0 3px !important;
+    border-radius: 4px !important;
+    margin-top: 2px !important;
+    text-align: center !important;
+    justify-content: center !important;
+    letter-spacing: -0.5px !important;
+  }
+  .radar-wrap {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    margin-bottom: 12px !important;
+  }
+  .radar-card {
+    padding: 10px 12px !important;
+  }
+
+  /* 주간 미션 테이블 모바일 스티키 선수명 열 */
+  .mission-table th:first-child,
+  .mission-table td:first-child {
+    position: sticky !important;
+    left: 0 !important;
+    z-index: 5 !important;
+    background: var(--card) !important;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.08) !important;
+  }
+  .mobile-mission-hint {
+    display: flex !important;
+  }
+}
+
 /* scoreboard */
 .vsbtns{display:flex;flex-direction:column;gap:6px;margin-left:auto}
 .board{background:var(--ink);color:#fff;border-radius:18px;padding:18px}
@@ -6570,7 +6672,7 @@ html, body {
     gap: 7px !important;
   }
   .board .vsbtns .vsbtn:first-child {
-    grid-column: 1 / -1 !important;
+    grid-column: auto !important;
   }
   .board .vsbtns .vsbtn {
     width: 100% !important;
@@ -7279,7 +7381,7 @@ html, body {
     margin-top: 10px !important;
   }
   .board .vsbtns .vsbtn:first-child {
-    grid-column: 1 / -1 !important;
+    grid-column: auto !important;
   }
   .board .vsbtns .vsbtn {
     width: 100% !important;
@@ -7563,7 +7665,7 @@ html[data-theme="dark"] .clip:not(.big) .pf b {
     justify-content: center !important;
   }
   .board .vsbtns .vsbtn:first-child {
-    grid-column: 1 / -1 !important;
+    grid-column: auto !important;
   }
   .board .stats.four {
     display: grid !important;
@@ -9698,6 +9800,54 @@ html[data-theme="dark"] .cl-form b {
 }
 
 
+/* 주간 미션 테이블 화면 흔들림 완전 방지 (고정 레이아웃 & 고정 치수) */
+.mission-table {
+  width: 100% !important;
+  table-layout: fixed !important;
+  border-collapse: collapse !important;
+  font-size: 13px !important;
+}
+.mission-table th, .mission-table td {
+  height: 48px !important;
+  vertical-align: middle !important;
+  box-sizing: border-box !important;
+  padding: 8px 6px !important;
+}
+.mission-btn {
+  width: 72px !important;
+  min-width: 72px !important;
+  max-width: 72px !important;
+  height: 30px !important;
+  line-height: 28px !important;
+  padding: 0 !important;
+  text-align: center !important;
+  font-size: 11.5px !important;
+  box-sizing: border-box !important;
+  transition: background-color 0.15s ease, color 0.15s ease !important;
+}
+.mission-stamp-all-btn {
+  width: 82px !important;
+  min-width: 82px !important;
+  max-width: 82px !important;
+  height: 30px !important;
+  line-height: 28px !important;
+  padding: 0 !important;
+  text-align: center !important;
+  font-size: 11.5px !important;
+  box-sizing: border-box !important;
+}
+.mission-status-cell {
+  display: inline-block !important;
+  width: 115px !important;
+  min-width: 115px !important;
+  max-width: 115px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  vertical-align: middle !important;
+  line-height: 30px !important;
+}
+
 /* =========================================================================
    WT 정산실 & 영수증 카드 스타일 (고대비 / 이미지 출력 최적화)
    ========================================================================= */
@@ -9796,11 +9946,18 @@ html[data-theme="dark"] .cl-form b {
   font-weight: 900;
   color: #0f172a;
   margin-bottom: 6px;
+  word-break: keep-all !important;
+  overflow-wrap: normal !important;
+  text-align: center !important;
+  line-height: 1.35 !important;
 }
 .receipt-sub {
   font-size: 12px;
   color: #64748b;
-  line-height: 1.4;
+  line-height: 1.4 !important;
+  word-break: keep-all !important;
+  overflow-wrap: normal !important;
+  text-align: center !important;
 }
 .receipt-section {
   margin-bottom: 16px;
@@ -10141,6 +10298,27 @@ html[data-theme="dark"] .cal-badge.event {
   color: #d8b4fe !important;
   border: 1px solid rgba(139, 92, 246, 0.45) !important;
 }
+.cal-badge.fed {
+  background: #fef3c7 !important;
+  color: #b45309 !important;
+  border: 1px solid #fde68a !important;
+}
+html[data-theme="dark"] .cal-badge.fed {
+  background: rgba(245, 158, 11, 0.22) !important;
+  color: #fcd34d !important;
+  border: 1px solid rgba(245, 158, 11, 0.45) !important;
+}
+.cal-badge.notice {
+  background: #ccfbf1 !important;
+  color: #0f766e !important;
+  border: 1px solid #99f6e4 !important;
+}
+html[data-theme="dark"] .cal-badge.notice {
+  background: rgba(20, 184, 166, 0.22) !important;
+  color: #5eead4 !important;
+  border: 1px solid rgba(20, 184, 166, 0.45) !important;
+}
+
 .cal-badge.more {
   background: #f1f5f9 !important;
   color: #64748b !important;
@@ -10151,7 +10329,28 @@ html[data-theme="dark"] .cal-badge.event {
   justify-content: center !important;
   font-weight: 800 !important;
 }
-html[data-theme="dark"] .cal-badge.more {
+html[data-theme="dark"] .cal-badge.fed {
+  background: #fef3c7 !important;
+  color: #b45309 !important;
+  border: 1px solid #fde68a !important;
+}
+html[data-theme="dark"] .cal-badge.fed {
+  background: rgba(245, 158, 11, 0.22) !important;
+  color: #fcd34d !important;
+  border: 1px solid rgba(245, 158, 11, 0.45) !important;
+}
+.cal-badge.notice {
+  background: #ccfbf1 !important;
+  color: #0f766e !important;
+  border: 1px solid #99f6e4 !important;
+}
+html[data-theme="dark"] .cal-badge.notice {
+  background: rgba(20, 184, 166, 0.22) !important;
+  color: #5eead4 !important;
+  border: 1px solid rgba(20, 184, 166, 0.45) !important;
+}
+
+.cal-badge.more {
   background: rgba(255, 255, 255, 0.12) !important;
   color: var(--mute) !important;
   border: 1px solid rgba(255, 255, 255, 0.2) !important;
@@ -10894,826 +11093,42 @@ V.dugout = () => {
 
   return `
     <div class="board" style="background: linear-gradient(135deg, #0D043D 0%, #172554 60%, #0F5FA4 100%) !important; color:#ffffff !important; margin-bottom: 22px !important;">
-      <div class="wt-board-topline">
-        <span class="wt-hero-slogan">WINNERS TOGETHER · FRIENDS</span>
-        <span class="wt-bhead-sub">서울 노원구 · 2008년 3월 3일 창단 (18주년) · 공식 선수단 22명 클럽하우스</span>
+      <div class="wt-board-topline" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;width:100%;gap:6px;flex-wrap:wrap">
+      <div>
+        ${isWT ? '<span class="wt-hero-slogan">WINNERS TOGETHER · FRIENDS</span>' : ''}
       </div>
-      <div class="bhead">
-        <div class="bhead-info">
-          <div class="wt-bhead-top">
-            ${badge(wt, 88)}
-            <div class="wt-bhead-title-col">
-              <div class="tm wt-dugout-title">🧢 WT프렌즈 덕아웃</div>
-              <div class="wt-bhead-desc" style="color:#f1f5f9;font-size:13px;font-weight:600;margin-top:4px">선수 카드를 클릭하면 세부 타격·투구 분석 및 히트맵을 볼 수 있습니다.</div>
-            </div>
+      <div>
+        ${isWT ? `
+          <div class="hero-me-pill" style="display:inline-flex;align-items:center;gap:6px;background:rgba(15, 23, 42, 0.85);border:1px solid rgba(255, 255, 255, 0.25);border-radius:999px;padding:3px 10px;backdrop-filter:blur(8px);box-shadow:0 2px 8px rgba(0,0,0,0.35);white-space:nowrap">
+            <span style="font-size:11.5px;color:#94a3b8;font-weight:700;white-space:nowrap;flex-shrink:0">👤 내 프로필:</span>
+            <select id="heroMeSel" class="hero-me-select" style="background:#0f172a !important;color:#f8fafc !important;border:1px solid rgba(255,255,255,0.25) !important;border-radius:6px !important;padding:2px 8px !important;font-size:12px !important;font-weight:800 !important;cursor:pointer;outline:none;white-space:nowrap">
+              <option value="" style="background:#0f172a;color:#94a3b8">${!ClubStore.getMe(t) ? '선수 선택 (22명) ▾' : '선수 변경 ▾'}</option>
+              ${luRoster(t).map(n => `<option value="${esc(n)}" ${n===ClubStore.getMe(t)?'selected':''} style="background:#0f172a;color:#f8fafc">${esc(n)}</option>`).join('')}
+            </select>
           </div>
-        </div>
-        <span class="vsbtns wt-dugout-btns">
-          <a class="vsbtn pri" href="#/home" style="background:linear-gradient(135deg, #ef4444 0%, #dc2626 100%);color:#ffffff;border:1px solid #f87171;font-weight:800">🏠 홈 기록실 ›</a>
-          <a class="vsbtn" href="#/lineup/aSEa0076" style="background:rgba(255,255,255,0.15);color:#ffffff;border:1px solid rgba(255,255,255,0.35);font-weight:700">📋 라인업 짜기 ›</a>
-        </span>
-      </div>
-    </div>
-    ${(()=>{
-      const today = new Date();
-      const m = String(today.getMonth() + 1).padStart(2, '0');
-      const d = String(today.getDate()).padStart(2, '0');
-      const todayMd = m + '-' + d;
-      
-      const bdayToday = sorted.filter(p => p.birth && p.birth.slice(5) === todayMd);
-      if (bdayToday.length) {
-        return `<div class="dugout-bday-banner">
-          <div class="dugout-bday-left">
-            <span style="font-size:22px">🎂</span>
-            <div>
-              <div style="color:#ffffff;font-size:15px">오늘의 생일! <b>${bdayToday.map(p=>`${esc(p.name)} (#${p.no||''})`).join(', ')}</b> 선수의 생일을 진심으로 축하합니다! 🎉</div>
-              <div style="font-size:12px;color:#fecdd3">팀 단톡방과 덕아웃에서 따뜻한 축하 인사를 전해주세요!</div>
-            </div>
-          </div>
-          <span class="st-badge" style="background:#f43f5e;color:#ffffff;border:none">HAPPY BIRTHDAY!</span>
-        </div>`;
-      }
-      
-      // 다가오는 가장 가까운 생일자 찾기
-      const withBday = sorted.filter(p => p.birth).map(p => {
-        const parts = p.birth.split('-');
-        let bYear = today.getFullYear();
-        let bDate = new Date(bYear, parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
-        if (bDate < new Date(today.getFullYear(), today.getMonth(), today.getDate())) {
-          bDate = new Date(bYear + 1, parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
-        }
-        const diffDays = Math.ceil((bDate - today) / (1000 * 60 * 60 * 24));
-        return { p, diffDays, month: parts[1], day: parts[2] };
-      }).sort((a, b) => a.diffDays - b.diffDays);
-      
-      const nextB = withBday[0];
-      if (nextB) {
-        return `<div class="dugout-bday-banner" style="background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.15)">
-          <div class="dugout-bday-left" style="color:var(--ink)">
-            <span style="font-size:18px">🎂</span>
-            <span>다가오는 생일: <b>${esc(nextB.p.name)} (#${nextB.p.no||''})</b> — ${parseInt(nextB.month,10)}월 ${parseInt(nextB.day,10)}일 <span style="color:#10b981;font-weight:800">(D-${nextB.diffDays})</span></span>
-          </div>
-          <span class="st-badge" style="background:rgba(255,255,255,0.1);color:var(--ink)">생일 알림</span>
-        </div>`;
-      }
-      return '';
-    })()}
-    <div class="wt-roster-grid">
-      ${sorted.map(p => {
-        const pc = {};
-        p.bat.forEach(b => {
-          const posName = b.pos || '';
-          if (posName && posName !== '대타' && posName !== '대주자') {
-            pc[posName] = (pc[posName] || 0) + 1;
-          }
-        });
-        if (p.P.G > 0 || p.pit.length > 0) {
-          pc['투수'] = (pc['투수'] || 0) + (p.P.G || p.pit.length);
-        }
-        const sortedPos = Object.entries(pc).sort((a, b) => b[1] - a[1]);
-        const mainPos = sortedPos[0] ? sortedPos[0][0] : (p.regPos || p.mainPos || (p.P.G > 0 ? '투수' : '타자'));
-        const mainPosCount = sortedPos[0] ? sortedPos[0][1] : 0;
-        const posText = mainPos;
-
-        const numStr = p.no ? `#${p.no}` : '-';
-        let statText = '';
-        const hasPlayed = (p.B.G > 0 || p.P.G > 0);
-        if (!hasPlayed) {
-          statText = p.role === '코치' ? '코칭스태프' : '출전 대기 (등록 선수)';
-        } else if (p.P.G > 0 && p.P.outs >= 9) {
-          statText = `ERA ${f2(p.P.ERA)} · ${p.P.SO}탈삼진`;
-        } else if (p.B.AB > 0) {
-          statText = `타율 ${f3(p.B.AVG)} · ${p.B.H}안타`;
-        } else {
-          statText = `${p.B.PA}타석 출전`;
-        }
-
-        const roleTag = p.role && p.role !== '선수' ? ` · ${p.role}` : '';
-        const hoverTitle = `${esc(p.name)} (${numStr} · 주 포지션 ${posText}${mainPosCount ? ` ${mainPosCount}회` : ''}${roleTag}) - 클릭 시 기록 상세 이동`;
-
-        return `
-          <a class="wt-player-card" href="#/player/${encodeURIComponent(wt.id + '|' + p.name)}" title="${hoverTitle}">
-            <div class="wt-player-card-head">
-              <span class="wt-player-num-badge" title="등번호 ${numStr}">${numStr}</span>
-              <span class="wt-player-pos-badge" title="최다 출전 포지션: ${posText}${mainPosCount ? ` (${mainPosCount}경기)` : ''}">${posText}</span>
-            </div>
-            <div class="wt-player-info">
-              <div class="wt-player-name">${esc(p.name)}${p.role && p.role !== '선수' ? ` <small style="font-size:10.5px;font-weight:700;color:var(--mute)">${p.role}</small>` : ''}</div>
-              <div class="wt-player-stat-line">
-                <span>${p.B.G || p.P.G || 0}경기 출전</span>
-                <b>${statText}</b>
-              </div>
-              <div class="wt-player-hover-hint">기록 보기 ›</div>
-            </div>
-          </a>
-        `;
-      }).join('')}
-    </div>
-  `;
-};
-
-V.standings=()=>{
-  const S=Store;
-  UI.standDiv=UI.standDiv||'';
-  const c=UI.standComp;
-
-  // Auto-reset / validate divFilter for this competition:
-  const availDivs=getCompDivisions(c);
-  if(availDivs.length===0){
-    UI.standDiv=''; // 리그분리 없는 대회는 무조건 전체가 기본값!
-  }else if(UI.standDiv && !availDivs.some(x=>x.id===UI.standDiv)){
-    UI.standDiv=''; // 해당 대회에 없는 디비전이면 전체로 자동 리셋
-  }
-  const d=UI.standDiv;
-  const rows=S.standings(c,d);
-  const T=subtabs('stand',[['chart','그래프'],['table','기록표']]);
-
-  let subtitle='';
-  if(d==='champ') subtitle='🏆 2026 챔프리그 순위표';
-  else if(d==='future') subtitle='🌱 2026 퓨처리그 순위표';
-  else if(d==='master') subtitle='⭐ 2026 승강제 마스터 순위표';
-  else if(d==='rookie') subtitle='⚾ 2026 승강제 루키 순위표';
-  else if(d==='yeongnam') subtitle='🌊 2026 승강제 영남권 순위표';
-  else subtitle='2026 전체 순위표';
-
-  if(c!=null){
-    const compObj=S.comps.find(x=>x.i===c);
-    if(compObj) subtitle+=` · ${compObj.name}`;
-  }
-
-  let divSectionHtml='';
-  if(availDivs.length>0){
-    const divChips=availDivs.map(x=>{
-      let cls='chip';
-      if(x.id==='champ') cls+=' chip-champ';
-      if(x.id==='future') cls+=' chip-future';
-      return `<button class="${cls} ${d===x.id?'on':''}" data-stand-div="${x.id}">${x.label}</button>`;
-    }).join('');
-    divSectionHtml=`<div style="margin-top:12px">
-      <div style="font-size:12px;font-weight:700;color:var(--mute);margin-bottom:6px">리그 / 디비전 구분</div>
-      <div class="chips">${divChips}</div>
-    </div>`;
-  }else{
-    divSectionHtml=`<div style="margin-top:12px">
-      <span class="pill" style="background:var(--chip);color:var(--ink2);border:1.5px solid var(--line);font-size:12.5px;padding:5px 12px;font-weight:600">📌 단일 대회 (리그 분리 없음 · 대회 전체 순위 기본)</span>
-    </div>`;
-  }
-
-  const body=rows.length===0
-    ? `<div class="card empty" style="margin-top:14px">해당 조건에 진행된 경기 기록이 없습니다.</div>`
-    : (T.cur==='chart'
-      ? `<div class="card">${rows.map((r,i)=>{
-          const tag=r.tRank===1?' <span class="pill pill-champ" style="font-size:10.5px;padding:1px 6px">우승</span>':r.tRank===2?' <span class="pill" style="background:var(--chip);color:var(--ink);border:1px solid var(--line);font-size:10.5px;font-weight:800;padding:1px 6px">준우승</span>':r.tRank===3?' <span class="pill" style="background:#d97706;color:#ffffff;font-size:10.5px;font-weight:800;padding:1px 6px;border-radius:4px">3위</span>':'';
-          return `<div class="srow"><div class="sl"><span class="crk">${i+1}</span>${badge(r.team,26)}<div>${tlink(r.team)}${tag}<small>${r.G}경기 · 득점 ${r.RS} · 실점 ${r.RA} · 득실 ${r.RD>0?'+':''}${r.RD}</small></div><b>${pct(r.PCT)}</b></div>
-          ${stackBar([{v:r.W,color:'#10b981',label:r.W+'승'},{v:r.D,color:'#64748b',label:r.D+'무'},{v:r.L,color:'#f43f5e',label:r.L+'패'}])}</div>`;
-        }).join('')}</div>`
-      : table([{k:'rk',t:'#',f:(r,i)=>i+1,nosort:1},{k:'team',t:'구단',l:1,cls:'name',f:r=>{
-          const tag=r.tRank===1?' <span class="pill pill-champ" style="font-size:10px;padding:1px 5px">우승</span>':r.tRank===2?' <span class="pill" style="background:var(--chip);color:var(--ink);border:1px solid var(--line);font-size:10px;font-weight:800;padding:1px 5px">준우승</span>':r.tRank===3?' <span class="pill" style="background:#d97706;color:#ffffff;font-size:10px;font-weight:800;padding:1px 5px;border-radius:4px">3위</span>':'';
-          return `<span class="tcell">${badge(r.team,24)}${tlink(r.team)}${tag}</span>`;
-        },v:r=>r.team.short},{k:'G',t:'경기'},{k:'W',t:'승'},{k:'L',t:'패'},{k:'D',t:'무'},
-         {k:'PCT',t:'승률',f:r=>pct(r.PCT)},{k:'RS',t:'득점'},{k:'RA',t:'실점'},{k:'RD',t:'득실'},{k:'rpg',t:'경기당 득점',v:r=>r.RS/r.G,f:r=>(r.RS/r.G).toFixed(1)},{k:'rapg',t:'경기당 실점',v:r=>r.RA/r.G,f:r=>(r.RA/r.G).toFixed(1)},
-         {k:'form',t:'최근 5',f:r=>formDots(r.form),nosort:1}],rows,{}));
-
-  return `<h1>순위</h1>
-  <p class="sub" style="margin-top:4px"><b>${subtitle}</b> (총 ${rows.length}개 구단 기록 집계)</p>
-  <div style="margin-top:12px">
-    <div style="font-size:12px;font-weight:700;color:var(--mute);margin-bottom:6px">대회 선택</div>
-    <div class="chips">${[`<button class="chip ${c==null?'on':''}" data-comp="">전체 시즌</button>`].concat(S.comps.map(x=>`<button class="chip ${c===x.i?'on':''}" data-comp="${x.i}">${esc(x.short)}</button>`)).join('')}</div>
-  </div>
-  ${divSectionHtml}
-  ${T.html}${body}${note('standings','missing')}`;
-};
-V.standings.bind=()=>{
-  $app.querySelectorAll('[data-comp]').forEach(b=>b.onclick=()=>{
-    const newComp=b.dataset.comp===''?null:+b.dataset.comp;
-    UI.standComp=newComp;
-    const avail=getCompDivisions(newComp);
-    if(avail.length===0 || !avail.some(x=>x.id===UI.standDiv)){
-      UI.standDiv='';
-    }
-    render();
-  });
-  $app.querySelectorAll('[data-stand-div]').forEach(b=>b.onclick=()=>{
-    UI.standDiv=b.dataset.standDiv;
-    render();
-  });
-};
-V.games=(q)=>{
-  const S=Store;
-  if(q){
-    if(q.c!=null)UI.gamesComp=String(q.c);
-    if(q.t!=null){
-      const tid = String(q.t);
-      UI.gamesTeam = (tid === '26' || tid === 'aSEa0076') ? 'aSEa0076' : tid;
-    }
-    if(q.m!=null)UI.gamesMonth=String(q.m);
-    if(q.div!=null)UI.gamesDiv=String(q.div);
-  }
-  UI.gamesDiv=UI.gamesDiv||'';
-
-  // Validate gamesDiv against selected gamesComp:
-  const availDivs=getCompDivisions(UI.gamesComp);
-  if(availDivs.length===0){
-    UI.gamesDiv=''; // 대회에 디비전이 없으면 전체가 기본값!
-  }else if(UI.gamesDiv && !availDivs.some(x=>x.id===UI.gamesDiv)){
-    UI.gamesDiv=''; // 해당 대회에 없는 디비전이면 전체로 자동 리셋
-  }
-
-  let list=S.games.slice();
-  if(UI.gamesComp!=='') list=list.filter(g=>g.comp.i===+UI.gamesComp);
-  if(UI.gamesDiv==='champ') list=list.filter(g=>String(g.round||'').includes('챔프'));
-  else if(UI.gamesDiv==='future') list=list.filter(g=>String(g.round||'').includes('퓨처'));
-  else if(UI.gamesDiv==='master') list=list.filter(g=>String(g.round||'').includes('마스터'));
-  else if(UI.gamesDiv==='rookie') list=list.filter(g=>String(g.round||'').includes('루키'));
-  else if(UI.gamesDiv==='yeongnam') list=list.filter(g=>g.comp.i===2&&String(g.round||'').includes('영남권'));
-
-  if(UI.gamesTeam!=='') list=list.filter(g=>g.home.id===UI.gamesTeam||g.away.id===UI.gamesTeam);
-  if(UI.gamesMonth!=='') list=list.filter(g=>g.date.slice(5,7)===UI.gamesMonth);
-
-  const allMonths=[...new Set(S.games.map(g=>g.date.slice(5,7)))].sort();
-  const activeTeams=S.teams.filter(t=>!t.combined&&S.gamesOf(t).length).sort((a,b)=>a.short.localeCompare(b.short,'ko'));
-
-  const compChips=[`<button class="chip ${UI.gamesComp===''?'on':''}" data-gcomp="">전체 대회</button>`]
-    .concat(S.comps.map(c=>`<button class="chip ${UI.gamesComp===String(c.i)?'on':''}" data-gcomp="${c.i}">${esc(c.short)}</button>`)).join('');
-
-  let divSectionHtml='';
-  if(availDivs.length>0){
-    const divChips=availDivs.map(x=>{
-      let cls='chip';
-      if(x.id==='champ') cls+=' chip-champ';
-      if(x.id==='future') cls+=' chip-future';
-      return `<button class="${cls} ${UI.gamesDiv===x.id?'on':''}" data-gdiv="${x.id}">${x.label}</button>`;
-    }).join('');
-    divSectionHtml=`<div style="margin-top:10px">
-      <div style="font-size:12px;font-weight:700;color:var(--mute);margin-bottom:6px">리그 / 디비전 선택</div>
-      <div class="chips">${divChips}</div>
-    </div>`;
-  }else{
-    divSectionHtml=`<div style="margin-top:10px">
-      <span class="pill" style="background:var(--chip);color:var(--ink2);border:1.5px solid var(--line);font-size:12.5px;padding:5px 12px;font-weight:600">📌 단일 대회 (리그 분리 없음 · 전체 경기 표시)</span>
-    </div>`;
-  }
-
-  const monthChips=[`<button class="chip ${UI.gamesMonth===''?'on':''}" data-gmonth="">전체 월</button>`]
-    .concat(allMonths.map(m=>`<button class="chip ${UI.gamesMonth===m?'on':''}" data-gmonth="${m}">${parseInt(m,10)}월</button>`)).join('');
-
-  const teamOpts=[`<option value="">전체 구단 (${activeTeams.length})</option>`]
-    .concat(activeTeams.map(t=>`<option value="${t.id}" ${UI.gamesTeam===t.id?'selected':''}>${esc(t.short)} (${esc(t.sido)})</option>`)).join('');
-
-  const playedCount=list.filter(g=>g.status!=='미진행/결과없음').length;
-  const cards=list.length
-    ? `<div class="grid g2" style="margin-top:14px">${list.map(g=>gameCard(g)).join('')}</div>`
-    : `<div class="card empty" style="margin-top:14px">조건에 맞는 경기 일정이 없습니다.</div>`;
-
-  return `<h1>경기 일정 및 결과</h1>
-    <p class="sub" style="margin-top:4px">2026 시즌 전체 ${S.games.length}경기 중 현재 조건에 해당하는 <b>${list.length}경기</b> (진행 ${playedCount}경기)</p>
-    <div style="margin-top:14px">
-      <div style="font-size:12px;font-weight:700;color:var(--mute);margin-bottom:6px">대회 선택</div>
-      <div class="chips">${compChips}</div>
-    </div>
-    ${divSectionHtml}
-    <div style="margin-top:10px">
-      <div style="font-size:12px;font-weight:700;color:var(--mute);margin-bottom:6px">월별 보기</div>
-      <div class="chips">${monthChips}</div>
-    </div>
-    <div style="margin-top:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-      <label style="font-size:13px;font-weight:700;color:var(--ink2)">구단 필터:</label>
-      <select id="gamesTeamSel" style="padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:var(--card);font-size:13px;font-weight:600">
-        ${teamOpts}
-      </select>
-      ${(UI.gamesComp!==''||UI.gamesTeam!==''||UI.gamesMonth!==''||UI.gamesDiv!=='')?`<button id="btnResetGamesFilter" class="chip" style="font-size:12px">필터 초기화 ↺</button>`:''}
-    </div>
-    ${cards}
-    ${note('box','missing')}`;
-};
-V.games.bind=()=>{
-  $app.querySelectorAll('[data-gcomp]').forEach(b=>b.onclick=()=>{
-    const newComp=b.dataset.gcomp;
-    UI.gamesComp=newComp;
-    const avail=getCompDivisions(newComp);
-    if(avail.length===0 || !avail.some(x=>x.id===UI.gamesDiv)){
-      UI.gamesDiv='';
-    }
-    render();
-  });
-  $app.querySelectorAll('[data-gdiv]').forEach(b=>b.onclick=()=>{
-    UI.gamesDiv=b.dataset.gdiv;
-    render();
-  });
-  $app.querySelectorAll('[data-gmonth]').forEach(b=>b.onclick=()=>{
-    UI.gamesMonth=b.dataset.gmonth;
-    render();
-  });
-  const tsel=document.getElementById('gamesTeamSel');
-  if(tsel)tsel.onchange=()=>{
-    UI.gamesTeam=tsel.value;
-    render();
-  };
-  const rst=document.getElementById('btnResetGamesFilter');
-  if(rst)rst.onclick=()=>{
-    UI.gamesDiv='';
-    UI.gamesComp='';
-    UI.gamesTeam='';
-    UI.gamesMonth='';
-    render();
-  };
-};
-V.game=(q,id)=>{
-  const S=Store,g=S.game(id);if(!g)return '<div class="empty">경기를 찾을 수 없습니다</div>';
-  const B=S.batOf(g),P=S.pitOf(g);
-  const winner=g.hres==='승'?'h':g.ares==='승'?'a':'';
-  const T=subtabs('game',[['sum','요약'],['h',esc(g.home.short)],['a',esc(g.away.short)]]);
-  
-  // 라인업 이동 버튼 대신 경기 목록으로 돌아가는 버튼 제공
-  const backToListHtml = `<div style="margin:14px 0 10px;display:flex;justify-content:center"><button type="button" class="vsbtn" id="btnBackToGamesList" style="background:rgba(255,255,255,0.12);color:var(--ink);font-weight:800;padding:9px 20px;border-radius:10px;border:1px solid var(--border);cursor:pointer;display:inline-flex;align-items:center;gap:6px">‹ 경기 목록으로 돌아가기</button></div>`;
-let body='';
-  if(T.cur==='sum'){
-    if(!g.boxH&&!g.boxA)body=`<div class="card empty">KBSA에 박스스코어가 등록되지 않은 경기입니다.</div>`;
-    else{const sb=t=>S.sumBat(B.filter(b=>b.team.i===t.i)),sp=t=>S.sumPit(P.filter(p=>p.team.i===t.i));const h=sb(g.home),a=sb(g.away),hp=sp(g.home),ap=sp(g.away);
-      const ch=teamTheme(g.home).bg,ca0=teamTheme(g.away).bg;const rgb=x=>[1,3,5].map(i=>parseInt(x.substr(i,2),16));const ca=Math.hypot(...rgb(ch).map((v,i)=>v-rgb(ca0)[i]))<110?'#E5381B':ca0;
-      const top=t=>B.filter(b=>b.team.i===t.i&&b.PA>0).map(b=>({b,i:S.bIdx(S.prod(b),b.PA)+b.RBI*10})).sort((x,y)=>y.i-x.i).slice(0,3);
-      const line=b=>`${b.AB}타수 ${b.H}안타${b.HR?' '+b.HR+'홈런':''}${b.RBI?' '+b.RBI+'타점':''}${b.R?' '+b.R+'득점':''}${b.SB?' '+b.SB+'도루':''}${b.BB+b.HBP?' '+(b.BB+b.HBP)+'사사구':''}`;
-      body=`<div class="card">${vsBars([{label:'안타',a:h.H,b:a.H},{label:'장타',a:h.B2+h.B3+h.HR,b:a.B2+a.B3+a.HR},{label:'볼넷+사구',a:h.BB+h.HBP,b:a.BB+a.HBP},{label:'삼진',a:h.SO,b:a.SO},{label:'도루',a:h.SB,b:a.SB},{label:'실책 출루',a:h.ROE,b:a.ROE},{label:'투구 수',a:hp.pitches,b:ap.pitches},{label:'등판 투수',a:hp.G,b:ap.G}],ch,ca,g.home.short,g.away.short)}</div>
-      <div class="grid g2" style="margin-top:10px">${[g.home,g.away].map(t=>`<div class="card lcard"><h3>${esc(t.short)} 활약 선수</h3>${top(t).map(x=>`<div class="leader"><div class="who">${plink(t,x.b.name)}<small>${line(x.b)}</small></div></div>`).join('')||'<div class="sub">기록 없음</div>'}</div>`).join('')}</div>`;}
-    body+=note('box','src');
-  }else{
-    const side=T.cur==='a'?g.away:g.home,has=T.cur==='a'?g.boxA:g.boxH;
-    const bs=B.filter(b=>b.team.i===side.i).sort((a,b)=>a.order-b.order),ps=P.filter(p=>p.team.i===side.i).sort((a,b)=>a.seq-b.seq),tot=S.sumBat(bs);
-    const pl=r=>side.combined?esc(r.name):plink(side,r.name);
-    body=has?`<h2>타자</h2>${table([{k:'order',t:'타순',f:r=>r._tot?'':r.starter?r.order:'교체',nosort:1},{k:'name',t:'선수',l:1,cls:'name',f:r=>r._tot?'<b>합계</b>':pl(r)},
-       {k:'pos',t:'포지션',l:1},{k:'PA',t:'타석'},{k:'AB',t:'타수'},{k:'H',t:'안타'},{k:'B2',t:'2루타'},{k:'B3',t:'3루타'},{k:'HR',t:'홈런'},
-       {k:'RBI',t:'타점'},{k:'R',t:'득점'},{k:'SB',t:'도루'},{k:'CS',t:'도루자'},{k:'BB',t:'볼넷'},{k:'HBP',t:'사구'},{k:'SO',t:'삼진'},{k:'SF',t:'희비'},{k:'SH',t:'희타'},{k:'plays',t:'타석 결과',l:1,cls:'plays',nosort:1}],
-       bs.concat([Object.assign({name:'합계',order:'',pos:'',starter:true,plays:'',_tot:1},tot)]),{nosort:1,limit:30,rowClass:r=>r._tot?'tot':(r.starter?'':'sub-row')})}
-      <h2>투수</h2>${table([{k:'name',t:'투수',l:1,cls:'name',f:pl},{k:'dec',t:'결정',l:1},{k:'outs',t:'이닝',f:r=>ipStr(r.outs)},{k:'BF',t:'타자'},{k:'AB',t:'타수'},{k:'pitches',t:'투구수'},{k:'H',t:'피안타'},{k:'HR',t:'피홈런'},
-       {k:'BB',t:'볼넷'},{k:'HBP',t:'사구'},{k:'SO',t:'삼진'},{k:'WP',t:'폭투'},{k:'BK',t:'보크'},{k:'R',t:'실점'},{k:'ER',t:'자책'}],ps,{nosort:1})}`
-      :`<div class="card empty">KBSA에 이 팀의 박스스코어가 등록되지 않은 경기입니다.</div>`;
-    body+=note('box','src');
-  }
-  return `<div class="board"><div class="row">
-    <div class="tm">${badge(g.home,60)}<div>${tlink(g.home)}<small>홈${winner==='h'?' · 승':''}</small></div></div>
-    <div class="big">${g.hs==null?'<span style="font-size:15px">'+(g.status==='몰수/기권'?'몰수/기권':'결과 없음')+'</span>':`<span class="${winner==='a'?'l':''}">${g.hs}</span> : <span class="${winner==='h'?'l':''}">${g.as}</span>`}</div>
-    <div class="tm r">${badge(g.away,60)}<div>${tlink(g.away)}<small>원정${winner==='a'?' · 승':''}</small></div></div></div>
-    <div class="info">${g.date.replace(/-/g,'.')} (${g.dow}) ${g.time} · ${esc(g.comp.name)} · ${esc(g.round)}${divPill(g.round)}</div>
-    ${(g.boxH||g.boxA)?`<div style="margin-top:10px;display:flex;justify-content:center"><button class="vsbtn" data-gmvp="${g.id}" style="background:#10B981;color:#042F2E;border:0;cursor:pointer;font-weight:900;padding:7px 14px;border-radius:999px">👑 Today's MVP 카드 만들기 ›</button></div>`:''}</div>
-  ${T.html}${backToListHtml}${body}`;
-};
-V.game.bind=()=>{
-  const mvpBtn=$app.querySelector('[data-gmvp]');
-  if(mvpBtn)mvpBtn.onclick=()=>openGameMvpStudio(mvpBtn.dataset.gmvp);
-  const backBtn=$app.querySelector('#btnBackToGamesList');
-  if(backBtn)backBtn.onclick=()=>{
-    if(history.length>1){history.back();}
-    else{go('#/games');}
-  };
-};
-
-V.teams=()=>{
-  const S=Store;
-  UI.teamsDiv=UI.teamsDiv||'';
-  const sidos=[...new Set(S.teams.filter(t=>!t.combined).map(t=>t.sido))].sort((a,b)=>a.localeCompare(b,'ko'));
-  let ts=S.teams.filter(t=>!t.combined).map(t=>{
-    const gs=S.gamesOf(t);
-    const hasChamp=gs.some(g=>String(g.round||'').includes('챔프'));
-    const hasFuture=gs.some(g=>String(g.round||'').includes('퓨처'));
-    const hasMaster=gs.some(g=>String(g.round||'').includes('마스터'));
-    const hasRookie=gs.some(g=>String(g.round||'').includes('루키'));
-    const hasYeongnam=gs.some(g=>g.comp.i===2&&String(g.round||'').includes('영남권'));
-    return {t, r:S.teamRecord(t), hasChamp, hasFuture, hasMaster, hasRookie, hasYeongnam};
-  });
-  if(UI.teamsSido) ts=ts.filter(x=>x.t.sido===UI.teamsSido);
-  if(UI.teamsDiv==='champ') ts=ts.filter(x=>x.hasChamp);
-  else if(UI.teamsDiv==='future') ts=ts.filter(x=>x.hasFuture);
-  else if(UI.teamsDiv==='master') ts=ts.filter(x=>x.hasMaster);
-  else if(UI.teamsDiv==='rookie') ts=ts.filter(x=>x.hasRookie);
-  else if(UI.teamsDiv==='yeongnam') ts=ts.filter(x=>x.hasYeongnam);
-
-  const act=ts.filter(x=>x.r.G>0).sort((a,b)=>b.r.G-a.r.G||b.r.PCT-a.r.PCT), idle=ts.filter(x=>x.r.G===0);
-  const card=({t,r,hasChamp,hasFuture,hasMaster,hasRookie,hasYeongnam})=>{
-    let dtag=[];
-    if(hasMaster) dtag.push('<span class="pill pill-master" style="font-size:10px;padding:1px 5px">마스터</span>');
-    if(hasChamp) dtag.push('<span class="pill pill-champ" style="font-size:10px;padding:1px 5px">챔프</span>');
-    if(hasFuture) dtag.push('<span class="pill pill-future" style="font-size:10px;padding:1px 5px">퓨처</span>');
-    if(hasRookie) dtag.push('<span class="pill pill-rookie" style="font-size:10px;padding:1px 5px">루키</span>');
-    if(hasYeongnam) dtag.push('<span class="pill pill-yeongnam" style="font-size:10px;padding:1px 5px">영남권</span>');
-
-    return `<a class="tc" href="#/team/${t.id}">${badge(t)}<div><div class="nm">${esc(t.short)} ${dtag.join(' ')}</div><div class="rec">${esc(t.sido)} · ${r.G?`${r.W}승 ${r.L}패${r.D?' '+r.D+'무':''}`:'2026 경기 없음'}</div></div>
-     <div class="r">${r.G?formDots(r.form)+`<div class="rec">${pct(r.PCT)}</div>`:''}</div></a>`;
-  };
-
-  const divChips=[
-    `<button class="chip ${UI.teamsDiv===''?'on':''}" data-tdiv="">전체 리그</button>`,
-    `<button class="chip chip-champ ${UI.teamsDiv==='champ'?'on':''}" data-tdiv="champ">🏆 챔프</button>`,
-    `<button class="chip chip-future ${UI.teamsDiv==='future'?'on':''}" data-tdiv="future">🌱 퓨처</button>`
-  ].join('');
-
-  return `<h1>구단</h1><p class="sub">연맹 등록 ${ts.length}개 구단${UI.teamsSido?` · ${UI.teamsSido}`:''}</p>
-  <div style="margin-top:12px">
-    <div style="font-size:12px;font-weight:700;color:var(--mute);margin-bottom:6px">디비전 필터</div>
-    <div class="chips">${divChips}</div>
-  </div>
-  <div style="margin-top:10px">
-    <div style="font-size:12px;font-weight:700;color:var(--mute);margin-bottom:6px">지역별 보기</div>
-    <div class="chips"><button class="chip ${!UI.teamsSido?'on':''}" data-sido="">전체 지역</button>${sidos.map(s=>`<button class="chip ${UI.teamsSido===s?'on':''}" data-sido="${s}">${s}</button>`).join('')}</div>
-  </div>
-  <h2>2026 시즌 참가 <span class="sub">${act.length}</span></h2><div class="grid g2">${act.map(card).join('')}</div>
-  ${idle.length?`<h2>2026 경기 기록 없음 <span class="sub">${idle.length}</span></h2><div class="grid g2">${idle.map(card).join('')}</div>`:''}`;
-};
-V.teams.bind=()=>{
-  $app.querySelectorAll('[data-sido]').forEach(b=>b.onclick=()=>{UI.teamsSido=b.dataset.sido;render()});
-  $app.querySelectorAll('[data-tdiv]').forEach(b=>b.onclick=()=>{UI.teamsDiv=b.dataset.tdiv;render()});
-};
-/* ---------- 구단 분석 (WT·나인빅스 기록관리와 같은 기준) ---------- */
-const POS={'포수':'포수','1루수':'1루','2루수':'2루','3루수':'3루','유격수':'유격','좌익수':'좌익','중견수':'중견','우익수':'우익','투수':'투수','지명타자':'지명','대타':'대타','대주자':'대주자'};
-const FIELD=['포수','1루','2루','3루','유격','좌익','중견','우익'];
-const TYPES=[
-  {k:'파워형',d:'탈삼진 비율이 리그 평균의 1.25배 이상',
-   feat:'공의 힘이나 변화로 헛스윙을 많이 끌어내는 투수입니다. 삼진으로 이닝을 끝낼 수 있어 주자가 있어도 실점을 막는 힘이 있습니다.',
-   tip:'삼진이 늘기 쉬우니 짧게 맞히는 타격과 번트·도루로 흔드는 작전이 잘 통합니다. 콘택트가 좋은 타자를 앞쪽에 두세요.'},
-  {k:'제구불안형',d:'볼넷+사구 비율이 리그 평균의 1.25배 이상',
-   feat:'스트라이크를 넣는 데 어려움을 겪어 볼넷·몸에 맞는 공이 많은 투수입니다. 주자를 쉽게 내보내고 투구 수가 늘어납니다.',
-   tip:'초구·유인구에 서두르지 말고 공을 많이 보는 것이 핵심입니다. 출루한 뒤 도루로 압박하면 폭투·실책까지 이어지기 쉽습니다.'},
-  {k:'제구형',d:'볼넷+사구 비율이 리그 평균의 0.8배 이하',
-   feat:'볼넷을 거의 주지 않고 스트라이크 존 안에서 승부하는 투수입니다. 쉽게 무너지지 않지만 공이 존 안에 들어오는 만큼 맞을 수 있습니다.',
-   tip:'기다려도 볼넷이 잘 나오지 않으니 빠른 카운트에서 적극적으로 치는 것이 유리합니다. 장타력 있는 타자가 힘을 쓰기 좋습니다.'},
-  {k:'맞춰잡기형',d:'탈삼진·볼넷 비율이 모두 리그 평균 수준',
-   feat:'삼진도 볼넷도 평균적인, 타구를 만들어 수비로 잡는 투수입니다. 결과가 수비력과 타구 운에 많이 좌우됩니다.',
-   tip:'공을 띄우기보다 강한 땅볼·라인드라이브로 수비 사이를 노리는 타격이 효과적입니다. 상대 수비 숙련도가 낮을 때 특히 공략하기 좋습니다.'}];
-const TYPE_OF=k=>TYPES.find(x=>x.k===k);
-function typeGuide(open){
-  const B=Store.typeBase;if(!B)return '';
-  const pc=v=>(v*100).toFixed(1)+'%';
-  const th={파워형:`탈삼진 ÷ 상대 타자 ≥ ${pc(B.kL*1.25)}`,제구불안형:`(볼넷+사구) ÷ 상대 타자 ≥ ${pc(B.wL*1.25)}`,제구형:`(볼넷+사구) ÷ 상대 타자 ≤ ${pc(B.wL*.8)}`,맞춰잡기형:'위 세 조건에 해당하지 않음'};
-  const rows=TYPES.map(x=>{const ps=Store.players.filter(p=>p.ptype===x.k).sort((a,b)=>b.P.BF-a.P.BF);
-    return `<div class="tg-row"><div class="tg-k"><span class="tpill t-${x.k}">${x.k}</span><small>리그 ${ps.length}명</small></div>
-      <div><div class="tg-th">${th[x.k]}</div><p>${x.feat}</p><p class="tg-tip"><b>공략 포인트</b> ${x.tip}</p>
-      <div class="tg-ex">대표 투수: ${ps.slice(0,4).map(p=>`${plink(p.team,p.name)} <small>(${esc(p.team.short)} · 삼진 ${pc(p.kRate)} · 볼넷+사구 ${pc(p.wRate)})</small>`).join(', ')||'-'}</div></div></div>`}).join('');
-  return `<details class="guide" ${open?'open':''}><summary>투수 유형이란? <span class="sub">분류 기준과 특징 보기</span></summary>
-    <div class="tg-body"><p class="sub">2026 시즌 상대 타자 30명 이상인 투수를 <b>탈삼진 비율</b>(삼진 ÷ 상대 타자)과 <b>볼넷+사구 비율</b>((볼넷+사구) ÷ 상대 타자)로 나눴습니다.
-    리그 평균은 탈삼진 ${pc(B.kL)}, 볼넷+사구 ${pc(B.wL)}입니다. 위에서부터 차례로 판정하므로 삼진과 볼넷이 모두 많은 투수는 파워형이 됩니다.</p>${rows}
-    <p class="note">유형은 투구 스타일의 경향일 뿐 우열을 뜻하지 않습니다. 같은 유형 안에서도 실력 차이는 투수 효율지수로 보세요. 상대 타자 30명 미만인 투수는 표본이 작아 '미분류'입니다.</p></div></details>`;
-}
-const typePill=k=>k?`<span class="tpill t-${k}" title="${esc(TYPE_OF(k)?.d||'')}">${k}</span>`:'<span class="tpill">미분류</span>';
-(function typePitchers(){ // 상대 타자 30명 이상 상대한 투수 분류
-  let so=0,w=0,bf=0;Store.pit.forEach(p=>{so+=p.SO;w+=p.BB+p.HBP;bf+=p.BF});const kL=so/bf,wL=w/bf;
-  Store.players.forEach(p=>{const P=p.P;if(P.BF<30){p.ptype=null;return}const k=P.SO/P.BF,x=(P.BB+P.HBP)/P.BF;
-    p.ptype=k>=kL*1.25?'파워형':x>=wL*1.25?'제구불안형':x<=wL*.8?'제구형':'맞춰잡기형';p.kRate=k;p.wRate=x});
-  Store.typeBase={kL,wL};
-})();
-const pitcherOf=(team,name)=>Store.player(team.id+'|'+name);
-
-const _teamCache=new Map();
-function analyzeTeam(t){
-  if(_teamCache.has(t.i))return _teamCache.get(t.i);
-  const S=Store;
-  const games=S.gamesOf(t).slice().sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
-  const B=S.bat.filter(b=>b.team.i===t.i), P=S.pit.filter(p=>p.team.i===t.i);
-  const tb=S.sumBat(B), tp=S.sumPit(P);
-  const base=tb.PA?tb.PROD/tb.PA:0, pbase=tp.BF?tp.ALLOWED/tp.BF:0;      // 팀 평균 = 100
-  const bI=(pr,pa)=>pa&&base?Math.round(pr/pa/base*100):null;
-  const pI=(al,bf)=>bf?(al?Math.round(pbase/(al/bf)*100):999):null;
-  const res=g=>g.home.i===t.i?g.hres:g.ares;
-  const rf=g=>g.home.i===t.i?g.hs:g.as, ra=g=>g.home.i===t.i?g.as:g.hs;
-  const opp=g=>g.home.i===t.i?g.away:g.home;
-
-  // 경기별 요약
-  const glog=games.map(g=>{const gb=B.filter(b=>b.game===g),gp=P.filter(p=>p.game===g).sort((a,b)=>a.seq-b.seq);const s=S.sumBat(gb);
-    const op=S.pitOf(g).filter(p=>p.team.i!==t.i).sort((a,b)=>a.seq-b.seq);
-    return {g,res:res(g),rf:rf(g),ra:ra(g),opp:opp(g),bidx:s.PA?bI(s.PROD,s.PA):null,avg:s.AVG,obp:s.OBP,PA:s.PA,
-      sp:gp[0]||null,osp:op[0]||null,opits:op,mine:gp,bats:gb}});
-
-  // 타자 (팀 기준 효율지수 · 타순)
-  const pmap=new Map();B.forEach(b=>{(pmap.get(b.name)||pmap.set(b.name,[]).get(b.name)).push(b)});
-  const batters=[...pmap.entries()].map(([name,rows])=>{const s=S.sumBat(rows);const pl=S.player(t.id+'|'+name);
-    const od={},pc={};rows.forEach(r=>{if(r.starter&&r.order)od[r.order]=(od[r.order]||0)+1;const ps=POS[r.pos]||r.pos;if(ps&&ps!=='대타'&&ps!=='대주자')pc[ps]=(pc[ps]||0)+1});
-    const ords=Object.entries(od).sort((a,b)=>b[1]-a[1]);const poss=Object.entries(pc).sort((a,b)=>b[1]-a[1]);
-    const rr=rows.filter(r=>r.PA>0);let recent=null;
-    if(rr.length>=6){const r5=S.sumBat(rr.slice(-5));if(r5.PA>=5){const d=(r5.OBP||0)-(s.OBP||0);recent={s:r5,diff:d,idx:bI(r5.PROD,r5.PA),trend:d>=.05?'up':d<=-.05?'down':'flat'}}}
-    return {name,pl,s,idx:bI(s.PROD,s.PA),mainOrder:ords[0]?+ords[0][0]:null,orders:ords.slice(0,3).map(([o,n])=>`${o}번${n}`).join(' · '),
-      pos:poss.slice(0,3).map(([p,n])=>`${p}${n}`).join(' · '),mainPos:poss[0]?poss[0][0]:'',starts:rows.filter(r=>r.starter).length,recent}}).filter(x=>x.s.PA>0);
-
-  // 타순별
-  const slots=[];for(let o=1;o<=9;o++){const rows=B.filter(b=>b.order===o);if(!rows.length)continue;const s=S.sumBat(rows);
-    const occ={};rows.filter(r=>r.starter).forEach(r=>occ[r.name]=(occ[r.name]||0)+1);
-    slots.push({o,s,idx:bI(s.PROD,s.PA),occ:Object.entries(occ).sort((a,b)=>b[1]-a[1]).slice(0,3)})}
-
-  // 우리 투수 (효율지수 + 투수별 수비·타격 PVF)
-  const pnames=[...new Set(P.map(p=>p.name))];
-  const pitchers=pnames.map(nm=>{const gl=glog.filter(x=>x.mine.some(p=>p.name===nm)).map(x=>({...x,p:x.mine.find(p=>p.name===nm)}));
-    const ps=S.sumPit(gl.map(x=>x.p));const idx=pI(ps.ALLOWED,ps.BF);
-    const rec={승:0,패:0,무:0};gl.forEach(x=>{if(rec[x.res]!=null)rec[x.res]++});
-    const gpi=x=>pI(S.allowed(x.p),x.p.BF);
-    const allB=gl.flatMap(x=>x.bats);const ts=S.sumBat(allB);
-    const agg=sel=>{const bf=sel.reduce((a,x)=>a+x.p.BF,0),al=sel.reduce((a,x)=>a+S.allowed(x.p),0);
-      return {games:sel.length,bf,pidx:pI(al,bf),R:sel.reduce((a,x)=>a+x.p.R,0),ER:sel.reduce((a,x)=>a+x.p.ER,0)}};
-    const hot=gl.filter(x=>x.bidx!=null&&x.bidx>=100),cold=gl.filter(x=>!(x.bidx!=null&&x.bidx>=100));
-    const pairs=gl.filter(x=>x.p.BF>=3&&x.PA).map(x=>[x.bats.reduce((a,b)=>a+S.prod(b),0)/x.PA,-S.allowed(x.p)/x.p.BF]);
-    const defense={};FIELD.forEach(pos=>{const m=new Map();gl.forEach(x=>{new Set(x.bats.filter(b=>(POS[b.pos]||b.pos)===pos&&b.name!==nm).map(b=>b.name)).forEach(f=>{(m.get(f)||m.set(f,[]).get(f)).push(x)})});
-      defense[pos]=[...m.entries()].map(([f,sel])=>{const a=agg(sel);a.name=f;a.diff=a.pidx!=null&&idx!=null&&a.pidx!==999&&idx!==999?a.pidx-idx:null;a.unearned=a.R-a.ER;return a}).sort((a,b)=>b.bf-a.bf)});
-    const bm=new Map();gl.forEach(x=>x.bats.filter(b=>b.PA>0).forEach(b=>{(bm.get(b.name)||bm.set(b.name,[]).get(b.name)).push(b)}));
-    const bl=[...bm.entries()].map(([bn,rows])=>{const s=S.sumBat(rows);const se=batters.find(b=>b.name===bn);const i=bI(s.PROD,s.PA);
-      return {name:bn,G:rows.length,s,idx:i,season:se?se.idx:null,diff:i!=null&&se&&se.idx!=null?i-se.idx:null,self:bn===nm}}).sort((a,b)=>b.s.PA-a.s.PA);
-    return {name:nm,pl:S.player(t.id+'|'+nm),gl,ps,idx,rec,ts,tidx:bI(ts.PROD,ts.PA),hot:agg(hot),cold:agg(cold),r:pearson(pairs.map(a=>a[0]),pairs.map(a=>a[1])),defense,batters:bl,gpi}
-  }).sort((a,b)=>b.ps.outs-a.ps.outs);
-
-  // 상대 투수 상성
-  const om=new Map();
-  glog.forEach(x=>x.opits.forEach(p=>{const k=p.team.id+'|'+p.name;(om.get(k)||om.set(k,{team:p.team,name:p.name,rows:[],xs:[]}).get(k)).rows.push(p);om.get(k).xs.push(x)}));
-  const LB=S.L.allowed/S.L.bf;
-  const opps=[...om.values()].map(o=>{const pl=S.player(o.team.id+'|'+o.name);const vs=S.sumPit(o.rows);
-    const others=pl?pl.pit.filter(r=>r.game.home.i!==t.i&&r.game.away.i!==t.i):[];const os=S.sumPit(others);
-    const ref=os.BF>=15?os.ALLOWED/os.BF:(pl&&pl.P.BF?pl.P.ALLOWED/pl.P.BF:LB);
-    const m=vs.BF?Math.round((vs.ALLOWED/vs.BF)/(ref||LB)*100):null;
-    const started=o.xs.filter(x=>x.osp&&x.osp.name===o.name&&x.osp.team.i===o.team.i);
-    const sb=S.sumBat(started.flatMap(x=>x.bats));
-    const W=started.filter(x=>x.res==='승').length,Lo=started.filter(x=>x.res==='패').length;
-    const label=vs.BF<8?'표본 적음':m>=120?'공략 우세':m<=80?'고전 (천적)':'보통';
-    // 그 투수 선발 경기의 우리 타자별
-    const bm=new Map();started.forEach(x=>x.bats.filter(b=>b.PA>0).forEach(b=>{(bm.get(b.name)||bm.set(b.name,[]).get(b.name)).push(b)}));
-    const bl=[...bm.entries()].map(([bn,rows])=>{const s=S.sumBat(rows);const se=batters.find(b=>b.name===bn);const i=bI(s.PROD,s.PA);
-      return {name:bn,G:rows.length,s,idx:i,season:se?se.idx:null,diff:i!=null&&se&&se.idx!=null?i-se.idx:null}}).sort((a,b)=>b.s.PA-a.s.PA);
-    return {key:o.team.id+'|'+o.name,team:o.team,name:o.name,pl,type:pl?pl.ptype:null,vs,others:os,m,label,G:new Set(o.rows.map(r=>r.game.i)).size,
-      GS:started.length,W,L:Lo,teamIdx:sb.PA?bI(sb.PROD,sb.PA):null,teamAvg:sb.AVG,batters:bl}}).sort((a,b)=>b.vs.BF-a.vs.BF);
-
-  // 투수 유형별 (상대 투수가 상대한 타자 수 비율로 나눠 반영)
-  const tAgg={},bAgg={};TYPES.forEach(x=>tAgg[x.k]={pa:0,pr:0,h:0,ab:0});
-  glog.forEach(x=>{const tot=x.opits.reduce((a,p)=>a+p.BF,0);if(!tot)return;
-    x.opits.forEach(p=>{const pl=S.player(p.team.id+'|'+p.name);const ty=pl&&pl.ptype;if(!ty)return;const w=p.BF/tot;
-      x.bats.forEach(b=>{const a=tAgg[ty];a.pa+=b.PA*w;a.pr+=S.prod(b)*w;a.h+=b.H*w;a.ab+=b.AB*w;
-        const bb=(bAgg[b.name]=bAgg[b.name]||{});const c=(bb[ty]=bb[ty]||{pa:0,pr:0});c.pa+=b.PA*w;c.pr+=S.prod(b)*w})})});
-  const typeTeam=TYPES.map(x=>{const a=tAgg[x.k];return {k:x.k,d:x.d,pa:a.pa,idx:a.pa>=10?bI(a.pr,a.pa):null,avg:a.ab?a.h/a.ab:null}});
-  const typeBat=batters.filter(b=>b.s.PA>=10).map(b=>{const m=bAgg[b.name]||{};const v={};
-    TYPES.forEach(x=>{const c=m[x.k];v[x.k]=c&&c.pa>=5?{idx:bI(c.pr,c.pa),pa:c.pa}:null});
-    const vals=TYPES.filter(x=>v[x.k]).map(x=>({k:x.k,i:v[x.k].idx}));let ev='';
-    if(vals.length>=2){const hi=vals.reduce((a,b)=>b.i>a.i?b:a),lo=vals.reduce((a,b)=>b.i<a.i?b:a);
-      if(hi.i-lo.i>=25)ev=`${hi.k}에 강함(${hi.i}) · ${lo.k}에 약함(${lo.i})`;else ev='유형에 따른 차이 적음'}
-    return {name:b.name,idx:b.idx,PA:b.s.PA,v,ev}});
-
-  const out={t,games:glog,tb,tp,base,pbase,bI,pI,batters,slots,pitchers,opps,typeTeam,typeBat,rec:S.teamRecord(t)};
-  _teamCache.set(t.i,out);return out;
-}
-function pearson(xs,ys){const n=xs.length;if(n<3)return null;const mx=xs.reduce((a,b)=>a+b)/n,my=ys.reduce((a,b)=>a+b)/n;
-  let sx=0,sy=0,sxy=0;for(let i=0;i<n;i++){sx+=(xs[i]-mx)**2;sy+=(ys[i]-my)**2;sxy+=(xs[i]-mx)*(ys[i]-my)}return sx&&sy?sxy/Math.sqrt(sx*sy):null}
-const signed=v=>v==null?'-':`<span class="trend ${v>=10?'up':v<=-10?'down':'flat'}">${v>0?'+':''}${v}</span>`;
-const lab=l=>`<span class="pill ${l==='공략 우세'?'good':l==='고전 (천적)'?'bad':''}">${l}</span>`;
-
-
-function openTeamChartModal(teamId, initialType) {
-  const S = Store;
-  const t = S.team(teamId);
-  if (!t) return;
-  const A = analyzeTeam(t);
-  const tc = teamTheme(t).bg;
-  const md = d => d.slice(5).replace('-', '.');
-  let curType = initialType || 'score';
-
-  const wrap = document.createElement('div');
-  wrap.className = 'tc-modal-wrap';
-  wrap.onclick = (e) => { if (e.target === wrap) close(); };
-
-  function close() {
-    wrap.remove();
-    document.removeEventListener('keydown', onKey);
-  }
-  function onKey(e) {
-    if (e.key === 'Escape') close();
-  }
-  document.addEventListener('keydown', onKey);
-
-  function renderModal() {
-    const isScore = curType === 'score';
-    const chartHtml = isScore
-      ? colChart(A.games.map(x => ({ rf: x.rf, ra: x.ra, res: x.res, label: md(x.g.date) })), { color: tc, w: 840, h: 320, isModal: true })
-      : lineChart(A.games.filter(x => x.bidx != null).map(x => ({
-          y: x.bidx,
-          label: md(x.g.date),
-          color: x.res === '승' ? tc : x.res === '패' ? '#9AA4B5' : '#C7CDD8',
-          title: `${md(x.g.date)} vs ${x.opp.short} ${x.res||''} 효율 ${x.bidx}`
-        })), { ref: 100, refLabel: '팀 평균 100', color: tc, w: 840, h: 300, isModal: true,
-            legend: `<span><i style="background:${tc}"></i>승리 경기</span><span><i style="background:#64748b"></i>패배 경기</span>` });
-
-    wrap.innerHTML = `
-      <div class="tc-modal-dialog" onclick="event.stopPropagation()">
-        <div class="tc-modal-head">
-          <div style="display:flex;align-items:center;gap:12px">
-            ${badge(t, 40)}
-            <div>
-              <b class="tc-modal-title" style="font-size:17px;color:var(--ink);display:block">${esc(t.short)} 경기별 기록 정밀 분석</b>
-              <small style="display:block;font-size:12px;color:var(--mute)">${esc(t.name)} · 2026 시즌 전체 ${A.games.length}경기 상세 추이</small>
-            </div>
-          </div>
-          <button type="button" class="tc-modal-close" id="btnTcModalClose">✕ 닫기</button>
-        </div>
-
-        <div class="tc-modal-subnav">
-          <button type="button" class="tc-modal-tab ${curType === 'score' ? 'on' : ''}" data-type="score">
-            📊 경기별 득점·실점 분석
-          </button>
-          <button type="button" class="tc-modal-tab ${curType === 'eff' ? 'on' : ''}" data-type="eff">
-            📈 경기별 팀 타격 효율 추이
-          </button>
-        </div>
-
-        <div class="tc-modal-body">
-          <div style="margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
-            <span style="font-size:13px;font-weight:700;color:var(--ink2)">
-              ${isScore ? '💡 막대 위는 팀 득점, 아래는 실점입니다. (마우스 오버 시 상대팀 및 스코어 상세 확인)' : '💡 100보다 높으면 팀 평균 이상의 타격 화력을 발휘한 경기입니다.'}
-            </span>
-            <span style="font-size:12px;color:var(--mute)">가로 스크롤로 전체 경기를 시원하게 확인할 수 있습니다</span>
-          </div>
-          <div class="tc-modal-chart-box">
-            ${chartHtml}
-          </div>
-        </div>
-      </div>
-    `;
-
-    wrap.querySelector('#btnTcModalClose').onclick = close;
-    wrap.querySelectorAll('[data-type]').forEach(btn => {
-      btn.onclick = () => {
-        curType = btn.dataset.type;
-        renderModal();
-      };
-    });
-  }
-
-  renderModal();
-  document.body.appendChild(wrap);
-}
-
-V.team=(q,id)=>{
-  const S=Store,t=S.team(id);if(!t)return '<div class="empty">구단을 찾을 수 없습니다</div>';
-  const A=analyzeTeam(t),r=A.rec,tab=UI.teamTab,th=teamTheme(t),tc=th.bg;let body='';
-  const pBat = n => {
-    let noChip = '';
-    try {
-      const pl = Store.player(t.id + '|' + n);
-      if (pl && pl.no) noChip = `<span class="p-no-chip">#${pl.no}</span>`;
-    } catch(e) {}
-    return `<span class="p-bat-wrap">${noChip}${plink(t, n)}</span>`;
-  };const md=d=>d.slice(5).replace('-','.');
-  if(tab==='sum'){
-    const s=subtabs('tsum',[['flow','시즌 흐름'],['players','주요 선수'],['vs','상성']]);body=s.html;
-    if(s.cur==='flow'){
-      const comp={};A.games.forEach(x=>{if(!x.res)return;const c=comp[x.g.comp.short]=comp[x.g.comp.short]||{W:0,L:0,D:0};c[x.res==='승'?'W':x.res==='패'?'L':'D']++});
-      body+=`<div class="grid g2" style="margin-top:16px">
-        <div class="card chart-card" data-open-chart="score" style="cursor:pointer" title="클릭 시 큰 화면으로 자세히 봅니다">
-          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px">
-            <h3 style="font-size:15px;font-weight:800;color:var(--ink);display:flex;align-items:center;gap:6px">
-              경기별 득점·실점 <span class="chart-zoom-badge">🔍 크게 보기</span>
-            </h3>
-            <span style="font-size:11.5px;color:var(--mute);font-weight:600">상단 득점 · 하단 실점</span>
-          </div>
-          ${colChart(A.games.map(x=>({rf:x.rf,ra:x.ra,res:x.res,label:md(x.g.date)})),{color:tc})}
-        </div>
-        <div class="card chart-card" data-open-chart="eff" style="cursor:pointer" title="클릭 시 큰 화면으로 자세히 봅니다">
-          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px">
-            <h3 style="font-size:15px;font-weight:800;color:var(--ink);display:flex;align-items:center;gap:6px">
-              경기별 팀 타격 효율 <span class="chart-zoom-badge">🔍 크게 보기</span>
-            </h3>
-            <span style="font-size:11.5px;color:var(--mute);font-weight:600">기준 100 = 팀 평균</span>
-          </div>
-          ${lineChart(A.games.filter(x=>x.bidx!=null).map(x=>({y:x.bidx,label:md(x.g.date),color:x.res==='승'?tc:x.res==='패'?'#9AA4B5':'#C7CDD8',title:`${md(x.g.date)} vs ${x.opp.short} ${x.res||''} 효율 ${x.bidx}`})),{ref:100,refLabel:'팀 평균 100',color:tc,legend:`<span><i style="background:${tc}"></i>승리 경기</span><span><i style="background:#9AA4B5"></i>패배 경기</span>`})}
-        </div>
-      </div>
-      <h2>대회별 성적</h2><div class="card">${Object.entries(comp).map(([k,c])=>`<div class="srow"><div class="sl"><div>${esc(k)}<small>${c.W}승 ${c.L}패${c.D?' '+c.D+'무':''}</small></div><b>${pct((c.W+c.L)?c.W/(c.W+c.L):0)}</b></div>${stackBar([{v:c.W,color:'#10b981',label:c.W+'승'},{v:c.D,color:'#64748b',label:c.D+'무'},{v:c.L,color:'#f43f5e',label:c.L+'패'}])}</div>`).join('')}</div>
-      ${note('gameEff','bidxT','standings')}`;}
-    if(s.cur==='players'){
-      const ef=n=>EFF.get(Store.player(t.id+'|'+n))||{};const top=A.batters.slice().sort((a,b)=>(ef(b.name).total??0)-(ef(a.name).total??0)).slice(0,8);const qp=A.pitchers.slice().sort((a,b)=>(ef(b.name).pit??0)-(ef(a.name).pit??0)).slice(0,6);
-      const tr=A.batters.filter(b=>b.recent).sort((a,b)=>b.recent.diff-a.recent.diff);
-      body+=`<h2>종합 지수 상위</h2><div class="card">${barList(top.map(b=>{const e=ef(b.name);const grBadge=grade(e.total);return {label:`${pBat(b.name)}${grBadge?' '+grBadge:''}`,sub:`${esc(b.mainPos)} · 주로 ${b.mainOrder||'-'}번 · ${b.s.PA}타석`,v:e.total||0,text:e.total??'-',color:tc}}),{ref:100,refLabel:'리그 평균'})}</div>
-      <h2>투수 FIP+</h2><div class="card">${barList(qp.map(p=>{const e=ef(p.name);const typeBadge=(p.pl?.ptype&&p.pl.ptype!=='미분류')?typePill(p.pl.ptype):'';const grBadge=grade(e.pit);return {label:`${pBat(p.name)}${typeBadge?' '+typeBadge:''}${grBadge?' '+grBadge:''}`,sub:`${ipStr(p.ps.outs)}이닝 · ERA ${f2(p.ps.ERA)} · WHIP ${f2(p.ps.WHIP)}`,v:e.pit||0,text:e.pit??'-',color:tc}}),{ref:100,refLabel:'리그 평균'})}</div>
-      <h2>최근 5경기 출루율 변화</h2><div class="card">${tr.length?dumbbell(tr.slice(0,4).concat(tr.slice(-4).filter(x=>!tr.slice(0,4).includes(x))).map(b=>({label:pBat(b.name),sub:trendCell(b.recent),a:b.s.OBP||0,b:b.recent.s.OBP||0,ta:f3(b.s.OBP),tb:f3(b.recent.s.OBP)})),{max:1}):'<div class="sub">비교할 수 있는 선수가 없습니다</div>'}</div>
-      ${note('eff','effq','grade','trend')}`;}
-    if(s.cur==='vs'){
-      const good=A.opps.filter(o=>o.vs.BF>=8).sort((a,b)=>b.m-a.m);
-      body+=`<h2>투수 유형별 팀 타격</h2><div class="card">${barList(A.typeTeam.map(x=>({label:typePill(x.k),sub:`타석 ${Math.round(x.pa)} · 타율 ${f3(x.avg)}`,v:x.idx||0,text:x.idx??'-',color:tc})),{ref:100,refLabel:'팀 평균'})}</div>
-      <h2>공략한 투수 · 고전한 투수 <span class="sub">8타자 이상</span></h2><div class="card">${barList(good.slice(0,5).concat(good.slice(-5).filter(x=>!good.slice(0,5).includes(x))).map(o=>({label:plink(o.team,o.name),sub:`${esc(o.team.short)} · ${o.vs.BF}타자 ${lab(o.label)}`,v:Math.min(o.m,250),text:o.m,color:o.m>=100?'var(--up)':'var(--down)'})),{ref:100,refLabel:'평소 수준'})}</div>
-      ${note('matchup','types')}`;}
-  }
-  if(tab==='games'){
-    body=table([
-      {k:'gameLink',t:'경기 (상세 기록지)',l:1,cls:'name',v:x=>x.g.date+x.g.time,f:x=>`<a class="game-box-link" href="#/game/${x.g.id}" style="color:var(--ink);font-weight:800;text-decoration:none;display:inline-flex;align-items:center;gap:6px"><span>⚾ vs ${esc(x.opp.short)}</span> <small style="color:var(--mute);font-weight:600">(${md(x.g.date)}${x.res?` · <b class="res r-${x.res}" style="padding:1px 5px;border-radius:4px;font-size:11px">${x.res}</b>`:''})</small> <span style="color:#10b981;font-size:12px;font-weight:700">기록지 ›</span></a>`},
-      {k:'opp',t:'상대 구단',l:1,v:x=>x.opp.short,f:x=>`<span class="tcell">${badge(x.opp,20)}<a href="#/team/${x.opp.id}" style="color:var(--mute);font-size:12px;margin-left:4px" title="${esc(x.opp.short)} 구단 전력 보기">[상대팀]</a></span>`},
-      {k:'res',t:'결과',l:1,f:x=>x.res?`<b class="res r-${x.res}">${x.res}</b>`:'-'},
-      {k:'comp',t:'대회',l:1,v:x=>x.g.comp.short,f:x=>esc(x.g.comp.short)},
-      {k:'sc',t:'스코어',v:x=>(x.rf??-1)-(x.ra??0),f:x=>x.rf==null?'-':`<a href="#/game/${x.g.id}" style="font-weight:800;color:var(--ink);text-decoration:underline">${x.rf} : ${x.ra}</a>`},
-      {k:'sp',t:'우리 선발',l:1,v:x=>x.sp?.name||'',f:x=>x.sp?pBat(x.sp.name):'-'},
-      {k:'osp',t:'상대 선발',l:1,v:x=>x.osp?.name||'',f:x=>x.osp?plink(x.osp.team,x.osp.name):'-'},
-      {k:'avg',t:'팀 타율',f:x=>f3(x.avg)},
-      {k:'obp',t:'팀 출루율',f:x=>f3(x.obp)},
-      {k:'bidx',t:'타격 효율',f:x=>idxCell(x.bidx)}
-    ],A.games.slice().reverse(),{})+note('gameEff','box');
-  }
-  if(tab==='bat'){
-    const s=subtabs('tbat',[['chart','그래프'],['table','기록표'],['trend','최근 추세']]);body=s.html;
-    if(s.cur==='chart'){const ef=n=>EFF.get(Store.player(t.id+'|'+n))||{};body+=`<div class="card">${barList(A.batters.slice().sort((a,b)=>(ef(b.name).bat??0)-(ef(a.name).bat??0)).map(b=>{const e=ef(b.name);const grBadge=grade(e.bat);return {label:`${pBat(b.name)}${grBadge?' '+grBadge:''}`,sub:`${esc(b.mainPos||'-')} · 주로 ${b.mainOrder||'-'}번 · ${b.s.PA}타석 · 타율 ${f3(b.s.AVG)} · 타점 ${b.s.RBI}`,v:e.bat||0,text:e.bat??'-',color:tc}}),{ref:100,refLabel:'리그 평균'})}</div>${note('eff','effq','effc','grade')}`;}
-    if(s.cur==='table')body+=table([{k:'name',t:'선수',l:1,cls:'name',f:b=>pBat(b.name)},{k:'pos',t:'포지션',l:1},{k:'orders',t:'타순',l:1},
-      {k:'G',t:'경기',v:b=>b.s.G},{k:'GS',t:'선발',v:b=>b.starts},{k:'PA',t:'타석',v:b=>b.s.PA},{k:'AB',t:'타수',v:b=>b.s.AB},{k:'H',t:'안타',v:b=>b.s.H},{k:'B2',t:'2루타',v:b=>b.s.B2},{k:'B3',t:'3루타',v:b=>b.s.B3},{k:'HR',t:'홈런',v:b=>b.s.HR},
-      {k:'TB',t:'루타',v:b=>b.s.TB},{k:'RBI',t:'타점',v:b=>b.s.RBI},{k:'R',t:'득점',v:b=>b.s.R},{k:'SB',t:'도루',v:b=>b.s.SB},{k:'CS',t:'도루자',v:b=>b.s.CS},{k:'BB',t:'볼넷',v:b=>b.s.BB},{k:'IBB',t:'고의4구',v:b=>b.s.IBB},
-      {k:'HBP',t:'사구',v:b=>b.s.HBP},{k:'SO',t:'삼진',v:b=>b.s.SO},{k:'SF',t:'희비',v:b=>b.s.SF},{k:'SH',t:'희타',v:b=>b.s.SH},{k:'GIDP',t:'병살',v:b=>b.s.GIDP},
-      {k:'AVG',t:'타율',v:b=>b.s.AVG,f:b=>f3(b.s.AVG)},{k:'OBP',t:'출루율',v:b=>b.s.OBP,f:b=>f3(b.s.OBP)},{k:'SLG',t:'장타율',v:b=>b.s.SLG,f:b=>f3(b.s.SLG)},{k:'OPS',t:'OPS',v:b=>b.s.OPS,f:b=>f3(b.s.OPS)},
-      {k:'EO',t:'종료 아웃',v:b=>b.s.EO},{k:'T2',t:'2아웃 출루',v:b=>b.s.T2PA?b.s.T2OB/b.s.T2PA:null,f:b=>b.s.T2PA?`${b.s.T2OB}/${b.s.T2PA}`:'-'},{k:'eb',t:'타자 wRC+',v:b=>EFF.get(Store.player(t.id+'|'+b.name))?.bat},{k:'ed',t:'수비 Def+',v:b=>EFF.get(Store.player(t.id+'|'+b.name))?.def},{k:'ep',t:'투수 FIP+',v:b=>EFF.get(Store.player(t.id+'|'+b.name))?.pit},{k:'et',t:'종합 지수',v:b=>EFF.get(Store.player(t.id+'|'+b.name))?.total},{k:'gr',t:'평가',l:1,f:b=>grade(EFF.get(Store.player(t.id+'|'+b.name))?.total),nosort:1},{k:'fp',t:'수비율',v:b=>Field.defIdx(t,b.name)?.pct,f:b=>{const d=Field.defIdx(t,b.name);return d?f3(d.pct):'-'}},{k:'fe',t:'실책',v:b=>Field.defIdx(t,b.name)?.e,f:b=>{const d=Field.defIdx(t,b.name);return d?fmtN(d.e):'-'}}],A.batters,{sort:'et'})+note('eff','effq','effc','grade','rates','src');
-    if(s.cur==='trend'){const tr=A.batters.filter(b=>b.recent).sort((a,b)=>b.recent.diff-a.recent.diff);
-      body+=`<div class="card">${tr.length?dumbbell(tr.map(b=>({label:pBat(b.name),sub:`${trendCell(b.recent)} · 최근 효율 ${b.recent.idx}`,a:b.s.OBP||0,b:b.recent.s.OBP||0,ta:f3(b.s.OBP),tb:f3(b.recent.s.OBP)})),{max:1,la:'시즌 출루율',lb:'최근 5경기'}):'<div class="sub">비교할 수 있는 선수가 없습니다</div>'}</div>${note('trend','rates')}`;}
-  }
-  if(tab==='order'){
-    const s=subtabs('tord',[['chart','그래프'],['table','기록표']]);body=s.html;
-    body+=s.cur==='chart'?`<div class="card">${barList(A.slots.map(x=>({label:`<b>${x.o}번</b>`,sub:`타율 ${f3(x.s.AVG)} · 출루율 ${f3(x.s.OBP)} · ${x.s.PA}타석<br>주로 ${x.occ.map(([n,c])=>`${pBat(n)} ${c}`).join(', ')||'-'}`,v:x.idx,text:x.idx,color:tc})),{ref:100,refLabel:'팀 평균'})}</div>`
-      :table([{k:'o',t:'타순'},{k:'occ',t:'주로 선 선수 (선발 횟수)',l:1,cls:'name',f:x=>`${x.o}번 · `+(x.occ.map(([n,c])=>`${pBat(n)} ${c}`).join(', ')||'-'),nosort:1},
-        {k:'PA',t:'타석',v:x=>x.s.PA},{k:'AB',t:'타수',v:x=>x.s.AB},{k:'H',t:'안타',v:x=>x.s.H},{k:'HR',t:'홈런',v:x=>x.s.HR},{k:'RBI',t:'타점',v:x=>x.s.RBI},{k:'R',t:'득점',v:x=>x.s.R},{k:'SB',t:'도루',v:x=>x.s.SB},
-        {k:'BB',t:'볼넷',v:x=>x.s.BB},{k:'SO',t:'삼진',v:x=>x.s.SO},{k:'AVG',t:'타율',v:x=>x.s.AVG,f:x=>f3(x.s.AVG)},{k:'OBP',t:'출루율',v:x=>x.s.OBP,f:x=>f3(x.s.OBP)},{k:'SLG',t:'장타율',v:x=>x.s.SLG,f:x=>f3(x.s.SLG)},{k:'idx',t:'효율지수',f:x=>idxCell(x.idx)}],A.slots,{sort:'o',dir:1});
-    body+=note('order','bidxT','rates');
-  }
-  if(tab==='pit'){
-    const s=subtabs('tpit',[['chart','그래프'],['table','기록표'],['detail','투수별 분석']]);body=s.html;
-    if(s.cur==='chart'){const qp=A.pitchers.filter(p=>p.ps.outs>=9);const tot=A.pitchers.reduce((a,p)=>a+p.ps.outs,0)||1;
-      body+=`<h2>투수 FIP+</h2><div class="card">${barList(A.pitchers.map(p=>({p,e:EFF.get(Store.player(t.id+'|'+p.name))||{}})).sort((a,b)=>(b.e.pit??0)-(a.e.pit??0)).map(({p,e})=>{const typeBadge=(p.pl?.ptype&&p.pl.ptype!=='미분류')?typePill(p.pl.ptype):'';const grBadge=grade(e.pit);return {label:`${pBat(p.name)}${typeBadge?' '+typeBadge:''}${grBadge?' '+grBadge:''}`,sub:`${ipStr(p.ps.outs)}이닝 · ERA ${f2(p.ps.ERA)} · WHIP ${f2(p.ps.WHIP)}`,v:e.pit||0,text:e.pit??'-',color:tc};}),{ref:100,refLabel:'리그 평균'})}</div>
-      <h2>이닝 분담</h2><div class="card">${barList(A.pitchers.slice(0,10).map(p=>({label:pBat(p.name),sub:`${p.ps.G}경기 · 선발 ${p.ps.GS}`,v:p.ps.outs/tot*100,text:`${ipStr(p.ps.outs)} (${Math.round(p.ps.outs/tot*100)}%)`,color:tc})),{max:Math.max(...A.pitchers.map(p=>p.ps.outs/tot*100))*1.1})}</div>
-      ${typeGuide(false)}${note('eff','effq','grade','prates')}`;}
-    if(s.cur==='table')body+=table([{k:'name',t:'투수',l:1,cls:'name',f:p=>pBat(p.name)},{k:'type',t:'유형',l:1,v:p=>p.pl?.ptype||'',f:p=>typePill(p.pl?.ptype)},{k:'G',t:'경기',v:p=>p.ps.G},{k:'GS',t:'선발',v:p=>p.ps.GS},{k:'W',t:'승',v:p=>p.ps.W},{k:'L',t:'패',v:p=>p.ps.L},
-      {k:'outs',t:'이닝',v:p=>p.ps.outs,f:p=>ipStr(p.ps.outs)},{k:'BF',t:'타자',v:p=>p.ps.BF},{k:'AB',t:'타수',v:p=>p.ps.AB},{k:'np',t:'투구수',v:p=>p.ps.pitches},{k:'H',t:'피안타',v:p=>p.ps.H},{k:'HR',t:'피홈런',v:p=>p.ps.HR},
-      {k:'BB',t:'볼넷',v:p=>p.ps.BB},{k:'HBP',t:'사구',v:p=>p.ps.HBP},{k:'SO',t:'삼진',v:p=>p.ps.SO},{k:'WP',t:'폭투',v:p=>p.ps.WP},{k:'BK',t:'보크',v:p=>p.ps.BK},{k:'R',t:'실점',v:p=>p.ps.R},{k:'ER',t:'자책',v:p=>p.ps.ER},
-      {k:'ERA',t:'ERA',v:p=>p.ps.outs?-p.ps.ERA:null,f:p=>p.ps.outs>=9?f2(p.ps.ERA):'-'},{k:'WHIP',t:'WHIP',v:p=>p.ps.outs?-p.ps.WHIP:null,f:p=>p.ps.outs>=9?f2(p.ps.WHIP):'-'},{k:'OAVG',t:'피안타율',v:p=>p.ps.OAVG,f:p=>f3(p.ps.OAVG)},
-      {k:'ep',t:'투수 FIP+',v:p=>EFF.get(Store.player(t.id+'|'+p.name))?.pit},{k:'gr',t:'평가',l:1,f:p=>grade(EFF.get(Store.player(t.id+'|'+p.name))?.pit),nosort:1}],A.pitchers,{sort:'ep'})+note('eff','effq','grade','prates','src');
-    if(s.cur==='detail'){const sel=A.pitchers.find(p=>p.name===UI.teamPitcher)||A.pitchers[0];body+=sel?pitcherDetail(A,sel):'<div class="empty">투수 기록이 없습니다</div>';}
-  }
-  if(tab==='opp'){
-    const s=subtabs('topp',[['type','투수 유형별'],['list','상대 투수별'],['bat','타자 평가']]);body=s.html;
-    if(s.cur==='type')body+=`<div class="card">${barList(A.typeTeam.map(x=>({label:typePill(x.k),sub:`${x.d} · 타석 ${Math.round(x.pa)} · 타율 ${f3(x.avg)}`,v:x.idx||0,text:x.idx??'-',color:tc})),{ref:100,refLabel:'팀 평균'})}</div>${typeGuide(false)}${note('types','bidxT')}`;
-    if(s.cur==='list'){const sel=A.opps.find(o=>o.key===UI.teamOpp);
-      body+=(sel?oppDetail(A,sel):'')+table([{k:'name',t:'상대 투수',l:1,cls:'name',f:o=>`<a href="javascript:void 0" data-opp="${esc(o.key)}">${esc(o.name)} ›</a>`},{k:'team',t:'구단',l:1,v:o=>o.team.short,f:o=>tlink(o.team)},
-        {k:'type',t:'유형',l:1,v:o=>o.type||'',f:o=>typePill(o.type)},{k:'label',t:'평가',l:1,f:o=>lab(o.label)},{k:'G',t:'맞대결'},{k:'GS',t:'선발'},{k:'wl',t:'선발 시 우리',v:o=>o.W-o.L,f:o=>o.GS?`${o.W}승 ${o.L}패`:'-'},
-        {k:'BF',t:'상대 타자',v:o=>o.vs.BF},{k:'outs',t:'이닝',v:o=>o.vs.outs,f:o=>ipStr(o.vs.outs)},{k:'H',t:'안타',v:o=>o.vs.H},{k:'BB',t:'볼넷+사구',v:o=>o.vs.BB+o.vs.HBP},{k:'SO',t:'삼진',v:o=>o.vs.SO},
-        {k:'R',t:'득점',v:o=>o.vs.R},{k:'m',t:'상성 지수',f:o=>o.vs.BF>=8?idxCell(o.m):'-',v:o=>o.vs.BF>=8?o.m:null}],A.opps,{sort:'BF'})+`<p class="note">투수 이름을 누르면 그 투수가 선발로 나온 경기의 우리 타자별 기록이 위에 열립니다.</p>`+note('matchup','types');}
-    if(s.cur==='bat')body+=table([{k:'name',t:'타자',l:1,cls:'name',f:b=>pBat(b.name)},{k:'ev',t:'평가',l:1},{k:'PA',t:'타석'},{k:'idx',t:'시즌 효율',f:b=>idxCell(b.idx)},
-        ...TYPES.map(x=>({k:x.k,t:x.k,v:b=>b.v[x.k]?b.v[x.k].idx:null,f:b=>b.v[x.k]?`${b.v[x.k].idx}<small class="sub"> /${Math.round(b.v[x.k].pa)}</small>`:'-'}))],A.typeBat,{sort:'PA'})
-      +`<p class="note">평가: 유형별 효율지수 차이가 25 이상이면 가장 강한 유형과 약한 유형을 표시합니다. 유형별 5타석 이상만 계산합니다.</p>`+note('types','bidxT');
-  }
-  if(tab==='club'){body=renderTeamClubView(t,A,tc,th);}
-  const teamGs=S.gamesOf(t);
-  const champCount=teamGs.filter(g=>String(g.round||'').includes('챔프')).length;
-  const futureCount=teamGs.filter(g=>String(g.round||'').includes('퓨처')).length;
-  const masterCount=teamGs.filter(g=>String(g.round||'').includes('마스터')).length;
-  const rookieCount=teamGs.filter(g=>String(g.round||'').includes('루키')).length;
-  const yeongnamCount=teamGs.filter(g=>g.comp.i===2&&String(g.round||'').includes('영남권')).length;
-  let divBadges=[];
-  if(masterCount) divBadges.push(`<span class="pill pill-master" style="font-size:11px;padding:2px 8px">⭐ 마스터 (${masterCount}G)</span>`);
-  if(champCount) divBadges.push(`<span class="pill pill-champ" style="font-size:11px;padding:2px 8px">🏆 챔프 (${champCount}G)</span>`);
-  if(futureCount) divBadges.push(`<span class="pill pill-future" style="font-size:11px;padding:2px 8px">🌱 퓨처 (${futureCount}G)</span>`);
-  if(rookieCount) divBadges.push(`<span class="pill pill-rookie" style="font-size:11px;padding:2px 8px">⚾ 루키 (${rookieCount}G)</span>`);
-  if(yeongnamCount) divBadges.push(`<span class="pill pill-yeongnam" style="font-size:11px;padding:2px 8px">🌊 영남권 (${yeongnamCount}G)</span>`);
-
-    const isWT = (t.id === 'aSEa0076');
-  const subLine = isWT 
-    ? '서울 노원구 · 2026 KBSA 한국여자야구 공식 클럽하우스'
-    : `${esc(t.name)} · ${esc(t.sido)}`;
-  const badgesHtml = divBadges.length ? `<span class="wt-div-badges">${divBadges.join(' ')}</span>` : '';
-
-  return `<div class="board" style="background: linear-gradient(135deg, #0D043D 0%, #172554 60%, #0F5FA4 100%) !important; color: #ffffff !important; margin-bottom: 22px !important;">
-    <div class="wt-board-topline" style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px">
-      <!-- 1열 (최상단): 모바일 가로폭 대응 flex-wrap & white-space nowrap 적용 (글자 세로 찌그러짐 0%) -->
-      <div class="wt-topline-row1" style="display:flex;justify-content:space-between;align-items:center;width:100%;flex-wrap:wrap;gap:6px">
-        <div style="flex-shrink:0">
-          ${isWT ? '<span class="wt-hero-slogan">WINNERS TOGETHER · FRIENDS</span>' : ''}
-        </div>
-        <div style="flex-shrink:0;margin-left:auto">
-          ${isWT ? `
-            <div class="hero-me-pill" style="display:inline-flex;align-items:center;gap:6px;background:rgba(15, 23, 42, 0.85);border:1px solid rgba(255, 255, 255, 0.25);border-radius:999px;padding:3px 10px;backdrop-filter:blur(8px);box-shadow:0 2px 8px rgba(0,0,0,0.35);white-space:nowrap">
-              <span style="font-size:11.5px;color:#94a3b8;font-weight:700;white-space:nowrap;flex-shrink:0">👤 내 프로필:</span>
-              <select id="heroMeSel" class="hero-me-select" style="background:#0f172a !important;color:#f8fafc !important;border:1px solid rgba(255,255,255,0.25) !important;border-radius:6px !important;padding:2px 8px !important;font-size:12px !important;font-weight:800 !important;cursor:pointer;outline:none;white-space:nowrap">
-                <option value="" style="background:#0f172a;color:#94a3b8">${!ClubStore.getMe(t) ? '선수 선택 (22명) ▾' : '선수 변경 ▾'}</option>
-                ${luRoster(t).map(n => `<option value="${esc(n)}" ${n===ClubStore.getMe(t)?'selected':''} style="background:#0f172a;color:#f8fafc">${esc(n)}</option>`).join('')}
-              </select>
-            </div>
-          ` : ''}
-        </div>
-      </div>
-
-      <!-- 2열: 좌측 클럽하우스 설명 & 우측 챔프/퓨처 뱃지 -->
-      <div style="display:flex;justify-content:space-between;align-items:center;width:100%;flex-wrap:wrap;gap:6px">
-        <span class="wt-bhead-sub">${subLine}</span>
-        <div class="wt-topline-right" style="display:flex;align-items:center;gap:6px">
-          ${badgesHtml}
-        </div>
+        ` : ''}
       </div>
     </div>
     <div class="bhead">
       <div class="bhead-info">
-        <div class="wt-bhead-top">
-          ${badge(t, 88)}
+        <div class="wt-bhead-top" style="display:flex;align-items:center;gap:12px">
+          ${badge(t, 64)}
           <div class="wt-bhead-title-col">
-            <div class="tm wt-main-title">${isWT ? 'WT프렌즈 야구 기록실' : esc(t.name)}</div>
-            <div class="wt-bhead-desc" style="color:#f1f5f9;font-size:13px;font-weight:600;margin-top:4px">${isWT ? '2026 KBSA 한국여자야구연맹 공식 클럽하우스 · 등록 선수 22명' : (esc(t.sido) + ' 소속 구단')}</div>
+            <div class="tm wt-main-title" style="font-size:20px;font-weight:900;color:#ffffff;line-height:1.2">${isWT ? 'WT프렌즈 야구 기록실' : esc(t.name)}</div>
+            <div style="display:flex;align-items:center;gap:6px;margin-top:5px;flex-wrap:wrap">
+              <span style="color:#cbd5e1;font-size:12px;font-weight:600">${isWT ? '서울 노원구 · 창단 18주년 · 등록 22명' : (esc(t.sido) + ' 소속 구단')}</span>
+              ${badgesHtml}
+            </div>
           </div>
         </div>
       </div>
       <span class="vsbtns">
-        <a class="vsbtn pri" href="#/lineup/${t.id}" onclick="go('#/lineup/' + t.id);return false;" style="background:linear-gradient(135deg, #ef4444 0%, #dc2626 100%);color:#ffffff;border:1px solid #f87171;cursor:pointer;font-weight:800">📋 라인업 짜기 ›</a>
-        ${isWT ? '<a class="vsbtn" href="#/dugout" style="color:#ffffff;background:rgba(37,99,235,0.35);border:1px solid rgba(147,197,253,0.5);font-weight:700">🧢 덕아웃 선수단 ›</a>' : ''}
-        <button class="vsbtn" data-go-club="${t.id}" style="color:#ffffff;background:rgba(220,38,38,0.3);border:1px solid rgba(252,165,165,0.45);cursor:pointer;font-weight:700">🧢 팀 클럽하우스 ›</button>
-        <button type="button" class="vsbtn" data-sheet-db style="color:#38bdf8;background:rgba(56,189,248,0.18);border:1px solid rgba(56,189,248,0.6);cursor:pointer;font-weight:800">📊 구단 DB ↗</button>
-        <a class="vsbtn" href="#/standings" style="color:#ffffff;background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.3);font-weight:700">🏆 리그 순위 ›</a>
-        <a class="vsbtn" href="#/games?t=${t.id}" style="color:#ffffff;background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.3);font-weight:700">⚾ 경기 일정·결과 ›</a>
+        <button class="vsbtn pri-club" data-go-club="${t.id}" style="background:linear-gradient(135deg, #10b981 0%, #059669 100%) !important;color:#ffffff !important;border:1px solid #34d399 !important;cursor:pointer;font-weight:800;box-shadow:0 3px 10px rgba(16,185,129,0.35)">🧢 WT 클럽하우스 ›</button>
+        <a class="vsbtn pri" href="#/lineup/${t.id}" onclick="go('#/lineup/' + t.id);return false;" style="background:linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;color:#ffffff !important;border:1px solid #f87171 !important;cursor:pointer;font-weight:800;box-shadow:0 3px 10px rgba(239,68,68,0.35)">📋 라인업 짜기 ›</a>
+        ${isWT ? '<a class="vsbtn" href="#/dugout" style="color:#ffffff !important;background:rgba(255,255,255,0.12) !important;border:1px solid rgba(255,255,255,0.25) !important;font-weight:700">👥 덕아웃 선수단 ›</a>' : ''}
+        <button type="button" class="vsbtn" data-sheet-db style="color:#38bdf8 !important;background:rgba(56,189,248,0.18) !important;border:1px solid rgba(56,189,248,0.5) !important;cursor:pointer;font-weight:800">☁️ 구단 통합 DB ↗</button>
+        <a class="vsbtn" href="#/games?t=${t.id}" style="color:#ffffff !important;background:rgba(255,255,255,0.12) !important;border:1px solid rgba(255,255,255,0.25) !important;font-weight:700">⚾ 경기 일정·결과 ›</a>
+        <a class="vsbtn" href="#/standings" style="color:#ffffff !important;background:rgba(255,255,255,0.12) !important;border:1px solid rgba(255,255,255,0.25) !important;font-weight:700">🏆 2026 리그 순위 ›</a>
       </span>
     </div>
     <div class="stats four" style="margin-top:14px">
@@ -14093,6 +13508,9 @@ function openTeamProModal(teamId) {
 /* =========================================================================
    구단별 그룹모임 (일정·참석투표·공지·셋로그) & 전체 커뮤니티 모듈 (v15)
    ========================================================================= */
+const WT_GAS_URL = 'https://script.google.com/macros/s/AKfycbwJkdWv9a7BXTsI-rwdOasNLL11iJiBgMyzMrmIcGS_2VfR2_TeAA_z_nbEYY5Un7cO/exec';
+window.WT_GOOGLE_SHEET_URL = WT_GAS_URL;
+
 const ClubStore = {
   key: 'kbsa_club_v20_',
   commKey: 'kbsa_comm_v20',
@@ -14102,21 +13520,18 @@ const ClubStore = {
 
   getSheetUrl(team) {
     try {
-      // 1. Check URL query parameter (when shared via KakaoTalk)
       const {q} = parse();
       if (q && q.surl) {
         localStorage.setItem(this.sheetUrlKey + team.id, q.surl.trim());
         localStorage.setItem('kbsa_global_sheet_api_url', q.surl.trim());
         return q.surl.trim();
       }
-      // 2. Check team-specific storage
       const saved = localStorage.getItem(this.sheetUrlKey + team.id);
       if (saved) return saved;
-      // 3. Check global admin storage
       const gSaved = localStorage.getItem('kbsa_global_sheet_api_url');
       if (gSaved) return gSaved;
-      return window.WT_GOOGLE_SHEET_URL || '';
-    } catch(e) { return ''; }
+      return window.WT_GOOGLE_SHEET_URL || WT_GAS_URL;
+    } catch(e) { return WT_GAS_URL; }
   },
   setSheetUrl(team, url) {
     try {
@@ -14157,12 +13572,32 @@ const ClubStore = {
       const res = await fetch(`${url}${sep}action=get&teamId=${encodeURIComponent(team.id)}&t=${Date.now()}`);
       if (!res.ok) return null;
       const json = await res.json();
-      if (json && json.status === 'success') {
-        const d = json.data || { events: [], notices: [], setlogs: [] };
+      if (json && json.status === 'success' && json.data) {
+        const d = json.data;
         d.events = Array.isArray(d.events) ? d.events : [];
         d.notices = Array.isArray(d.notices) ? d.notices : [];
         d.setlogs = Array.isArray(d.setlogs) ? d.setlogs : [];
         d.settlements = Array.isArray(d.settlements) ? d.settlements : [];
+
+        // 로컬 사용자 수정 내역 보호: 로컬 정산서나 일정이 있으면 덮어쓰지 않고 병합 보존
+        const localRaw = localStorage.getItem(this.key + team.id);
+        if (localRaw) {
+          try {
+            const localObj = JSON.parse(localRaw);
+            if (localObj.settlements && localObj.settlements.length > 0) {
+              d.settlements = localObj.settlements;
+            }
+            if (localObj.events && localObj.events.length > 0) {
+              const evMap = new Map();
+              d.events.forEach(ev => evMap.set(ev.id, ev));
+              localObj.events.forEach(ev => evMap.set(ev.id, ev));
+              d.events = Array.from(evMap.values());
+            }
+            if (localObj.missions && localObj.missions.length > 0) {
+              d.missions = localObj.missions;
+            }
+          } catch(e) {}
+        }
         try { localStorage.setItem(this.key + team.id, JSON.stringify(d)); } catch(e) {}
         return d;
       }
@@ -14187,9 +13622,12 @@ const ClubStore = {
       const raw = localStorage.getItem(this.key + team.id);
       if (raw) {
         const d = JSON.parse(raw);
-        const seedSt = this.seedTeamData(team).settlements;
-        if (!d.settlements || !d.settlements.length || !d.settlements[0].incomes || d.settlements[0].incomes.length < 2 || (d.settlements[0].participants && d.settlements[0].participants.includes('사나'))) {
-          d.settlements = seedSt;
+        if (!d.settlements || !d.settlements.length) {
+          d.settlements = this.seedTeamData(team).settlements;
+          try { localStorage.setItem(this.key + team.id, JSON.stringify(d)); } catch (e) {}
+        }
+        if (!d.missions || !d.missions.length) {
+          d.missions = this.seedTeamData(team).missions;
           try { localStorage.setItem(this.key + team.id, JSON.stringify(d)); } catch (e) {}
         }
         return d;
@@ -14238,14 +13676,36 @@ const ClubStore = {
       ],
       notices: [],
       setlogs: [],
+      missions: [
+        {
+          id: 'm_202611_w2',
+          weekTitle: '2026 시즌 11월 2주차 주간 미션',
+          dateRange: '11.09 ~ 11.15',
+          tasks: [
+            { id: 't1', title: '하체 밸런스', goal: '스쿼트 50회 3세트 & 런지 20회', icon: '🏋️' },
+            { id: 't2', title: '코어 & 어깨 보강', goal: '플랭크 1분 3세트 & 튜빙 밴드', icon: '🧘' },
+            { id: 't3', title: '야구 기술 루틴', goal: '티배팅/빈스윙 100개 또는 섀도우 50구', icon: '⚾' }
+          ],
+          stamps: {
+            '전순아': ['t1', 't2', 't3'],
+            '정은경': ['t1', 't2', 't3'],
+            '서희숙': ['t1', 't2', 't3'],
+            '안장우': ['t1', 't3'],
+            '민정현': ['t1', 't2'],
+            '황지민': ['t1', 't3'],
+            '이은숙': ['t1', 't2'],
+            '구민경': ['t1', 't2', 't3']
+          }
+        }
+      ],
       settlements: [
         {
           id: 'ST_20261108_01',
-          title: '2026 프로야구선수협회장기 밀양 대회 정산서',
+          title: '프로야구선수협회장기 밀양대회 정산서',
           type: '공식대회',
           startDate: '2026-11-07',
           endDate: '2026-11-08',
-          venue: '경남 밀양시 (밀양 스포츠파크)',
+          venue: '밀양 스포츠파크',
           participants: [
             '전순아', '정은경', '이은숙', '안장우', '서희숙', '민정현', '이수정',
             '이문희', '황지민', '구민경', '류이슬', '전광숙', '이선희', '조보영', '임은아'
@@ -14722,10 +14182,9 @@ function renderClubCalendarSection(t, data, tc, me) {
   const games = S.gamesOf(t) || [];
   const rosterPlayers = S.players.filter(p => p.team === t);
   
-  // 현재 보고 있는 월 (UI.calMonth: YYYY-MM)
-  const now = new Date();
+  // 현재 보고 있는 월 (UI.calMonth: YYYY-MM) - 2026년 11월 기준
   if (!UI.calMonth) {
-    UI.calMonth = now.toISOString().slice(0, 7);
+    UI.calMonth = '2026-11';
   }
   const [curY, curM] = UI.calMonth.split('-').map(Number);
 
@@ -14750,20 +14209,20 @@ function renderClubCalendarSection(t, data, tc, me) {
   const getDayItems = (dateStr) => {
     const md = dateStr.slice(5);
     const items = [];
-    // 생일 (셀 안에는 컴팩트하게 '🎂 이름'만 넣어 넘치지 않게 단정 정렬)
+    // 생일 (셀 안에는 컴팩트하게 '🎂 이름'만 넣어 모바일에서도 글자 넘침 방지)
     rosterPlayers.forEach(p => {
       if (p.birth && p.birth.slice(5) === md) {
         const bdayDesc = `🎂 ${p.name}(#${p.no||''}) 생일 축하!`;
         items.push({
           type: 'bday',
           label: bdayDesc,
-          shortLabel: `🎂 ${p.name} 생일`,
+          shortLabel: `🎂 ${p.name}`,
           fullLabel: bdayDesc,
           date: dateStr
         });
       }
     });
-    // 시합
+    // 시합 (KBSA 정규 경기)
     games.forEach(g => {
       if (g.date === dateStr) {
         const oppName = g.home.i === t.i ? g.away.short : g.home.short;
@@ -14771,21 +14230,30 @@ function renderClubCalendarSection(t, data, tc, me) {
         items.push({
           type: 'game',
           label: gameDesc,
-          shortLabel: `🏆 vs ${oppName} (${g.time || '11:00'})`,
+          shortLabel: `🏆 vs ${oppName.slice(0, 3)}`,
           fullLabel: gameDesc,
           date: dateStr
         });
       }
     });
-    // 팀 일정 (훈련, 회식, 대회)
+    // 구단 일정 (훈련, 모임, 대회, 연맹행사, 자체경기, 공지 등)
     events.forEach(e => {
       if (e.date === dateStr) {
-        const icon = e.type === '모임' ? '🍻' : (e.type === '공식대회' ? '🏆' : '⚾');
-        const drillDesc = `${icon} ${e.title} (${e.time || '10:00'})${e.venue ? ' - ' + e.venue : ''}`;
+        let icon = '⚾';
+        let badgeType = 'drill';
+        let shortText = '훈련';
+        if (e.type === '모임') { icon = '🍻'; badgeType = 'event'; shortText = '모임'; }
+        else if (e.type === '공식대회') { icon = '🏆'; badgeType = 'game'; shortText = e.title.includes('밀양') ? '밀양대회' : (e.title.slice(0, 4)); }
+        else if (e.type === '연맹행사') { icon = '🎓'; badgeType = 'fed'; shortText = '연맹행사'; }
+        else if (e.type === '자체경기') { icon = '⚔️'; badgeType = 'game'; shortText = '자체경기'; }
+        else if (e.type === '공지') { icon = '📢'; badgeType = 'notice'; shortText = '공지'; }
+        else { shortText = e.title.slice(0, 4); }
+
+        const drillDesc = `${icon} [${e.type || '훈련'}] ${e.title} (${e.time || '10:00'})${e.venue ? ' - ' + e.venue : ''}`;
         items.push({
-          type: e.type === '모임' ? 'event' : (e.type === '공식대회' ? 'game' : 'drill'),
+          type: badgeType,
           label: drillDesc,
-          shortLabel: `${icon} ${e.title}`,
+          shortLabel: `${icon} ${shortText}`,
           fullLabel: drillDesc,
           date: dateStr,
           ev: e
@@ -14794,7 +14262,6 @@ function renderClubCalendarSection(t, data, tc, me) {
     });
     return items;
   };
-
   const thisWeekItems = thisWeekDates.flatMap(d => getDayItems(d));
   const nextWeekItems = nextWeekDates.flatMap(d => getDayItems(d));
 
@@ -14809,48 +14276,56 @@ function renderClubCalendarSection(t, data, tc, me) {
   const prevMonthLastDay = new Date(curY, curM - 1, 0).getDate();
   for (let i = startDayOfWeek - 1; i >= 0; i--) {
     const dayNum = prevMonthLastDay - i;
-    calCells.push({ dayNum, isCur: false, dateStr: '' });
+    calCells.push({ dayNum, isCur: false });
   }
-  // 이번 달
+  // 이번 달 채우기
+  const todayStr = '2026-11-11';
   for (let d = 1; d <= totalDays; d++) {
-    const dStr = `${curY}-${String(curM).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-    calCells.push({ dayNum: d, isCur: true, dateStr: dStr, items: getDayItems(dStr) });
+    const dayStr = String(d).padStart(2, '0');
+    const mStr = String(curM).padStart(2, '0');
+    const dateStr = `${curY}-${mStr}-${dayStr}`;
+    calCells.push({
+      dayNum: d,
+      isCur: true,
+      dateStr,
+      items: getDayItems(dateStr)
+    });
   }
-  // 다음 달 채우기
-  const remain = (7 - (calCells.length % 7)) % 7;
-  for (let i = 1; i <= remain; i++) {
-    calCells.push({ dayNum: i, isCur: false, dateStr: '' });
+  // 다음 달 빈 칸 채우기 (7의 배수)
+  const remaining = (7 - (calCells.length % 7)) % 7;
+  for (let i = 1; i <= remaining; i++) {
+    calCells.push({ dayNum: i, isCur: false });
   }
-
-  const todayStr = new Date().toISOString().slice(0, 10);
 
   return `
-    <!-- 주간 일정 레이더 위젯 -->
-    <div class="weekly-radar">
-      <div class="radar-col">
-        <div class="radar-title">
-          <span>🗓️ <b>이번 주 주요 일정</b> (${thisWeekDates[0].slice(5).replace('-','.')} ~ ${thisWeekDates[6].slice(5).replace('-','.')})</span>
-          <span style="font-size:11px;color:#10b981;font-weight:700">${thisWeekItems.length}건</span>
+    <!-- 주간 레이더 섹션 -->
+    <div class="radar-wrap" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:14px; margin-bottom:16px">
+      <!-- 이번 주 레이더 -->
+      <div class="radar-card">
+        <div class="radar-head">
+          <div class="radar-title">📅 이번 주 주요 일정 (${thisWeekDates[0].slice(5).replace('-','.')} ~ ${thisWeekDates[6].slice(5).replace('-','.')})</div>
+          <span class="radar-count">${thisWeekItems.length}건</span>
         </div>
         ${thisWeekItems.length ? thisWeekItems.map(it => `
           <div class="radar-item ${it.type}">
-            <span style="font-weight:700">${esc(it.fullLabel || it.label)}</span>
-            <span style="font-size:11.5px;color:var(--mute);font-weight:600">${it.date.slice(5).replace('-','.')}</span>
+            <span>${esc(it.label)}</span>
+            <span class="r-date">${it.date.slice(5).replace('-','.')}</span>
           </div>
-        `).join('') : '<div style="font-size:12.5px;color:var(--mute);padding:8px 0">이번 주 예정된 일정이 없습니다.</div>'}
+        `).join('') : '<div style="font-size:12px;color:var(--mute);padding:8px 0">이번 주 예정된 일정이 없습니다.</div>'}
       </div>
 
-      <div class="radar-col">
-        <div class="radar-title">
-          <span>🗓️ <b>다음 주 주요 일정</b> (${nextWeekDates[0].slice(5).replace('-','.')} ~ ${nextWeekDates[6].slice(5).replace('-','.')})</span>
-          <span style="font-size:11px;color:#3b82f6;font-weight:700">${nextWeekItems.length}건</span>
+      <!-- 다음 주 레이더 -->
+      <div class="radar-card">
+        <div class="radar-head">
+          <div class="radar-title">📅 다음 주 주요 일정 (${nextWeekDates[0].slice(5).replace('-','.')} ~ ${nextWeekDates[6].slice(5).replace('-','.')})</div>
+          <span class="radar-count">${nextWeekItems.length}건</span>
         </div>
         ${nextWeekItems.length ? nextWeekItems.map(it => `
           <div class="radar-item ${it.type}">
-            <span style="font-weight:700">${esc(it.fullLabel || it.label)}</span>
-            <span style="font-size:11.5px;color:var(--mute);font-weight:600">${it.date.slice(5).replace('-','.')}</span>
+            <span>${esc(it.label)}</span>
+            <span class="r-date">${it.date.slice(5).replace('-','.')}</span>
           </div>
-        `).join('') : '<div style="font-size:12.5px;color:var(--mute);padding:8px 0">다음 주 예정된 일정이 없습니다.</div>'}
+        `).join('') : '<div style="font-size:12px;color:var(--mute);padding:8px 0">다음 주 예정된 일정이 없습니다.</div>'}
       </div>
     </div>
 
@@ -14886,7 +14361,7 @@ function renderClubCalendarSection(t, data, tc, me) {
             `;
           }
           const isToday = c.dateStr === todayStr;
-          const isSel = UI.selectedCalDate === c.dateStr;
+          const isSel = (UI.selectedCalDate || todayStr) === c.dateStr;
           const items = c.items || [];
           const visibleItems = items.slice(0, 3);
           const moreCount = items.length - visibleItems.length;
@@ -14906,41 +14381,125 @@ function renderClubCalendarSection(t, data, tc, me) {
           `;
         }).join('')}
       </div>
-      <div style="display:flex;gap:12px;margin-top:10px;font-size:11.5px;color:var(--sub);justify-content:flex-end">
+      <div style="display:flex;gap:12px;margin-top:10px;font-size:11.5px;color:var(--sub);justify-content:flex-end;flex-wrap:wrap">
         <span style="color:#f43f5e">● 🎂 생일</span>
-        <span style="color:#10b981">● 🏆 시합</span>
+        <span style="color:#10b981">● 🏆 시합/대회</span>
         <span style="color:#3b82f6">● ⚾ 훈련</span>
+        <span style="color:#b45309">● 🎓 연맹행사</span>
+        <span style="color:#7e22ce">● 🍻 모임/이벤트</span>
       </div>
       
-      <!-- 선택한 날짜의 상세 일정 카드 -->
-      <div id="calDayDetailCard" style="margin-top:12px;padding:12px 14px;background:var(--chip);border:1px solid var(--line);border-radius:10px">
+      <!-- 선택한 날짜의 상세 일정 카드 & 실시간 일정 등록 시스템 -->
+      <div id="calDayDetailCard" style="margin-top:14px;padding:16px;background:var(--chip);border:1px solid var(--line);border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.04)">
         ${(()=>{
           const selDate = UI.selectedCalDate || todayStr;
           const dayItems = getDayItems(selDate);
+          const editingEv = (UI.editingCalEvId && data.events) ? data.events.find(x => String(x.id) === String(UI.editingCalEvId)) : null;
+          const isFormOpen = UI.calEventFormOpen || !!editingEv;
+
           return `
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-              <b style="font-size:13.5px;color:var(--ink)">🗓️ ${selDate.replace(/-/g, '.')} 일정 상세</b>
-              <span style="font-size:12px;color:var(--mute)">총 ${dayItems.length}건</span>
-            </div>
-            ${dayItems.length ? dayItems.map(it => `
-              <div style="font-size:12.5px;color:var(--ink);padding:4px 0;display:flex;align-items:center;gap:6px">
-                <span>${it.type === 'bday' ? '🎂' : (it.type === 'game' ? '🏆' : '⚾')}</span>
-                <span>${esc(it.fullLabel || it.label)}</span>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+              <div>
+                <b style="font-size:15px;color:var(--ink)">🗓️ ${selDate.replace(/-/g, '.')} 일정 및 행사 관리</b>
+                <span style="font-size:12px;color:var(--mute);margin-left:6px">(총 ${dayItems.length}건)</span>
               </div>
-            `).join('') : '<div style="font-size:12px;color:var(--mute);padding:4px 0">이 날에는 등록된 일정이 없습니다.</div>'}
+              <button type="button" class="cl-btn sm ${isFormOpen ? 'ghost' : 'pri btn-action-green'}" id="btnToggleCalEventForm" style="font-size:12px;font-weight:800;${isFormOpen ? '' : 'background:#10b981 !important;color:#ffffff !important'}">
+                ${isFormOpen ? '✕ 입력창 닫기' : '＋ 이 날짜에 새 일정/행사 등록'}
+              </button>
+            </div>
+
+            <!-- 해당 일자 등록된 일정 목록 -->
+            <div style="margin-bottom:${isFormOpen ? '14px' : '4px'}">
+              ${dayItems.length ? `
+                <div style="display:grid;gap:8px">
+                  ${dayItems.map(it => {
+                    const isTeamEvent = !!it.ev;
+                    return `
+                      <div style="display:flex;justify-content:space-between;align-items:center;background:var(--card);border:1px solid var(--line);padding:10px 12px;border-radius:8px;flex-wrap:wrap;gap:8px">
+                        <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:200px">
+                          <span style="font-size:18px">${it.type === 'bday' ? '🎂' : (it.type === 'game' ? '🏆' : (it.type === 'fed' ? '🎓' : (it.type === 'notice' ? '📢' : (it.type === 'event' ? '🍻' : '⚾'))))}</span>
+                          <div>
+                            <div style="font-size:13px;font-weight:800;color:var(--ink)">${esc(it.fullLabel || it.label)}</div>
+                            ${(it.ev && it.ev.note) ? `<div style="font-size:11.5px;color:var(--sub);margin-top:2px">📝 ${esc(it.ev.note)}</div>` : ''}
+                          </div>
+                        </div>
+                        ${isTeamEvent ? `
+                          <div style="display:flex;gap:6px">
+                            <button type="button" class="cl-btn sm ghost" data-cal-ev-edit="${esc(it.ev.id)}" style="font-size:11.5px;padding:3px 8px">✏️ 수정</button>
+                            <button type="button" class="cl-btn sm ghost" data-cal-ev-del="${esc(it.ev.id)}" style="font-size:11.5px;padding:3px 8px;color:#ef4444">🗑️ 삭제</button>
+                          </div>
+                        ` : ''}
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              ` : '<div style="font-size:12.5px;color:var(--mute);padding:6px 0">이 날짜에는 등록된 팀 일정이나 행사가 없습니다. 상단 버튼을 눌러 일정을 등록해 보세요!</div>'}
+            </div>
+
+            <!-- 인터랙티브 일정 등록 및 수정 폼 -->
+            ${isFormOpen ? `
+              <form id="calDayEventForm" style="background:var(--card);border:1.5px solid #10b981;border-radius:10px;padding:14px;margin-top:10px;display:grid;gap:10px">
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                  <b style="font-size:13.5px;color:#10b981">
+                    ${editingEv ? '✏️ 일정 내용 수정하기' : `＋ ${selDate} 새 일정/행사 등록`}
+                  </b>
+                  ${editingEv ? '<span style="font-size:11.5px;color:var(--mute)">수정 모드 활성화됨</span>' : ''}
+                </div>
+
+                <div class="cl-form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                  <div>
+                    <label style="font-size:11.5px;color:var(--mute);font-weight:700">일정 구분</label>
+                    <select id="calInType" style="width:100%;margin-top:3px;padding:6px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:12.5px" required>
+                      <option value="훈련" ${(editingEv && editingEv.type === '훈련') ? 'selected' : ''}>⚾ 정기 훈련 / 연습</option>
+                      <option value="공식대회" ${(editingEv && editingEv.type === '공식대회') ? 'selected' : ''}>🏆 공식 대회 / 시합</option>
+                      <option value="연맹행사" ${(editingEv && editingEv.type === '연맹행사') ? 'selected' : ''}>🎓 WBAK 연맹 행사·클리닉</option>
+                      <option value="모임" ${(editingEv && editingEv.type === '모임') ? 'selected' : ''}>🍻 팀 모임 / 회식 / 행사</option>
+                      <option value="자체경기" ${(editingEv && editingEv.type === '자체경기') ? 'selected' : ''}>⚔️ 자체전 / 친선 경기</option>
+                      <option value="공지" ${(editingEv && editingEv.type === '공지') ? 'selected' : ''}>📢 구단 공지 / 기타</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style="font-size:11.5px;color:var(--mute);font-weight:700">시간</label>
+                    <input type="time" id="calInTime" value="${editingEv ? esc(editingEv.time || '10:00') : '10:00'}" style="width:100%;margin-top:3px;padding:6px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:12.5px" required>
+                  </div>
+                </div>
+
+                <div class="cl-form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                  <div>
+                    <label style="font-size:11.5px;color:var(--mute);font-weight:700">장소 / 구장</label>
+                    <input type="text" id="calInVenue" value="${editingEv ? esc(editingEv.venue || '') : ''}" placeholder="예: 살곶이 야구장, 밀양 스포츠파크" style="width:100%;margin-top:3px;padding:6px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:12.5px" required>
+                  </div>
+                  <div>
+                    <label style="font-size:11.5px;color:var(--mute);font-weight:700">일정 제목</label>
+                    <input type="text" id="calInTitle" value="${editingEv ? esc(editingEv.title || '') : ''}" placeholder="예: 토요일 오전 훈련 & 펑고" style="width:100%;margin-top:3px;padding:6px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:12.5px" required>
+                  </div>
+                </div>
+
+                <div>
+                  <label style="font-size:11.5px;color:var(--mute);font-weight:700">세부 안내 및 준비물 메모</label>
+                  <input type="text" id="calInNote" value="${editingEv ? esc(editingEv.note || '') : ''}" placeholder="예: 유니폼 착용, 9:50까지 구장 집결, 시합구 1박스 지참" style="width:100%;margin-top:3px;padding:6px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:12.5px">
+                </div>
+
+                <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:6px">
+                  <button type="button" class="cl-btn ghost sm" id="btnCancelCalDayEvent">취소</button>
+                  <button type="submit" class="cl-btn pri sm btn-action-green" style="background:#10b981 !important;color:#ffffff !important;font-weight:800;padding:6px 14px">
+                    ${editingEv ? '✓ 수정 완료 저장' : '✓ 일정 등록 및 캘린더 반영'}
+                  </button>
+                </div>
+              </form>
+            ` : ''}
           `;
         })()}
       </div>
     </div>
   `;
 }
-
 // 2. 주간 미션 & 스탬프북 렌더러
 function renderClubMissionSection(t, data, tc, me) {
   const S = Store;
   // 체력훈련 미션 대상에서 코칭스태프(김현우, 김성현) 제외하고 순수 선수단 기준으로 설정
   const roster = luRoster(t).filter(n => n !== '김현우' && n !== '김성현');
-  const missions = data.missions || [
+  const missions = (data.missions && data.missions.length) ? data.missions : [
     {
       id: 'm_202611_w2',
       weekTitle: '2026 시즌 11월 2주차 주간 미션',
@@ -14965,7 +14524,7 @@ function renderClubMissionSection(t, data, tc, me) {
 
   const curMission = missions[0];
   curMission.stamps = curMission.stamps || {};
-  const stampedMembers = Object.keys(curMission.stamps);
+  const stampedMembers = Object.keys(curMission.stamps).filter(k => (curMission.stamps[k] || []).length > 0);
   const totalStamps = Object.values(curMission.stamps).reduce((acc, cur) => acc + (cur || []).length, 0);
   const completionPct = Math.round((stampedMembers.length / roster.length) * 100);
 
@@ -14976,7 +14535,7 @@ function renderClubMissionSection(t, data, tc, me) {
         <div class="sub">선수 스스로 홈트레이닝을 수행하고 체크하거나, 감독님이 선수별 미션을 체크해 스탬프를 부여할 수 있습니다.</div>
       </div>
       <div style="display:flex;align-items:center;gap:8px">
-        <span class="st-badge" style="background:#10b981;color:#ffffff;border:none;padding:5px 12px;font-size:13px">
+        <span class="st-badge" id="missionPctBadge" style="background:#10b981;color:#ffffff;border:none;padding:5px 12px;font-size:13px">
           🔥 팀 달성률 ${completionPct}% (${stampedMembers.length}/${roster.length}명 인증)
         </span>
       </div>
@@ -14992,7 +14551,7 @@ function renderClubMissionSection(t, data, tc, me) {
         </div>
         <div style="text-align:right">
           <span style="font-size:12px;color:var(--mute)">적립된 스탬프 총계</span>
-          <div style="font-size:20px;font-weight:900;color:#ef4444">💮 ${totalStamps}개 적립</div>
+          <div style="font-size:20px;font-weight:900;color:#ef4444" id="missionTotalStampsDisplay">💮 ${totalStamps}개 적립</div>
         </div>
       </div>
 
@@ -15007,23 +14566,31 @@ function renderClubMissionSection(t, data, tc, me) {
       </div>
     </div>
 
-    <!-- 선수별 미션 체크 & 스탬프 부여 체크리스트 테이블 -->
+    <!-- 선수별 미션 체크 & 스탬프 부여 체크리스트 테이블 (고정 레이아웃으로 흔들림 완전 방지) -->
     <div class="card" style="padding:16px; margin-bottom:16px">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
         <b style="font-size:15px; color:var(--ink)">📋 선수단 22명 미션 체크 & 스탬프북</b>
-        <span style="font-size:12px; color:var(--mute)">선수 본인 또는 감독님이 버튼을 눌러 미션을 체크해 주세요!</span>
+        <span style="font-size:12px; color:var(--mute)">클릭 시 화면 흔들림 없이 고정된 위치에서 스탬프가 실시간으로 기록됩니다.</span>
       </div>
 
       <div style="overflow-x:auto">
-        <table style="width:100%;border-collapse:collapse;font-size:13px">
+        <table class="mission-table" style="width:100%;table-layout:fixed;border-collapse:collapse;font-size:13px">
+          <colgroup>
+            <col style="width:75px">
+            <col style="width:85px">
+            <col style="width:85px">
+            <col style="width:85px">
+            <col style="width:125px">
+            <col style="width:95px">
+          </colgroup>
           <thead>
-            <tr style="border-bottom:1.5px solid var(--line);color:var(--mute);text-align:left">
-              <th style="padding:8px">선수명</th>
-              <th style="padding:8px">1. 하체 밸런스 🏋️</th>
-              <th style="padding:8px">2. 코어 & 어깨 🧘</th>
-              <th style="padding:8px">3. 기술 루틴 ⚾</th>
-              <th style="padding:8px">스탬프 현황</th>
-              <th style="padding:8px;text-align:right">원클릭 전체완료</th>
+            <tr style="border-bottom:1.5px solid var(--line);color:var(--mute);text-align:left;height:44px">
+              <th style="padding:6px 8px;width:75px">선수명</th>
+              <th style="padding:6px 8px;width:85px;text-align:center">1. 하체 🏋️</th>
+              <th style="padding:6px 8px;width:85px;text-align:center">2. 코어 🧘</th>
+              <th style="padding:6px 8px;width:85px;text-align:center">3. 기술 ⚾</th>
+              <th style="padding:6px 8px;width:125px">스탬프 현황</th>
+              <th style="padding:6px 8px;width:95px;text-align:right">원클릭 완료</th>
             </tr>
           </thead>
           <tbody>
@@ -15035,33 +14602,33 @@ function renderClubMissionSection(t, data, tc, me) {
               const isAll = t1 && t2 && t3;
 
               return `
-                <tr style="border-bottom:1px solid var(--line)">
-                  <td style="padding:10px 8px;font-weight:800;color:var(--ink)">
+                <tr style="border-bottom:1px solid var(--line);height:48px" data-mission-row="${esc(pName)}">
+                  <td style="padding:8px;font-weight:800;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
                     ${esc(pName)}
-                    ${pName === me ? '<span style="font-size:11px;color:#10b981;margin-left:4px">(나)</span>' : ''}
+                    ${pName === me ? '<span style="font-size:11px;color:#10b981;margin-left:2px">(나)</span>' : ''}
                   </td>
-                  <td style="padding:10px 8px">
-                    <button type="button" class="cl-btn sm ${t1 ? 'pri btn-action-green' : 'ghost'}" data-toggle-task="${esc(pName)}:t1" style="font-size:11.5px">
+                  <td style="padding:8px;text-align:center">
+                    <button type="button" class="cl-btn sm mission-btn ${t1 ? 'pri btn-action-green' : 'ghost'}" data-toggle-task="${esc(pName)}:t1" style="width:72px;min-width:72px;max-width:72px;height:30px;line-height:28px;padding:0;text-align:center;font-size:11.5px;box-sizing:border-box;${t1 ? 'background:#10b981 !important;color:#ffffff !important;' : ''}">
                       ${t1 ? '✓ 완료' : '미완료'}
                     </button>
                   </td>
-                  <td style="padding:10px 8px">
-                    <button type="button" class="cl-btn sm ${t2 ? 'pri btn-action-green' : 'ghost'}" data-toggle-task="${esc(pName)}:t2" style="font-size:11.5px">
+                  <td style="padding:8px;text-align:center">
+                    <button type="button" class="cl-btn sm mission-btn ${t2 ? 'pri btn-action-green' : 'ghost'}" data-toggle-task="${esc(pName)}:t2" style="width:72px;min-width:72px;max-width:72px;height:30px;line-height:28px;padding:0;text-align:center;font-size:11.5px;box-sizing:border-box;${t2 ? 'background:#10b981 !important;color:#ffffff !important;' : ''}">
                       ${t2 ? '✓ 완료' : '미완료'}
                     </button>
                   </td>
-                  <td style="padding:10px 8px">
-                    <button type="button" class="cl-btn sm ${t3 ? 'pri btn-action-green' : 'ghost'}" data-toggle-task="${esc(pName)}:t3" style="font-size:11.5px">
+                  <td style="padding:8px;text-align:center">
+                    <button type="button" class="cl-btn sm mission-btn ${t3 ? 'pri btn-action-green' : 'ghost'}" data-toggle-task="${esc(pName)}:t3" style="width:72px;min-width:72px;max-width:72px;height:30px;line-height:28px;padding:0;text-align:center;font-size:11.5px;box-sizing:border-box;${t3 ? 'background:#10b981 !important;color:#ffffff !important;' : ''}">
                       ${t3 ? '✓ 완료' : '미완료'}
                     </button>
                   </td>
-                  <td style="padding:10px 8px">
-                    <span style="font-weight:800;color:${isAll ? '#ef4444' : (myTasks.length ? '#10b981' : 'var(--mute)')}">
+                  <td style="padding:8px">
+                    <span class="mission-status-cell" style="display:inline-block;width:115px;min-width:115px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;line-height:30px;font-weight:800;color:${isAll ? '#ef4444' : (myTasks.length ? '#10b981' : 'var(--mute)')}">
                       ${isAll ? '💮 3/3 완벽달성!' : (myTasks.length ? `⚾ ${myTasks.length}/3 달성` : '미시작')}
                     </span>
                   </td>
-                  <td style="padding:10px 8px;text-align:right">
-                    <button type="button" class="cl-btn sm ${isAll ? 'ghost' : 'pri btn-action-green'}" data-stamp-all="${esc(pName)}" style="font-size:11.5px;font-weight:800">
+                  <td style="padding:8px;text-align:right">
+                    <button type="button" class="cl-btn sm mission-stamp-all-btn ${isAll ? 'ghost' : 'pri btn-action-green'}" data-stamp-all="${esc(pName)}" style="width:82px;min-width:82px;max-width:82px;height:30px;line-height:28px;padding:0;text-align:center;font-size:11.5px;font-weight:800;box-sizing:border-box;${isAll ? '' : 'background:#10b981 !important;color:#ffffff !important;'}">
                       ${isAll ? '✓ 인증완료' : '💮 도장 쾅!'}
                     </button>
                   </td>
@@ -15074,7 +14641,6 @@ function renderClubMissionSection(t, data, tc, me) {
     </div>
   `;
 }
-
 function renderClubAttendanceSection(t, data, tc, me) {
   const S = Store;
   const events = data.events || [];
@@ -15106,19 +14672,25 @@ function renderClubAttendanceSection(t, data, tc, me) {
     return { name, attended, carpool, absent, total: totalEv, rate };
   }).sort((a, b) => b.rate - a.rate || b.attended - a.attended);
 
-  const top1 = stats[0] || { name: '서희숙', rate: 100, attended: 12, carpool: 4 };
-  const top2 = stats[1] || { name: '안장우', rate: 92, attended: 11, carpool: 5 };
-  const top3 = stats[2] || { name: '황지민', rate: 92, attended: 11, carpool: 2 };
+  const curRsvp = curEvent ? (curEvent.rsvp || {}) : {};
+  const inCount = Object.values(curRsvp).filter(v => v === 'in' || v === 'car').length;
+  const carCount = Object.values(curRsvp).filter(v => v === 'car').length;
+  const outCount = Object.values(curRsvp).filter(v => v === 'out').length;
 
   return `
     <div style="display:flex; justify-content:space-between; align-items:center; margin:10px 0 16px; flex-wrap:wrap; gap:10px">
       <div>
         <b style="font-size:16px; color:var(--ink)">📊 2026 WT프렌즈 공식 출석부 & 성실상</b>
-        <div class="sub">선수단 출석을 실시간으로 체크하고, 누적 통계로 연말 올해의 출석왕을 선정합니다.</div>
+        <div class="sub">선수단 출석을 실시간으로 체크하고, 구글 시트와 양방향 동기화하여 전 팀원이 공유합니다.</div>
       </div>
-      <button type="button" class="cl-btn pri sm btn-action-green" id="btnExportAttendAward" style="background:#10b981 !important;color:#ffffff !important;font-weight:800">
-        🏅 올해의 출석왕 상장 카드 출력
-      </button>
+      <div style="display:flex;gap:8px;align-items:center">
+        <a href="https://docs.google.com/spreadsheets/d/1DoWB-aEtjD2N0xN6md5Go-s_1l3fVwvLUl9C7MXmvlQ/edit" target="_blank" rel="noopener noreferrer" class="st-badge" style="background:#10b981;color:#ffffff;border:none;padding:6px 12px;font-size:12px;text-decoration:none;display:inline-flex;align-items:center;gap:4px;font-weight:800;border-radius:6px">
+          ☁️ 구글 시트 클라우드 DB 열기 ↗
+        </a>
+        <button type="button" class="cl-btn pri sm btn-action-green" id="btnExportAttendAward" style="background:#10b981 !important;color:#ffffff !important;font-weight:800">
+          🏅 올해의 출석왕 상장 카드 출력
+        </button>
+      </div>
     </div>
 
     <!-- 1. 일정별 실시간 출석 체크 관리기 -->
@@ -15139,96 +14711,93 @@ function renderClubAttendanceSection(t, data, tc, me) {
             <b>${esc(curEvent.title)}</b>
             <span style="font-size:12px;color:var(--mute);margin-left:8px">🗓️ ${esc(curEvent.date)} ${esc(curEvent.time)} · 📍 ${esc(curEvent.venue)}</span>
           </div>
-          <div style="font-size:12.5px;color:var(--sub)">
-            참석: <b style="color:#10b981">${Object.values(curEvent.rsvp || {}).filter(v => v==='in'||v==='car').length}명</b>
-            · 불참: <b style="color:#ef4444">${Object.values(curEvent.rsvp || {}).filter(v => v==='out').length}명</b>
+          <div style="font-size:12.5px;color:var(--sub)" id="attendHeaderCountDisplay">
+            참석: <b style="color:#10b981">${inCount}명</b>${carCount ? ` (🚗카풀 ${carCount}명)` : ''} · 불참: <b style="color:#ef4444">${outCount}명</b>
           </div>
         </div>
 
-        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:10px">
+        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(230px, 1fr)); gap:10px">
           ${roster.map(pName => {
             const st = (curEvent.rsvp || {})[pName] || '';
+            const isAttending = (st === 'in' || st === 'car');
+            const isCarpool = (st === 'car');
+            const isAbsent = (st === 'out');
+
             return `
-              <div style="background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px;display:flex;justify-content:space-between;align-items:center">
+              <div style="background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px;display:flex;justify-content:space-between;align-items:center" data-attend-card="${esc(pName)}">
                 <b style="font-size:13.5px;color:var(--ink)">${esc(pName)}</b>
                 <div style="display:flex;gap:4px">
-                  <button type="button" class="cl-btn sm ${st === 'in' ? 'pri btn-action-green' : 'ghost'}" data-attend-chk="${esc(curEvent.id)}:${esc(pName)}:in" style="font-size:11px;padding:3px 7px" title="참석">✓참석</button>
-                  <button type="button" class="cl-btn sm ${st === 'car' ? 'pri' : 'ghost'}" data-attend-chk="${esc(curEvent.id)}:${esc(pName)}:car" style="font-size:11px;padding:3px 7px;background:${st === 'car' ? '#0284c7' : ''};color:${st === 'car' ? '#fff' : ''}" title="카풀지원">🚗카풀</button>
-                  <button type="button" class="cl-btn sm ${st === 'out' ? 'pri' : 'ghost'}" data-attend-chk="${esc(curEvent.id)}:${esc(pName)}:out" style="font-size:11px;padding:3px 7px;background:${st === 'out' ? '#e11d48' : ''};color:${st === 'out' ? '#fff' : ''}" title="불참">✕불참</button>
+                  <button type="button" class="cl-btn sm ${isAttending ? 'pri btn-action-green' : 'ghost'}" data-attend-chk="${esc(curEvent.id)}:${esc(pName)}:in" style="font-size:11px;padding:3px 8px;min-width:48px;height:28px;box-sizing:border-box;${isAttending ? 'background:#10b981 !important;color:#ffffff !important;' : ''}" title="참석 여부">✓참석</button>
+                  <button type="button" class="cl-btn sm ${isCarpool ? 'pri' : 'ghost'}" data-attend-chk="${esc(curEvent.id)}:${esc(pName)}:car" style="font-size:11px;padding:3px 8px;min-width:48px;height:28px;box-sizing:border-box;${isCarpool ? 'background:#0284c7 !important;color:#ffffff !important;border-color:#0284c7 !important;' : ''}" title="카풀 지원 (참석 포함)">🚗카풀</button>
+                  <button type="button" class="cl-btn sm ${isAbsent ? 'pri' : 'ghost'}" data-attend-chk="${esc(curEvent.id)}:${esc(pName)}:out" style="font-size:11px;padding:3px 8px;min-width:48px;height:28px;box-sizing:border-box;${isAbsent ? 'background:#e11d48 !important;color:#ffffff !important;border-color:#e11d48 !important;' : ''}" title="불참">✕불참</button>
                 </div>
               </div>
             `;
           }).join('')}
         </div>
-      ` : '<div class="empty">등록된 팀 일정이 없습니다.</div>'}
+      ` : '<div style="font-size:13px;color:var(--mute);padding:14px;text-align:center">등록된 일정이 없습니다. [일정·캘린더] 탭에서 먼저 일정을 등록해 주세요!</div>'}
     </div>
 
-    <!-- 2. 출석 명예의 전당 포디엄 -->
-    <div class="podium-wrap">
-      <div class="podium-card silver">
-        <div class="podium-rank">🥈 2위</div>
-        <div class="podium-name">${esc(top2.name)}</div>
-        <div class="podium-sub">출석 ${top2.attended}회 · 카풀 ${top2.carpool}회</div>
-        <div class="podium-pct" style="color:#94a3b8">${top2.rate}%</div>
+    <!-- 2. 누적 출석률 랭킹 & 올해의 출석왕 순위표 -->
+    <div class="card" style="padding:16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+        <b style="font-size:15px; color:var(--ink)">🏆 2026 시즌 선수단 출석률 & 카풀 랭킹 TOP 22</b>
+        <span style="font-size:12px; color:var(--mute)">훈련 및 시합 전 일정 누적 집계</span>
       </div>
 
-      <div class="podium-card gold" style="transform:translateY(-8px)">
-        <div class="podium-rank">🥇 1위 (출석왕)</div>
-        <div class="podium-name" style="font-size:18px">${esc(top1.name)}</div>
-        <div class="podium-sub">출석 ${top1.attended}회 · 카풀 ${top1.carpool}회</div>
-        <div class="podium-pct" style="color:#eab308">${top1.rate}%</div>
-      </div>
-
-      <div class="podium-card bronze">
-        <div class="podium-rank">🥉 3위</div>
-        <div class="podium-name">${esc(top3.name)}</div>
-        <div class="podium-sub">출석 ${top3.attended}회 · 카풀 ${top3.carpool}회</div>
-        <div class="podium-pct" style="color:#d97706">${top3.rate}%</div>
-      </div>
-    </div>
-
-    <!-- 3. 선수단 전체 누적 출석부 테이블 -->
-    <div class="card" style="padding:14px;overflow-x:auto">
-      <table style="width:100%;border-collapse:collapse;font-size:13px">
-        <thead>
-          <tr style="border-bottom:1.5px solid var(--line);color:var(--mute);text-align:left">
-            <th style="padding:8px">순위</th>
-            <th style="padding:8px">선수명</th>
-            <th style="padding:8px">출석률 (%)</th>
-            <th style="padding:8px">참석</th>
-            <th style="padding:8px">카풀지원</th>
-            <th style="padding:8px">불참</th>
-            <th style="padding:8px">성실 등급</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${stats.map((s, idx) => {
-            const grade = s.rate >= 90 ? '🌟 S급' : (s.rate >= 75 ? '👍 A급' : 'B급');
-            return `
-              <tr style="border-bottom:1px solid var(--line)">
-                <td style="padding:9px 8px;font-weight:700">${idx + 1}</td>
-                <td style="padding:9px 8px;font-weight:800;color:var(--ink)">${esc(s.name)}</td>
-                <td style="padding:9px 8px">
-                  <div style="display:flex;align-items:center;gap:8px">
-                    <span style="font-weight:800;color:#10b981;min-width:38px">${s.rate}%</span>
-                    <div style="flex:1;max-width:100px;background:var(--line);height:6px;border-radius:3px;overflow:hidden">
-                      <div style="width:${s.rate}%;background:#10b981;height:100%"></div>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:13px">
+          <thead>
+            <tr style="border-bottom:1.5px solid var(--line);color:var(--mute);text-align:left">
+              <th style="padding:8px">순위</th>
+              <th style="padding:8px">선수명</th>
+              <th style="padding:8px">참석 횟수</th>
+              <th style="padding:8px">🚗 카풀 지원</th>
+              <th style="padding:8px">불참</th>
+              <th style="padding:8px">출석률</th>
+              <th style="padding:8px;text-align:right">성실 등급</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${stats.map((s, idx) => {
+              const rank = idx + 1;
+              const isKing = rank === 1;
+              const isPodium = rank <= 3;
+              return `
+                <tr style="border-bottom:1px solid var(--line);background:${isKing ? 'rgba(234, 179, 8, 0.08)' : 'transparent'}">
+                  <td style="padding:10px 8px;font-weight:900;color:${isKing ? '#eab308' : (isPodium ? '#3b82f6' : 'var(--mute)')}">
+                    ${isKing ? '🥇 1위' : (rank === 2 ? '🥈 2위' : (rank === 3 ? '🥉 3위' : rank + '위'))}
+                  </td>
+                  <td style="padding:10px 8px;font-weight:800;color:var(--ink)">
+                    ${esc(s.name)}
+                    ${s.name === me ? '<span style="font-size:11px;color:#10b981;margin-left:4px">(나)</span>' : ''}
+                    ${isKing ? '<span style="font-size:11px;background:#eab308;color:#ffffff;padding:2px 6px;border-radius:4px;margin-left:4px;font-weight:800">출석왕</span>' : ''}
+                  </td>
+                  <td style="padding:10px 8px;font-weight:800;color:#10b981">${s.attended}회</td>
+                  <td style="padding:10px 8px;font-weight:700;color:#0284c7">${s.carpool > 0 ? `🚗 ${s.carpool}회` : '-'}</td>
+                  <td style="padding:10px 8px;color:#ef4444">${s.absent}회</td>
+                  <td style="padding:10px 8px">
+                    <div style="display:flex;align-items:center;gap:6px">
+                      <div style="flex:1;max-width:80px;height:6px;background:var(--line);border-radius:999px;overflow:hidden">
+                        <div style="width:${s.rate}%;height:100%;background:${s.rate>=90?'#10b981':(s.rate>=75?'#3b82f6':'#f59e0b')}"></div>
+                      </div>
+                      <b style="font-size:12px;color:var(--ink)">${s.rate}%</b>
                     </div>
-                  </div>
-                </td>
-                <td style="padding:9px 8px;color:var(--ink)">${s.attended}회</td>
-                <td style="padding:9px 8px;color:#38bdf8">${s.carpool}회</td>
-                <td style="padding:9px 8px;color:var(--mute)">${s.absent}회</td>
-                <td style="padding:9px 8px;font-weight:700">${grade}</td>
-              </tr>
-            `;
-          }).join('')}
-        </tbody>
-      </table>
+                  </td>
+                  <td style="padding:10px 8px;text-align:right">
+                    <span class="st-badge" style="background:${s.rate>=90?'#10b981':(s.rate>=75?'#3b82f6':'#64748b')};color:#ffffff;border:none;font-size:11px">
+                      ${s.rate>=90 ? '⭐ S급' : (s.rate>=75 ? 'A급' : 'B급')}
+                    </span>
+                  </td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
     </div>
   `;
 }
-
 function renderClubSettlementView(t, data, tc, me) {
   const S = Store;
   const settlements = data.settlements || [];
@@ -15249,7 +14818,7 @@ function renderClubSettlementView(t, data, tc, me) {
     if (!st || isNew) {
       st = {
         id: isNew ? ('ST_' + Date.now().toString(36)) : curId,
-        title: isNew ? '2026 프로야구선수협회장기 밀양 대회' : '',
+        title: isNew ? '프로야구선수협회장기 밀양대회 정산서' : '',
         type: '공식대회',
         startDate: '2026-11-07',
         endDate: '2026-11-08',
@@ -15527,7 +15096,7 @@ function renderClubSettlementView(t, data, tc, me) {
         const partStr = partList.slice(0, 5).join(' ') + (partList.length > 5 ? ` 외 ${partList.length - 5}명` : '');
 
         return `
-          <div class="clip" style="--tc:#2563eb; cursor:pointer; padding:0; overflow:hidden">
+          <div class="clip" style="--tc:#2563eb; cursor:pointer; padding:0; overflow:hidden" data-st-edit="${esc(st.id)}">
             <div class="paper" style="padding:16px">
               <div class="ph" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:8px">
                 <span class="ph-badge" style="background:#2563eb; color:#ffffff; font-size:11px; font-weight:800; padding:2px 8px; border-radius:4px">${esc(t.short)}</span>
@@ -15950,30 +15519,128 @@ function bindTeamClubView() {
   const me = ClubStore.getMe(t);
   const re = () => { const y = window.scrollY; render(); window.scrollTo(0, y); };
 
-  // --- 스마트 캘린더 네비게이션 바인딩 ---
+  // --- 스마트 캘린더 네비게이션 및 인터랙티브 일정 관리 바인딩 ---
   const btnPrevM = document.getElementById('btnCalPrevMonth');
   if (btnPrevM) {
     btnPrevM.onclick = () => {
-      const [y, m] = (UI.calMonth || new Date().toISOString().slice(0, 7)).split('-').map(Number);
-      const prevD = new Date(y, m - 2, 1);
-      UI.calMonth = prevD.toISOString().slice(0, 7);
+      let [y, m] = (UI.calMonth || '2026-11').split('-').map(Number);
+      m = m - 1;
+      if (m < 1) { m = 12; y--; }
+      UI.calMonth = `${y}-${String(m).padStart(2, '0')}`;
       re();
     };
   }
-  // 날짜 클릭 시 상세 일정 갱신
+  const btnNextM = document.getElementById('btnCalNextMonth');
+  if (btnNextM) {
+    btnNextM.onclick = () => {
+      let [y, m] = (UI.calMonth || '2026-11').split('-').map(Number);
+      m = m + 1;
+      if (m > 12) { m = 1; y++; }
+      UI.calMonth = `${y}-${String(m).padStart(2, '0')}`;
+      re();
+    };
+  }
+
+  // 날짜 클릭 시 상세 일정 갱신 (선택 날짜 활성화)
   $app.querySelectorAll('[data-cal-date]').forEach(cell => {
     cell.onclick = () => {
       UI.selectedCalDate = cell.dataset.calDate;
+      UI.calEventFormOpen = false;
+      UI.editingCalEvId = null;
       re();
     };
   });
 
-  const btnNextM = document.getElementById('btnCalNextMonth');
-  if (btnNextM) {
-    btnNextM.onclick = () => {
-      const [y, m] = (UI.calMonth || new Date().toISOString().slice(0, 7)).split('-').map(Number);
-      const nextD = new Date(y, m, 1);
-      UI.calMonth = nextD.toISOString().slice(0, 7);
+  // 일정 등록 폼 토글 버튼
+  const btnToggleCalForm = document.getElementById('btnToggleCalEventForm');
+  if (btnToggleCalForm) {
+    btnToggleCalForm.onclick = () => {
+      UI.calEventFormOpen = !UI.calEventFormOpen;
+      UI.editingCalEvId = null;
+      re();
+    };
+  }
+
+  // 일정 수정 버튼
+  $app.querySelectorAll('[data-cal-ev-edit]').forEach(btn => {
+    btn.onclick = () => {
+      UI.calEventFormOpen = true;
+      UI.editingCalEvId = btn.dataset.calEvEdit;
+      re();
+    };
+  });
+
+  // 일정 삭제 버튼
+  $app.querySelectorAll('[data-cal-ev-del]').forEach(btn => {
+    btn.onclick = () => {
+      const evId = btn.dataset.calEvDel;
+      if (confirm('선택하신 일정을 정말 삭제하시겠습니까?')) {
+        const curData = ClubStore.getTeamData(t);
+        curData.events = (curData.events || []).filter(x => String(x.id) !== String(evId));
+        ClubStore.saveTeamData(t, curData);
+        if (UI.editingCalEvId === evId) UI.editingCalEvId = null;
+        re();
+      }
+    };
+  });
+
+  // 폼 취소 버튼
+  const btnCancelCalDay = document.getElementById('btnCancelCalDayEvent');
+  if (btnCancelCalDay) {
+    btnCancelCalDay.onclick = () => {
+      UI.calEventFormOpen = false;
+      UI.editingCalEvId = null;
+      re();
+    };
+  }
+
+  // 인터랙티브 일정 등록 / 수정 폼 제출
+  const calDayForm = document.getElementById('calDayEventForm');
+  if (calDayForm) {
+    calDayForm.onsubmit = (e) => {
+      e.preventDefault();
+      const selDate = UI.selectedCalDate || '2026-11-14';
+      const type = document.getElementById('calInType')?.value || '훈련';
+      const time = document.getElementById('calInTime')?.value || '10:00';
+      const venue = document.getElementById('calInVenue')?.value.trim() || '살곶이 야구장';
+      const title = document.getElementById('calInTitle')?.value.trim() || '팀 일정';
+      const note = document.getElementById('calInNote')?.value.trim() || '';
+
+      const curData = ClubStore.getTeamData(t);
+      curData.events = curData.events || [];
+
+      if (UI.editingCalEvId) {
+        const ev = curData.events.find(x => String(x.id) === String(UI.editingCalEvId));
+        if (ev) {
+          ev.type = type;
+          ev.time = time;
+          ev.venue = venue;
+          ev.title = title;
+          ev.note = note;
+          ev.date = selDate;
+        }
+        UI.editingCalEvId = null;
+        alert(`일정이 성공적으로 수정되었습니다! (${selDate})`);
+      } else {
+        const newEv = {
+          id: 'ev_' + Date.now().toString(36),
+          type,
+          date: selDate,
+          time,
+          venue,
+          title,
+          note,
+          rsvp: {
+            '전순아': 'in', '정은경': 'in', '안장우': 'in', '민정현': 'in', '서희숙': 'in',
+            '황지민': 'in', '이은숙': 'in', '구민경': 'in', '이수정': 'in', '류이슬': 'in'
+          }
+        };
+        curData.events.unshift(newEv);
+        alert(`선택하신 날짜(${selDate})에 새 일정이 등록되었습니다!`);
+      }
+
+      ClubStore.saveTeamData(t, curData);
+      UI.calEventFormOpen = false;
       re();
     };
   }
@@ -15987,116 +15654,232 @@ function bindTeamClubView() {
     };
   }
 
-  // 출석 체크 버튼 클릭 (참석/카풀/불참)
+  // 출석 체크 버튼 클릭 (참석/카풀/불참) - DOM 직접 실시간 갱신 & 구글 시트 클라우드 동기화
   $app.querySelectorAll('[data-attend-chk]').forEach(btn => {
     btn.onclick = (e) => {
       e.stopPropagation();
-      const [evId, pName, status] = btn.dataset.attendChk.split(':');
+      e.preventDefault();
+      const [evId, pName, action] = btn.dataset.attendChk.split(':');
       const curData = ClubStore.getTeamData(t);
-      const ev = (curData.events || []).find(x => x.id === evId);
-      if (ev) {
-        ev.rsvp = ev.rsvp || {};
-        ev.rsvp[pName] = status;
-        ClubStore.saveTeamData(t, curData);
-        re();
+      const ev = (curData.events || []).find(x => String(x.id) === String(evId));
+      if (!ev) return;
+
+      ev.rsvp = ev.rsvp || {};
+      const curSt = ev.rsvp[pName] || '';
+      let newSt = curSt;
+
+      if (action === 'in') {
+        // [✓ 참석] 클릭: 이미 참석이면 토글 해제, 카풀 중이면 일반 참석으로 전환, 그 외엔 참석 설정
+        if (curSt === 'in') newSt = '';
+        else if (curSt === 'car') newSt = 'in';
+        else newSt = 'in';
+      } else if (action === 'car') {
+        // [🚗 카풀] 클릭 (카풀은 곧 참석!): 이미 카풀이면 카풀 끄고 참석('in') 유지, 그 외엔 참석+카풀('car') 동시 활성화
+        if (curSt === 'car') newSt = 'in';
+        else newSt = 'car';
+      } else if (action === 'out') {
+        // [✕ 불참] 클릭: 이미 불참이면 토글 해제, 그 외엔 불참 설정 (참석·카풀 모두 끔)
+        if (curSt === 'out') newSt = '';
+        else newSt = 'out';
+      }
+
+      ev.rsvp[pName] = newSt;
+      ClubStore.saveTeamData(t, curData); // 브라우저 로컬 저장 + 구글 시트 클라우드 DB 즉시 전송
+
+      // DOM 인라인 실시간 갱신 (화면 흔들림 / 스크롤 점프 완전 방지)
+      const card = btn.closest('[data-attend-card]');
+      if (card) {
+        const isAttending = (newSt === 'in' || newSt === 'car');
+        const isCarpool = (newSt === 'car');
+        const isAbsent = (newSt === 'out');
+
+        const btnIn = card.querySelector(`[data-attend-chk$=":in"]`);
+        const btnCar = card.querySelector(`[data-attend-chk$=":car"]`);
+        const btnOut = card.querySelector(`[data-attend-chk$=":out"]`);
+
+        if (btnIn) {
+          btnIn.className = `cl-btn sm ${isAttending ? 'pri btn-action-green' : 'ghost'}`;
+          btnIn.style.background = isAttending ? '#10b981' : '';
+          btnIn.style.color = isAttending ? '#ffffff' : '';
+        }
+        if (btnCar) {
+          btnCar.className = `cl-btn sm ${isCarpool ? 'pri' : 'ghost'}`;
+          btnCar.style.background = isCarpool ? '#0284c7' : '';
+          btnCar.style.color = isCarpool ? '#ffffff' : '';
+          btnCar.style.borderColor = isCarpool ? '#0284c7' : '';
+        }
+        if (btnOut) {
+          btnOut.className = `cl-btn sm ${isAbsent ? 'pri' : 'ghost'}`;
+          btnOut.style.background = isAbsent ? '#e11d48' : '';
+          btnOut.style.color = isAbsent ? '#ffffff' : '';
+          btnOut.style.borderColor = isAbsent ? '#e11d48' : '';
+        }
+      }
+
+      // 상단 참석/불참 카운트 실시간 업데이트
+      const rsvpVals = Object.values(ev.rsvp);
+      const inCount = rsvpVals.filter(v => v === 'in' || v === 'car').length;
+      const carCount = rsvpVals.filter(v => v === 'car').length;
+      const outCount = rsvpVals.filter(v => v === 'out').length;
+      const countEl = document.getElementById('attendHeaderCountDisplay');
+      if (countEl) {
+        countEl.innerHTML = `참석: <b style="color:#10b981">${inCount}명</b>${carCount ? ` (🚗카풀 ${carCount}명)` : ''} · 불참: <b style="color:#ef4444">${outCount}명</b>`;
       }
     };
   });
 
-  // 주간 미션: 개별 과제 토글
+  // 주간 미션: 개별 과제 토글 (DOM 직접 실시간 갱신 - 화면 점프/스크롤 이동 완전 제거)
   $app.querySelectorAll('[data-toggle-task]').forEach(btn => {
-    btn.onclick = () => {
+    btn.onclick = (e) => {
+      e.preventDefault();
       const [pName, taskId] = btn.dataset.toggleTask.split(':');
       const curData = ClubStore.getTeamData(t);
-      curData.missions = curData.missions || [
-        {
-          id: 'm_202611_w2',
-          weekTitle: '2026 시즌 11월 2주차 주간 미션',
-          dateRange: '11.09 ~ 11.15',
-          tasks: [
-            { id: 't1', title: '하체 밸런스', goal: '스쿼트 50회 3세트 & 런지 20회', icon: '🏋️' },
-            { id: 't2', title: '코어 & 어깨 보강', goal: '플랭크 1분 3세트 & 튜빙 밴드', icon: '🧘' },
-            { id: 't3', title: '야구 기술 루틴', goal: '티배팅/빈스윙 100개 또는 섀도우 50구', icon: '⚾' }
-          ],
-          stamps: {}
-        }
-      ];
+      if (!curData.missions || !curData.missions.length) {
+        curData.missions = [
+          {
+            id: 'm_202611_w2',
+            weekTitle: '2026 시즌 11월 2주차 주간 미션',
+            dateRange: '11.09 ~ 11.15',
+            tasks: [
+              { id: 't1', title: '하체 밸런스', goal: '스쿼트 50회 3세트 & 런지 20회', icon: '🏋️' },
+              { id: 't2', title: '코어 & 어깨 보강', goal: '플랭크 1분 3세트 & 튜빙 밴드', icon: '🧘' },
+              { id: 't3', title: '야구 기술 루틴', goal: '티배팅/빈스윙 100개 또는 섀도우 50구', icon: '⚾' }
+            ],
+            stamps: {
+              '전순아': ['t1', 't2', 't3'],
+              '정은경': ['t1', 't2', 't3'],
+              '서희숙': ['t1', 't2', 't3'],
+              '안장우': ['t1', 't3'],
+              '민정현': ['t1', 't2'],
+              '황지민': ['t1', 't3'],
+              '이은숙': ['t1', 't2'],
+              '구민경': ['t1', 't2', 't3']
+            }
+          }
+        ];
+      }
       const curM = curData.missions[0];
       curM.stamps = curM.stamps || {};
       curM.stamps[pName] = curM.stamps[pName] || [];
       const idx = curM.stamps[pName].indexOf(taskId);
-      if (idx >= 0) curM.stamps[pName].splice(idx, 1);
-      else curM.stamps[pName].push(taskId);
+      const isNowDone = idx < 0;
+      if (isNowDone) {
+        curM.stamps[pName].push(taskId);
+      } else {
+        curM.stamps[pName].splice(idx, 1);
+      }
       ClubStore.saveTeamData(t, curData);
-      re();
+
+      // DOM 실시간 인라인 업데이트 (스크롤 점프 없음)
+      if (isNowDone) {
+        btn.className = 'cl-btn sm pri btn-action-green';
+        btn.style.background = '#10b981';
+        btn.style.color = '#ffffff';
+        btn.textContent = '✓ 완료';
+      } else {
+        btn.className = 'cl-btn sm ghost';
+        btn.style.background = 'transparent';
+        btn.style.color = 'var(--mute)';
+        btn.textContent = '미완료';
+      }
+
+      // 행 내 스탬프 현황 갱신
+      const tr = btn.closest('tr');
+      if (tr) {
+        const myTasks = curM.stamps[pName];
+        const isAll = myTasks.includes('t1') && myTasks.includes('t2') && myTasks.includes('t3');
+        const statusSpan = tr.querySelector('.mission-status-cell');
+        if (statusSpan) {
+          statusSpan.style.color = isAll ? '#ef4444' : (myTasks.length ? '#10b981' : 'var(--mute)');
+          statusSpan.textContent = isAll ? '💮 3/3 완벽달성!' : (myTasks.length ? `⚾ ${myTasks.length}/3 달성` : '미시작');
+        }
+        const stampAllBtn = tr.querySelector('[data-stamp-all]');
+        if (stampAllBtn) {
+          stampAllBtn.className = isAll ? 'cl-btn sm ghost' : 'cl-btn sm pri btn-action-green';
+          stampAllBtn.style.background = isAll ? 'transparent' : '#10b981';
+          stampAllBtn.style.color = isAll ? 'var(--mute)' : '#ffffff';
+          stampAllBtn.textContent = isAll ? '✓ 인증완료' : '💮 도장 쾅!';
+        }
+      }
+
+      // 상단 총계 갱신
+      const totalStamps = Object.values(curM.stamps).reduce((acc, cur) => acc + (cur || []).length, 0);
+      const stampedMembers = Object.keys(curM.stamps).filter(k => (curM.stamps[k] || []).length > 0);
+      const totalSpan = document.getElementById('missionTotalStampsDisplay');
+      if (totalSpan) totalSpan.textContent = `💮 ${totalStamps}개 적립`;
+      const pctBadge = document.getElementById('missionPctBadge');
+      if (pctBadge) {
+        const pct = Math.round((stampedMembers.length / 22) * 100);
+        pctBadge.textContent = `🔥 팀 달성률 ${pct}% (${stampedMembers.length}/22명 인증)`;
+      }
     };
   });
 
-  // 주간 미션: 원클릭 전체 완료 스탬프
+  // 주간 미션: 원클릭 전체 완료 스탬프 (DOM 직접 갱신)
   $app.querySelectorAll('[data-stamp-all]').forEach(btn => {
-    btn.onclick = () => {
+    btn.onclick = (e) => {
+      e.preventDefault();
       const pName = btn.dataset.stampAll;
       const curData = ClubStore.getTeamData(t);
-      curData.missions = curData.missions || [
-        {
-          id: 'm_202611_w2',
-          weekTitle: '2026 시즌 11월 2주차 주간 미션',
-          dateRange: '11.09 ~ 11.15',
-          tasks: [
-            { id: 't1', title: '하체 밸런스', goal: '스쿼트 50회 3세트 & 런지 20회', icon: '🏋️' },
-            { id: 't2', title: '코어 & 어깨 보강', goal: '플랭크 1분 3세트 & 튜빙 밴드', icon: '🧘' },
-            { id: 't3', title: '야구 기술 루틴', goal: '티배팅/빈스윙 100개 또는 섀도우 50구', icon: '⚾' }
-          ],
-          stamps: {}
-        }
-      ];
+      if (!curData.missions || !curData.missions.length) {
+        curData.missions = [
+          {
+            id: 'm_202611_w2',
+            weekTitle: '2026 시즌 11월 2주차 주간 미션',
+            dateRange: '11.09 ~ 11.15',
+            tasks: [
+              { id: 't1', title: '하체 밸런스', goal: '스쿼트 50회 3세트 & 런지 20회', icon: '🏋️' },
+              { id: 't2', title: '코어 & 어깨 보강', goal: '플랭크 1분 3세트 & 튜빙 밴드', icon: '🧘' },
+              { id: 't3', title: '야구 기술 루틴', goal: '티배팅/빈스윙 100개 또는 섀도우 50구', icon: '⚾' }
+            ],
+            stamps: {
+              '전순아': ['t1', 't2', 't3'],
+              '정은경': ['t1', 't2', 't3'],
+              '서희숙': ['t1', 't2', 't3'],
+              '안장우': ['t1', 't3'],
+              '민정현': ['t1', 't2'],
+              '황지민': ['t1', 't3'],
+              '이은숙': ['t1', 't2'],
+              '구민경': ['t1', 't2', 't3']
+            }
+          }
+        ];
+      }
       const curM = curData.missions[0];
       curM.stamps = curM.stamps || {};
       curM.stamps[pName] = ['t1', 't2', 't3'];
       ClubStore.saveTeamData(t, curData);
-      alert(`${pName} 선수, 3대 주간 미션 완벽 달성! 💮 야구공 스탬프가 적립되었습니다!`);
-      re();
-    };
-  });
 
-  // 주간 미션 스탬프 바인딩
-  $app.querySelectorAll('[data-stamp-task]').forEach(btn => {
-    btn.onclick = () => {
-      let curMe = ClubStore.getMe(t);
-      if (!curMe) {
-        curMe = prompt('스탬프를 찍을 선수 이름을 입력하세요 (예: 전순아, 정은경):');
-        if (curMe && roster.includes(curMe.trim())) {
-          curMe = curMe.trim();
-          ClubStore.setMe(t, curMe);
-        } else {
-          alert('선수 명단에 등록된 이름을 선택해 주세요!');
-          return;
+      // 행 내 모든 버튼 '✓ 완료'로 업데이트
+      const tr = btn.closest('tr');
+      if (tr) {
+        tr.querySelectorAll('[data-toggle-task]').forEach(tBtn => {
+          tBtn.className = 'cl-btn sm pri btn-action-green';
+          tBtn.style.background = '#10b981';
+          tBtn.style.color = '#ffffff';
+          tBtn.textContent = '✓ 완료';
+        });
+        const statusSpan = tr.querySelector('.mission-status-cell');
+        if (statusSpan) {
+          statusSpan.style.color = '#ef4444';
+          statusSpan.textContent = '💮 3/3 완벽달성!';
         }
+        btn.className = 'cl-btn sm ghost';
+        btn.style.background = 'transparent';
+        btn.style.color = 'var(--mute)';
+        btn.textContent = '✓ 인증완료';
       }
-      const taskId = btn.dataset.stampTask;
-      const curData = ClubStore.getTeamData(t);
-      curData.missions = curData.missions || [
-        {
-          id: 'm_202611_w2',
-          weekTitle: '2026 시즌 11월 2주차 주간 미션',
-          dateRange: '11.09 ~ 11.15',
-          tasks: [
-            { id: 't1', title: '하체 밸런스 훈련', goal: '스쿼트 50회 3세트 & 런지 20회', icon: '🏋️' },
-            { id: 't2', title: '코어 & 어깨 보강', goal: '플랭크 1분 3세트 & 튜빙 밴드 회전근개', icon: '🧘' },
-            { id: 't3', title: '야구 기술 루틴', goal: '티배팅/빈스윙 100개 또는 섀도우 피칭 50구', icon: '⚾' }
-          ],
-          stamps: {}
-        }
-      ];
-      const curM = curData.missions[0];
-      curM.stamps = curM.stamps || {};
-      curM.stamps[curMe] = curM.stamps[curMe] || [];
-      if (!curM.stamps[curMe].includes(taskId)) {
-        curM.stamps[curMe].push(taskId);
+
+      // 상단 총계 갱신
+      const totalStamps = Object.values(curM.stamps).reduce((acc, cur) => acc + (cur || []).length, 0);
+      const stampedMembers = Object.keys(curM.stamps).filter(k => (curM.stamps[k] || []).length > 0);
+      const totalSpan = document.getElementById('missionTotalStampsDisplay');
+      if (totalSpan) totalSpan.textContent = `💮 ${totalStamps}개 적립`;
+      const pctBadge = document.getElementById('missionPctBadge');
+      if (pctBadge) {
+        const pct = Math.round((stampedMembers.length / 22) * 100);
+        pctBadge.textContent = `🔥 팀 달성률 ${pct}% (${stampedMembers.length}/22명 인증)`;
       }
-      ClubStore.saveTeamData(t, curData);
-      alert(`${curMe} 선수, 스탬프가 성공적으로 찍혔습니다! 💮 야구공 스탬프 적립 완료!`);
-      re();
     };
   });
 
@@ -16407,9 +16190,9 @@ function bindTeamClubView() {
     const venueEl = document.getElementById('stInVenue');
     const startEl = document.getElementById('stInStartDate');
     const endEl = document.getElementById('stInEndDate');
-    if (!titleEl || !venueEl) return;
+    if (!titleEl || !venueEl) return curId;
 
-    const title = titleEl.value.trim() || '대회 정산서';
+    const title = titleEl.value.trim() || '프로야구선수협회장기 밀양대회 정산서';
     const startDate = startEl ? startEl.value : '2026-11-07';
     const endDate = endEl ? endEl.value : '2026-11-08';
     const venue = venueEl.value.trim() || '밀양 스포츠파크';
@@ -16452,7 +16235,7 @@ function bindTeamClubView() {
       incomes,
       expenses,
       sponsorships,
-      notes: '정상 정산 완료'
+      notes: '수입 1,372,300원 / 지출 1,372,300원 잔액 0원으로 정산 완료'
     };
 
     curData.settlements = curData.settlements || [];
@@ -16464,6 +16247,9 @@ function bindTeamClubView() {
     }
 
     ClubStore.saveTeamData(t, curData);
+    if (UI.curSettlementId === 'new' || !UI.curSettlementId) {
+      UI.curSettlementId = targetId;
+    }
     return targetId;
   };
 
@@ -16472,7 +16258,7 @@ function bindTeamClubView() {
   if (inTitleEl) {
     inTitleEl.oninput = () => {
       const receiptTitle = document.querySelector('#settlementReceiptCard .receipt-title');
-      if (receiptTitle) receiptTitle.textContent = inTitleEl.value.trim() || '대회 정산 영수증';
+      if (receiptTitle) receiptTitle.textContent = inTitleEl.value.trim() || '프로야구선수협회장기 밀양대회 정산서';
       collectAndSaveSettlement(UI.curSettlementId);
     };
   }
@@ -16480,10 +16266,11 @@ function bindTeamClubView() {
   if (inVenueEl) {
     inVenueEl.oninput = () => {
       const receiptSub = document.querySelector('#settlementReceiptCard .receipt-sub');
-      const startD = document.getElementById('stInStartDate')?.value || '';
-      const endD = document.getElementById('stInEndDate')?.value || '';
+      const startD = document.getElementById('stInStartDate')?.value || '2026-11-07';
+      const endD = document.getElementById('stInEndDate')?.value || '2026-11-08';
+      const venueVal = inVenueEl.value.trim() || '밀양 스포츠파크';
       if (receiptSub) {
-        receiptSub.innerHTML = `<span>🗓️ ${startD} ~ ${endD}</span><span> · 📍 ${esc(inVenueEl.value.trim() || '대회 구장')}</span>`;
+        receiptSub.innerHTML = `<span>🗓️ ${startD} ~ ${endD}</span><span> · 📍 ${esc(venueVal)}</span>`;
       }
       collectAndSaveSettlement(UI.curSettlementId);
     };
@@ -16756,7 +16543,7 @@ V.comm.bind = () => {};
 
 function luLoadH2C(){return window.html2canvas?Promise.resolve():new Promise((ok,no)=>{const s=document.createElement('script');s.src='lib/html2canvas.min.js';s.onload=ok;s.onerror=no;document.head.appendChild(s)})}
 
-const WT_GAS_URL = 'https://script.google.com/macros/s/AKfycbwJkdWv9a7BXTsI-rwdOasNLL11iJiBgMyzMrmIcGS_2VfR2_TeAA_z_nbEYY5Un7cO/exec';
+
 
 async function saveLineupToGoogleSheet(l, t, btn) {
   if (!verifyAdminForAction('구글 시트 라인업 저장')) {
