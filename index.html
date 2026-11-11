@@ -11871,6 +11871,195 @@ html[data-theme="dark"] .ev-edit-btn:hover {
   }
 }
 
+
+/* =========================================================================
+   GALAXY FOLD (INNER SCREEN) & TABLET & MOBILE MASTER LAYOUT (대장님 완벽 맞춤)
+   ========================================================================= */
+
+/* 1. 폴드 펼침 화면 (541px 이상): 상단 알약 좌우 배치, 엠블럼 84px + 타이틀 25px 씩씩한 좌측 정렬 */
+@media (min-width: 541px) {
+  .board .wt-board-topline {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin-bottom: 16px !important;
+    padding-bottom: 12px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14) !important;
+    box-sizing: border-box !important;
+  }
+  .board .wt-board-topline .wt-hero-slogan {
+    margin: 0 !important;
+    font-size: 11.5px !important;
+    padding: 5px 16px !important;
+    border-radius: 999px !important;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+    color: #ffffff !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.04em !important;
+    box-shadow: 0 3px 8px rgba(239, 68, 68, 0.45) !important;
+  }
+  .board .wt-board-topline .hero-me-pill {
+    margin: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    background: rgba(15, 23, 42, 0.85) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    border-radius: 999px !important;
+    padding: 3px 12px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
+  }
+  .board .bhead {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    margin-bottom: 16px !important;
+  }
+  .wt-hero-main-row {
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 18px !important;
+    margin-bottom: 16px !important;
+  }
+  .wt-hero-emb-card {
+    flex: 0 0 84px !important;
+    width: 84px !important;
+    min-height: 84px !important;
+    height: 84px !important;
+    border-radius: 20px !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.22) !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35) !important;
+    padding: 8px !important;
+  }
+  .wt-hero-title {
+    font-size: 24px !important;
+    font-weight: 900 !important;
+    color: #ffffff !important;
+    line-height: 1.2 !important;
+    letter-spacing: -0.02em !important;
+  }
+  .wt-hero-sub {
+    font-size: 13px !important;
+    color: rgba(255, 255, 255, 0.85) !important;
+    margin-top: 3px !important;
+  }
+  .wt-hero-badges .pill {
+    padding: 4.5px 12px !important;
+    font-size: 12.5px !important;
+    font-weight: 800 !important;
+  }
+  /* 폴드/태블릿에서 6개 버튼: 2열 x 3행 완전 대칭 균형 */
+  .board .vsbtns {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+  }
+  .board .vsbtns .vsbtn {
+    grid-column: auto !important;
+    width: 100% !important;
+    height: 40px !important;
+  }
+}
+
+/* 2. 일반 좁은 모바일 (540px 이하): 상하 270px 동일너비 알약, 로고+타이틀 가로 꽉 채움 */
+@media (max-width: 540px) {
+  .board .wt-board-topline {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    gap: 8px !important;
+    margin-bottom: 14px !important;
+    padding-bottom: 0 !important;
+    border-bottom: none !important;
+  }
+  .board .wt-board-topline .wt-hero-slogan {
+    width: 100% !important;
+    max-width: 270px !important;
+    height: 38px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 12px !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.04em !important;
+    border-radius: 999px !important;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 3px 8px rgba(239, 68, 68, 0.45) !important;
+    box-sizing: border-box !important;
+  }
+  .board .wt-board-topline .hero-me-pill {
+    width: 100% !important;
+    max-width: 270px !important;
+    height: 38px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    background: rgba(15, 23, 42, 0.85) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    border-radius: 999px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
+    box-sizing: border-box !important;
+  }
+  .board .bhead {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    margin-bottom: 12px !important;
+  }
+  .wt-hero-main-row {
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 12px !important;
+    margin-bottom: 12px !important;
+  }
+  .wt-hero-emb-card {
+    flex: 0 0 74px !important;
+    width: 74px !important;
+    height: 74px !important;
+    min-height: 74px !important;
+    border-radius: 16px !important;
+    padding: 6px !important;
+  }
+  .wt-hero-title {
+    font-size: 20px !important;
+    font-weight: 900 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+  .wt-hero-sub {
+    font-size: 11px !important;
+  }
+  .wt-hero-badges .pill {
+    padding: 3px 9px !important;
+    font-size: 11px !important;
+  }
+  .board .vsbtns {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 6px !important;
+  }
+  .board .vsbtns .vsbtn {
+    grid-column: auto !important;
+    height: 38px !important;
+  }
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
 </head>
@@ -13284,38 +13473,65 @@ V.players = () => {
       ], rows, {nosort: 1});
 
   return `<h1>선수검색</h1><p class="sub">2026 시즌 선수 및 구단 기록 검색 · 부문별 순위와 세이버메트릭스 지표를 확인할 수 있습니다.</p>
-  <div class="ctrl" style="margin-top:12px"><input id="q" type="search" placeholder="선수 또는 구단 이름 검색" value="${esc(UI.rankQ)}"></div>
-  ${qy ? '' : `<div class="chips">${CATS.map(x => `<button class="chip ${x.k===c.k?'on':''}" data-cat="${x.k}">${x.t}</button>`).join('')}</div>`}
-  <div class="tw-fixed-wrap">${res}</div>
+  <div class="ctrl" style="margin-top:12px"><input id="q" type="search" placeholder="선수 또는 구단 이름 검색" value="${esc(UI.rankQ)}" autocomplete="off" autocapitalize="off" spellcheck="false"></div>
+  ${qy ? '' : `<div class="chips" id="rankCatChips">${CATS.map(x => `<button class="chip ${x.k===c.k?'on':''}" data-cat="${x.k}">${x.t}</button>`).join('')}</div>`}
+  <div class="tw-fixed-wrap" id="rankTableArea">${res}</div>
   ${note('qual', 'rates', 'prates', 'bidxL', 'pidxL', 'src')}`;
 };
+
+function updatePlayerRankTableDirect() {
+  const S = Store;
+  const c = CATS.find(x => x.k === UI.rankCat) || CATS[0];
+  const qy = UI.rankQ.trim();
+  let rows;
+  if (qy) {
+    rows = S.players.filter(p => p.name.includes(qy) || p.team.short.includes(qy)).sort((a,b) => (b.B.PA + b.P.BF) - (a.B.PA + a.P.BF)).slice(0, 100);
+  } else {
+    rows = S.players.filter(p => (c.q ? c.q(p) : true) && c.v(p) != null && (c.pit ? p.P.G > 0 : p.B.PA > 0)).sort((a,b) => c.v(b) - c.v(a)).slice(0, 50);
+  }
+  const val = c.f || (p => c.v(p));
+  const res = qy 
+    ? table([
+        {k:'name', t:'선수', cls:'col-name', l:1, f:p=>plink(p.team, p.name)},
+        {k:'team', t:'구단', cls:'col-team', l:1, f:p=>tlink(p.team), v:p=>p.team.short},
+        {k:'pos',  t:'포지션', cls:'col-pos', l:1, f:p=>esc(p.mainPos)},
+        {k:'PA',   t:'타석', cls:'col-g', v:p=>p.B.PA},
+        {k:'AVG',  t:'타율', cls:'col-avg', v:p=>p.B.AVG, f:p=>f3(p.B.AVG)},
+        {k:'outs', t:'이닝', cls:'col-ip', v:p=>p.P.outs, f:p=>p.P.G ? ipStr(p.P.outs) : '-'}
+      ], rows, {})
+    : table([
+        {k:'rk',   t:'#', cls:'col-rk', f:(p,i)=>i+1, nosort:1},
+        {k:'name', t:'선수', cls:'col-name', l:1, f:p=>plink(p.team, p.name)},
+        {k:'team', t:'구단', cls:'col-team', l:1, f:p=>tlink(p.team)},
+        ...(c.pit 
+          ? [{k:'g', t:'경기', cls:'col-g', f:p=>p.P.G}, {k:'ip', t:'이닝', cls:'col-pa', f:p=>ipStr(p.P.outs)}] 
+          : [{k:'g', t:'경기', cls:'col-g', f:p=>p.B.G}, {k:'pa', t:'타석', cls:'col-pa', f:p=>p.B.PA}]
+        ),
+        {k:'v', t:c.t, cls:'col-val hi', f:p=>val(p)}
+      ], rows, {nosort: 1});
+
+  const area = document.getElementById('rankTableArea');
+  if (area) area.innerHTML = res;
+  const chips = document.getElementById('rankCatChips');
+  if (chips) chips.style.display = qy ? 'none' : 'flex';
+}
+
 V.players.bind=()=>{
-  $app.querySelectorAll('[data-cat]').forEach(b=>b.onclick=()=>{UI.rankCat=b.dataset.cat;render()});
+  $app.querySelectorAll('[data-cat]').forEach(b=>b.onclick=()=>{
+    UI.rankCat=b.dataset.cat;
+    $app.querySelectorAll('[data-cat]').forEach(x => x.classList.toggle('on', x.dataset.cat === UI.rankCat));
+    updatePlayerRankTableDirect();
+  });
   const q = document.getElementById('q');
   if (q) {
     let tm;
-    let isComposing = false;
-    q.addEventListener('compositionstart', () => { isComposing = true; });
-    q.addEventListener('compositionend', () => {
-      isComposing = false;
-      UI.rankQ = q.value;
-      clearTimeout(tm);
-      tm = setTimeout(() => {
-        render();
-        const n = document.getElementById('q');
-        if (n) { n.focus(); n.setSelectionRange(n.value.length, n.value.length); }
-      }, 120);
-    });
-    q.addEventListener('input', () => {
-      if (isComposing) return;
+    q.oninput = () => {
       clearTimeout(tm);
       tm = setTimeout(() => {
         UI.rankQ = q.value;
-        render();
-        const n = document.getElementById('q');
-        if (n) { n.focus(); n.setSelectionRange(n.value.length, n.value.length); }
-      }, 350);
-    });
+        updatePlayerRankTableDirect(); // DOM을 절대 파괴하지 않고 테이블만 교체 -> 폴드 자판 먹통 100% 해결!
+      }, 150);
+    };
   }
 };
 
@@ -15966,6 +16182,10 @@ function renderTeamClubView(t, A, tc, th) {
           const remoteStr = JSON.stringify(remoteData);
           if (localStr !== remoteStr) {
             try { localStorage.setItem(ClubStore.key + t.id, remoteStr); } catch(e) {}
+            const act = document.activeElement;
+            if (act && (act.tagName === 'INPUT' || act.tagName === 'TEXTAREA' || act.tagName === 'SELECT' || act.isContentEditable)) {
+              return; // 폼 입력 중에 시트 자동 동기화로 인한 화면 리셋/자판 튕김 원천 차단!
+            }
             const y = window.scrollY; render(); window.scrollTo(0, y);
           }
         }
