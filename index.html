@@ -11630,7 +11630,7 @@ V.team=(q,id)=>{
       <span class="vsbtns">
         <a class="vsbtn pri" href="#/lineup/${t.id}" onclick="go('#/lineup/' + t.id);return false;" style="background:linear-gradient(135deg, #ef4444 0%, #dc2626 100%);color:#ffffff;border:1px solid #f87171;cursor:pointer;font-weight:800">📋 라인업 짜기 ›</a>
         ${isWT ? '<a class="vsbtn" href="#/dugout" style="color:#ffffff;background:rgba(37,99,235,0.35);border:1px solid rgba(147,197,253,0.5);font-weight:700">🧢 덕아웃 선수단 ›</a>' : ''}
-        <button class="vsbtn" data-go-club="${t.id}" style="color:#ffffff;background:rgba(220,38,38,0.3);border:1px solid rgba(252,165,165,0.45);cursor:pointer;font-weight:700">📅 팀 모임·일정 ›</button>
+        <button class="vsbtn" data-go-club="${t.id}" style="color:#ffffff;background:rgba(220,38,38,0.3);border:1px solid rgba(252,165,165,0.45);cursor:pointer;font-weight:700">🧢 팀 클럽하우스 ›</button>
         <button type="button" class="vsbtn" data-sheet-db style="color:#38bdf8;background:rgba(56,189,248,0.18);border:1px solid rgba(56,189,248,0.6);cursor:pointer;font-weight:800">📊 구단 DB ↗</button>
         <a class="vsbtn" href="#/standings" style="color:#ffffff;background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.3);font-weight:700">🏆 리그 순위 ›</a>
         <a class="vsbtn" href="#/games?t=${t.id}" style="color:#ffffff;background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.3);font-weight:700">⚾ 경기 일정·결과 ›</a>
@@ -11650,7 +11650,7 @@ V.team=(q,id)=>{
       <span>최근 ${formDots(r.form)}</span>
     </div>
   </div>
-  <div class="tabs scroll">${[['sum','요약'],['club','📅 모임·일정·셋로그'],['games','경기'],['bat','타자'],['order','타순'],['pit','투수'],['opp','상대 투수']].map(([k,l])=>`<button data-tt="${k}" class="${tab===k?'on':''}">${l}</button>`).join('')}</div>${body}`;
+  <div class="tabs scroll">${[['sum','요약'],['club', isWT ? '🧢 WT 클럽하우스' : '🧢 팀 클럽하우스'],['games','경기'],['bat','타자'],['order','타순'],['pit','투수'],['opp','상대 투수']].map(([k,l])=>`<button data-tt="${k}" class="${tab===k?'on':''}">${l}</button>`).join('')}</div>${body}`;
 };
 
 function pitcherDetail(A,p){
@@ -15863,6 +15863,12 @@ function openClubSheetSyncModal(t) {
 
 function bindTeamClubView() {
   const {parts} = parse();
+  const myT = localStorage.getItem('kbsa_myteam') || 'aSEa0076';
+  const tid = (parts[0] === 'team' && parts[1]) ? parts[1] : (parts[1] || myT);
+  const t = Store.team(tid) || Store.team('aSEa0076') || Store.teams[0];
+  if (!t) return;
+  const me = ClubStore.getMe(t);
+  const re = () => { const y = window.scrollY; render(); window.scrollTo(0, y); };
 
   // --- 스마트 캘린더 네비게이션 바인딩 ---
   const btnPrevM = document.getElementById('btnCalPrevMonth');
@@ -16168,10 +16174,7 @@ function bindTeamClubView() {
   $app.querySelectorAll('.btn-del-row').forEach(b => {
     b.onclick = () => b.closest('div').remove();
   });
-  const btnStBack = document.getElementById('btnStBack');
-  if (btnStBack) {
-    btnStBack.onclick = () => { UI.curSettlementId = null; const y = window.scrollY; render(); window.scrollTo(0, y); };
-  }
+// btnStBack handled with auto-save below
   const btnStCancel = document.getElementById('btnStCancelEdit');
   if (btnStCancel) {
     btnStCancel.onclick = () => { UI.curSettlementId = null; const y = window.scrollY; render(); window.scrollTo(0, y); };
@@ -16268,83 +16271,119 @@ function bindTeamClubView() {
     };
   }
 
-  // 정산서 폼 저장 바인딩
+  // 정산서 실시간 자동 수집 & 저장 헬퍼
+  const collectAndSaveSettlement = (curId) => {
+    const curData = ClubStore.getTeamData(t);
+    const titleEl = document.getElementById('stInTitle');
+    const venueEl = document.getElementById('stInVenue');
+    const startEl = document.getElementById('stInStartDate');
+    const endEl = document.getElementById('stInEndDate');
+    if (!titleEl || !venueEl) return;
+
+    const title = titleEl.value.trim() || '대회 정산서';
+    const startDate = startEl ? startEl.value : '2026-11-07';
+    const endDate = endEl ? endEl.value : '2026-11-08';
+    const venue = venueEl.value.trim() || '밀양 스포츠파크';
+
+    // 1. 참석자 칩
+    const participants = Array.from($app.querySelectorAll('.st-part-chip.active')).map(btn => btn.dataset.partName);
+
+    // 2. 수입 행들
+    const incomes = Array.from($app.querySelectorAll('.st-income-row')).map(row => {
+      const item = row.querySelector('.st-inc-name')?.value.trim();
+      const amount = Number(row.querySelector('.st-inc-amt')?.value) || 0;
+      const note = row.querySelector('.st-inc-note')?.value.trim() || '';
+      return item ? { item, amount, note } : null;
+    }).filter(Boolean);
+
+    // 3. 지출 행들
+    const expenses = Array.from($app.querySelectorAll('.st-expense-row')).map(row => {
+      const cat = row.querySelector('.st-exp-cat')?.value || '기타';
+      const item = row.querySelector('.st-exp-name')?.value.trim();
+      const amount = Number(row.querySelector('.st-exp-amt')?.value) || 0;
+      return item ? { cat, item, amount } : null;
+    }).filter(Boolean);
+
+    // 4. 후원 행들
+    const sponsorships = Array.from($app.querySelectorAll('.st-spon-row')).map(row => {
+      const person = row.querySelector('.st-spon-person')?.value.trim();
+      const item = row.querySelector('.st-spon-item')?.value.trim();
+      return (person && item) ? { person, item } : null;
+    }).filter(Boolean);
+
+    const targetId = (curId === 'new' || !curId) ? ('ST_' + Date.now().toString(36)) : curId;
+    const newSt = {
+      id: targetId,
+      title,
+      type: '공식대회',
+      startDate,
+      endDate,
+      venue,
+      participants,
+      incomes,
+      expenses,
+      sponsorships,
+      notes: '정상 정산 완료'
+    };
+
+    curData.settlements = curData.settlements || [];
+    const existIdx = curData.settlements.findIndex(x => x.id === targetId);
+    if (existIdx >= 0) {
+      curData.settlements[existIdx] = newSt;
+    } else {
+      curData.settlements.unshift(newSt);
+    }
+
+    ClubStore.saveTeamData(t, curData);
+    return targetId;
+  };
+
+  // 실시간 타이핑 즉시 반영 (대회 이름, 장소 입력 시 영수증 프리뷰 즉시 갱신 및 자동 저장)
+  const inTitleEl = document.getElementById('stInTitle');
+  if (inTitleEl) {
+    inTitleEl.oninput = () => {
+      const receiptTitle = document.querySelector('#settlementReceiptCard .receipt-title');
+      if (receiptTitle) receiptTitle.textContent = inTitleEl.value.trim() || '대회 정산 영수증';
+      collectAndSaveSettlement(UI.curSettlementId);
+    };
+  }
+  const inVenueEl = document.getElementById('stInVenue');
+  if (inVenueEl) {
+    inVenueEl.oninput = () => {
+      const receiptSub = document.querySelector('#settlementReceiptCard .receipt-sub');
+      const startD = document.getElementById('stInStartDate')?.value || '';
+      const endD = document.getElementById('stInEndDate')?.value || '';
+      if (receiptSub) {
+        receiptSub.innerHTML = `<span>🗓️ ${startD} ~ ${endD}</span><span> · 📍 ${esc(inVenueEl.value.trim() || '대회 구장')}</span>`;
+      }
+      collectAndSaveSettlement(UI.curSettlementId);
+    };
+  }
+
+  // 정산서 목록으로 돌아갈 때 자동 저장 후 목록으로 이동
+  const btnStBack = document.getElementById('btnStBack');
+  if (btnStBack) {
+    btnStBack.onclick = () => {
+      if (UI.curSettlementId) {
+        collectAndSaveSettlement(UI.curSettlementId);
+      }
+      UI.curSettlementId = null;
+      re();
+    };
+  }
+
+  // 정산서 폼 저장 버튼 제출 바인딩
   const stForm = document.getElementById('stEditForm');
   if (stForm) {
     stForm.onsubmit = (e) => {
       e.preventDefault();
-      const myT = localStorage.getItem('kbsa_myteam') || 'aSEa0076';
-      const curT = Store.team(myT) || Store.teams[0];
-      const curData = ClubStore.getTeamData(curT);
-
-      const title = document.getElementById('stInTitle').value.trim();
-      const startDate = document.getElementById('stInStartDate').value;
-      const endDate = document.getElementById('stInEndDate').value;
-      const venue = document.getElementById('stInVenue').value.trim();
-// participants collected from active chips below
-
-      // 1. 참석자 칩에서 선택된 선수들 수집
-      const participants = Array.from($app.querySelectorAll('.st-part-chip.active')).map(btn => btn.dataset.partName);
-
-      // 2. 수입 행들에서 수집
-      const incomes = Array.from($app.querySelectorAll('.st-income-row')).map(row => {
-        const item = row.querySelector('.st-inc-name')?.value.trim();
-        const amount = Number(row.querySelector('.st-inc-amt')?.value) || 0;
-        const note = row.querySelector('.st-inc-note')?.value.trim() || '';
-        return item ? { item, amount, note } : null;
-      }).filter(Boolean);
-
-      // 3. 지출 행들에서 수집
-      const expenses = Array.from($app.querySelectorAll('.st-expense-row')).map(row => {
-        const cat = row.querySelector('.st-exp-cat')?.value || '기타';
-        const item = row.querySelector('.st-exp-name')?.value.trim();
-        const amount = Number(row.querySelector('.st-exp-amt')?.value) || 0;
-        return item ? { cat, item, amount } : null;
-      }).filter(Boolean);
-
-      // 4. 후원 행들에서 수집
-      const sponsorships = Array.from($app.querySelectorAll('.st-spon-row')).map(row => {
-        const person = row.querySelector('.st-spon-person')?.value.trim();
-        const item = row.querySelector('.st-spon-item')?.value.trim();
-        return (person && item) ? { person, item } : null;
-      }).filter(Boolean);
-
-      const curId = UI.curSettlementId === 'new' ? ('ST_' + Date.now().toString(36)) : UI.curSettlementId;
-      const newSt = {
-        id: curId,
-        title,
-        type: '공식대회',
-        startDate,
-        endDate,
-        venue,
-        participants,
-        incomes,
-        expenses,
-        sponsorships,
-        notes: '정상 정산 완료'
-      };
-
-      curData.settlements = curData.settlements || [];
-      const existIdx = curData.settlements.findIndex(x => x.id === curId);
-      if (existIdx >= 0) {
-        curData.settlements[existIdx] = newSt;
-      } else {
-        curData.settlements.unshift(newSt);
-      }
-
-      ClubStore.saveTeamData(curT, curData);
-      UI.curSettlementId = curId;
+      const savedId = collectAndSaveSettlement(UI.curSettlementId);
+      UI.curSettlementId = savedId;
       alert('정산서가 성공적으로 저장되었습니다! 구글 시트와도 실시간 동기화됩니다.');
-      const y = window.scrollY; render(); window.scrollTo(0, y);
+      re();
     };
   }
   // --- WT 정산실 전용 이벤트 바인딩 끝 ---
-  const myT = localStorage.getItem('kbsa_myteam') || 'aSEa0076';
-  const tid = (parts[0] === 'team' && parts[1]) ? parts[1] : (parts[1] || myT);
-  const t = Store.team(tid) || Store.team('aSEa0076') || Store.teams[0];
-  if (!t) return;
-  const me = ClubStore.getMe(t);
-  const re = () => { const y = window.scrollY; render(); window.scrollTo(0, y); };
 
   const meSel = document.getElementById('clMeSel');
   if (meSel) meSel.onchange = () => { ClubStore.setMe(t, meSel.value); re(); };
