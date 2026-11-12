@@ -12242,6 +12242,57 @@ html[data-theme="dark"] .ev-edit-btn:hover {
   line-height: 1.35 !important;
 }
 
+
+/* =========================================================================
+   FOLD CLOSED / ULTRA-NARROW MOBILE (<= 420px): 100% RESTORE CLEAN ORDER & ZERO TRUNCATION
+   ========================================================================= */
+@media (max-width: 420px) {
+  .board .wt-hero-emb-card {
+    flex: 0 0 72px !important;
+    width: 72px !important;
+    height: 72px !important;
+    min-height: 72px !important;
+    border-radius: 16px !important;
+    padding: 6px !important;
+  }
+  .board .wt-hero-main-row {
+    gap: 11px !important;
+    align-items: center !important;
+  }
+  .board .wt-hero-info-card {
+    gap: 3px !important;
+  }
+  .wt-hero-title-row {
+    display: contents !important;
+  }
+  .wt-hero-title-row .wt-hero-title {
+    order: 1 !important;
+    font-size: 18.5px !important;
+    font-weight: 900 !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+  }
+  .board .wt-hero-sub {
+    order: 2 !important;
+    font-size: 11px !important;
+    line-height: 1.3 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+  .wt-hero-title-row .wt-hero-badges {
+    order: 3 !important;
+    margin-top: 3px !important;
+    gap: 5px !important;
+  }
+  .wt-hero-badges .pill {
+    padding: 3px 9px !important;
+    font-size: 11px !important;
+  }
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
 </head>
