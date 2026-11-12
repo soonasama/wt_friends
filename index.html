@@ -12459,6 +12459,112 @@ const V={};
 const $app=document.getElementById('app');
 window.UI=null;var UI={sub:{},standComp:null,standDiv:'',gamesComp:'',gamesTeam:'',gamesMonth:'',gamesDiv:'',teamsSido:'',teamsDiv:'',rankCat:'TOT',rankQ:'',teamTab:'club',teamPitcher:'',teamOpp:'',gameTab:'h',playerTab:'bat'};
 
+
+// =========================================================================
+// 🔐 선수별 4자리 개인 PIN 본인 인증 시스템 (대리 투표 원천 방지)
+// =========================================================================
+
+function isPlayerAuthed(team, playerName) {
+  if (isAdmin()) return true; // 관리자는 프리패스 인증
+  if (!playerName) return false;
+  return localStorage.getItem('wt_player_pin_auth_' + team.id + '_' + playerName) === '1';
+}
+
+function getPlayerPin(team, playerName) {
+  const data = ClubStore.getTeamData(team);
+  const pins = data.pins || {};
+  if (pins[playerName]) return String(pins[playerName]).trim();
+  // 기본 PIN: 등번호 4자리(예: #22 -> 0022) 또는 '1234'
+  try {
+    const pl = Store.player(team.id + '|' + playerName);
+    if (pl && pl.no) return String(pl.no).padStart(4, '0');
+  } catch(e) {}
+  return '1234';
+}
+
+function setPlayerPin(team, playerName, newPin) {
+  const data = ClubStore.getTeamData(team);
+  if (!data.pins) data.pins = {};
+  data.pins[playerName] = String(newPin).trim();
+  ClubStore.saveTeamData(team, data);
+}
+
+function openPlayerPinModal(team, playerName, onAuthSuccess) {
+  let modal = document.getElementById('wtPlayerPinModal');
+  if (modal) modal.remove();
+
+  modal = document.createElement('div');
+  modal.id = 'wtPlayerPinModal';
+  modal.className = 'tc-modal-wrap';
+  modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.65);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;backdrop-filter:blur(4px)';
+
+  const expectedPin = getPlayerPin(team, playerName);
+  const isDefault = expectedPin === '1234' || (expectedPin.length === 4 && expectedPin.startsWith('00'));
+
+  modal.innerHTML = `
+    <div style="background:var(--card);color:var(--ink);width:100%;max-width:340px;border-radius:18px;border:1.5px solid var(--line);box-shadow:0 12px 36px rgba(0,0,0,0.4);padding:22px 20px;text-align:center;box-sizing:border-box">
+      <div style="width:48px;height:48px;border-radius:50%;background:#e0f2fe;color:#0369a1;display:inline-flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:12px">🔐</div>
+      <h3 style="font-size:17px;font-weight:900;margin:0 0 6px;color:var(--ink)">[${esc(playerName)}] 선수 본인 인증</h3>
+      <p style="font-size:12px;color:var(--mute);margin:0 0 16px;line-height:1.4">
+        대리 투표 방지를 위해 <b>개인 PIN 번호(4자리)</b>를 입력해주세요.<br>
+        <span style="font-size:11px;color:#10b981">(최초 1회 인증 시 이 기기에 영구 자동 저장됩니다)</span>
+      </p>
+
+      <div style="margin-bottom:16px">
+        <input type="password" id="inPlayerPinInput" maxlength="4" pattern="[0-9]*" inputmode="numeric" placeholder="• • • •" style="width:160px;height:44px;font-size:24px;font-weight:900;text-align:center;letter-spacing:10px;border:2px solid #3b82f6;border-radius:10px;outline:none;background:var(--chip);color:var(--ink)">
+        ${isDefault ? `<div style="font-size:11px;color:var(--mute);margin-top:6px">💡 초기 비밀번호: <b>1234</b> (또는 본인 등번호)</div>` : ''}
+      </div>
+
+      <div style="display:flex;gap:8px">
+        <button type="button" class="cl-btn ghost" id="btnCancelPlayerPin" style="flex:1;height:38px;border-radius:8px">취소</button>
+        <button type="button" class="cl-btn pri" id="btnConfirmPlayerPin" style="flex:1.5;height:38px;border-radius:8px;background:#10b981 !important;color:#ffffff !important;font-weight:800">✓ 인증 완료</button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  const inp = modal.querySelector('#inPlayerPinInput');
+  setTimeout(() => { if (inp) inp.focus(); }, 100);
+
+  const doAuth = () => {
+    const val = (inp.value || '').trim();
+    if (val === expectedPin) {
+      localStorage.setItem('wt_player_pin_auth_' + team.id + '_' + playerName, '1');
+      modal.remove();
+      alert(`✓ [${playerName}] 선수 본인 인증이 완료되었습니다!\n이 기기에서는 앞으로 자동으로 본인 투표가 진행됩니다.`);
+      if (onAuthSuccess) onAuthSuccess();
+    } else {
+      alert('❌ PIN 번호가 일치하지 않습니다.\n(초기 비밀번호 1234 또는 관리자에게 문의하세요)');
+      inp.value = '';
+      inp.focus();
+    }
+  };
+
+  modal.querySelector('#btnConfirmPlayerPin').onclick = doAuth;
+  inp.onkeydown = (e) => { if (e.key === 'Enter') doAuth(); };
+  modal.querySelector('#btnCancelPlayerPin').onclick = () => modal.remove();
+  modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
+}
+
+function handlePlayerPinChange(team, playerName) {
+  if (!playerName) { alert('먼저 프로필을 선택해주세요.'); return; }
+  const curPin = prompt(`[${playerName}] 선수의 현재 PIN 번호(4자리)를 입력하세요:`);
+  if (!curPin) return;
+  if (curPin !== getPlayerPin(team, playerName) && !isAdmin()) {
+    alert('현재 비밀번호가 일치하지 않습니다.');
+    return;
+  }
+  const newPin = prompt(`[${playerName}] 선수의 새로운 PIN 번호(4자리 숫자)를 입력하세요:`);
+  if (newPin && newPin.trim().length === 4 && !isNaN(newPin)) {
+    setPlayerPin(team, playerName, newPin.trim());
+    localStorage.setItem('wt_player_pin_auth_' + team.id + '_' + playerName, '1');
+    alert(`✓ [${playerName}] 선수의 PIN 번호가 [${newPin.trim()}]으로 안전하게 변경되었습니다!`);
+  } else if (newPin) {
+    alert('PIN 번호는 4자리 숫자로 입력해주세요.');
+  }
+}
+
 V.home = (q) => {
   return V.team(q || {}, 'aSEa0076');
 };
@@ -16094,7 +16200,7 @@ function renderTeamClubView(t, A, tc, th) {
           </div>
           <span class="wt-sec-desc">참석 투표 결과를 클릭 한 번으로 <b>시합 라인업 작성기</b>로 즉시 전송할 수 있습니다.</span>
         </div>
-        <button type="button" class="cl-btn pri" id="btnToggleEvForm" style="background:#10b981 !important;color:#ffffff !important;font-weight:800;border-radius:10px;padding:8px 14px;box-shadow:0 3px 10px rgba(16,185,129,0.3)">＋ 새 일정·투표 만들기</button>
+        ${isAdmin() ? '<button type="button" class="cl-btn pri" id="btnToggleEvForm" style="background:#10b981 !important;color:#ffffff !important;font-weight:800;border-radius:10px;padding:8px 14px;box-shadow:0 3px 10px rgba(16,185,129,0.3)">＋ 새 일정·투표 만들기</button>' : '<button type="button" class="cl-btn ghost sm" onclick="handleAdminAuthClick()" style="font-size:11.5px;color:var(--mute)">🔒 관리자 전용 일정등록</button>'}
       </div>
 
       <form class="cl-form" id="evFormBox" style="display:${UI.showEvForm?'grid':'none'};border:1.5px solid #10b981;border-radius:12px;padding:16px;background:var(--card)">
@@ -16140,10 +16246,12 @@ function renderTeamClubView(t, A, tc, th) {
                   </div>
                   <div class="ev-title" style="font-size:14.5px;font-weight:700;color:var(--ink);line-height:1.35;word-break:keep-all;letter-spacing:-0.01em">${esc(ev.title)}</div>
                 </div>
+                ${isAdmin() ? `
                 <div style="flex:0 0 auto;display:flex;align-items:center;gap:6px;padding-top:2px">
                   <button type="button" class="ev-edit-btn" data-ev-edit="${esc(ev.id)}" title="일정 내용 수정">✏️ 수정</button>
                   <button type="button" class="ev-del-btn" data-ev-del="${esc(ev.id)}" data-team-id="${esc(t.id)}" title="일정 삭제">🗑️ 삭제</button>
                 </div>
+                ` : ''}
               </div>
               <div class="ev-meta" style="font-size:13px;color:var(--mute);margin-bottom:8px">
                 <span>🗓️ ${luDate(ev.date)} (${WD[luDay(ev.date)]||''}) ${esc(ev.time)}</span>
