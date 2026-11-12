@@ -17988,13 +17988,14 @@ function bindTeamClubView() {
     };
   }
 
-  // 출석 체크 버튼 클릭 (참석/카풀/불참) - DOM 직접 실시간 갱신 & 구글 시트 클라우드 동기화
+  // 출석 체크 버튼 클릭 (참석/카풀/불참) - 선수 본인 PIN 인증 + DOM 직접 실시간 갱신 & 구글 시트 동기화
   $app.querySelectorAll('[data-attend-chk]').forEach(btn => {
     btn.onclick = (e) => {
       e.stopPropagation();
       e.preventDefault();
       const [evId, pName, action] = btn.dataset.attendChk.split(':');
-      const curData = ClubStore.getTeamData(t);
+      const runAttendUpdate = () => {
+        const curData = ClubStore.getTeamData(t);
       const ev = (curData.events || []).find(x => String(x.id) === String(evId));
       if (!ev) return;
 
@@ -18059,6 +18060,12 @@ function bindTeamClubView() {
       if (countEl) {
         countEl.innerHTML = `참석: <b style="color:#10b981">${inCount}명</b>${carCount ? ` (🚗카풀 ${carCount}명)` : ''} · 불참: <b style="color:#ef4444">${outCount}명</b>`;
       }
+      };
+      if (!isPlayerAuthed(t, pName)) {
+        openPlayerPinModal(t, pName, runAttendUpdate);
+      } else {
+        runAttendUpdate();
+      }
     };
   });
 
@@ -18067,7 +18074,8 @@ function bindTeamClubView() {
     btn.onclick = (e) => {
       e.preventDefault();
       const [pName, taskId] = btn.dataset.toggleTask.split(':');
-      const curData = ClubStore.getTeamData(t);
+      const runTaskUpdate = () => {
+        const curData = ClubStore.getTeamData(t);
       if (!curData.missions || !curData.missions.length) {
         curData.missions = [
           {
@@ -18146,6 +18154,12 @@ function bindTeamClubView() {
         const pct = Math.round((stampedMembers.length / 22) * 100);
         pctBadge.textContent = `🔥 팀 달성률 ${pct}% (${stampedMembers.length}/22명 인증)`;
       }
+      };
+      if (!isPlayerAuthed(t, pName)) {
+        openPlayerPinModal(t, pName, runTaskUpdate);
+      } else {
+        runTaskUpdate();
+      }
     };
   });
 
@@ -18154,7 +18168,8 @@ function bindTeamClubView() {
     btn.onclick = (e) => {
       e.preventDefault();
       const pName = btn.dataset.stampAll;
-      const curData = ClubStore.getTeamData(t);
+      const runStampAllUpdate = () => {
+        const curData = ClubStore.getTeamData(t);
       if (!curData.missions || !curData.missions.length) {
         curData.missions = [
           {
@@ -18213,6 +18228,12 @@ function bindTeamClubView() {
       if (pctBadge) {
         const pct = Math.round((stampedMembers.length / 22) * 100);
         pctBadge.textContent = `🔥 팀 달성률 ${pct}% (${stampedMembers.length}/22명 인증)`;
+      }
+      };
+      if (!isPlayerAuthed(t, pName)) {
+        openPlayerPinModal(t, pName, runStampAllUpdate);
+      } else {
+        runStampAllUpdate();
       }
     };
   });
