@@ -11933,6 +11933,315 @@ html[data-theme="dark"] .ev-edit-btn:hover {
   }
 }
 
+
+/* =========================================================================
+   UNIFIED 6-PAGE HERO BOARD & 3-TIER RESPONSIVE LOCK (전 페이지 100% 통일)
+   ========================================================================= */
+
+.wt-hero-sub-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgba(15, 23, 42, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  border-radius: 999px !important;
+  padding: 4px 14px !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #e2e8f0 !important;
+  white-space: nowrap !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+  box-sizing: border-box !important;
+}
+
+/* [Tier 1] 좁은 모바일 & 폴드 닫힘 & PC PWA 앱 창 (560px 이하) */
+@media (max-width: 560px) {
+  .board .wt-board-topline {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: center !important;
+    width: 100% !important;
+    gap: 7px !important;
+    margin-bottom: 14px !important;
+    padding-bottom: 0 !important;
+    border-bottom: none !important;
+  }
+  .board .wt-board-topline .wt-hero-slogan,
+  .board .wt-board-topline .hero-me-pill,
+  .board .wt-board-topline .wt-hero-sub-pill {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 36px !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+  }
+  .board .bhead {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    margin-bottom: 12px !important;
+  }
+  .wt-hero-main-row {
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 14px !important;
+    margin-bottom: 14px !important;
+  }
+  .wt-hero-emb-card {
+    flex: 0 0 84px !important;
+    width: 84px !important;
+    height: 84px !important;
+    min-height: 84px !important;
+    border-radius: 18px !important;
+    padding: 7px !important;
+    box-sizing: border-box !important;
+  }
+  .wt-hero-title {
+    font-size: clamp(20px, 5.2vw, 24px) !important;
+    font-weight: 900 !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+  .wt-hero-sub {
+    font-size: 12px !important;
+  }
+  .wt-hero-badges .pill {
+    padding: 3.5px 10px !important;
+    font-size: 11.5px !important;
+  }
+  .board .vsbtns {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 7px !important;
+  }
+  .board .vsbtns.wt-home-btns .vsbtn:first-child {
+    grid-column: 1 / -1 !important;
+  }
+}
+
+/* [Tier 2] 폴드 펼침 & 태블릿 (561px ~ 960px): 도면(image_95dc01.jpg) 100% 맞춤 */
+@media (min-width: 561px) and (max-width: 960px) {
+  .board .wt-board-topline {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin-bottom: 16px !important;
+    padding-bottom: 12px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14) !important;
+  }
+  .board .bhead {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    margin-bottom: 16px !important;
+  }
+  .wt-hero-main-row {
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 20px !important;
+    margin-bottom: 16px !important;
+  }
+  .wt-hero-emb-card {
+    flex: 0 0 102px !important;
+    width: 102px !important;
+    height: 102px !important;
+    min-height: 102px !important;
+    border-radius: 22px !important;
+    padding: 9px !important;
+    box-sizing: border-box !important;
+  }
+  .wt-hero-info-card {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    gap: 5px !important;
+  }
+  .wt-hero-title {
+    font-size: 28px !important;
+    font-weight: 900 !important;
+    line-height: 1.2 !important;
+  }
+  .wt-hero-sub {
+    font-size: 13.5px !important;
+  }
+  .wt-hero-badges .pill {
+    padding: 4.5px 12px !important;
+    font-size: 12.5px !important;
+  }
+  .board .vsbtns {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+  }
+  .board .vsbtns.wt-home-btns .vsbtn:first-child {
+    grid-column: 1 / -1 !important;
+  }
+}
+
+/* [Tier 3] 데스크톱 PC (961px 이상): 좌측 110px 엠블럼&타이틀 + 우측 380px 버튼 그리드 */
+@media (min-width: 961px) {
+  .board .wt-board-topline {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin-bottom: 18px !important;
+    padding-bottom: 14px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14) !important;
+  }
+  .board .bhead {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 32px !important;
+    width: 100% !important;
+    margin-bottom: 20px !important;
+  }
+  .wt-hero-main-row {
+    flex: 1 1 auto !important;
+    width: auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 24px !important;
+    margin-bottom: 0 !important;
+  }
+  .wt-hero-emb-card {
+    flex: 0 0 110px !important;
+    width: 110px !important;
+    height: 110px !important;
+    min-height: 110px !important;
+    border-radius: 24px !important;
+    padding: 10px !important;
+    box-sizing: border-box !important;
+  }
+  .wt-hero-title {
+    font-size: 32px !important;
+    font-weight: 900 !important;
+    line-height: 1.15 !important;
+  }
+  .wt-hero-sub {
+    font-size: 14.5px !important;
+  }
+  .board .vsbtns {
+    flex: 0 0 380px !important;
+    width: 380px !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+    margin: 0 !important;
+  }
+  .board .vsbtns .vsbtn {
+    grid-column: auto !important;
+    width: 100% !important;
+    height: 42px !important;
+  }
+}
+
+
+/* =========================================================================
+   FIX: EMBLEM CARD BORDER/BG ALL VIEWPORTS + 2-BUTTON SUBPAGE SYMMETRY
+   ========================================================================= */
+.wt-hero-emb-card {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.22) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+.wt-hero-emb-card img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  display: block !important;
+}
+
+/* 서브 페이지(덕아웃/라인업/경기/순위/선수검색) 2개 버튼은 무조건 나란히 1줄 50:50 대칭! */
+.board .vsbtns:not(.wt-home-btns) .vsbtn:first-child,
+.board .vsbtns:not(.wt-home-btns) .vsbtn {
+  grid-column: auto !important;
+  width: 100% !important;
+  height: 40px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+
+
+/* =========================================================================
+   FULL-WIDTH LEFT-ALIGNED HERO WITH RIGHT-ANCHORED BADGES (여백 100% 활용)
+   ========================================================================= */
+.board .wt-hero-main-row {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+  box-sizing: border-box !important;
+}
+
+.board .wt-hero-info-card {
+  flex: 1 1 0% !important;
+  width: auto !important;
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  gap: 6px !important;
+}
+
+.wt-hero-title-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-wrap: wrap !important;
+  gap: 6px 10px !important;
+  width: 100% !important;
+}
+
+.wt-hero-title-row .wt-hero-title {
+  margin: 0 !important;
+  flex: 0 1 auto !important;
+}
+
+.wt-hero-title-row .wt-hero-badges {
+  margin: 0 !important;
+  flex: 0 0 auto !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  flex-wrap: wrap !important;
+}
+
+.board .wt-hero-sub {
+  width: 100% !important;
+  white-space: normal !important;
+  word-break: keep-all !important;
+  line-height: 1.35 !important;
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
 </head>
@@ -12587,21 +12896,27 @@ V.dugout = () => {
     <div class="board" style="background: linear-gradient(135deg, #0D043D 0%, #172554 60%, #0F5FA4 100%) !important; color:#ffffff !important; margin-bottom: 22px !important;">
       <div class="wt-board-topline">
         <span class="wt-hero-slogan">WINNERS TOGETHER · FRIENDS</span>
-        <span class="wt-bhead-sub">서울 노원구 · 2026 시즌 등록 선수단 22명 공식 클럽하우스</span>
+        <span class="wt-hero-sub-pill">🧢 2026 시즌 등록 선수단 ${wtPlayers.length}명</span>
       </div>
       <div class="bhead">
-        <div class="bhead-info">
-          <div class="wt-bhead-top">
-            ${badge(wt, 88)}
-            <div class="wt-bhead-title-col">
-              <div class="tm wt-dugout-title">🧢 WT프렌즈 덕아웃</div>
-              <div class="wt-bhead-desc" style="color:#f1f5f9;font-size:13px;font-weight:600;margin-top:4px">선수 카드를 클릭하면 세부 타격·투구 분석 및 히트맵을 볼 수 있습니다.</div>
+        <div class="wt-hero-main-row">
+          <div class="wt-hero-emb-card">
+            <img src="${teamTheme(wt).emb||'img/emblem.png'}" alt="${esc(wt.name)}" onerror="this.src='img/emblem.png'">
+          </div>
+          <div class="wt-hero-info-card">
+          <div class="wt-hero-title-row">
+            <div class="wt-hero-title">🧢 WT프렌즈 덕아웃</div>
+            <div class="wt-hero-badges">
+              <span class="pill" style="background:#fef3c7 !important;color:#92400e !important;border:none !important">👥 등록 ${wtPlayers.length}명</span>
+              <span class="pill" style="background:#e0f2fe !important;color:#0369a1 !important;border:none !important">⚾ 2026 KBSA</span>
             </div>
           </div>
+          <div class="wt-hero-sub">서울 노원구 · 선수 카드 클릭 시 세부 타격·투구 분석</div>
         </div>
-        <span class="vsbtns wt-dugout-btns">
-          <a class="vsbtn pri" href="#/home" style="background:linear-gradient(135deg, #ef4444 0%, #dc2626 100%);color:#ffffff;border:1px solid #f87171;font-weight:800">🏠 홈 기록실 ›</a>
-          <a class="vsbtn" href="#/lineup/aSEa0076" style="background:rgba(255,255,255,0.15);color:#ffffff;border:1px solid rgba(255,255,255,0.35);font-weight:700">📋 라인업 짜기 ›</a>
+        </div>
+        <span class="vsbtns">
+          <a class="vsbtn pri" href="#/home" style="background:linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;color:#ffffff !important;border:1px solid #f87171 !important;font-weight:800">🏠 홈 기록실 ›</a>
+          <a class="vsbtn" href="#/lineup/aSEa0076" style="background:rgba(255,255,255,0.15) !important;color:#ffffff !important;border:1px solid rgba(255,255,255,0.35) !important;font-weight:700">📋 라인업 짜기 ›</a>
         </span>
       </div>
     </div>
@@ -12721,8 +13036,35 @@ V.standings=()=>{
          {k:'PCT',t:'승률',f:r=>pct(r.PCT)},{k:'RS',t:'득점'},{k:'RA',t:'실점'},{k:'RD',t:'득실'},{k:'rpg',t:'경기당 득점',v:r=>r.RS/r.G,f:r=>(r.RS/r.G).toFixed(1)},{k:'rapg',t:'경기당 실점',v:r=>r.RA/r.G,f:r=>(r.RA/r.G).toFixed(1)},
          {k:'form',t:'최근 5',f:r=>formDots(r.form),nosort:1}],rows,{}));
 
-  return `<h1>순위</h1>
-  <p class="sub" style="margin-top:4px"><b>${subtitle}</b> (총 ${rows.length}개 구단 기록 집계)</p>
+  const wtSt = S.team('aSEa0076') || S.teams[0];
+  return `
+  <div class="board" style="background: linear-gradient(135deg, #0D043D 0%, #172554 60%, #0F5FA4 100%) !important; color:#ffffff !important; margin-bottom: 20px !important;">
+    <div class="wt-board-topline">
+      <span class="wt-hero-slogan">WINNERS TOGETHER · FRIENDS</span>
+      <span class="wt-hero-sub-pill">🏆 2026 KBSA 공식 순위</span>
+    </div>
+    <div class="bhead">
+      <div class="wt-hero-main-row">
+        <div class="wt-hero-emb-card">
+          <img src="${teamTheme(wtSt).emb||'img/emblem.png'}" alt="${esc(wtSt.name)}" onerror="this.src='img/emblem.png'">
+        </div>
+        <div class="wt-hero-info-card">
+          <div class="wt-hero-title-row">
+            <div class="wt-hero-title">🏆 2026 리그 순위</div>
+            <div class="wt-hero-badges">
+            <span class="pill" style="background:#fef3c7 !important;color:#92400e !important;border:none !important">🏟️ ${rows.length}개 구단</span>
+            <span class="pill" style="background:#e0f2fe !important;color:#0369a1 !important;border:none !important">📊 2026 시즌</span>
+          </div>
+          </div>
+          <div class="wt-hero-sub">${subtitle} · 총 ${rows.length}개 구단</div>
+        </div>
+      </div>
+      <span class="vsbtns">
+        <a class="vsbtn pri" href="#/home" style="background:rgba(255,255,255,0.15) !important;color:#ffffff !important;border:1px solid rgba(255,255,255,0.35) !important;font-weight:700">🏠 홈 기록실 ›</a>
+        <a class="vsbtn" href="#/games" style="background:rgba(255,255,255,0.15) !important;color:#ffffff !important;border:1px solid rgba(255,255,255,0.35) !important;font-weight:700">⚾ 경기 일정·결과 ›</a>
+      </span>
+    </div>
+  </div>
   <div style="margin-top:12px">
     <div style="font-size:12px;font-weight:700;color:var(--mute);margin-bottom:6px">대회 선택</div>
     <div class="chips">${[`<button class="chip ${c==null?'on':''}" data-comp="">전체 시즌</button>`].concat(S.comps.map(x=>`<button class="chip ${c===x.i?'on':''}" data-comp="${x.i}">${esc(x.short)}</button>`)).join('')}</div>
@@ -12812,8 +13154,35 @@ V.games=(q)=>{
     ? `<div class="grid g2" style="margin-top:14px">${list.map(g=>gameCard(g)).join('')}</div>`
     : `<div class="card empty" style="margin-top:14px">조건에 맞는 경기 일정이 없습니다.</div>`;
 
-  return `<h1>경기 일정 및 결과</h1>
-    <p class="sub" style="margin-top:4px">2026 시즌 전체 ${S.games.length}경기 중 현재 조건에 해당하는 <b>${list.length}경기</b> (진행 ${playedCount}경기)</p>
+  const wtGm = S.team('aSEa0076') || S.teams[0];
+  return `
+  <div class="board" style="background: linear-gradient(135deg, #0D043D 0%, #172554 60%, #0F5FA4 100%) !important; color:#ffffff !important; margin-bottom: 20px !important;">
+    <div class="wt-board-topline">
+      <span class="wt-hero-slogan">WINNERS TOGETHER · FRIENDS</span>
+      <span class="wt-hero-sub-pill">⚾ 2026 KBSA 경기 기록</span>
+    </div>
+    <div class="bhead">
+      <div class="wt-hero-main-row">
+        <div class="wt-hero-emb-card">
+          <img src="${teamTheme(wtGm).emb||'img/emblem.png'}" alt="${esc(wtGm.name)}" onerror="this.src='img/emblem.png'">
+        </div>
+        <div class="wt-hero-info-card">
+          <div class="wt-hero-title-row">
+            <div class="wt-hero-title">⚾ 경기 일정 및 결과</div>
+            <div class="wt-hero-badges">
+            <span class="pill" style="background:#dcfce7 !important;color:#15803d !important;border:none !important">✅ 진행 ${playedCount}경기</span>
+            <span class="pill" style="background:#e0f2fe !important;color:#0369a1 !important;border:none !important">📅 전체 ${S.games.length}경기</span>
+          </div>
+          </div>
+          <div class="wt-hero-sub">2026 시즌 전체 ${S.games.length}경기 중 조건 ${list.length}경기</div>
+        </div>
+      </div>
+      <span class="vsbtns">
+        <a class="vsbtn pri" href="#/home" style="background:rgba(255,255,255,0.15) !important;color:#ffffff !important;border:1px solid rgba(255,255,255,0.35) !important;font-weight:700">🏠 홈 기록실 ›</a>
+        <a class="vsbtn" href="#/standings" style="background:rgba(255,255,255,0.15) !important;color:#ffffff !important;border:1px solid rgba(255,255,255,0.35) !important;font-weight:700">🏆 2026 리그 순위 ›</a>
+      </span>
+    </div>
+  </div>
     <div style="margin-top:14px">
       <div style="font-size:12px;font-weight:700;color:var(--mute);margin-bottom:6px">대회 선택</div>
       <div class="chips">${compChips}</div>
@@ -13326,14 +13695,16 @@ V.team=(q,id)=>{
           <img src="${th.emb||'img/emblem.png'}" alt="${esc(t.name)}" onerror="this.src='img/emblem.png'">
         </div>
         <div class="wt-hero-info-card">
-          <div class="wt-hero-title">${isWT ? 'WT프렌즈 야구 기록실' : esc(t.name)}</div>
-          <div class="wt-hero-sub">${isWT ? '서울 노원구 · 창단 18주년 · 2026 KBSA' : (esc(t.sido) + ' 소속 구단')}</div>
-          <div class="wt-hero-badges">
+          <div class="wt-hero-title-row">
+            <div class="wt-hero-title">${isWT ? 'WT프렌즈 야구 기록실' : esc(t.name)}</div>
+            <div class="wt-hero-badges">
             ${badgesHtml}
           </div>
+          </div>
+          <div class="wt-hero-sub">${isWT ? '서울 노원구 · 창단 18주년 · 2026 KBSA' : (esc(t.sido) + ' 소속 구단')}</div>
         </div>
       </div>
-      <span class="vsbtns">
+      <span class="vsbtns wt-home-btns">
         <button type="button" class="vsbtn pri-sum" data-go-sum="${t.id}" style="background:linear-gradient(135deg, #10b981 0%, #059669 100%) !important;color:#ffffff !important;border:1px solid #34d399 !important;cursor:pointer;font-weight:800;box-shadow:0 3px 10px rgba(16,185,129,0.35)">📈 시즌요약 분석 ›</button>
         <a class="vsbtn pri" href="#/lineup/${t.id}" onclick="go('#/lineup/' + t.id);return false;" style="background:linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;color:#ffffff !important;border:1px solid #f87171 !important;cursor:pointer;font-weight:800;box-shadow:0 3px 10px rgba(239,68,68,0.35)">📋 라인업 짜기 ›</a>
         ${isWT ? '<a class="vsbtn" href="#/dugout" style="color:#ffffff !important;background:rgba(255,255,255,0.12) !important;border:1px solid rgba(255,255,255,0.25) !important;font-weight:700">👥 덕아웃 선수단 ›</a>' : ''}
@@ -13451,7 +13822,35 @@ V.players = () => {
         {k:'v', t:c.t, cls:'col-val hi', f:p=>val(p)}
       ], rows, {nosort: 1});
 
-  return `<h1>선수검색</h1><p class="sub">2026 시즌 선수 및 구단 기록 검색 · 부문별 순위와 세이버메트릭스 지표를 확인할 수 있습니다.</p>
+  const wtPl = S.team('aSEa0076') || S.teams[0];
+  return `
+  <div class="board" style="background: linear-gradient(135deg, #0D043D 0%, #172554 60%, #0F5FA4 100%) !important; color:#ffffff !important; margin-bottom: 20px !important;">
+    <div class="wt-board-topline">
+      <span class="wt-hero-slogan">WINNERS TOGETHER · FRIENDS</span>
+      <span class="wt-hero-sub-pill">🔍 2026 선수·구단 기록 검색</span>
+    </div>
+    <div class="bhead">
+      <div class="wt-hero-main-row">
+        <div class="wt-hero-emb-card">
+          <img src="${teamTheme(wtPl).emb||'img/emblem.png'}" alt="${esc(wtPl.name)}" onerror="this.src='img/emblem.png'">
+        </div>
+        <div class="wt-hero-info-card">
+          <div class="wt-hero-title-row">
+            <div class="wt-hero-title">🔍 선수 · 기록 검색</div>
+            <div class="wt-hero-badges">
+            <span class="pill" style="background:#fef3c7 !important;color:#92400e !important;border:none !important">👤 선수 ${S.players.length}명</span>
+            <span class="pill" style="background:#e0f2fe !important;color:#0369a1 !important;border:none !important">📈 16개 부문</span>
+          </div>
+          </div>
+          <div class="wt-hero-sub">부문별 순위 및 세이버메트릭스 지표 조회</div>
+        </div>
+      </div>
+      <span class="vsbtns">
+        <a class="vsbtn pri" href="#/home" style="background:rgba(255,255,255,0.15) !important;color:#ffffff !important;border:1px solid rgba(255,255,255,0.35) !important;font-weight:700">🏠 홈 기록실 ›</a>
+        <a class="vsbtn" href="#/dugout" style="background:rgba(255,255,255,0.15) !important;color:#ffffff !important;border:1px solid rgba(255,255,255,0.35) !important;font-weight:700">🧢 덕아웃 선수단 ›</a>
+      </span>
+    </div>
+  </div>
   <div class="ctrl" style="margin-top:12px"><input id="q" type="search" placeholder="선수 또는 구단 이름 검색" value="${esc(UI.rankQ)}" autocomplete="off" autocapitalize="off" spellcheck="false"></div>
   ${qy ? '' : `<div class="chips" id="rankCatChips">${CATS.map(x => `<button class="chip ${x.k===c.k?'on':''}" data-cat="${x.k}">${x.t}</button>`).join('')}</div>`}
   <div class="tw-fixed-wrap" id="rankTableArea">${res}</div>
@@ -14595,21 +14994,27 @@ V.lineup = (q, tid) => {
   const head = `<div class="board lu-b" style="background: linear-gradient(135deg, #0D043D 0%, #172554 60%, #0F5FA4 100%) !important; color: #ffffff !important; margin-bottom: 20px !important;">
     <div class="wt-board-topline">
       <span class="wt-hero-slogan">WINNERS TOGETHER · FRIENDS</span>
-      <span class="wt-bhead-sub">${esc(t.name)} · 2026 시즌 라인업 관리 클럽하우스</span>
+      <span class="wt-hero-sub-pill">📋 2026 시즌 라인업 관리실</span>
     </div>
     <div class="bhead">
-      <div class="bhead-info">
-        <div class="wt-bhead-top">
-          ${badge(t, 60)}
-          <div class="wt-bhead-title-col">
-            <div class="tm wt-main-title" style="color:#ffffff !important;font-weight:900 !important;font-size:clamp(20px, 3.5vw, 26px) !important">📋 ${esc(t.short)} 경기 라인업</div>
-            <div class="wt-bhead-desc" style="color:#f1f5f9;font-size:12px;font-weight:600;margin-top:4px">KBSA 2026 시즌 공식 출전 라인업 카드 및 모바일/인쇄용 시트</div>
+      <div class="wt-hero-main-row">
+        <div class="wt-hero-emb-card">
+          <img src="${th.emb||'img/emblem.png'}" alt="${esc(t.name)}" onerror="this.src='img/emblem.png'">
+        </div>
+        <div class="wt-hero-info-card">
+          <div class="wt-hero-title-row">
+            <div class="wt-hero-title">📋 ${esc(t.short)} 경기 라인업</div>
+            <div class="wt-hero-badges">
+            <span class="pill" style="background:#dcfce7 !important;color:#15803d !important;border:none !important">📋 오더 관리</span>
+            <span class="pill" style="background:#e0f2fe !important;color:#0369a1 !important;border:none !important">⚾ 9명 라인업</span>
           </div>
+          </div>
+          <div class="wt-hero-sub">KBSA 2026 시즌 공식 출전 오더 및 인쇄용 시트</div>
         </div>
       </div>
-      <span class="vsbtns wt-dugout-btns">
-        <a class="vsbtn pri" href="#/home" onclick="go('#/');return false;" style="background:rgba(255,255,255,0.15);color:#ffffff;border:1px solid rgba(255,255,255,0.35);font-weight:700">🏠 홈 기록실 ›</a>
-        <a class="vsbtn" href="#/dugout" onclick="go('#/dugout');return false;" style="background:rgba(255,255,255,0.15);color:#ffffff;border:1px solid rgba(255,255,255,0.35);font-weight:700">🧢 덕아웃 선수단 ›</a>
+      <span class="vsbtns">
+        <a class="vsbtn pri" href="#/home" onclick="go('#/');return false;" style="background:rgba(255,255,255,0.15) !important;color:#ffffff !important;border:1px solid rgba(255,255,255,0.35) !important;font-weight:700">🏠 홈 기록실 ›</a>
+        <a class="vsbtn" href="#/dugout" onclick="go('#/dugout');return false;" style="background:rgba(255,255,255,0.15) !important;color:#ffffff !important;border:1px solid rgba(255,255,255,0.35) !important;font-weight:700">🧢 덕아웃 선수단 ›</a>
       </span>
     </div>
   </div>`;
@@ -16195,7 +16600,7 @@ function renderTeamClubView(t, A, tc, th) {
       <div class="wt-sec-header" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
         <div class="wt-sec-title-wrap">
           <div style="display:flex;align-items:center;gap:8px">
-            <span class="wt-sec-badge" style="background:#dcfce7;color:#15803d">⚾ 참석 투표 (RSVP)</span>
+            <span class="wt-sec-badge" style="background:#dcfce7 !important;color:#15803d !important;border:none !important">⚾ 참석 투표 (RSVP)</span>
             <span class="wt-sec-title">${esc(t.short)} 팀 활동 일정 및 라인업 투표</span>
           </div>
           <span class="wt-sec-desc">참석 투표 결과를 클릭 한 번으로 <b>시합 라인업 작성기</b>로 즉시 전송할 수 있습니다.</span>
@@ -16598,7 +17003,7 @@ function renderClubCalendarSection(t, data, tc, me) {
       <div class="wt-sec-header">
         <div class="wt-sec-title-wrap">
           <div style="display:flex;align-items:center;gap:8px">
-            <span class="wt-sec-badge" style="background:#e0f2fe;color:#0369a1">📅 주간 브리핑</span>
+            <span class="wt-sec-badge" style="background:#e0f2fe !important;color:#0369a1 !important;border:none !important">📅 주간 브리핑</span>
             <span class="wt-sec-title">이번 주 & 다음 주 팀 일정 레이더</span>
           </div>
           <span class="wt-sec-desc">가장 가까운 주요 훈련 및 공식 시합 일정을 빠르게 브리핑합니다.</span>
