@@ -16306,15 +16306,13 @@ const ClubStore = {
           const rawDate = String(ev.date || '');
           // JS Date 문자열("Sat Nov 21 2026...")이 type이나 date에 섞여 들어온 경우 자동 복구
           if (/^(Mon|Tue|Wed|Thu|Fri|Sat|Sun)(\s|$)/.test(rawType)) {
-            const parsedFromType = new Date(rawType);
-            if (!isNaN(parsedFromType.getTime()) && (!/^\d{4}-\d{2}-\d{2}$/.test(rawDate))) {
-              const y = parsedFromType.getFullYear();
-              const mo = String(parsedFromType.getMonth() + 1).padStart(2, '0');
-              const da = String(parsedFromType.getDate()).padStart(2, '0');
-              ev.date = `${y}-${mo}-${da}`;
-            }
-            ev.type = '훈련';
-          }
+        const _mMap = {Jan:"01",Feb:"02",Mar:"03",Apr:"04",May:"05",Jun:"06",Jul:"07",Aug:"08",Sep:"09",Oct:"10",Nov:"11",Dec:"12"};
+        const dm = rawType.match(/(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)\s+([A-Za-z]{3})\s+(\d{1,2})\s+(\d{4})/);
+        if (dm && _mMap[dm[1]] && !/^\d{4}-\d{2}-\d{2}$/.test(rawDate)) {
+          ev.date = `${dm[3]}-${_mMap[dm[1]]}-${String(dm[2]).padStart(2,"0")}`;
+        }
+        ev.type = '훈련';
+      }
           if (typeof ev.date === 'string' && !/^\d{4}-\d{2}-\d{2}$/.test(ev.date)) {
             const m = ev.date.match(/(\d{4}-\d{2}-\d{2})/);
             if (m) {
@@ -16370,11 +16368,52 @@ const ClubStore = {
     try { localStorage.setItem(this.meKey + team.id, name); } catch (e) {}
   },
 
+  sanitizeEvents(rawEvs) {
+    const arr = Array.isArray(rawEvs) ? rawEvs : [];
+    const seen = new Set();
+    const out = [];
+    arr.forEach(ev => {
+      if (!ev || !ev.id) return;
+      const sid = String(ev.id);
+      if (seen.has(sid)) return;
+      seen.add(sid);
+      const rawType = String(ev.type || '');
+      const rawDate = String(ev.date || '').trim();
+      if (/^(Mon|Tue|Wed|Thu|Fri|Sat|Sun)(\s|$)/.test(rawType)) {
+        const _mMap = {Jan:"01",Feb:"02",Mar:"03",Apr:"04",May:"05",Jun:"06",Jul:"07",Aug:"08",Sep:"09",Oct:"10",Nov:"11",Dec:"12"};
+        const dm = rawType.match(/(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)\s+([A-Za-z]{3})\s+(\d{1,2})\s+(\d{4})/);
+        if (dm && _mMap[dm[1]] && !/^\d{4}-\d{2}-\d{2}$/.test(rawDate)) {
+          ev.date = `${dm[3]}-${_mMap[dm[1]]}-${String(dm[2]).padStart(2,"0")}`;
+        }
+        const pType = new Date(rawType.replace(/\s*\([^)]*\)\s*$/, ""));
+        if (!isNaN(pType.getTime()) && !/^\d{4}-\d{2}-\d{2}$/.test(rawDate)) {
+          ev.date = `${pType.getFullYear()}-${String(pType.getMonth()+1).padStart(2,'0')}-${String(pType.getDate()).padStart(2,'0')}`;
+        }
+        ev.type = '훈련';
+      }
+      if (ev.date) {
+        const cleaned = String(ev.date).trim().replace(/\./g, '-');
+        const m = cleaned.match(/(\d{4}-\d{2}-\d{2})/);
+        if (m) {
+          ev.date = m[1];
+        } else {
+          const pD = new Date(ev.date);
+          if (!isNaN(pD.getTime())) {
+            ev.date = `${pD.getFullYear()}-${String(pD.getMonth()+1).padStart(2,'0')}-${String(pD.getDate()).padStart(2,'0')}`;
+          }
+        }
+      }
+      out.push(ev);
+    });
+    return out;
+  },
+
   getTeamData(team) {
     try {
       const raw = localStorage.getItem(this.key + team.id);
       if (raw) {
         const d = JSON.parse(raw);
+        d.events = this.sanitizeEvents(d.events);
         if (!d.settlements || !d.settlements.length) {
           d.settlements = this.seedTeamData(team).settlements;
           try { localStorage.setItem(this.key + team.id, JSON.stringify(d)); } catch (e) {}
@@ -16783,7 +16822,7 @@ function renderTeamClubView(t, A, tc, th) {
                   </div>
                 ` : `
                   <div class="ev-rsvp-btns">
-                    <button type="button" class="rsvp-b in ${myStatus==='in'?'on':''}" data-rsvp="${esc(ev.id)}:in">⭕ 참석 (${inList.length - carList.length})</button>
+                    <button type="button" class="rsvp-b in ${(myStatus==='in'||myStatus==='car')?'on':''}" data-rsvp="${esc(ev.id)}:in">⭕ 참석 (${inList.length})</button>
                     <button type="button" class="rsvp-b car ${myStatus==='car'?'on':''}" data-rsvp="${esc(ev.id)}:car">🚗 차량지원 (${carList.length})</button>
                     <button type="button" class="rsvp-b out ${myStatus==='out'?'on':''}" data-rsvp="${esc(ev.id)}:out">❌ 불참 (${outList.length})</button>
                     <button type="button" class="rsvp-b tbd ${myStatus==='tbd'?'on':''}" data-rsvp="${esc(ev.id)}:tbd">❓ 미정 (${tbdList.length})</button>
@@ -17022,7 +17061,8 @@ function renderClubCalendarSection(t, data, tc, me) {
     });
     // 3. 구단 일정 (훈련, 모임, 대회, 연맹행사, 자체경기, 공지 등)
     events.forEach(e => {
-      if (e.date === dateStr) {
+      const evDateNorm = String(e.date || '').trim().replace(/\./g, '-').slice(0, 10);
+      if (evDateNorm === dateStr) {
         let icon = '⚾';
         let badgeType = 'drill';
         let shortText = '훈련';
