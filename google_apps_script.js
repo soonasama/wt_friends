@@ -24,6 +24,7 @@ function doGet(e) {
     if (rawJson) {
       try { data = JSON.parse(rawJson); } catch(err) { data = null; }
     }
+    data = mergeVisibleSheetsIntoData(ss, data);
     
     var response = {
       status: 'success',
@@ -309,4 +310,115 @@ function updateSettlementsSheet(ss, settlements) {
       ]);
     });
   }
+}
+
+// =========================================================================
+// 🔄 양방향 동기화: 가시적 시트(일정/출석, 공지, 주간미션) 직접 수정분 반영
+// =========================================================================
+function mergeVisibleSheetsIntoData(ss, data) {
+  if (!data) data = { initialized: true, events: [], notices: [], setlogs: [], missions: [], settlements: [], pins: {} };
+  data.events = Array.isArray(data.events) ? data.events : [];
+  data.notices = Array.isArray(data.notices) ? data.notices : [];
+  data.missions = Array.isArray(data.missions) ? data.missions : [];
+
+  // 1) WT_일정_참석투표_DB 직접 수정분 병합
+  var evSheet = ss.getSheetByName('WT_일정_참석투표_DB');
+  if (evSheet && evSheet.getLastRow() >= 1) {
+    var evVals = evSheet.getDataRange().getValues();
+    if (evVals.length >= 1) {
+      var evById = {};
+      data.events.forEach(function(ev) { if (ev && ev.id) evById[String(ev.id)] = ev; });
+      var sheetEvents = [];
+      for (var i = 1; i < evVals.length; i++) {
+        var row = evVals[i];
+        var id = String(row[0] || '').trim();
+        var title = String(row[1] || '').trim();
+        if (!id && !title) continue;
+        if (!id) id = 'ev_sheet_' + i;
+
+        var dtStr = String(row[3] || '').trim();
+        var dtParts = dtStr.split(/\s+/);
+        var datePart = dtParts[0] || '';
+        var timePart = dtParts[1] || '10:00';
+
+        var existing = evById[id] || { id: id, rsvp: {} };
+        var rsvp = existing.rsvp || {};
+
+        // 시트의 참석자명단(9번째 열, index 8)과 동기화
+        var namesCell = String(row[8] || '').trim();
+        var sheetNames = namesCell ? namesCell.split(/[,，\n]+/).map(function(s){ return s.trim(); }).filter(Boolean) : [];
+        var sheetNameSet = {};
+        sheetNames.forEach(function(nm) {
+          sheetNameSet[nm] = true;
+          if (rsvp[nm] !== 'in' && rsvp[nm] !== 'car') {
+            rsvp[nm] = 'in';
+          }
+        });
+        Object.keys(rsvp).forEach(function(nm) {
+          if ((rsvp[nm] === 'in' || rsvp[nm] === 'car') && !sheetNameSet[nm]) {
+            delete rsvp[nm];
+          }
+        });
+
+        sheetEvents.push({
+          id: id,
+          title: title || existing.title || '구단 일정',
+          type: String(row[2] || existing.type || '훈련').trim(),
+          date: datePart || existing.date || '',
+          time: timePart || existing.time || '10:00',
+          venue: String(row[4] || existing.venue || '').trim(),
+          note: String(row[9] !== undefined ? row[9] : (existing.note || '')).trim(),
+          rsvp: rsvp
+        });
+      }
+      data.events = sheetEvents;
+    }
+  }
+
+  // 2) WT_공지_커뮤니티_DB 직접 수정분 병합
+  var ntSheet = ss.getSheetByName('WT_공지_커뮤니티_DB');
+  if (ntSheet && ntSheet.getLastRow() >= 1) {
+    var ntVals = ntSheet.getDataRange().getValues();
+    if (ntVals.length >= 1) {
+      var ntById = {};
+      data.notices.forEach(function(nt) { if (nt && nt.id) ntById[String(nt.id)] = nt; });
+      var sheetNotices = [];
+      for (var j = 1; j < ntVals.length; j++) {
+        var nrow = ntVals[j];
+        var nid = String(nrow[0] || '').trim();
+        var ntitle = String(nrow[2] || '').trim();
+        if (!nid && !ntitle) continue;
+        if (!nid) nid = 'nt_sheet_' + j;
+        var nExisting = ntById[nid] || { id: nid, comments: [] };
+        sheetNotices.push({
+          id: nid,
+          author: String(nrow[1] || nExisting.author || '운영진').trim(),
+          title: ntitle || nExisting.title || '',
+          body: String(nrow[3] !== undefined ? nrow[3] : (nExisting.body || '')),
+          date: String(nrow[4] || nExisting.date || '').trim(),
+          pinned: !!nExisting.pinned,
+          comments: nExisting.comments || []
+        });
+      }
+      data.notices = sheetNotices;
+    }
+  }
+
+  // 3) WT_주간미션_스탬프_DB 직접 수정분 병합 (제목/기간/달성자명단)
+  var msSheet = ss.getSheetByName('WT_주간미션_스탬프_DB');
+  if (msSheet && msSheet.getLastRow() >= 2) {
+    var msVals = msSheet.getDataRange().getValues();
+    var msById = {};
+    data.missions.forEach(function(m) { if (m && m.id) msById[String(m.id)] = m; });
+    for (var k = 1; k < msVals.length; k++) {
+      var mrow = msVals[k];
+      var mid = String(mrow[0] || '').trim();
+      if (mid && msById[mid]) {
+        if (mrow[1]) msById[mid].weekTitle = String(mrow[1]).trim();
+        if (mrow[2]) msById[mid].dateRange = String(mrow[2]).trim();
+      }
+    }
+  }
+
+  return data;
 }

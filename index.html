@@ -16299,21 +16299,15 @@ const ClubStore = {
         d.setlogs = Array.isArray(d.setlogs) ? d.setlogs : [];
         d.settlements = Array.isArray(d.settlements) ? d.settlements : [];
 
-        // 로컬 사용자 수정 내역 보호: 로컬 정산서나 일정이 있으면 덮어쓰지 않고 병합 보존
+        // 구글 시트를 마스터 원본(Single Source of Truth)으로 사용 (시트 수정/삭제 즉시 반영!)
         const localRaw = localStorage.getItem(this.key + team.id);
         if (localRaw) {
           try {
             const localObj = JSON.parse(localRaw);
-            if (localObj.settlements && localObj.settlements.length > 0) {
+            if ((!d.settlements || d.settlements.length === 0) && localObj.settlements && localObj.settlements.length > 0) {
               d.settlements = localObj.settlements;
             }
-            if (localObj.events && localObj.events.length > 0) {
-              const evMap = new Map();
-              d.events.forEach(ev => evMap.set(ev.id, ev));
-              localObj.events.forEach(ev => evMap.set(ev.id, ev));
-              d.events = Array.from(evMap.values());
-            }
-            if (localObj.missions && localObj.missions.length > 0) {
+            if ((!d.missions || d.missions.length === 0) && localObj.missions && localObj.missions.length > 0) {
               d.missions = localObj.missions;
             }
           } catch(e) {}
@@ -16636,7 +16630,8 @@ function renderTeamClubView(t, A, tc, th) {
       <div style="font-size:13px;color:var(--sub);font-weight:700">
         🏆 <b>${esc(t.short)}</b> 공식 클럽하우스 <small style="color:var(--mute)">(2008.03.03 창단)</small>
       </div>
-      <div style="display:flex;gap:6px">
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button type="button" class="cl-btn ghost sm" id="clForceSyncSheet" title="구글 시트에서 최신 데이터 즉시 불러오기" style="font-size:11.5px;padding:3px 8px;color:#0284c7;border-color:#bae6fd">🔄 시트 새로고침</button>
         <button type="button" class="cl-btn ghost sm" id="clCopyTeamLink" style="font-size:11.5px;padding:3px 8px">🔗 초대 링크</button>
         <button type="button" class="cl-btn ghost sm" id="clOpenSheetSync" title="구글 시트 연동" style="font-size:11.5px;padding:3px 8px">⚙️ 시트 연동</button>
       </div>
@@ -17957,6 +17952,7 @@ function doGet(e) {
     if (rawJson) {
       try { data = JSON.parse(rawJson); } catch(err) { data = null; }
     }
+    data = mergeVisibleSheetsIntoData(ss, data);
     
     var response = {
       status: 'success',
@@ -18159,6 +18155,118 @@ function updateSetlogsSheet(ss, setlogs) {
   headerRange.setBackground('#172554').setFontColor('#ffffff').setFontWeight('bold');
   sheet.setFrozenRows(1);
   sheet.autoResizeColumns(1, headers.length);
+}
+
+
+// =========================================================================
+// 🔄 양방향 동기화: 가시적 시트(일정/출석, 공지, 주간미션) 직접 수정분 반영
+// =========================================================================
+function mergeVisibleSheetsIntoData(ss, data) {
+  if (!data) data = { initialized: true, events: [], notices: [], setlogs: [], missions: [], settlements: [], pins: {} };
+  data.events = Array.isArray(data.events) ? data.events : [];
+  data.notices = Array.isArray(data.notices) ? data.notices : [];
+  data.missions = Array.isArray(data.missions) ? data.missions : [];
+
+  // 1) WT_일정_참석투표_DB 직접 수정분 병합
+  var evSheet = ss.getSheetByName('WT_일정_참석투표_DB');
+  if (evSheet && evSheet.getLastRow() >= 1) {
+    var evVals = evSheet.getDataRange().getValues();
+    if (evVals.length >= 1) {
+      var evById = {};
+      data.events.forEach(function(ev) { if (ev && ev.id) evById[String(ev.id)] = ev; });
+      var sheetEvents = [];
+      for (var i = 1; i < evVals.length; i++) {
+        var row = evVals[i];
+        var id = String(row[0] || '').trim();
+        var title = String(row[1] || '').trim();
+        if (!id && !title) continue;
+        if (!id) id = 'ev_sheet_' + i;
+
+        var dtStr = String(row[3] || '').trim();
+        var dtParts = dtStr.split(/\s+/);
+        var datePart = dtParts[0] || '';
+        var timePart = dtParts[1] || '10:00';
+
+        var existing = evById[id] || { id: id, rsvp: {} };
+        var rsvp = existing.rsvp || {};
+
+        // 시트의 참석자명단(9번째 열, index 8)과 동기화
+        var namesCell = String(row[8] || '').trim();
+        var sheetNames = namesCell ? namesCell.split(/[,，\n]+/).map(function(s){ return s.trim(); }).filter(Boolean) : [];
+        var sheetNameSet = {};
+        sheetNames.forEach(function(nm) {
+          sheetNameSet[nm] = true;
+          if (rsvp[nm] !== 'in' && rsvp[nm] !== 'car') {
+            rsvp[nm] = 'in';
+          }
+        });
+        Object.keys(rsvp).forEach(function(nm) {
+          if ((rsvp[nm] === 'in' || rsvp[nm] === 'car') && !sheetNameSet[nm]) {
+            delete rsvp[nm];
+          }
+        });
+
+        sheetEvents.push({
+          id: id,
+          title: title || existing.title || '구단 일정',
+          type: String(row[2] || existing.type || '훈련').trim(),
+          date: datePart || existing.date || '',
+          time: timePart || existing.time || '10:00',
+          venue: String(row[4] || existing.venue || '').trim(),
+          note: String(row[9] !== undefined ? row[9] : (existing.note || '')).trim(),
+          rsvp: rsvp
+        });
+      }
+      data.events = sheetEvents;
+    }
+  }
+
+  // 2) WT_공지_커뮤니티_DB 직접 수정분 병합
+  var ntSheet = ss.getSheetByName('WT_공지_커뮤니티_DB');
+  if (ntSheet && ntSheet.getLastRow() >= 1) {
+    var ntVals = ntSheet.getDataRange().getValues();
+    if (ntVals.length >= 1) {
+      var ntById = {};
+      data.notices.forEach(function(nt) { if (nt && nt.id) ntById[String(nt.id)] = nt; });
+      var sheetNotices = [];
+      for (var j = 1; j < ntVals.length; j++) {
+        var nrow = ntVals[j];
+        var nid = String(nrow[0] || '').trim();
+        var ntitle = String(nrow[2] || '').trim();
+        if (!nid && !ntitle) continue;
+        if (!nid) nid = 'nt_sheet_' + j;
+        var nExisting = ntById[nid] || { id: nid, comments: [] };
+        sheetNotices.push({
+          id: nid,
+          author: String(nrow[1] || nExisting.author || '운영진').trim(),
+          title: ntitle || nExisting.title || '',
+          body: String(nrow[3] !== undefined ? nrow[3] : (nExisting.body || '')),
+          date: String(nrow[4] || nExisting.date || '').trim(),
+          pinned: !!nExisting.pinned,
+          comments: nExisting.comments || []
+        });
+      }
+      data.notices = sheetNotices;
+    }
+  }
+
+  // 3) WT_주간미션_스탬프_DB 직접 수정분 병합 (제목/기간/달성자명단)
+  var msSheet = ss.getSheetByName('WT_주간미션_스탬프_DB');
+  if (msSheet && msSheet.getLastRow() >= 2) {
+    var msVals = msSheet.getDataRange().getValues();
+    var msById = {};
+    data.missions.forEach(function(m) { if (m && m.id) msById[String(m.id)] = m; });
+    for (var k = 1; k < msVals.length; k++) {
+      var mrow = msVals[k];
+      var mid = String(mrow[0] || '').trim();
+      if (mid && msById[mid]) {
+        if (mrow[1]) msById[mid].weekTitle = String(mrow[1]).trim();
+        if (mrow[2]) msById[mid].dateRange = String(mrow[2]).trim();
+      }
+    }
+  }
+
+  return data;
 }
 `;
 
@@ -19115,6 +19223,20 @@ function bindTeamClubView() {
   const meSel = document.getElementById('clMeSel');
   if (meSel) meSel.onchange = () => { ClubStore.setMe(t, meSel.value); re(); };
 
+  const syncBtn = document.getElementById('clForceSyncSheet');
+  if (syncBtn) syncBtn.onclick = async () => {
+    syncBtn.textContent = '⏳ 불러오는 중...';
+    syncBtn.disabled = true;
+    const remoteData = await ClubStore.fetchFromSheet(t);
+    syncBtn.disabled = false;
+    if (remoteData) {
+      syncBtn.textContent = '✓ 동기화 완료!';
+      setTimeout(() => { re(); }, 400);
+    } else {
+      syncBtn.textContent = '🔄 시트 새로고침';
+      alert('구글 시트 연결을 확인해주세요.');
+    }
+  };
   const sheetBtn = document.getElementById('clOpenSheetSync');
   if (sheetBtn) sheetBtn.onclick = () => openClubSheetSyncModal(t);
 
