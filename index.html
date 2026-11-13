@@ -12293,6 +12293,31 @@ html[data-theme="dark"] .ev-edit-btn:hover {
   }
 }
 
+
+/* =========================================================================
+   FOLD 8 / TABLET (561px ~ 960px) FULL-WIDTH BUTTONS & GNB OVERFLOW FIX
+   ========================================================================= */
+@media (min-width: 561px) and (max-width: 960px) {
+  .board .vsbtns {
+    flex: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+    margin: 0 !important;
+  }
+  .board .vsbtns.wt-home-btns .vsbtn:first-child {
+    grid-column: 1 / -1 !important;
+  }
+  .team-nav-box #teamSel,
+  #teamSel {
+    max-width: 110px !important;
+    text-overflow: ellipsis !important;
+    overflow: hidden !important;
+  }
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
 </head>
@@ -13656,9 +13681,9 @@ V.team=(q,id)=>{
       ${note('matchup','types')}`;}
   }
   if(tab==='games'){
-    body=table([{k:'date',t:'날짜',l:1,v:x=>x.g.date+x.g.time,f:x=>`<a href="#/game/${x.g.id}">${md(x.g.date)}</a>`},{k:'opp',t:'상대',l:1,cls:'name',v:x=>x.opp.short,f:x=>`<span class="tcell">${badge(x.opp,22)}${tlink(x.opp)}</span>`},
-      {k:'res',t:'결과',l:1,f:x=>x.res?`<b class="res r-${x.res}">${x.res}</b>`:'-'},{k:'comp',t:'대회',l:1,v:x=>x.g.comp.short,f:x=>esc(x.g.comp.short)},
-      {k:'sc',t:'스코어',v:x=>(x.rf??-1)-(x.ra??0),f:x=>x.rf==null?'-':`${x.rf} : ${x.ra}`},{k:'sp',t:'우리 선발',l:1,v:x=>x.sp?.name||'',f:x=>x.sp?pBat(x.sp.name):'-'},
+    body=table([{k:'date',t:'날짜',l:1,v:x=>x.g.date+x.g.time,f:x=>`<a href="#/game/${x.g.id}" style="font-weight:700">${md(x.g.date)}</a>`},{k:'opp',t:'상대',l:1,cls:'name',v:x=>x.opp.short,f:x=>`<a href="#/game/${x.g.id}" class="tcell" style="display:inline-flex;align-items:center;gap:6px;font-weight:700;color:var(--ink)">${badge(x.opp,22)}<span>${esc(x.opp.short)}</span></a>`},
+      {k:'res',t:'결과',l:1,f:x=>x.res?`<a href="#/game/${x.g.id}"><b class="res r-${x.res}">${x.res}</b></a>`:'-'},{k:'comp',t:'대회',l:1,v:x=>x.g.comp.short,f:x=>`<a href="#/game/${x.g.id}">${esc(x.g.comp.short)}</a>`},
+      {k:'sc',t:'스코어',v:x=>(x.rf??-1)-(x.ra??0),f:x=>x.rf==null?'-':`<a href="#/game/${x.g.id}" style="font-weight:700">${x.rf} : ${x.ra}</a>`},{k:'sp',t:'우리 선발',l:1,v:x=>x.sp?.name||'',f:x=>x.sp?pBat(x.sp.name):'-'},
       {k:'osp',t:'상대 선발',l:1,v:x=>x.osp?.name||'',f:x=>x.osp?plink(x.osp.team,x.osp.name):'-'},{k:'avg',t:'팀 타율',f:x=>f3(x.avg)},{k:'obp',t:'팀 출루율',f:x=>f3(x.obp)},
       {k:'bidx',t:'타격 효율',f:x=>idxCell(x.bidx)}],A.games.slice().reverse(),{})+note('gameEff','box');
   }
