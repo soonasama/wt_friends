@@ -313,61 +313,102 @@ function updateSettlementsSheet(ss, settlements) {
 }
 
 // =========================================================================
-// 🔄 양방향 동기화: 가시적 시트(일정/출석, 공지, 주간미션) 직접 수정분 반영
+// 🔄 안전한 양방향 동기화: 헤더 이름 기반 매핑 + Date 객체 변환 + 중복/빈시트 방어
 // =========================================================================
+function findColIdx(headers, candidates) {
+  for (var i = 0; i < headers.length; i++) {
+    var h = String(headers[i] || '').trim();
+    for (var j = 0; j < candidates.length; j++) {
+      if (h === candidates[j]) return i;
+    }
+  }
+  return -1;
+}
+
+function parseSheetDateTime(val) {
+  if (val instanceof Date) {
+    return {
+      date: Utilities.formatDate(val, 'Asia/Seoul', 'yyyy-MM-dd'),
+      time: Utilities.formatDate(val, 'Asia/Seoul', 'HH:mm')
+    };
+  }
+  var s = String(val || '').trim();
+  var m = s.match(/(\d{4}-\d{2}-\d{2})(?:\s+(\d{2}:\d{2}))?/);
+  if (m) {
+    return { date: m[1], time: m[2] || '10:00' };
+  }
+  return { date: '', time: '10:00' };
+}
+
 function mergeVisibleSheetsIntoData(ss, data) {
   if (!data) data = { initialized: true, events: [], notices: [], setlogs: [], missions: [], settlements: [], pins: {} };
   data.events = Array.isArray(data.events) ? data.events : [];
   data.notices = Array.isArray(data.notices) ? data.notices : [];
   data.missions = Array.isArray(data.missions) ? data.missions : [];
 
-  // 1) WT_일정_참석투표_DB 직접 수정분 병합
+  // 1) WT_일정_참석투표_DB 직접 수정분 안전 병합 (데이터 행이 1개 이상일 때만)
   var evSheet = ss.getSheetByName('WT_일정_참석투표_DB');
-  if (evSheet && evSheet.getLastRow() >= 1) {
+  if (evSheet && evSheet.getLastRow() >= 2) {
     var evVals = evSheet.getDataRange().getValues();
-    if (evVals.length >= 1) {
+    var hdr = evVals[0] || [];
+    var cId = findColIdx(hdr, ['일정ID', 'ID']);
+    var cTitle = findColIdx(hdr, ['일정제목', '제목']);
+    var cType = findColIdx(hdr, ['일정구분', '구분']);
+    var cDt = findColIdx(hdr, ['일시', '날짜']);
+    var cVenue = findColIdx(hdr, ['장소', '구장']);
+    var cNames = findColIdx(hdr, ['참석자명단', '참석자']);
+    var cNote = findColIdx(hdr, ['비고', '메모', '공지']);
+
+    if (cId !== -1 && cTitle !== -1) {
       var evById = {};
       data.events.forEach(function(ev) { if (ev && ev.id) evById[String(ev.id)] = ev; });
+      var seenIds = {};
       var sheetEvents = [];
+
       for (var i = 1; i < evVals.length; i++) {
         var row = evVals[i];
-        var id = String(row[0] || '').trim();
-        var title = String(row[1] || '').trim();
+        var id = String(row[cId] || '').trim();
+        var title = String(row[cTitle] || '').trim();
         if (!id && !title) continue;
         if (!id) id = 'ev_sheet_' + i;
-
-        var dtStr = String(row[3] || '').trim();
-        var dtParts = dtStr.split(/\s+/);
-        var datePart = dtParts[0] || '';
-        var timePart = dtParts[1] || '10:00';
+        if (seenIds[id]) continue; // 중복 ID 카드 생성 원천 차단!
+        seenIds[id] = true;
 
         var existing = evById[id] || { id: id, rsvp: {} };
-        var rsvp = existing.rsvp || {};
+        var dtInfo = cDt !== -1 ? parseSheetDateTime(row[cDt]) : { date: existing.date || '', time: existing.time || '10:00' };
 
-        // 시트의 참석자명단(9번째 열, index 8)과 동기화
-        var namesCell = String(row[8] || '').trim();
-        var sheetNames = namesCell ? namesCell.split(/[,，\n]+/).map(function(s){ return s.trim(); }).filter(Boolean) : [];
-        var sheetNameSet = {};
-        sheetNames.forEach(function(nm) {
-          sheetNameSet[nm] = true;
-          if (rsvp[nm] !== 'in' && rsvp[nm] !== 'car') {
-            rsvp[nm] = 'in';
-          }
-        });
-        Object.keys(rsvp).forEach(function(nm) {
-          if ((rsvp[nm] === 'in' || rsvp[nm] === 'car') && !sheetNameSet[nm]) {
-            delete rsvp[nm];
-          }
-        });
+        var typeVal = cType !== -1 ? String(row[cType] || '').trim() : (existing.type || '훈련');
+        // Date 문자열이 잘못 들어온 경우 방어
+        if (/^(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\s/.test(typeVal)) {
+          typeVal = existing.type || '훈련';
+        }
+
+        var rsvp = existing.rsvp || {};
+        if (cNames !== -1) {
+          var namesCell = String(row[cNames] || '').trim();
+          var sheetNames = namesCell ? namesCell.split(/[,，\n]+/).map(function(s){ return s.trim(); }).filter(function(s){ return s && s.indexOf('/') === -1 && s.length <= 15; }) : [];
+          var sheetNameSet = {};
+          sheetNames.forEach(function(nm) {
+            sheetNameSet[nm] = true;
+            if (rsvp[nm] !== 'in' && rsvp[nm] !== 'car') {
+              rsvp[nm] = 'in';
+            }
+          });
+          Object.keys(rsvp).forEach(function(nm) {
+            if ((rsvp[nm] === 'in' || rsvp[nm] === 'car') && !sheetNameSet[nm]) {
+              delete rsvp[nm];
+            }
+          });
+        }
 
         sheetEvents.push({
           id: id,
           title: title || existing.title || '구단 일정',
-          type: String(row[2] || existing.type || '훈련').trim(),
-          date: datePart || existing.date || '',
-          time: timePart || existing.time || '10:00',
-          venue: String(row[4] || existing.venue || '').trim(),
-          note: String(row[9] !== undefined ? row[9] : (existing.note || '')).trim(),
+          type: typeVal || '훈련',
+          date: dtInfo.date || existing.date || '',
+          time: (dtInfo.time && dtInfo.time !== '00:00') ? dtInfo.time : (existing.time || '10:00'),
+          venue: cVenue !== -1 ? String(row[cVenue] || existing.venue || '').trim() : (existing.venue || ''),
+          note: cNote !== -1 ? String(row[cNote] !== undefined ? row[cNote] : (existing.note || '')).trim() : (existing.note || ''),
           rsvp: rsvp
         });
       }
@@ -375,27 +416,37 @@ function mergeVisibleSheetsIntoData(ss, data) {
     }
   }
 
-  // 2) WT_공지_커뮤니티_DB 직접 수정분 병합
+  // 2) WT_공지_커뮤니티_DB 직접 수정분 안전 병합 (데이터 행이 1개 이상일 때만 -> 빈 시트일 때 기존 공지 삭제 방지!)
   var ntSheet = ss.getSheetByName('WT_공지_커뮤니티_DB');
-  if (ntSheet && ntSheet.getLastRow() >= 1) {
+  if (ntSheet && ntSheet.getLastRow() >= 2) {
     var ntVals = ntSheet.getDataRange().getValues();
-    if (ntVals.length >= 1) {
+    var nhdr = ntVals[0] || [];
+    var ncId = findColIdx(nhdr, ['공지ID', 'ID']);
+    var ncAuth = findColIdx(nhdr, ['작성자']);
+    var ncTitle = findColIdx(nhdr, ['제목']);
+    var ncBody = findColIdx(nhdr, ['내용']);
+    var ncDate = findColIdx(nhdr, ['작성일시', '날짜']);
+
+    if (ncId !== -1 && ncTitle !== -1) {
       var ntById = {};
       data.notices.forEach(function(nt) { if (nt && nt.id) ntById[String(nt.id)] = nt; });
+      var seenNids = {};
       var sheetNotices = [];
       for (var j = 1; j < ntVals.length; j++) {
         var nrow = ntVals[j];
-        var nid = String(nrow[0] || '').trim();
-        var ntitle = String(nrow[2] || '').trim();
+        var nid = String(nrow[ncId] || '').trim();
+        var ntitle = String(nrow[ncTitle] || '').trim();
         if (!nid && !ntitle) continue;
         if (!nid) nid = 'nt_sheet_' + j;
+        if (seenNids[nid]) continue;
+        seenNids[nid] = true;
         var nExisting = ntById[nid] || { id: nid, comments: [] };
         sheetNotices.push({
           id: nid,
-          author: String(nrow[1] || nExisting.author || '운영진').trim(),
+          author: ncAuth !== -1 ? String(nrow[ncAuth] || nExisting.author || '운영진').trim() : (nExisting.author || '운영진'),
           title: ntitle || nExisting.title || '',
-          body: String(nrow[3] !== undefined ? nrow[3] : (nExisting.body || '')),
-          date: String(nrow[4] || nExisting.date || '').trim(),
+          body: ncBody !== -1 ? String(nrow[ncBody] !== undefined ? nrow[ncBody] : (nExisting.body || '')) : (nExisting.body || ''),
+          date: ncDate !== -1 ? String(nrow[ncDate] || nExisting.date || '').trim() : (nExisting.date || ''),
           pinned: !!nExisting.pinned,
           comments: nExisting.comments || []
         });
@@ -404,18 +455,24 @@ function mergeVisibleSheetsIntoData(ss, data) {
     }
   }
 
-  // 3) WT_주간미션_스탬프_DB 직접 수정분 병합 (제목/기간/달성자명단)
+  // 3) WT_주간미션_스탬프_DB 직접 수정분 안전 병합
   var msSheet = ss.getSheetByName('WT_주간미션_스탬프_DB');
   if (msSheet && msSheet.getLastRow() >= 2) {
     var msVals = msSheet.getDataRange().getValues();
-    var msById = {};
-    data.missions.forEach(function(m) { if (m && m.id) msById[String(m.id)] = m; });
-    for (var k = 1; k < msVals.length; k++) {
-      var mrow = msVals[k];
-      var mid = String(mrow[0] || '').trim();
-      if (mid && msById[mid]) {
-        if (mrow[1]) msById[mid].weekTitle = String(mrow[1]).trim();
-        if (mrow[2]) msById[mid].dateRange = String(mrow[2]).trim();
+    var mhdr = msVals[0] || [];
+    var mcId = findColIdx(mhdr, ['주차/미션ID', '미션ID', 'ID']);
+    var mcTitle = findColIdx(mhdr, ['미션제목', '제목']);
+    var mcRange = findColIdx(mhdr, ['기간']);
+    if (mcId !== -1) {
+      var msById = {};
+      data.missions.forEach(function(m) { if (m && m.id) msById[String(m.id)] = m; });
+      for (var k = 1; k < msVals.length; k++) {
+        var mrow = msVals[k];
+        var mid = String(mrow[mcId] || '').trim();
+        if (mid && msById[mid]) {
+          if (mcTitle !== -1 && mrow[mcTitle]) msById[mid].weekTitle = String(mrow[mcTitle]).trim();
+          if (mcRange !== -1 && mrow[mcRange]) msById[mid].dateRange = String(mrow[mcRange]).trim();
+        }
       }
     }
   }
