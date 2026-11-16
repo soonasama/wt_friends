@@ -1,0 +1,365 @@
+/* WT프렌즈 야구 기록실 - 2단계 확장 기능 전용 스타일 (다크/라이트/폴드 반응형 호환) */
+.wt-ext-wrap {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.wt-ext-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+[data-theme="light"] .wt-ext-card {
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.1);
+  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.06);
+}
+.wt-ext-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.wt-ext-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.wt-ext-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.wt-ext-badge.gold {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--gold);
+}
+.wt-ext-quickbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 14px;
+}
+.wt-ext-pillbtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 700;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--ink);
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.wt-ext-pillbtn:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+.wt-ext-pillbtn.pri {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border-color: transparent;
+  color: #ffffff;
+}
+[data-theme="light"] .wt-ext-pillbtn:not(.pri) {
+  background: #f8fafc;
+  border-color: rgba(15, 23, 42, 0.12);
+}
+
+/* 이닝별 경기 흐름 타임라인 */
+.wt-flow-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  padding: 12px 10px 8px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line);
+  overflow-x: auto;
+  margin-bottom: 12px;
+}
+[data-theme="light"] .wt-flow-chart {
+  background: #f8fafc;
+}
+.wt-flow-inn-col {
+  flex: 1;
+  min-width: 46px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+.wt-flow-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 54px;
+}
+.wt-flow-bar {
+  width: 12px;
+  border-radius: 4px 4px 2px 2px;
+  min-height: 4px;
+  transition: height 0.25s ease;
+}
+.wt-flow-bar.away {
+  background: #38bdf8;
+}
+.wt-flow-bar.home {
+  background: #10b981;
+}
+.wt-flow-bar.wt {
+  background: #f59e0b;
+}
+.wt-flow-lbl {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--sub);
+}
+.wt-flow-pts {
+  font-size: 10.5px;
+  font-weight: 800;
+  color: var(--ink2);
+}
+
+.wt-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.wt-tl-inn {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.02);
+}
+[data-theme="light"] .wt-tl-inn {
+  background: #f8fafc;
+}
+.wt-tl-inn-head {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: var(--accent);
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.wt-tl-half {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px dashed var(--line);
+}
+.wt-tl-half:first-of-type {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+.wt-tl-team {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--ink2);
+  margin-bottom: 4px;
+}
+.wt-tl-evs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.wt-ev-chip {
+  font-size: 11.5px;
+  padding: 3px 8px;
+  border-radius: 7px;
+  background: rgba(148, 163, 184, 0.12);
+  color: var(--ink2);
+  border: 1px solid transparent;
+}
+.wt-ev-chip.hit {
+  background: rgba(16, 185, 129, 0.16);
+  color: #34d399;
+  border-color: rgba(16, 185, 129, 0.3);
+  font-weight: 700;
+}
+[data-theme="light"] .wt-ev-chip.hit {
+  color: #047857;
+}
+.wt-ev-chip.run {
+  background: rgba(245, 158, 11, 0.18);
+  color: #fbbf24;
+  border-color: rgba(245, 158, 11, 0.35);
+  font-weight: 800;
+}
+[data-theme="light"] .wt-ev-chip.run {
+  color: #b45309;
+}
+
+/* 포지션 & 타구 방향 스프레이 */
+.wt-pos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.wt-pos-row {
+  display: grid;
+  grid-template-columns: 62px 1fr 48px;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+.wt-pos-bar-bg {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--line);
+  overflow: hidden;
+}
+.wt-pos-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #10b981, #38bdf8);
+}
+
+.wt-spray-grid {
+  display: grid;
+  grid-template-columns: minmax(220px, 280px) 1fr;
+  gap: 14px;
+  align-items: center;
+}
+@media (max-width: 640px) {
+  .wt-spray-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.wt-spray-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.wt-spray-table th,
+.wt-spray-table td {
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--line);
+  text-align: center;
+}
+.wt-spray-table th {
+  color: var(--sub);
+  font-weight: 700;
+}
+
+/* 아카이브 & 상대전적 필터/테이블 */
+.wt-arch-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.wt-arch-sel {
+  background: var(--card-solid);
+  color: var(--ink);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 7px 12px;
+  font-size: 13px;
+  font-weight: 700;
+}
+[data-theme="light"] .wt-arch-sel {
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.18);
+}
+.wt-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+@media (max-width: 560px) {
+  .wt-kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.wt-kpi-box {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px;
+  text-align: center;
+}
+[data-theme="light"] .wt-kpi-box {
+  background: #f8fafc;
+}
+.wt-kpi-val {
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--gold);
+}
+.wt-kpi-lbl {
+  font-size: 11px;
+  color: var(--sub);
+  margin-top: 2px;
+}
+.wt-game-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  text-decoration: none;
+  color: var(--ink);
+  margin-bottom: 7px;
+  transition: border-color 0.15s ease;
+}
+.wt-game-item:hover {
+  border-color: var(--accent);
+}
+.wt-game-item.is-wt {
+  border-color: rgba(245, 158, 11, 0.45);
+  background: rgba(245, 158, 11, 0.06);
+}
+.wt-res-pill {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+.wt-res-pill.w { background: rgba(16, 185, 129, 0.18); color: #10b981; }
+.wt-res-pill.l { background: rgba(239, 68, 68, 0.18); color: #ef4444; }
+.wt-res-pill.d { background: rgba(148, 163, 184, 0.2); color: var(--sub); }
+
+.wt-ms-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 8px;
+}
+.wt-ms-item {
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.02);
+  text-decoration: none;
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+[data-theme="light"] .wt-ms-item {
+  background: #f8fafc;
+}
+.wt-ms-item.is-wt {
+  border-color: rgba(245, 158, 11, 0.5);
+  background: rgba(245, 158, 11, 0.08);
+}
