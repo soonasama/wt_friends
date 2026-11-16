@@ -15456,13 +15456,6 @@ function openStatCardModal(playerKey) {
             </label>
             <div class="sc-chips" id="scChipBox"></div>
           </div>
-          <div class="sc-pro-box" onclick="this.closest('.sc-modal').remove(); openTeamProModal('${p.team.id}')">
-            <div>
-              <strong>🔒 우리 팀 연습경기·청백전 기록 합산 & 전력 분석</strong>
-              <small>KBSA 미등록 교류전 기록 입력 · 상대 투수 공략 시트</small>
-            </div>
-            <span class="sc-pro-pill">Team Pro ›</span>
-          </div>
           <div class="sc-actions">
             <button type="button" class="sc-btn pri" id="scShareBtn">📤 인스타 스토리 · 카톡 바로 공유</button>
             <button type="button" class="sc-btn sec" id="scSaveBtn">⬇️ 고화질 이미지 저장</button>
@@ -16406,34 +16399,6 @@ function openClubAwardStudio(teamId) {
   drawAwardCard();
 }
 
-/* Team Pro 구독 안내 모달 */
-function openTeamProModal(teamId) {
-  const t = Store.team(teamId) || Store.teams[0];
-  const wrap = document.createElement('div');
-  wrap.className = 'sc-modal';
-  wrap.onclick = () => wrap.remove();
-  wrap.innerHTML = `
-    <div class="sc-dialog" style="max-width:540px" onclick="event.stopPropagation()">
-      <div class="sc-head">
-        <b>⚡ 여자야구 기록실 Team Pro <span class="sc-pro-pill">구단 전용 라운지</span></b>
-        <button class="sc-close" onclick="this.closest('.sc-modal').remove()">×</button>
-      </div>
-      <div style="padding:20px;display:flex;flex-direction:column;gap:14px;line-height:1.6">
-        <div style="font-size:15px;font-weight:800;color:#34D399">${esc(t ? t.short : '우리 팀')} 감독·코치·총무님을 위한 올인원 기록 솔루션</div>
-        <p style="font-size:13px;color:var(--mute);line-height:1.6">팀 회비 월 9,900원으로 KBSA에 등록되지 않는 자체 연습경기 기록부터 상대 팀 맞춤형 스카우팅 리포트까지 한 번에 관리하세요.</p>
-        <div style="display:grid;gap:8px;background:rgba(255,255,255,.05);padding:14px;border-radius:12px;font-size:13px">
-          <div>✅ <b>비공식 연습경기·청백전 기록장:</b> 자체 경기 기록 입력 시 세이버메트릭스(wRC+, OPS) 자동 합산/분리 조회</div>
-          <div>✅ <b>원클릭 상대 팀 스카우팅 시트:</b> 다음 상대 팀 핵심 타자 TOP 3 및 선발 투수 공략 요약지 출력</div>
-          <div>✅ <b>구단 전용 스탯 카드 & 연말 어워드:</b> 워터마크 제거, 구단 커스텀 테마, 부문별 타이틀 수상자 자동 추출</div>
-        </div>
-        <button class="sc-btn pri" onclick="alert('베타 기간 얼리버드 신청이 접수되었습니다! 구단 대표자 오픈채팅/폼을 통해 우선 안내해 드립니다.');this.closest('.sc-modal').remove()">
-          🚀 우리 구단 Team Pro 무료 베타 신청하기
-        </button>
-      </div>
-    </div>
-  `;
-  document.body.appendChild(wrap);
-}
 
 
 /* =========================================================================
