@@ -12318,6 +12318,34 @@ html[data-theme="dark"] .ev-edit-btn:hover {
   }
 }
 
+
+/* === KBSA Hub Absorbed Features (Isolated) === */
+.pchip-wrap{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.pchip{display:inline-flex;align-items:center;padding:2px 6px;border-radius:6px;font-size:11px;font-weight:700;line-height:1.3;white-space:nowrap;border:1px solid transparent}
+.pchip.hit{background:rgba(37,99,235,0.12);color:#1d4ed8;border-color:rgba(37,99,235,0.25)}
+.pchip.walk{background:rgba(16,185,129,0.12);color:#047857;border-color:rgba(16,185,129,0.25)}
+.pchip.err{background:rgba(245,158,11,0.14);color:#b45309;border-color:rgba(245,158,11,0.3)}
+.pchip.out{background:rgba(100,116,139,0.1);color:var(--mute);border-color:rgba(100,116,139,0.18)}
+[data-theme="dark"] .pchip.hit{background:rgba(59,130,246,0.22);color:#93c5fd;border-color:rgba(59,130,246,0.35)}
+[data-theme="dark"] .pchip.walk{background:rgba(16,185,129,0.22);color:#6ee7b7;border-color:rgba(16,185,129,0.35)}
+[data-theme="dark"] .pchip.err{background:rgba(245,158,11,0.22);color:#fcd34d;border-color:rgba(245,158,11,0.35)}
+[data-theme="dark"] .pchip.out{background:rgba(148,163,184,0.14);color:#cbd5e1;border-color:rgba(148,163,184,0.22)}
+.gdiam-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.gdiam-btns{display:inline-flex;gap:4px;background:var(--bg2,rgba(148,163,184,0.12));padding:3px;border-radius:10px}
+.gdiam-btn{border:0;background:transparent;color:var(--mute);font-size:12px;font-weight:700;padding:5px 10px;border-radius:8px;cursor:pointer;transition:all .15s}
+.gdiam-btn.on{background:var(--card,#fff);color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,0.1)}
+.att-card{padding:12px 14px;margin-bottom:12px}
+.att-row{display:flex;justify-content:space-between;align-items:baseline;font-size:12.5px;margin-bottom:6px;gap:8px}
+.att-track{height:10px;border-radius:999px;background:rgba(148,163,184,0.2);overflow:hidden}
+.att-fill{height:100%;border-radius:999px;transition:width .35s ease}
+.hl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:8px}
+.hl-item{display:flex;flex-direction:column;gap:4px;padding:11px 12px;border-radius:12px;border:1px solid var(--bd);background:var(--card);text-decoration:none;color:inherit;transition:transform .12s}
+.hl-item:hover{transform:translateY(-1px)}
+.hl-tag{font-size:11px;font-weight:800;color:var(--acc,#2563eb)}
+.hl-val{font-size:16px;font-weight:900;color:var(--ink)}
+.hl-sub{font-size:11.5px;color:var(--mute);line-height:1.4}
+.pos-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;margin-bottom:4px}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
 </head>
@@ -12842,7 +12870,7 @@ const TABS=[
 ];
 const V={};
 const $app=document.getElementById('app');
-window.UI=null;var UI={sub:{},standComp:null,standDiv:'',gamesComp:'',gamesTeam:'',gamesMonth:'',gamesDiv:'',teamsSido:'',teamsDiv:'',rankCat:'TOT',rankQ:'',teamTab:'club',teamPitcher:'',teamOpp:'',gameTab:'h',playerTab:'bat'};
+window.UI=null;var UI={sub:{},standComp:null,standDiv:'',gamesComp:'',gamesTeam:'',gamesMonth:'',gamesDiv:'',teamsSido:'',teamsDiv:'',rankCat:'TOT',rankQ:'',rankPos:'',teamTab:'club',teamPitcher:'',teamOpp:'',gameTab:'h',gameDiam:'',playerTab:'bat'};
 
 
 // =========================================================================
@@ -13310,6 +13338,60 @@ V.games.bind=()=>{
     render();
   };
 };
+
+const posShort=p=>POS[p]||String(p||'').replace(/수$/,'')||'-';
+function playChips(str){
+  const s=String(str||'').trim();
+  if(!s)return '<span class="sub">-</span>';
+  return '<div class="pchip-wrap">'+s.split(/\s+/).map(tok=>{
+    let cls='out';
+    if(/홈런|3루타|2루타|안타|내안|번안|좌안|중안|우안|좌중|우중|월|1안/.test(tok))cls='hit';
+    else if(/실책|실출|야선|야수선택|낫아웃/.test(tok)&&!/실책사/.test(tok))cls='err';
+    else if(/볼넷|4구|사구|고의|도루(?!자)|득점/.test(tok))cls='walk';
+    return `<span class="pchip ${cls}">${esc(tok)}</span>`;
+  }).join('')+'</div>';
+}
+function posDiamondSvg(slots, opts={}){
+  const tc=opts.color||'#1d4ed8';
+  const coords={
+    '중견':[180,36],'좌익':[68,66],'우익':[292,66],
+    '유격':[128,118],'2루':[232,118],
+    '3루':[84,166],'1루':[276,166],
+    '투수':[180,174],'포수':[180,248]
+  };
+  const nodes=Object.entries(coords).map(([pos,[x,y]])=>{
+    const it=slots[pos];
+    const nm=it?esc(it.name):'-';
+    const sub=it&&it.sub?esc(it.sub):'';
+    const w=Math.max(66, Math.min(96, (nm.length*10)+24));
+    const h=sub?34:24;
+    const rx=x-w/2, ry=y-h/2;
+    return `<g>
+      <rect x="${rx}" y="${ry}" width="${w}" height="${h}" rx="8" fill="rgba(15,23,42,0.88)" stroke="${it?tc:'rgba(148,163,184,0.4)'}" stroke-width="1.4"/>
+      <rect x="${rx+3}" y="${ry+3}" width="28" height="14" rx="4" fill="${it?tc:'#475569'}"/>
+      <text x="${rx+17}" y="${ry+13}" text-anchor="middle" font-size="9.5" font-weight="800" fill="#ffffff">${pos}</text>
+      <text x="${rx+35}" y="${ry+13.5}" text-anchor="start" font-size="10.5" font-weight="800" fill="#ffffff">${nm.slice(0,5)}</text>
+      ${sub?`<text x="${x}" y="${ry+28}" text-anchor="middle" font-size="9" font-weight="700" fill="#cbd5e1">${sub}</text>`:''}
+    </g>`;
+  }).join('');
+  return `<svg viewBox="0 0 360 278" style="width:100%;max-width:440px;margin:0 auto;display:block" role="img" aria-label="포지션 다이아몬드">
+    <defs>
+      <linearGradient id="gGrass" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#15803d" stop-opacity="0.24"/>
+        <stop offset="100%" stop-color="#166534" stop-opacity="0.38"/>
+      </linearGradient>
+    </defs>
+    <path d="M 180 258 L 16 94 A 230 230 0 0 1 344 94 Z" fill="url(#gGrass)" stroke="rgba(34,197,94,0.35)" stroke-width="1.5"/>
+    <polygon points="180,104 268,176 180,248 92,176" fill="rgba(180,83,9,0.18)" stroke="rgba(217,119,6,0.45)" stroke-width="1.5"/>
+    <circle cx="180" cy="176" r="10" fill="rgba(217,119,6,0.35)" stroke="rgba(255,255,255,0.5)" stroke-width="1"/>
+    <rect x="176" y="100" width="8" height="8" transform="rotate(45 180 104)" fill="#ffffff"/>
+    <rect x="264" y="172" width="8" height="8" transform="rotate(45 268 176)" fill="#ffffff"/>
+    <rect x="88" y="172" width="8" height="8" transform="rotate(45 92 176)" fill="#ffffff"/>
+    <polygon points="180,252 175,247 175,243 185,243 185,247" fill="#ffffff"/>
+    ${nodes}
+  </svg>`;
+}
+
 V.game=(q,id)=>{
   const S=Store,g=S.game(id);if(!g)return '<div class="empty">경기를 찾을 수 없습니다</div>';
   const B=S.batOf(g),P=S.pitOf(g);
@@ -13328,16 +13410,32 @@ let body='';
       const ch=teamTheme(g.home).bg,ca0=teamTheme(g.away).bg;const rgb=x=>[1,3,5].map(i=>parseInt(x.substr(i,2),16));const ca=Math.hypot(...rgb(ch).map((v,i)=>v-rgb(ca0)[i]))<110?'#E5381B':ca0;
       const top=t=>B.filter(b=>b.team.i===t.i&&b.PA>0).map(b=>({b,i:S.bIdx(S.prod(b),b.PA)+b.RBI*10})).sort((x,y)=>y.i-x.i).slice(0,3);
       const line=b=>`${b.AB}타수 ${b.H}안타${b.HR?' '+b.HR+'홈런':''}${b.RBI?' '+b.RBI+'타점':''}${b.R?' '+b.R+'득점':''}${b.SB?' '+b.SB+'도루':''}${b.BB+b.HBP?' '+(b.BB+b.HBP)+'사사구':''}`;
+      const diamSide=(UI.gameDiam==='a'&&g.boxA)?'a':(UI.gameDiam==='h'&&g.boxH)?'h':(g.away.id==='aSEa0076'&&g.boxA)?'a':(g.boxH?'h':'a');
+      const dTeam=diamSide==='a'?g.away:g.home;
+      const dSlots={};
+      B.filter(b=>b.team.i===dTeam.i&&b.starter).forEach(b=>{const k=posShort(b.pos);if(!dSlots[k])dSlots[k]={name:b.name,sub:b.order?`${b.order}번`:''};});
+      const dSp=P.find(p=>p.team.i===dTeam.i&&p.seq===1);
+      if(dSp&&!dSlots['투수'])dSlots['투수']={name:dSp.name,sub:'선발투수'};
       body=`<div class="card">${vsBars([{label:'안타',a:h.H,b:a.H},{label:'장타',a:h.B2+h.B3+h.HR,b:a.B2+a.B3+a.HR},{label:'볼넷+사구',a:h.BB+h.HBP,b:a.BB+a.HBP},{label:'삼진',a:h.SO,b:a.SO},{label:'도루',a:h.SB,b:a.SB},{label:'실책 출루',a:h.ROE,b:a.ROE},{label:'투구 수',a:hp.pitches,b:ap.pitches},{label:'등판 투수',a:hp.G,b:ap.G}],ch,ca,g.home.short,g.away.short)}</div>
-      <div class="grid g2" style="margin-top:10px">${[g.home,g.away].map(t=>`<div class="card lcard"><h3>${esc(t.short)} 활약 선수</h3>${top(t).map(x=>`<div class="leader"><div class="who">${plink(t,x.b.name)}<small>${line(x.b)}</small></div></div>`).join('')||'<div class="sub">기록 없음</div>'}</div>`).join('')}</div>`;}
+      <div class="card" style="margin-top:10px">
+        <div class="gdiam-head">
+          <h3 style="margin:0;font-size:15px;font-weight:800">⚾ 선발 수비 포지션</h3>
+          <div class="gdiam-btns">
+            ${g.boxH?`<button class="gdiam-btn ${diamSide==='h'?'on':''}" data-gdiam="h">${esc(g.home.short)} (홈)</button>`:''}
+            ${g.boxA?`<button class="gdiam-btn ${diamSide==='a'?'on':''}" data-gdiam="a">${esc(g.away.short)} (원정)</button>`:''}
+          </div>
+        </div>
+        ${posDiamondSvg(dSlots,{color:teamTheme(dTeam).bg})}
+      </div>
+      <div class="grid g2" style="margin-top:10px">${[g.home,g.away].map(t=>`<div class="card lcard"><h3>${esc(t.short)} 활약 선수</h3>${top(t).map(x=>`<div class="leader"><div class="who">${plink(t,x.b.name)} <span class="pill" style="font-size:10.5px;padding:1px 6px;margin-left:4px">${x.b.order?x.b.order+'번 ':''}${esc(posShort(x.b.pos))}</span><small>${line(x.b)}</small></div></div>`).join('')||'<div class="sub">기록 없음</div>'}</div>`).join('')}</div>`;}
     body+=note('box','src');
   }else{
     const side=T.cur==='a'?g.away:g.home,has=T.cur==='a'?g.boxA:g.boxH;
     const bs=B.filter(b=>b.team.i===side.i).sort((a,b)=>a.order-b.order),ps=P.filter(p=>p.team.i===side.i).sort((a,b)=>a.seq-b.seq),tot=S.sumBat(bs);
     const pl=r=>side.combined?esc(r.name):plink(side,r.name);
     body=has?`<h2>타자</h2>${table([{k:'order',t:'타순',f:r=>r._tot?'':r.starter?r.order:'교체',nosort:1},{k:'name',t:'선수',l:1,cls:'name',f:r=>r._tot?'<b>합계</b>':pl(r)},
-       {k:'pos',t:'포지션',l:1},{k:'PA',t:'타석'},{k:'AB',t:'타수'},{k:'H',t:'안타'},{k:'B2',t:'2루타'},{k:'B3',t:'3루타'},{k:'HR',t:'홈런'},
-       {k:'RBI',t:'타점'},{k:'R',t:'득점'},{k:'SB',t:'도루'},{k:'CS',t:'도루자'},{k:'BB',t:'볼넷'},{k:'HBP',t:'사구'},{k:'SO',t:'삼진'},{k:'SF',t:'희비'},{k:'SH',t:'희타'},{k:'plays',t:'타석 결과',l:1,cls:'plays',nosort:1}],
+       {k:'pos',t:'포지션',l:1,f:r=>r._tot?'':esc(posShort(r.pos))},{k:'PA',t:'타석'},{k:'AB',t:'타수'},{k:'H',t:'안타'},{k:'B2',t:'2루타'},{k:'B3',t:'3루타'},{k:'HR',t:'홈런'},
+       {k:'RBI',t:'타점'},{k:'R',t:'득점'},{k:'SB',t:'도루'},{k:'CS',t:'도루자'},{k:'BB',t:'볼넷'},{k:'HBP',t:'사구'},{k:'SO',t:'삼진'},{k:'SF',t:'희비'},{k:'SH',t:'희타'},{k:'plays',t:'타석 결과',l:1,cls:'plays',nosort:1,f:r=>r._tot?'':playChips(r.plays)}],
        bs.concat([Object.assign({name:'합계',order:'',pos:'',starter:true,plays:'',_tot:1},tot)]),{nosort:1,limit:30,rowClass:r=>r._tot?'tot':(r.starter?'':'sub-row')})}
       <h2>투수</h2>${table([{k:'name',t:'투수',l:1,cls:'name',f:pl},{k:'dec',t:'결정',l:1},{k:'outs',t:'이닝',f:r=>ipStr(r.outs)},{k:'BF',t:'타자'},{k:'AB',t:'타수'},{k:'pitches',t:'투구수'},{k:'H',t:'피안타'},{k:'HR',t:'피홈런'},
        {k:'BB',t:'볼넷'},{k:'HBP',t:'사구'},{k:'SO',t:'삼진'},{k:'WP',t:'폭투'},{k:'BK',t:'보크'},{k:'R',t:'실점'},{k:'ER',t:'자책'}],ps,{nosort:1})}`
@@ -13355,6 +13453,7 @@ let body='';
 V.game.bind=()=>{
   const mvpBtn=$app.querySelector('[data-gmvp]');
   if(mvpBtn)mvpBtn.onclick=()=>openGameMvpStudio(mvpBtn.dataset.gmvp);
+  $app.querySelectorAll('[data-gdiam]').forEach(b=>b.onclick=()=>{UI.gameDiam=b.dataset.gdiam;const y=scrollY;render();scrollTo(0,y)});
 };
 
 V.teams=()=>{
@@ -13665,6 +13764,72 @@ V.team=(q,id)=>{
           ${lineChart(A.games.filter(x=>x.bidx!=null).map(x=>({y:x.bidx,label:md(x.g.date),color:x.res==='승'?tc:x.res==='패'?'#9AA4B5':'#C7CDD8',title:`${md(x.g.date)} vs ${x.opp.short} ${x.res||''} 효율 ${x.bidx}`})),{ref:100,refLabel:'팀 평균 100',color:tc,legend:`<span><i style="background:${tc}"></i>승리 경기</span><span><i style="background:#9AA4B5"></i>패배 경기</span>`})}
         </div>
       </div>
+      ${(()=>{
+        const rs=A.games.reduce((a,x)=>a+(x.rf||0),0), ra=A.games.reduce((a,x)=>a+(x.ra||0),0);
+        const pyth=(rs+ra)>0?(rs*rs)/(rs*rs+ra*ra):0.5;
+        const wPct=r.PCT||0;
+        const diff=wPct-pyth;
+        const pythMsg=Math.abs(diff)<0.03?'득실점 밸런스와 실제 성적이 거의 일치하는 탄탄한 시즌입니다.':diff>0?`기대승률보다 <b>${(diff*100).toFixed(1)}%p</b> 높은 승률을 기록하며 접전 승부에서 강한 모습을 보였습니다.`:`득실점 대비 실제 승률이 <b>${(Math.abs(diff)*100).toFixed(1)}%p</b> 낮아 아쉽게 놓친 접전 경기가 많았습니다.`;
+        // Team position map from starters + KBSA_FLD
+        const pCounts={};
+        A.games.forEach(x=>{
+          S.batOf(x.g).filter(b=>b.team.i===t.i&&b.starter).forEach(b=>{
+            const k=posShort(b.pos);
+            if(!pCounts[k])pCounts[k]={};
+            pCounts[k][b.name]=(pCounts[k][b.name]||0)+1;
+          });
+          const sp=S.pitOf(x.g).find(p=>p.team.i===t.i&&p.seq===1);
+          if(sp){pCounts['투수']=pCounts['투수']||{};pCounts['투수'][sp.name]=(pCounts['투수'][sp.name]||0)+1;}
+        });
+        const tSlots={};
+        Object.entries(pCounts).forEach(([pos,mp])=>{
+          const sorted=Object.entries(mp).sort((a,b)=>b[1]-a[1]);
+          const tot=sorted.reduce((s,x)=>s+x[1],0)||1;
+          if(sorted[0]){
+            const pl=S.player(t.id+'|'+sorted[0][0]);
+            tSlots[pos]={name:sorted[0][0],sub:`${pl&&pl.no?'#'+pl.no+' · ':''}${Math.round(sorted[0][1]/tot*100)}%`};
+          }
+        });
+        // Single-game highlights for this team
+        let bestRbi=null,bestH=null,bestSb=null,bestPit=null;
+        A.games.forEach(x=>{
+          S.batOf(x.g).filter(b=>b.team.i===t.i).forEach(b=>{
+            if(!bestRbi||b.RBI>bestRbi.v)bestRbi={v:b.RBI,n:b.name,g:x.g,opp:x.opp};
+            if(!bestH||b.H>bestH.v)bestH={v:b.H,n:b.name,g:x.g,opp:x.opp};
+            if(!bestSb||b.SB>bestSb.v)bestSb={v:b.SB,n:b.name,g:x.g,opp:x.opp};
+          });
+          S.pitOf(x.g).filter(p=>p.team.i===t.i).forEach(p=>{
+            const sc=p.outs*2+p.SO-p.ER*3;
+            if(!bestPit||sc>bestPit.sc)bestPit={sc,outs:p.outs,so:p.SO,er:p.ER,n:p.name,g:x.g,opp:x.opp};
+          });
+        });
+        const hls=[
+          bestRbi&&bestRbi.v>0?{tag:'🔥 한 경기 최다 타점',val:`${bestRbi.n} (${bestRbi.v}타점)`,sub:`${md(bestRbi.g.date)} vs ${bestRbi.opp.short}`,id:bestRbi.g.id}:null,
+          bestH&&bestH.v>0?{tag:'💥 한 경기 최다 안타',val:`${bestH.n} (${bestH.v}안타)`,sub:`${md(bestH.g.date)} vs ${bestH.opp.short}`,id:bestH.g.id}:null,
+          bestSb&&bestSb.v>0?{tag:'⚡ 한 경기 최다 도루',val:`${bestSb.n} (${bestSb.v}도루)`,sub:`${md(bestSb.g.date)} vs ${bestSb.opp.short}`,id:bestSb.g.id}:null,
+          bestPit?{tag:'🎯 최고 역투',val:`${bestPit.n} (${ipStr(bestPit.outs)}이닝 ${bestPit.so}K)`,sub:`${md(bestPit.g.date)} vs ${bestPit.opp.short} · ${bestPit.er}자책`,id:bestPit.g.id}:null
+        ].filter(Boolean);
+        return `
+        <div class="grid g2" style="margin-top:16px">
+          <div class="card">
+            <h3 style="font-size:15px;font-weight:800;margin-bottom:8px">📊 피타고리안 기대승률</h3>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px">
+              <div><span class="sub">기대승률</span> <b style="font-size:20px;color:${tc}">${pct(pyth)}</b></div>
+              <div><span class="sub">실제승률</span> <b style="font-size:18px">${pct(wPct)}</b></div>
+            </div>
+            <div class="att-track"><div class="att-fill" style="width:${Math.round(pyth*100)}%;background:${tc}"></div></div>
+            <p class="sub" style="margin-top:8px;line-height:1.55">총 ${rs}득점 · ${ra}실점 기준 — ${pythMsg}</p>
+            ${hls.length?`<div style="margin-top:14px"><h4 style="font-size:13px;font-weight:800;margin-bottom:4px">🏅 2026 한 경기 하이라이트</h4><div class="hl-grid">${hls.map(h=>`<a class="hl-item" href="#/game/${h.id}"><span class="hl-tag">${h.tag}</span><span class="hl-val">${esc(h.val)}</span><span class="hl-sub">${esc(h.sub)}</span></a>`).join('')}</div></div>`:''}
+          </div>
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px">
+              <h3 style="font-size:15px;font-weight:800">🗺️ 시즌 팀 포지션 맵</h3>
+              <span class="sub">선발 최다 출전 비율</span>
+            </div>
+            ${posDiamondSvg(tSlots,{color:tc})}
+          </div>
+        </div>`;
+      })()}
       <h2>대회별 성적</h2><div class="card">${Object.entries(comp).map(([k,c])=>`<div class="srow"><div class="sl"><div>${esc(k)}<small>${c.W}승 ${c.L}패${c.D?' '+c.D+'무':''}</small></div><b>${pct((c.W+c.L)?c.W/(c.W+c.L):0)}</b></div>${stackBar([{v:c.W,color:'#10b981',label:c.W+'승'},{v:c.D,color:'#64748b',label:c.D+'무'},{v:c.L,color:'#f43f5e',label:c.L+'패'}])}</div>`).join('')}</div>
       ${note('gameEff','bidxT','standings')}`;}
     if(s.cur==='players'){
@@ -13870,11 +14035,19 @@ V.players = () => {
   const S = Store;
   const c = CATS.find(x => x.k === UI.rankCat) || CATS[0];
   const qy = UI.rankQ.trim();
+  const pf = UI.rankPos || '';
+  const posCounts = {
+    '': S.players.length,
+    '투수': S.players.filter(p=>posShort(p.mainPos)==='투수').length,
+    '포수': S.players.filter(p=>posShort(p.mainPos)==='포수').length,
+    '내야': S.players.filter(p=>['1루','2루','3루','유격'].includes(posShort(p.mainPos))).length,
+    '외야': S.players.filter(p=>['좌익','중견','우익'].includes(posShort(p.mainPos))).length
+  };
   let rows;
   if (qy) {
-    rows = S.players.filter(p => p.name.includes(qy) || p.team.short.includes(qy)).sort((a,b) => (b.B.PA + b.P.BF) - (a.B.PA + a.P.BF)).slice(0, 100);
+    rows = S.players.filter(p => (p.name.includes(qy) || p.team.short.includes(qy)) && (!pf || (pf==='투수'?posShort(p.mainPos)==='투수':pf==='포수'?posShort(p.mainPos)==='포수':pf==='내야'?['1루','2루','3루','유격'].includes(posShort(p.mainPos)):['좌익','중견','우익'].includes(posShort(p.mainPos))))).sort((a,b) => (b.B.PA + b.P.BF) - (a.B.PA + a.P.BF)).slice(0, 100);
   } else {
-    rows = S.players.filter(p => (c.q ? c.q(p) : true) && c.v(p) != null && (c.pit ? p.P.G > 0 : p.B.PA > 0)).sort((a,b) => c.v(b) - c.v(a)).slice(0, 50);
+    rows = S.players.filter(p => (c.q ? c.q(p) : true) && c.v(p) != null && (c.pit ? p.P.G > 0 : p.B.PA > 0) && (!pf || (pf==='투수'?posShort(p.mainPos)==='투수':pf==='포수'?posShort(p.mainPos)==='포수':pf==='내야'?['1루','2루','3루','유격'].includes(posShort(p.mainPos)):['좌익','중견','우익'].includes(posShort(p.mainPos))))).sort((a,b) => c.v(b) - c.v(a)).slice(0, 50);
   }
   const val = c.f || (p => c.v(p));
   
@@ -13928,6 +14101,9 @@ V.players = () => {
     </div>
   </div>
   <div class="ctrl" style="margin-top:12px"><input id="q" type="search" placeholder="선수 또는 구단 이름 검색" value="${esc(UI.rankQ)}" autocomplete="off" autocapitalize="off" spellcheck="false"></div>
+  <div class="pos-chips" id="rankPosChips">
+    ${[['','전체'],['투수','투수'],['포수','포수'],['내야','내야'],['외야','외야']].map(([k,lb])=>`<button class="chip ${pf===k?'on':''}" data-rpos="${k}">${lb} <span style="opacity:.75;font-size:11px">${posCounts[k]}</span></button>`).join('')}
+  </div>
   ${qy ? '' : `<div class="chips" id="rankCatChips">${CATS.map(x => `<button class="chip ${x.k===c.k?'on':''}" data-cat="${x.k}">${x.t}</button>`).join('')}</div>`}
   <div class="tw-fixed-wrap" id="rankTableArea">${res}</div>
   ${note('qual', 'rates', 'prates', 'bidxL', 'pidxL', 'src')}`;
@@ -13937,11 +14113,13 @@ function updatePlayerRankTableDirect() {
   const S = Store;
   const c = CATS.find(x => x.k === UI.rankCat) || CATS[0];
   const qy = UI.rankQ.trim();
+  const pf = UI.rankPos || '';
+  const matchPos = p => !pf || (pf==='투수'?posShort(p.mainPos)==='투수':pf==='포수'?posShort(p.mainPos)==='포수':pf==='내야'?['1루','2루','3루','유격'].includes(posShort(p.mainPos)):['좌익','중견','우익'].includes(posShort(p.mainPos)));
   let rows;
   if (qy) {
-    rows = S.players.filter(p => p.name.includes(qy) || p.team.short.includes(qy)).sort((a,b) => (b.B.PA + b.P.BF) - (a.B.PA + a.P.BF)).slice(0, 100);
+    rows = S.players.filter(p => (p.name.includes(qy) || p.team.short.includes(qy)) && matchPos(p)).sort((a,b) => (b.B.PA + b.P.BF) - (a.B.PA + a.P.BF)).slice(0, 100);
   } else {
-    rows = S.players.filter(p => (c.q ? c.q(p) : true) && c.v(p) != null && (c.pit ? p.P.G > 0 : p.B.PA > 0)).sort((a,b) => c.v(b) - c.v(a)).slice(0, 50);
+    rows = S.players.filter(p => (c.q ? c.q(p) : true) && c.v(p) != null && (c.pit ? p.P.G > 0 : p.B.PA > 0) && matchPos(p)).sort((a,b) => c.v(b) - c.v(a)).slice(0, 50);
   }
   const val = c.f || (p => c.v(p));
   const res = qy 
@@ -13974,6 +14152,11 @@ V.players.bind=()=>{
   $app.querySelectorAll('[data-cat]').forEach(b=>b.onclick=()=>{
     UI.rankCat=b.dataset.cat;
     $app.querySelectorAll('[data-cat]').forEach(x => x.classList.toggle('on', x.dataset.cat === UI.rankCat));
+    updatePlayerRankTableDirect();
+  });
+  $app.querySelectorAll('[data-rpos]').forEach(b=>b.onclick=()=>{
+    UI.rankPos=b.dataset.rpos;
+    $app.querySelectorAll('[data-rpos]').forEach(x => x.classList.toggle('on', x.dataset.rpos === UI.rankPos));
     updatePlayerRankTableDirect();
   });
   const q = document.getElementById('q');
@@ -14298,7 +14481,10 @@ V.player=(q,key)=>{
     if(s.cur==='sum'){
       const rows=p.bat.filter(b=>b.PA>0);const roll=rows.map((b,i)=>{const w=rows.slice(Math.max(0,i-4),i+1);const ab=w.reduce((a,x)=>a+x.AB,0),h=w.reduce((a,x)=>a+x.H,0);return {y:ab?Math.round(h/ab*1000):null,label:md(b.game.date),title:`${md(b.game.date)}까지 최근 ${w.length}경기 타율 ${ab?f3(h/ab):'-'}`}});
       const pr=HEX.pctOf('정확성',B.AB?B.H/B.AB:null);
-      body+=`${effCards(p)}
+      const teamG=Math.max(1, S.gamesOf(p.team).filter(g=>g.hs!=null).length);
+      const playedG=new Set([...p.bat.map(x=>x.game.id),...p.pit.map(x=>x.game.id)]).size;
+      const attPct=Math.min(100, Math.round(playedG/teamG*100));
+      body+=`<div class="card att-card"><div class="att-row"><b>🏃 시즌 팀 경기 출전률</b><span><b>${playedG}</b> / 팀 ${teamG}경기 출전 (<b style="color:${tc}">${attPct}%</b>)</span></div><div class="att-track"><div class="att-fill" style="width:${attPct}%;background:${tc}"></div></div></div>${effCards(p)}
       <div class="card" style="margin-top:10px"><b>한 줄 평가</b><p class="sub" style="margin-top:4px;line-height:1.7">${playerSummary(p,D,C,R,pr)}</p></div>
       <h2>가치 구성 <span class="sub">어디서 점수를 얻었나</span></h2>${effDetail(p)}
       <h2>2026 통합 기록</h2><div class="cg big">${[['경기',B.G],['타석',B.PA],['타수',B.AB],['안타',B.H],['2루타',B.B2],['3루타',B.B3],['홈런',B.HR],['타점',B.RBI],['득점',B.R],['도루',B.SB],['볼넷',B.BB],['사구',B.HBP],['삼진',B.SO],['장타율',f3(B.SLG)],['OPS',f3(B.OPS)],['타율',f3(B.AVG)],['출루율',f3(B.OBP)],['수비율',D?f3(D.pct):'-'],['실책',D?fmtN(D.e):'-'],['이닝 종료 아웃',B.EO],['2아웃 출루',`${B.T2OB}/${B.T2PA}`]].map(([k,v])=>`<div><span>${k}</span><b>${v}</b></div>`).join('')}</div>
@@ -14345,7 +14531,7 @@ V.player=(q,key)=>{
       {k:'idx',t:'효율',v:b=>b.PA?S.bIdx(S.prod(b),b.PA):null,f:b=>b.PA?S.bIdx(S.prod(b),b.PA):'-'},{k:'plays',t:'타석 결과',l:1,cls:'plays',nosort:1}],p.bat.slice().reverse(),{})+note('box','bidxL');
   }
   if(tab==='pit'){const P=p.P;const s=subtabs('pp',[['sum','요약'],['hex','능력치 레이더'],['season','시즌 기록'],['log','경기별']]);body=s.html;
-    if(s.cur==='sum'){body+=`${effCards(p)}<div class="stats" style="margin-top:10px"><div class="stat"><b>${P.outs>=9?f2(P.ERA):'-'}</b><span>평균자책</span></div><div class="stat"><b>${P.W}-${P.L}</b><span>승-패</span></div><div class="stat"><b>${P.outs>=9?(P.IDX>=999?'—':P.IDX):'-'}</b><span>효율지수 ${P.outs>=9?grade(P.IDX):''}</span></div></div>
+    if(s.cur==='sum'){const teamG=Math.max(1, S.gamesOf(p.team).filter(g=>g.hs!=null).length);const playedG=new Set([...p.bat.map(x=>x.game.id),...p.pit.map(x=>x.game.id)]).size;const attPct=Math.min(100, Math.round(playedG/teamG*100));body+=`<div class="card att-card"><div class="att-row"><b>🏃 시즌 팀 경기 출전률</b><span><b>${playedG}</b> / 팀 ${teamG}경기 출전 (<b style="color:${tc}">${attPct}%</b>)</span></div><div class="att-track"><div class="att-fill" style="width:${attPct}%;background:${tc}"></div></div></div>${effCards(p)}<div class="stats" style="margin-top:10px"><div class="stat"><b>${P.outs>=9?f2(P.ERA):'-'}</b><span>평균자책</span></div><div class="stat"><b>${P.W}-${P.L}</b><span>승-패</span></div><div class="stat"><b>${P.outs>=9?(P.IDX>=999?'—':P.IDX):'-'}</b><span>효율지수 ${P.outs>=9?grade(P.IDX):''}</span></div></div>
       ${p.ptype?`<div class="card" style="margin-top:10px">${typePill(p.ptype)} <span class="sub">탈삼진 ${(p.kRate*100).toFixed(1)}% · 볼넷+사구 ${(p.wRate*100).toFixed(1)}%</span><p class="sub" style="margin-top:6px">${TYPE_OF(p.ptype).feat}</p></div>`:''}
       <h2>경기별 투구</h2>${lineChart(p.pit.map(r=>{const i=S.pIdx(S.allowed(r),r.BF);return {y:i==null?null:Math.min(300,i),label:md(r.game.date),title:`${md(r.game.date)} vs ${opp(r).short} ${ipStr(r.outs)}이닝 ${r.R}실점(${r.ER}자책)`}}),{ref:100,refLabel:'리그 평균',color:tc,title:'경기별 투수 효율'})||''}
       <div class="card" style="margin-top:10px">${barList(p.pit.slice(-8).reverse().map(r=>({label:`${md(r.game.date)} ${esc(opp(r).short)}`,sub:`${r.seq===1?'선발':'구원'} · ${r.BF}타자 · ${r.H}피안타 ${r.BB+r.HBP}사사구 ${r.SO}삼진 · ${r.R}실점`,v:r.outs,text:ipStr(r.outs)+'이닝',color:tc})))}</div>
