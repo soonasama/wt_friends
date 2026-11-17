@@ -421,21 +421,16 @@
     const years = core.years || [];
     let selYear = 'all';
     let onlyWT = true;
+    let limit = 80;
 
     function draw() {
       const gamesAll = core.games || [];
-      const filtered = gamesAll.filter(g => {
-        const yOk = selYear === 'all' || String(g[0]).startsWith(selYear);
-        const wtOk = !onlyWT || g[1] === WT_ID || g[2] === WT_ID;
-        return yOk && wtOk;
-      });
-      // WT프렌즈 경기 최우선 정렬
-      filtered.sort((a, b) => {
-        const aw = (a[1] === WT_ID || a[2] === WT_ID) ? 0 : 1;
-        const bw = (b[1] === WT_ID || b[2] === WT_ID) ? 0 : 1;
-        if (aw !== bw) return aw - bw;
-        return String(b[0]).localeCompare(String(a[0]));
-      });
+      const yearGames = gamesAll.filter(g => selYear === 'all' || String(g[0]).startsWith(selYear));
+      const wtCount = yearGames.filter(g => g[1] === WT_ID || g[2] === WT_ID).length;
+      const allCount = yearGames.length;
+
+      const filtered = onlyWT ? yearGames.filter(g => g[1] === WT_ID || g[2] === WT_ID) : yearGames.slice();
+      filtered.sort((a, b) => String(b[0]).localeCompare(String(a[0])));
 
       // WT프렌즈 요약 계산
       const wtList = gamesAll.filter(g => (selYear === 'all' || String(g[0]).startsWith(selYear)) && (g[1] === WT_ID || g[2] === WT_ID));
@@ -452,7 +447,8 @@
       const wtDivs = (core.teams && core.teams[WT_ID] && core.teams[WT_ID].d) || {};
       const divNote = selYear !== 'all' && wtDivs[selYear] ? ` (${wtDivs[selYear]}리그)` : '';
 
-      const listHtml = filtered.slice(0, 80).map(g => {
+      const shown = filtered.slice(0, limit);
+      const listHtml = shown.map(g => {
         const [dt, aId, hId, as, hs, comp, grp, , , , gid] = g;
         const isWt = aId === WT_ID || hId === WT_ID;
         const aName = teamName(core, aId), hName = teamName(core, hId);
@@ -487,9 +483,8 @@
                 <option value="all" ${selYear === 'all' ? 'selected' : ''}>전체 14시즌 (2013~2026)</option>
                 ${years.map(y => `<option value="${y}" ${selYear === y ? 'selected' : ''}>${y} 시즌</option>`).join('')}
               </select>
-              <button type="button" class="wt-ext-pillbtn ${onlyWT ? 'pri' : ''}" id="wtArchToggleWT">
-                ${onlyWT ? '⭐ WT프렌즈 경기만 보기' : '전체 팀 경기 보기'}
-              </button>
+              <button type="button" class="wt-ext-pillbtn ${onlyWT ? 'pri' : ''}" id="wtArchBtnWT">⭐ WT프렌즈만 (${wtCount})</button>
+              <button type="button" class="wt-ext-pillbtn ${!onlyWT ? 'pri' : ''}" id="wtArchBtnAll">⚾ 전체 구단 경기 (${allCount})</button>
             </div>
             <div style="font-size:12.5px;font-weight:700;color:var(--gold);margin-bottom:8px">
               WT프렌즈 ${selYear === 'all' ? '역대 통산' : selYear + ' 시즌'}${esc(divNote)} 요약
@@ -500,13 +495,17 @@
               <div class="wt-kpi-box"><div class="wt-kpi-val">${pct}</div><div class="wt-kpi-lbl">승률</div></div>
               <div class="wt-kpi-box"><div class="wt-kpi-val">${rf} / ${ra}</div><div class="wt-kpi-lbl">득점 / 실점</div></div>
             </div>
-            <div style="font-size:12px;color:var(--sub);margin-bottom:8px">총 ${filtered.length}경기 (최대 80경기 표시 · 클릭 시 경기 흐름 상세)</div>
+            <div style="font-size:12px;color:var(--sub);margin-bottom:8px">총 ${filtered.length}경기 중 ${shown.length}경기 표시 · 클릭 시 경기 흐름 상세</div>
             <div>${listHtml || '<div class="empty">해당 조건의 경기가 없습니다.</div>'}</div>
+            ${filtered.length > limit ? `<div style="text-align:center;margin-top:12px"><button type="button" class="wt-ext-pillbtn" id="wtArchMore">더 보기 (+80경기)</button></div>` : ''}
           </div>
         </div>`;
 
-      document.getElementById('wtArchYear').onchange = e => { selYear = e.target.value; draw(); };
-      document.getElementById('wtArchToggleWT').onclick = () => { onlyWT = !onlyWT; draw(); };
+      document.getElementById('wtArchYear').onchange = e => { selYear = e.target.value; limit = 80; draw(); };
+      document.getElementById('wtArchBtnWT').onclick = () => { onlyWT = true; limit = 80; draw(); };
+      document.getElementById('wtArchBtnAll').onclick = () => { onlyWT = false; limit = 80; draw(); };
+      const moreBtn = document.getElementById('wtArchMore');
+      if (moreBtn) moreBtn.onclick = () => { limit += 80; draw(); };
     }
     draw();
   }

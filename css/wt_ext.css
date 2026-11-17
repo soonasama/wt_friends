@@ -363,3 +363,17 @@
   border-color: rgba(245, 158, 11, 0.5);
   background: rgba(245, 158, 11, 0.08);
 }
+
+/* 선택상자(select) 글자 크기 균형 보정 */
+#app select,
+.ctrl select,
+.sortbar select,
+select.wt-arch-sel {
+  font-size: 13px !important;
+  height: 34px !important;
+  line-height: 32px !important;
+  padding: 0 10px !important;
+  flex: 0 1 auto !important;
+  width: auto !important;
+  min-width: 90px;
+}

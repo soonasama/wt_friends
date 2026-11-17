@@ -346,9 +346,12 @@ function mergeVisibleSheetsIntoData(ss, data) {
   data.notices = Array.isArray(data.notices) ? data.notices : [];
   data.missions = Array.isArray(data.missions) ? data.missions : [];
 
-  // 1) WT_일정_참석투표_DB 직접 수정분 안전 병합 (데이터 행이 1개 이상일 때만)
+  // 1) WT_일정_참석투표_DB 직접 수정/삭제분 100% 반영 (헤더만 남기고 전부 지운 경우에도 빈 배열로 동기화)
   var evSheet = ss.getSheetByName('WT_일정_참석투표_DB');
-  if (evSheet && evSheet.getLastRow() >= 2) {
+  if (evSheet && evSheet.getLastRow() >= 1) {
+    if (evSheet.getLastRow() < 2) {
+      data.events = [];
+    } else {
     var evVals = evSheet.getDataRange().getValues();
     var hdr = evVals[0] || [];
     var cId = findColIdx(hdr, ['일정ID', 'ID']);
@@ -414,11 +417,15 @@ function mergeVisibleSheetsIntoData(ss, data) {
       }
       data.events = sheetEvents;
     }
+    }
   }
 
-  // 2) WT_공지_커뮤니티_DB 직접 수정분 안전 병합 (데이터 행이 1개 이상일 때만 -> 빈 시트일 때 기존 공지 삭제 방지!)
+  // 2) WT_공지_커뮤니티_DB 직접 수정/삭제분 반영
   var ntSheet = ss.getSheetByName('WT_공지_커뮤니티_DB');
-  if (ntSheet && ntSheet.getLastRow() >= 2) {
+  if (ntSheet && ntSheet.getLastRow() >= 1) {
+    if (ntSheet.getLastRow() < 2) {
+      data.notices = [];
+    } else {
     var ntVals = ntSheet.getDataRange().getValues();
     var nhdr = ntVals[0] || [];
     var ncId = findColIdx(nhdr, ['공지ID', 'ID']);
@@ -452,6 +459,7 @@ function mergeVisibleSheetsIntoData(ss, data) {
         });
       }
       data.notices = sheetNotices;
+    }
     }
   }
 

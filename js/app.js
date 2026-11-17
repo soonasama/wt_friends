@@ -4125,25 +4125,7 @@ const ClubStore = {
         d.setlogs = Array.isArray(d.setlogs) ? d.setlogs : [];
         d.settlements = Array.isArray(d.settlements) ? d.settlements : [];
 
-        // 구글 시트를 마스터 원본(Single Source of Truth)으로 사용 (시트 수정/삭제 즉시 반영!)
-        const localRaw = localStorage.getItem(this.key + team.id);
-        if (localRaw) {
-          try {
-            const localObj = JSON.parse(localRaw);
-            if ((!d.notices || d.notices.length === 0) && localObj.notices && localObj.notices.length > 0) {
-              d.notices = localObj.notices;
-            }
-            if ((!d.setlogs || d.setlogs.length === 0) && localObj.setlogs && localObj.setlogs.length > 0) {
-              d.setlogs = localObj.setlogs;
-            }
-            if ((!d.settlements || d.settlements.length === 0) && localObj.settlements && localObj.settlements.length > 0) {
-              d.settlements = localObj.settlements;
-            }
-            if ((!d.missions || d.missions.length === 0) && localObj.missions && localObj.missions.length > 0) {
-              d.missions = localObj.missions;
-            }
-          } catch(e) {}
-        }
+        // 구글 시트를 마스터 원본(Single Source of Truth)으로 사용 (시트에서 삭제 시 로컬 캐시도 즉시 비움)
         try { localStorage.setItem(this.key + team.id, JSON.stringify(d)); } catch(e) {}
         return d;
       }
@@ -4239,11 +4221,7 @@ const ClubStore = {
           venue: '살곶이 야구장',
           title: '토요일 오전 정기 훈련 & 내야 펑고·수비 포메이션',
           note: '유니폼 착용, 9:50까지 구장 집결',
-          rsvp: {
-            '전순아': 'in', '정은경': 'in', '안장우': 'car', '민정현': 'in',
-            '서희숙': 'in', '황지민': 'car', '이은숙': 'in', '구민경': 'in',
-            '이수정': 'in', '류이슬': 'in', '조우림': 'out', '이선희': 'in'
-          }
+          rsvp: {}
         },
         {
           id: 'ev_20261108',
@@ -4253,12 +4231,7 @@ const ClubStore = {
           venue: '밀양 스포츠파크',
           title: '2026 선수협회장기 밀양 대회 (왕중왕전)',
           note: '공식 대회 출전 라인업 경기',
-          rsvp: {
-            '전순아': 'in', '정은경': 'in', '안장우': 'car', '민정현': 'in',
-            '서희숙': 'in', '황지민': 'car', '이은숙': 'in', '구민경': 'in',
-            '이수정': 'in', '류이슬': 'in', '전광숙': 'in', '이선희': 'in',
-            '조보영': 'in'
-          }
+          rsvp: {}
         }
       ],
       notices: [],
@@ -7158,6 +7131,7 @@ function bindTeamClubView() {
   if (syncBtn) syncBtn.onclick = async () => {
     syncBtn.textContent = '⏳ 불러오는 중...';
     syncBtn.disabled = true;
+    try { localStorage.removeItem(ClubStore.key + t.id); } catch(e) {}
     const remoteData = await ClubStore.fetchFromSheet(t);
     syncBtn.disabled = false;
     if (remoteData) {
@@ -7217,8 +7191,11 @@ function bindTeamClubView() {
           const inNote = document.getElementById('evInNote');
           const submitBtn = formBox.querySelector('button[type="submit"]');
 
-          if (selType) selType.value = ev.type || '훈련';
-          if (inDate) inDate.value = ev.date || '';
+          if (selType) {
+            const validTypes = ['훈련', '자체경기', '공식대회', '연맹행사', '모임', '방학'];
+            selType.value = validTypes.includes(ev.type) ? ev.type : '훈련';
+          }
+          if (inDate) inDate.value = ev.date || new Date().toISOString().slice(0, 10);
           if (inTime) inTime.value = ev.time || '10:00';
           if (inVenue) inVenue.value = ev.venue || '';
           if (inTitle) inTitle.value = ev.title || '';
