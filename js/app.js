@@ -4094,7 +4094,7 @@ const ClubStore = {
         d.events = [];
         _rawEvs.forEach(ev => {
           if (!ev || !ev.id) return;
-          const sid = String(ev.id);
+          const sid = String(ev.id); ev.id = sid;
           if (_evSeen.has(sid)) return; // 중복 ID 제거
           _evSeen.add(sid);
           const rawType = String(ev.type || '');
@@ -4151,7 +4151,7 @@ const ClubStore = {
     const out = [];
     arr.forEach(ev => {
       if (!ev || !ev.id) return;
-      const sid = String(ev.id);
+      const sid = String(ev.id); ev.id = sid;
       if (seen.has(sid)) return;
       seen.add(sid);
       const rawType = String(ev.type || '');
@@ -7261,9 +7261,12 @@ function bindTeamClubView() {
         document.getElementById('clMeSel')?.focus();
         return;
       }
-      const [evId, status] = btn.dataset.rsvp.split(':');
+      const rawRsvp = btn.dataset.rsvp || '';
+      const sepIdx = rawRsvp.lastIndexOf(':');
+      const evId = sepIdx >= 0 ? rawRsvp.slice(0, sepIdx) : rawRsvp;
+      const status = sepIdx >= 0 ? rawRsvp.slice(sepIdx + 1) : 'in';
       const curData = ClubStore.getTeamData(t);
-      const ev = curData.events.find(x => x.id === evId);
+      const ev = (curData.events || []).find(x => String(x.id) === String(evId));
       if (!ev) return;
       ev.rsvp = ev.rsvp || {};
       ev.rsvp[curMe] = ev.rsvp[curMe] === status ? '' : status;
