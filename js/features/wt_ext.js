@@ -40,7 +40,10 @@
   }
 
   function isHitEvent(txt) {
-    return /(안|2루|3루|홈런|2|3|HR|볼넷|사구|몸|출루|번트안|내야안)/i.test(txt) && !/(삼진|땅|플|직|파울|병살|실책|야선)/.test(txt);
+    if (!txt) return false;
+    if (/^(1|2|3|투|포|유|좌|중|우)?(땅|플|파플|인플|직선타|직|삼진|낫아웃|번|희번|희플|실|송구실책|포구실책|야선|병살)$/.test(txt)) return false;
+    if (/(삼진|낫아웃(?!출)|땅(?!출)|플|직|파울|병살|실|야선)/.test(txt)) return false;
+    return /(안|루타|홈|HR|볼넷|4구|사구|몸|출$|[가-힣](2|3)$)/i.test(txt);
   }
 
   function parseGameFlow(boxEntry, awayName, homeName) {
@@ -60,6 +63,7 @@
             if (m) runsByInn[Number(m[1])] = m[2];
           });
         }
+        const scoredUsed = {};
         if (batLog) {
           batLog.split('|').forEach(seg => {
             const m = seg.match(/^(\d+):(.*)$/);
@@ -68,7 +72,8 @@
             const desc = m[2].trim();
             if (!innings[inn]) innings[inn] = { a: [], h: [], aRuns: 0, hRuns: 0, aHits: 0, hHits: 0 };
             const rStr = runsByInn[inn] || '';
-            const scored = /(^|,)R(,|$)/.test(rStr);
+            const scored = !scoredUsed[inn] && /(^|,)R(,|$)/.test(rStr);
+            if (scored) scoredUsed[inn] = true;
             const hit = isHitEvent(desc);
             if (sideKey === 'a') {
               if (scored) innings[inn].aRuns++;
@@ -80,6 +85,15 @@
             innings[inn][sideKey].push({ name, pos, desc, run: rStr, scored, hit, team: tName });
           });
         }
+        // 대주자 등 타석 기록 없이 주루 득점만 있는 경우(전체 59건) 누락 없이 반영
+        Object.entries(runsByInn).forEach(([innStr, rStr]) => {
+          const inn = Number(innStr);
+          if (!scoredUsed[inn] && /(^|,)R(,|$)/.test(rStr)) {
+            if (!innings[inn]) innings[inn] = { a: [], h: [], aRuns: 0, hRuns: 0, aHits: 0, hHits: 0 };
+            if (sideKey === 'a') innings[inn].aRuns++; else innings[inn].hRuns++;
+            innings[inn][sideKey].push({ name, pos: pos || '주자', desc: '대주자/주루', run: rStr, scored: true, hit: false, team: tName });
+          }
+        });
       });
     }
     ingest(boxEntry[0], 'a', awayName);
@@ -161,22 +175,43 @@
       const innings = parseGameFlow(boxEntry, awayName, homeName);
       const flowHtml = innings ? renderFlowHTML(innings, awayName, homeName, awayId, homeId) : '<div class="wt-ext-card"><div class="wt-ext-title">이 경기는 이닝별 세부 타석 로그가 제공되지 않습니다.</div></div>';
 
+      const fmtInn = outs => {
+        const n = Number(outs) || 0;
+        const full = Math.floor(n / 3), rem = n % 3;
+        return rem ? `${full}.${rem}` : `${full}`;
+      };
       const renderBoxTable = (players, title) => {
         if (!Array.isArray(players) || !players.length) return '';
         const rows = players.map(p => {
           const st = Array.isArray(p[1]) ? p[1] : [0, 0, 0, 0, 0, 0];
           const pos = p[5] || '-';
-          return `<tr><td><b>${esc(p[0])}</b></td><td>${esc(pos)}</td><td>${st[1] ?? '-'}</td><td>${st[2] ?? '-'}</td><td>${st[3] ?? '-'}</td><td>${st[4] ?? '-'}</td><td>${st[5] ?? '-'}</td></tr>`;
+          return `<tr><td>${st[0] ?? '-'}</td><td><b>${esc(p[0])}</b></td><td>${esc(pos)}</td><td>${st[1] ?? '-'}</td><td>${st[2] ?? '-'}</td><td>${st[3] ?? '-'}</td><td>${st[4] ?? '-'}</td><td>${st[5] ?? '-'}</td></tr>`;
         }).join('');
+        const pitchers = players.filter(p => Array.isArray(p[2]) && p[2].length >= 6);
+        const pitHtml = pitchers.length ? `
+          <div style="margin-top:12px">
+            <div style="font-size:12.5px;font-weight:800;color:var(--sub);margin-bottom:6px">🔥 투수 기록</div>
+            <div style="overflow-x:auto">
+              <table class="wt-spray-table">
+                <thead><tr><th>투수</th><th>이닝</th><th>피안타</th><th>사사구</th><th>탈삼진</th><th>실점</th><th>자책</th><th>결과</th></tr></thead>
+                <tbody>${pitchers.map(p => {
+                  const pt = p[2];
+                  const res = pt[6] === 'W' ? '승' : (pt[6] === 'L' ? '패' : (pt[6] || '-'));
+                  return `<tr><td><b>${esc(p[0])}</b></td><td>${fmtInn(pt[0])}</td><td>${pt[1]}</td><td>${pt[2]}</td><td>${pt[3]}</td><td>${pt[4]}</td><td>${pt[5]}</td><td><b>${esc(res)}</b></td></tr>`;
+                }).join('')}</tbody>
+              </table>
+            </div>
+          </div>` : '';
         return `
           <div class="wt-ext-card">
             <div class="wt-ext-head"><div class="wt-ext-title">⚾ ${esc(title)} 박스스코어</div></div>
             <div style="overflow-x:auto">
               <table class="wt-spray-table">
-                <thead><tr><th>선수</th><th>포지션</th><th>타수</th><th>안타</th><th>타점</th><th>득점</th><th>삼진</th></tr></thead>
+                <thead><tr><th>타순</th><th>선수</th><th>포지션</th><th>타수</th><th>안타</th><th>타점</th><th>득점</th><th>도루</th></tr></thead>
                 <tbody>${rows}</tbody>
               </table>
             </div>
+            ${pitHtml}
           </div>`;
       };
 
