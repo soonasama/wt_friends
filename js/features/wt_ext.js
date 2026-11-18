@@ -637,6 +637,7 @@
       uploader: opts.uploader || '관리자',
       addToGallery: opts.addToGallery !== false
     };
+    let serverErr = '';
     try {
       const resp = await fetch(url, {
         method: 'POST',
@@ -646,24 +647,32 @@
       if (resp.ok) {
         const json = await resp.json();
         if (json && json.status === 'success' && json.item) return json.item;
+        if (json && json.message) serverErr = json.message;
       }
     } catch (e) {
-      // Apps Script CORS redirect fallback
+      // Apps Script CORS redirect fallback -> send no-cors POST and poll doGet up to 5 times
       await fetch(url, {
         method: 'POST',
         mode: 'no-cors',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(payload)
       });
-      await new Promise(r => setTimeout(r, 1500));
-      const resGet = await fetch(url + (url.includes('?') ? '&' : '?') + 'action=get&teamId=' + WT_ID + '&t=' + Date.now());
-      if (resGet.ok) {
-        const jGet = await resGet.json();
-        const found = (jGet && jGet.data && Array.isArray(jGet.data.gallery)) ? jGet.data.gallery.find(x => x.id === clientId) : null;
-        if (found) return found;
+      const delays = [1800, 2000, 2200, 2500, 3000];
+      for (const ms of delays) {
+        await new Promise(r => setTimeout(r, ms));
+        try {
+          const resGet = await fetch(url + (url.includes('?') ? '&' : '?') + 'action=get&teamId=' + WT_ID + '&t=' + Date.now());
+          if (resGet.ok) {
+            const jGet = await resGet.json();
+            const gal = (jGet && jGet.data && Array.isArray(jGet.data.gallery)) ? jGet.data.gallery : [];
+            const uploads = (jGet && jGet.data && jGet.data._recentUploads) ? jGet.data._recentUploads : {};
+            const found = gal.find(x => x.id === clientId) || uploads[clientId];
+            if (found) return found;
+          }
+        } catch (_) {}
       }
     }
-    throw new Error('업로드 응답 확인 실패 (Apps Script 재배포 및 드라이브 권한을 확인해 주세요)');
+    throw new Error(serverErr ? ('서버 오류: ' + serverErr) : '업로드 응답 확인 실패 (Apps Script 새 버전 배포 및 드라이브 권한 승인을 확인해 주세요)');
   };
 
   window.WT_OPEN_LIGHTBOX = function (imgUrl, title, linkUrl) {

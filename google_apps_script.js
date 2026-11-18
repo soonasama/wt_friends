@@ -129,6 +129,15 @@ function doPost(e) {
         date: nowStr
       };
 
+      var rawS2 = getOrCreateSheet(ss, '_CLUB_RAW');
+      var rawV2 = rawS2.getRange('A1').getValue();
+      var clubObj2 = null;
+      if (rawV2) { try { clubObj2 = JSON.parse(rawV2); } catch(err) { clubObj2 = null; } }
+      if (!clubObj2) clubObj2 = { initialized: true, events: [], notices: [], setlogs: [], missions: [], settlements: [], gallery: [] };
+      clubObj2._recentUploads = clubObj2._recentUploads || {};
+      clubObj2._recentUploads[item.id] = item;
+      rawS2.getRange('A1').setValue(JSON.stringify(clubObj2));
+
       if (data.addToGallery !== false) {
         var gSheet = getOrCreateSheet(ss, 'WT_갤러리_DB');
         if (gSheet.getLastRow() === 0) {
