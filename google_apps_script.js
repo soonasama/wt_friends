@@ -94,6 +94,62 @@ function doPost(e) {
         .setMimeType(ContentService.MimeType.JSON);
     }
     
+    // 분기 A-2: 구글 드라이브 이미지/첨부파일 업로드
+    if (data.action === 'uploadFile' && data.base64) {
+      var folderName = 'WT프렌즈_갤러리';
+      var folders = DriveApp.getFoldersByName(folderName);
+      var folder = folders.hasNext() ? folders.next() : DriveApp.createFolder(folderName);
+
+      var bytes = Utilities.base64Decode(data.base64);
+      var mime = data.mimeType || 'application/octet-stream';
+      var fname = data.fileName || ('wt_file_' + Date.now());
+      var blob = Utilities.newBlob(bytes, mime, fname);
+      var file = folder.createFile(blob);
+      file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+
+      var fid = file.getId();
+      var isImg = mime.indexOf('image/') === 0;
+      var viewUrl = 'https://drive.google.com/file/d/' + fid + '/view';
+      var thumbUrl = isImg ? ('https://drive.google.com/thumbnail?id=' + fid + '&sz=w1000') : '';
+      var downloadUrl = 'https://drive.google.com/uc?export=download&id=' + fid;
+      var nowStr = Utilities.formatDate(new Date(), 'Asia/Seoul', 'yyyy-MM-dd HH:mm');
+
+      var item = {
+        id: data.clientId || ('gal_' + Date.now()),
+        fileId: fid,
+        title: data.title || fname,
+        category: data.category || '일반',
+        name: fname,
+        mimeType: mime,
+        isImage: isImg,
+        thumbUrl: thumbUrl,
+        viewUrl: viewUrl,
+        downloadUrl: downloadUrl,
+        uploader: data.uploader || '관리자',
+        date: nowStr
+      };
+
+      if (data.addToGallery !== false) {
+        var gSheet = getOrCreateSheet(ss, 'WT_갤러리_DB');
+        if (gSheet.getLastRow() === 0) {
+          gSheet.appendRow(['파일ID', '제목', '분류', '파일명', '파일형식', '미리보기URL', '원본URL', '업로더', '등록일시']);
+        }
+        gSheet.appendRow([item.id, item.title, item.category, item.name, item.mimeType, item.thumbUrl, item.viewUrl, item.uploader, item.date]);
+
+        var rawS = getOrCreateSheet(ss, '_CLUB_RAW');
+        var rawV = rawS.getRange('A1').getValue();
+        var clubObj = null;
+        if (rawV) { try { clubObj = JSON.parse(rawV); } catch(err) { clubObj = null; } }
+        if (!clubObj) clubObj = { initialized: true, events: [], notices: [], setlogs: [], missions: [], settlements: [], gallery: [] };
+        clubObj.gallery = Array.isArray(clubObj.gallery) ? clubObj.gallery : [];
+        clubObj.gallery.unshift(item);
+        rawS.getRange('A1').setValue(JSON.stringify(clubObj));
+      }
+
+      return ContentService.createTextOutput(JSON.stringify({ status: 'success', item: item }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
     // 분기 B: 클럽하우스 데이터 전체 동기화
     var clubData = data.data || data;
     
@@ -118,6 +174,9 @@ function doPost(e) {
     }
     if (clubData.settlements && Array.isArray(clubData.settlements)) {
       updateSettlementsSheet(ss, clubData.settlements);
+    }
+    if (clubData.gallery && Array.isArray(clubData.gallery)) {
+      updateGallerySheet(ss, clubData.gallery);
     }
     
     return ContentService.createTextOutput(JSON.stringify({ status: "success", message: "WT프렌즈 클럽하우스 전체 DB 동기화 완료" }))
@@ -455,7 +514,8 @@ function mergeVisibleSheetsIntoData(ss, data) {
           body: ncBody !== -1 ? String(nrow[ncBody] !== undefined ? nrow[ncBody] : (nExisting.body || '')) : (nExisting.body || ''),
           date: ncDate !== -1 ? String(nrow[ncDate] || nExisting.date || '').trim() : (nExisting.date || ''),
           pinned: !!nExisting.pinned,
-          comments: nExisting.comments || []
+          comments: nExisting.comments || [],
+          attachments: nExisting.attachments || []
         });
       }
       data.notices = sheetNotices;
@@ -485,5 +545,80 @@ function mergeVisibleSheetsIntoData(ss, data) {
     }
   }
 
+
+  // 3) WT_갤러리_DB 병합
+  data.gallery = Array.isArray(data.gallery) ? data.gallery : [];
+  var galSheet = ss.getSheetByName('WT_갤러리_DB');
+  if (galSheet && galSheet.getLastRow() >= 1) {
+    if (galSheet.getLastRow() < 2) {
+      data.gallery = [];
+    } else {
+      var galVals = galSheet.getDataRange().getValues();
+      var ghdr = galVals[0] || [];
+      var gId = findColIdx(ghdr, ['파일ID', 'ID']);
+      var gTitle = findColIdx(ghdr, ['제목']);
+      var gCat = findColIdx(ghdr, ['분류']);
+      var gName = findColIdx(ghdr, ['파일명']);
+      var gMime = findColIdx(ghdr, ['파일형식']);
+      var gThumb = findColIdx(ghdr, ['미리보기URL']);
+      var gView = findColIdx(ghdr, ['원본URL']);
+      var gUp = findColIdx(ghdr, ['업로더']);
+      var gDate = findColIdx(ghdr, ['등록일시']);
+      if (gView !== -1) {
+        var galList = [];
+        var galSeen = {};
+        for (var k = 1; k < galVals.length; k++) {
+          var gr = galVals[k];
+          var gid = gId !== -1 ? String(gr[gId] || '').trim() : ('gal_' + k);
+          var gurl = String(gr[gView] || '').trim();
+          if (!gurl) continue;
+          if (galSeen[gid]) continue;
+          galSeen[gid] = true;
+          var gm = gMime !== -1 ? String(gr[gMime] || '') : '';
+          var gt = gThumb !== -1 ? String(gr[gThumb] || '') : '';
+          var mFid = gurl.match(/\/d\/([a-zA-Z0-9_-]+)/);
+          var fid = mFid ? mFid[1] : '';
+          galList.push({
+            id: gid,
+            fileId: fid,
+            title: gTitle !== -1 ? String(gr[gTitle] || '') : '',
+            category: gCat !== -1 ? String(gr[gCat] || '일반') : '일반',
+            name: gName !== -1 ? String(gr[gName] || '') : '',
+            mimeType: gm,
+            isImage: gm.indexOf('image/') === 0 || !!gt,
+            thumbUrl: gt,
+            viewUrl: gurl,
+            downloadUrl: fid ? ('https://drive.google.com/uc?export=download&id=' + fid) : gurl,
+            uploader: gUp !== -1 ? String(gr[gUp] || '관리자') : '관리자',
+            date: gDate !== -1 ? String(gr[gDate] || '') : ''
+          });
+        }
+        data.gallery = galList;
+      }
+    }
+  }
   return data;
+}
+
+
+// 8. 팀 갤러리 시트
+function updateGallerySheet(ss, gallery) {
+  var sheet = getOrCreateSheet(ss, 'WT_갤러리_DB');
+  sheet.clear();
+  sheet.appendRow(['파일ID', '제목', '분류', '파일명', '파일형식', '미리보기URL', '원본URL', '업로더', '등록일시']);
+  if (gallery && gallery.length) {
+    gallery.forEach(function(g) {
+      sheet.appendRow([
+        g.id || g.fileId || '',
+        g.title || g.name || '',
+        g.category || '일반',
+        g.name || '',
+        g.mimeType || '',
+        g.thumbUrl || '',
+        g.viewUrl || '',
+        g.uploader || '관리자',
+        g.date || ''
+      ]);
+    });
+  }
 }

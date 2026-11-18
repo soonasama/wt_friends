@@ -402,7 +402,8 @@
       bar.id = 'wt-ext-quickbar';
       bar.innerHTML = `
         <a class="wt-ext-pillbtn pri" href="#/archive">📅 14시즌 아카이브 (2013~2026)</a>
-        <a class="wt-ext-pillbtn" href="#/h2h">⚔️ WT프렌즈 역대 상대전적</a>`;
+        <a class="wt-ext-pillbtn" href="#/h2h">⚔️ WT프렌즈 역대 상대전적</a>
+        <a class="wt-ext-pillbtn" href="#/gallery">📷 팀 갤러리 · 자료실</a>`;
       appEl.prepend(bar);
     }
 
@@ -589,12 +590,242 @@
       </div>`;
   }
 
+
+  function readFileAsBase64(file) {
+    return new Promise((resolve, reject) => {
+      const isImg = (file.type || '').startsWith('image/');
+      const reader = new FileReader();
+      reader.onerror = () => reject(new Error('파일 읽기 실패'));
+      reader.onload = () => {
+        const res = String(reader.result || '');
+        if (!isImg || file.size <= 900 * 1024) {
+          return resolve({ base64: res.split(',')[1] || '', mimeType: file.type || 'application/octet-stream' });
+        }
+        // 큰 이미지는 최대 1600px로 가볍게 리사이즈해 업로드 속도 향상
+        const img = new Image();
+        img.onload = () => {
+          const maxW = 1600;
+          let w = img.width, h = img.height;
+          if (w > maxW) { h = Math.round((h * maxW) / w); w = maxW; }
+          const cv = document.createElement('canvas');
+          cv.width = w; cv.height = h;
+          cv.getContext('2d').drawImage(img, 0, 0, w, h);
+          const outUrl = cv.toDataURL('image/jpeg', 0.85);
+          resolve({ base64: outUrl.split(',')[1] || '', mimeType: 'image/jpeg' });
+        };
+        img.onerror = () => resolve({ base64: res.split(',')[1] || '', mimeType: file.type || 'image/jpeg' });
+        img.src = res;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  window.WT_DRIVE_UPLOAD = async function (file, opts) {
+    opts = opts || {};
+    const url = (window.ClubStore && window.ClubStore.getSheetUrl({ id: WT_ID })) || window.WT_GOOGLE_SHEET_URL;
+    if (!url) throw new Error('구글 시트 연결 URL이 없습니다.');
+    const { base64, mimeType } = await readFileAsBase64(file);
+    const clientId = 'gal_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 6);
+    const payload = {
+      action: 'uploadFile',
+      clientId,
+      fileName: file.name,
+      mimeType,
+      base64,
+      title: opts.title || file.name,
+      category: opts.category || '일반',
+      uploader: opts.uploader || '관리자',
+      addToGallery: opts.addToGallery !== false
+    };
+    try {
+      const resp = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      });
+      if (resp.ok) {
+        const json = await resp.json();
+        if (json && json.status === 'success' && json.item) return json.item;
+      }
+    } catch (e) {
+      // Apps Script CORS redirect fallback
+      await fetch(url, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      });
+      await new Promise(r => setTimeout(r, 1500));
+      const resGet = await fetch(url + (url.includes('?') ? '&' : '?') + 'action=get&teamId=' + WT_ID + '&t=' + Date.now());
+      if (resGet.ok) {
+        const jGet = await resGet.json();
+        const found = (jGet && jGet.data && Array.isArray(jGet.data.gallery)) ? jGet.data.gallery.find(x => x.id === clientId) : null;
+        if (found) return found;
+      }
+    }
+    throw new Error('업로드 응답 확인 실패 (Apps Script 재배포 및 드라이브 권한을 확인해 주세요)');
+  };
+
+  window.WT_OPEN_LIGHTBOX = function (imgUrl, title, linkUrl) {
+    const old = document.getElementById('wtLightboxModal');
+    if (old) old.remove();
+    const box = document.createElement('div');
+    box.id = 'wtLightboxModal';
+    box.className = 'wt-lightbox';
+    box.innerHTML = `
+      <div style="width:100%;max-width:720px;display:flex;justify-content:space-between;align-items:center;color:#fff;margin-bottom:10px">
+        <b style="font-size:14px">${esc(title || '이미지 보기')}</b>
+        <button type="button" id="wtLbClose" class="wt-ext-pillbtn">✕ 닫기</button>
+      </div>
+      <img src="${esc(imgUrl)}" alt="${esc(title || '')}">
+      <div style="margin-top:12px;display:flex;gap:8px">
+        ${linkUrl ? `<a class="wt-ext-pillbtn pri" href="${esc(linkUrl)}" target="_blank" rel="noopener">↗ 구글 드라이브 원본 열기</a>` : ''}
+      </div>`;
+    box.onclick = e => { if (e.target === box || e.target.id === 'wtLbClose') box.remove(); };
+    document.body.appendChild(box);
+  };
+
+  async function renderGalleryPage() {
+    const appEl = document.getElementById('app');
+    if (!appEl) return;
+    const isAdm = localStorage.getItem('wt_admin_auth') === '1';
+    const cats = ['전체', '대회 사진', '훈련/연습', '행사/모임', '자료실'];
+    let selCat = '전체';
+
+    function getTeamObj() { return { id: WT_ID, short: 'WT프렌즈' }; }
+    function loadLocalGallery() {
+      try {
+        const raw = localStorage.getItem('kbsa_club_v20_' + WT_ID);
+        if (raw) {
+          const d = JSON.parse(raw);
+          if (Array.isArray(d.gallery)) return d.gallery;
+        }
+      } catch (e) {}
+      return [];
+    }
+
+    let items = loadLocalGallery();
+    function draw() {
+      const shown = selCat === '전체' ? items : items.filter(x => (x.category || '일반') === selCat);
+      appEl.innerHTML = `
+        <div class="wt-ext-wrap">
+          <div class="wt-ext-card">
+            <div class="wt-ext-head">
+              <div class="wt-ext-title">📷 WT프렌즈 팀 갤러리 & 자료실</div>
+              <div style="display:flex;gap:6px">
+                <button type="button" class="wt-ext-pillbtn" id="wtGalSync">🔄 새로고침</button>
+                <a class="wt-ext-pillbtn" href="#/">🏠 홈으로</a>
+              </div>
+            </div>
+            <div class="wt-arch-filters">
+              ${cats.map(c => `<button type="button" class="wt-ext-pillbtn ${selCat === c ? 'pri' : ''}" data-gal-cat="${esc(c)}">${esc(c)}</button>`).join('')}
+            </div>
+            ${isAdm ? `
+              <form id="wtGalForm" style="border:1.5px solid var(--accent);border-radius:12px;padding:12px;margin-bottom:14px;display:grid;gap:8px">
+                <b style="font-size:13.5px;color:var(--accent)">➕ 사진·첨부파일 올리기 (관리자 전용 · 구글 드라이브 자동 저장)</b>
+                <div style="display:flex;flex-wrap:wrap;gap:8px">
+                  <select id="wtGalCat" class="wt-arch-sel">
+                    <option value="대회 사진">🏆 대회 사진</option>
+                    <option value="훈련/연습">⚾ 훈련/연습</option>
+                    <option value="행사/모임">🍻 행사/모임</option>
+                    <option value="자료실">📁 자료실 (PDF/문서)</option>
+                  </select>
+                  <input type="text" id="wtGalTitle" placeholder="제목 또는 설명 (선택)" style="flex:1;min-width:160px;padding:6px 10px;border-radius:8px">
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+                  <input type="file" id="wtGalFile" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.hwp,.zip" multiple required style="flex:1;font-size:12.5px">
+                  <button type="submit" class="wt-ext-pillbtn pri" id="wtGalSubmit">⬆️ 드라이브에 올리기</button>
+                </div>
+              </form>
+            ` : `<div style="font-size:12px;color:var(--sub);margin-bottom:10px">사진을 누르면 크게 볼 수 있으며, 문서는 클릭 시 구글 드라이브에서 열립니다. (등록·삭제는 관리자 전용)</div>`}
+            <div class="wt-gal-grid">
+              ${shown.length ? shown.map(g => `
+                <div class="wt-gal-card">
+                  ${g.isImage && g.thumbUrl
+                    ? `<img class="wt-gal-thumb" src="${esc(g.thumbUrl)}" alt="${esc(g.title || g.name)}" loading="lazy" data-gal-zoom="${esc(g.thumbUrl)}" data-gal-title="${esc(g.title || g.name)}" data-gal-link="${esc(g.viewUrl)}">`
+                    : `<a class="wt-gal-filebox" href="${esc(g.viewUrl)}" target="_blank" rel="noopener"><span style="font-size:26px">📄</span><span>${esc(g.name || g.title || '첨부파일')}</span></a>`}
+                  <div class="wt-gal-meta">
+                    <div style="display:flex;justify-content:space-between;align-items:center;gap:4px">
+                      <span class="wt-ext-badge">${esc(g.category || '일반')}</span>
+                      ${isAdm ? `<button type="button" data-gal-del="${esc(g.id)}" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:12px;font-weight:800">🗑️ 삭제</button>` : ''}
+                    </div>
+                    <b style="font-size:12.5px;line-height:1.3">${esc(g.title || g.name)}</b>
+                    <span style="font-size:11px;color:var(--sub)">${esc(g.date || '')}</span>
+                  </div>
+                </div>`).join('') : '<div class="empty" style="grid-column:1/-1">등록된 사진이나 첨부파일이 없습니다.</div>'}
+            </div>
+          </div>
+        </div>`;
+
+      appEl.querySelectorAll('[data-gal-cat]').forEach(b => { b.onclick = () => { selCat = b.dataset.galCat; draw(); }; });
+      appEl.querySelectorAll('[data-gal-zoom]').forEach(img => {
+        img.onclick = () => window.WT_OPEN_LIGHTBOX(img.dataset.galZoom, img.dataset.galTitle, img.dataset.galLink);
+      });
+      const syncBtn = document.getElementById('wtGalSync');
+      if (syncBtn && window.ClubStore) {
+        syncBtn.onclick = async () => {
+          syncBtn.textContent = '⏳ 불러오는 중...';
+          const remote = await window.ClubStore.fetchFromSheet(getTeamObj());
+          items = (remote && Array.isArray(remote.gallery)) ? remote.gallery : loadLocalGallery();
+          draw();
+        };
+      }
+      if (isAdm) {
+        const form = document.getElementById('wtGalForm');
+        if (form) form.onsubmit = async e => {
+          e.preventDefault();
+          const files = Array.from(document.getElementById('wtGalFile').files || []);
+          if (!files.length) return;
+          const btn = document.getElementById('wtGalSubmit');
+          btn.disabled = true; btn.textContent = '⏳ 업로드 중...';
+          try {
+            const cat = document.getElementById('wtGalCat').value;
+            const customTitle = document.getElementById('wtGalTitle').value.trim();
+            for (const f of files) {
+              const item = await window.WT_DRIVE_UPLOAD(f, { category: cat, title: customTitle || f.name, addToGallery: true });
+              items.unshift(item);
+            }
+            if (window.ClubStore) {
+              const td = window.ClubStore.getTeamData(getTeamObj());
+              td.gallery = items;
+              window.ClubStore.saveTeamData(getTeamObj(), td);
+            }
+            draw();
+          } catch (err) {
+            alert('업로드 중 오류: ' + err.message);
+            btn.disabled = false; btn.textContent = '⬆️ 드라이브에 올리기';
+          }
+        };
+        appEl.querySelectorAll('[data-gal-del]').forEach(b => {
+          b.onclick = () => {
+            if (!confirm('갤러리에서 이 항목을 삭제하시겠습니까?')) return;
+            const id = b.dataset.galDel;
+            items = items.filter(x => String(x.id) !== String(id));
+            if (window.ClubStore) {
+              const td = window.ClubStore.getTeamData(getTeamObj());
+              td.gallery = items;
+              window.ClubStore.saveTeamData(getTeamObj(), td);
+            }
+            draw();
+          };
+        });
+      }
+    }
+    draw();
+    if (window.ClubStore) {
+      window.ClubStore.fetchFromSheet(getTeamObj()).then(remote => {
+        if (remote && Array.isArray(remote.gallery)) { items = remote.gallery; draw(); }
+      });
+    }
+  }
+
   window.addEventListener('wt:rendered', e => {
     const info = e.detail || {};
     const name = info.name || 'home';
     const parts = info.parts || [];
     if (name === 'archive') { renderArchivePage(); return; }
     if (name === 'h2h') { renderH2HPage(); return; }
+    if (name === 'gallery') { renderGalleryPage(); return; }
     if (name === 'game' && parts[1]) { enhanceGameView(parts[1]); return; }
     if (name === 'player' && parts[1]) { enhancePlayerView(parts[1]); return; }
     enhanceHomeAndLists(name);

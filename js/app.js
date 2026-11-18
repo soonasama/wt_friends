@@ -4027,6 +4027,7 @@ const WT_GAS_URL = 'https://script.google.com/macros/s/AKfycbwJkdWv9a7BXTsI-rwdO
 window.WT_GOOGLE_SHEET_URL = WT_GAS_URL;
 
 const ClubStore = {
+
   key: 'kbsa_club_v20_',
   commKey: 'kbsa_comm_v20',
   meKey: 'kbsa_me_player_',
@@ -4375,6 +4376,7 @@ const ClubStore = {
 };
 
 
+window.ClubStore = ClubStore;
 // Global unblockable deletion listener for club events, notices, and setlogs
 document.addEventListener('click', (e) => {
   const evDelBtn = e.target.closest('[data-ev-del]');
@@ -4645,6 +4647,12 @@ function renderTeamClubView(t, A, tc, th) {
         </div>
         <input type="text" id="ntInTitle" placeholder="제목을 입력하세요" required>
         <textarea id="ntInBody" placeholder="공지 내용이나 모임 안내 사항을 작성하세요" required></textarea>
+        ${isAdmin() ? `
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:8px 10px;border-radius:9px;border:1px dashed var(--line);font-size:12px">
+            <b>📎 사진·첨부파일 (관리자 전용):</b>
+            <input type="file" id="ntInFiles" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.hwp,.zip" multiple style="flex:1;min-width:180px">
+          </div>
+        ` : ''}
         <div style="display:flex;justify-content:flex-end;gap:8px">
           <button type="button" class="cl-btn ghost" id="btnCancelNt">취소</button>
           <button type="submit" class="cl-btn pri">✓ 게시글 등록</button>
@@ -4664,6 +4672,14 @@ function renderTeamClubView(t, A, tc, th) {
             </div>
             <div class="sub">작성자: <b>${esc(nt.author)}</b> · ${esc(nt.date)}</div>
             <div class="nt-body">${esc(nt.body)}</div>
+            ${Array.isArray(nt.attachments) && nt.attachments.length ? `
+              <div class="wt-nt-attaches">
+                ${nt.attachments.map(at => at.isImage && at.thumbUrl
+                  ? `<img class="wt-nt-thumb" src="${esc(at.thumbUrl)}" alt="${esc(at.name)}" loading="lazy" onclick="window.WT_OPEN_LIGHTBOX && window.WT_OPEN_LIGHTBOX('${esc(at.thumbUrl)}','${esc(at.name)}','${esc(at.viewUrl)}')">`
+                  : `<a class="wt-nt-filechip" href="${esc(at.viewUrl)}" target="_blank" rel="noopener">📄 ${esc(at.name || '첨부파일')} ↗</a>`
+                ).join('')}
+              </div>
+            ` : ''}
             <div class="nt-cmts">
               <div style="font-size:11.5px;font-weight:800;color:var(--mute)">💬 팀원 댓글 (${nt.comments.length})</div>
               ${nt.comments.map(c => `
@@ -7336,8 +7352,25 @@ function bindTeamClubView() {
   const cancelNt = document.getElementById('btnCancelNt');
   if (cancelNt) cancelNt.onclick = () => { UI.showNtForm = false; re(); };
   const ntForm = document.getElementById('ntFormBox');
-  if (ntForm) ntForm.onsubmit = (e) => {
+  if (ntForm) ntForm.onsubmit = async (e) => {
     e.preventDefault();
+    const subBtn = ntForm.querySelector('button[type="submit"]');
+    const filesEl = document.getElementById('ntInFiles');
+    const files = (isAdmin() && filesEl && filesEl.files) ? Array.from(filesEl.files) : [];
+    const attachments = [];
+    if (files.length && window.WT_DRIVE_UPLOAD) {
+      if (subBtn) { subBtn.disabled = true; subBtn.textContent = '⏳ 파일 업로드 중...'; }
+      try {
+        for (const f of files) {
+          const item = await window.WT_DRIVE_UPLOAD(f, { category: '공지첨부', title: f.name, uploader: me || '관리자', addToGallery: false });
+          attachments.push(item);
+        }
+      } catch (err) {
+        alert('첨부파일 업로드 오류: ' + err.message);
+        if (subBtn) { subBtn.disabled = false; subBtn.textContent = '✓ 게시글 등록'; }
+        return;
+      }
+    }
     const curData = ClubStore.getTeamData(t);
     curData.notices = curData.notices || [];
     curData.notices.unshift({
@@ -7348,6 +7381,7 @@ function bindTeamClubView() {
       date: new Date().toISOString().slice(0, 10),
       title: document.getElementById('ntInTitle').value.trim(),
       body: document.getElementById('ntInBody').value.trim(),
+      attachments: attachments,
       comments: []
     });
     ClubStore.saveTeamData(t, curData);
