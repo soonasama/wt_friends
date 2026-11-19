@@ -209,7 +209,7 @@ function getOrCreateSheet(ss, name) {
 function updateEventsSheet(ss, events) {
   var sheet = getOrCreateSheet(ss, 'WT_일정_참석투표_DB');
   sheet.clear();
-  sheet.appendRow(['일정ID', '일정제목', '일정구분', '일시', '장소', '참석수', '불참수', '미정수', '참석자명단', '비고']);
+  sheet.appendRow(['일정ID', '일정제목', '일정구분', '일시', '장소', '참석수', '불참수', '미정수', '참석자명단', '불참자명단', '미정자명단', '비고']);
   if (events && events.length) {
     events.forEach(function(ev) {
       var rsvp = ev.rsvp || {};
@@ -229,6 +229,8 @@ function updateEventsSheet(ss, events) {
         outs.length,
         tbds.length,
         ins.join(', '),
+        outs.join(', '),
+        tbds.join(', '),
         ev.note || ''
       ]);
     });
@@ -428,6 +430,8 @@ function mergeVisibleSheetsIntoData(ss, data) {
     var cDt = findColIdx(hdr, ['일시', '날짜']);
     var cVenue = findColIdx(hdr, ['장소', '구장']);
     var cNames = findColIdx(hdr, ['참석자명단', '참석자']);
+    var cOuts = findColIdx(hdr, ['불참자명단', '불참자']);
+    var cTbds = findColIdx(hdr, ['미정자명단', '미정자']);
     var cNote = findColIdx(hdr, ['비고', '메모', '공지']);
 
     if (cId !== -1 && cTitle !== -1) {
@@ -455,20 +459,36 @@ function mergeVisibleSheetsIntoData(ss, data) {
         }
 
         var rsvp = existing.rsvp || {};
-        if (cNames !== -1) {
-          var namesCell = String(row[cNames] || '').trim();
-          var sheetNames = namesCell ? namesCell.split(/[,，\n]+/).map(function(s){ return s.trim(); }).filter(function(s){ return s && s.indexOf('/') === -1 && s.length <= 15; }) : [];
-          var sheetNameSet = {};
-          sheetNames.forEach(function(nm) {
-            sheetNameSet[nm] = true;
-            if (rsvp[nm] !== 'in' && rsvp[nm] !== 'car') {
-              rsvp[nm] = 'in';
-            }
+        var parseNames = function(colIdx) {
+          if (colIdx === -1) return null;
+          var cell = String(row[colIdx] || '').trim();
+          return cell ? cell.split(/[,，\n]+/).map(function(s){ return s.trim(); }).filter(function(s){ return s && s.indexOf('/') === -1 && s.length <= 15; }) : [];
+        };
+        var inNames = parseNames(cNames);
+        var outNames = parseNames(cOuts);
+        var tbdNames = parseNames(cTbds);
+        if (inNames !== null) {
+          var inSet = {};
+          inNames.forEach(function(nm) {
+            inSet[nm] = true;
+            if (rsvp[nm] !== 'in' && rsvp[nm] !== 'car') rsvp[nm] = 'in';
           });
           Object.keys(rsvp).forEach(function(nm) {
-            if ((rsvp[nm] === 'in' || rsvp[nm] === 'car') && !sheetNameSet[nm]) {
-              delete rsvp[nm];
-            }
+            if ((rsvp[nm] === 'in' || rsvp[nm] === 'car') && !inSet[nm]) delete rsvp[nm];
+          });
+        }
+        if (outNames !== null) {
+          var outSet = {};
+          outNames.forEach(function(nm) { outSet[nm] = true; rsvp[nm] = 'out'; });
+          Object.keys(rsvp).forEach(function(nm) {
+            if (rsvp[nm] === 'out' && !outSet[nm]) delete rsvp[nm];
+          });
+        }
+        if (tbdNames !== null) {
+          var tbdSet = {};
+          tbdNames.forEach(function(nm) { tbdSet[nm] = true; rsvp[nm] = 'tbd'; });
+          Object.keys(rsvp).forEach(function(nm) {
+            if (rsvp[nm] === 'tbd' && !tbdSet[nm]) delete rsvp[nm];
           });
         }
 

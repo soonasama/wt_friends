@@ -4033,6 +4033,8 @@ const ClubStore = {
   meKey: 'kbsa_me_player_',
   sheetUrlKey: 'kbsa_sheet_api_url_',
   _isSyncing: false,
+  _lastSaveAt: 0,
+  _skipNextSync: false,
 
   getSheetUrl(team) {
     try {
@@ -4080,14 +4082,18 @@ const ClubStore = {
     }
   },
 
-  async fetchFromSheet(team) {
+  async fetchFromSheet(team, force) {
     const url = this.getSheetUrl(team);
     if (!url) return null;
+    const reqStart = Date.now();
     try {
       const sep = url.includes('?') ? '&' : '?';
       const res = await fetch(`${url}${sep}action=get&teamId=${encodeURIComponent(team.id)}&t=${Date.now()}`);
       if (!res.ok) return null;
       const json = await res.json();
+      if (!force && (this._lastSaveAt > reqStart || (Date.now() - this._lastSaveAt) < 6000)) {
+        return null; // 방금 저장한 로컬 변경사항 보호 (레이스 컨디션 방지)
+      }
       if (json && json.status === 'success' && json.data) {
         const d = json.data;
         const _rawEvs = Array.isArray(d.events) ? d.events : [];
@@ -4206,6 +4212,7 @@ const ClubStore = {
     return this.seedTeamData(team);
   },
   saveTeamData(team, data) {
+    this._lastSaveAt = Date.now();
     try { localStorage.setItem(this.key + team.id, JSON.stringify(data)); } catch (e) {}
     this.syncToSheet(team, data);
   },
@@ -4449,7 +4456,8 @@ function renderTeamClubView(t, A, tc, th) {
   const data = ClubStore.getTeamData(t);
 
   // 실시간 구글 시트 백그라운드 자동 동기화 (앱 열릴 때 시트의 최신 상태를 즉시 로드)
-  if (ClubStore.getSheetUrl(t) && !ClubStore._isSyncing) {
+  if (ClubStore._skipNextSync) { ClubStore._skipNextSync = false; }
+  else if (ClubStore.getSheetUrl(t) && !ClubStore._isSyncing && (Date.now() - (ClubStore._lastSaveAt || 0) > 6000)) {
     ClubStore._isSyncing = true;
     setTimeout(() => {
       ClubStore.fetchFromSheet(t).then(remoteData => {
@@ -7141,14 +7149,15 @@ function bindTeamClubView() {
   // --- WT 정산실 전용 이벤트 바인딩 끝 ---
 
   const meSel = document.getElementById('clMeSel');
-  if (meSel) meSel.onchange = () => { ClubStore.setMe(t, meSel.value); re(); };
+  if (meSel) meSel.onchange = () => { ClubStore._skipNextSync = true; ClubStore.setMe(t, meSel.value); re(); };
 
   const syncBtn = document.getElementById('clForceSyncSheet');
   if (syncBtn) syncBtn.onclick = async () => {
     syncBtn.textContent = '⏳ 불러오는 중...';
     syncBtn.disabled = true;
+    ClubStore._lastSaveAt = 0;
     try { localStorage.removeItem(ClubStore.key + t.id); } catch(e) {}
-    const remoteData = await ClubStore.fetchFromSheet(t);
+    const remoteData = await ClubStore.fetchFromSheet(t, true);
     syncBtn.disabled = false;
     if (remoteData) {
       syncBtn.textContent = '✓ 동기화 완료!';
