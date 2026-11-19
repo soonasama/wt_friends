@@ -407,37 +407,102 @@
       appEl.prepend(bar);
     }
 
-    // 홈 화면 하단에 주요 기록 하이라이트
+    // 홈 화면 하단에 2026 시즌 WT프렌즈 최고 기록 하이라이트
     if (routeName === 'home' && !document.getElementById('wt-ext-home-ms')) {
-      const core = await loadCore();
-      if (!core || !Array.isArray(core.ms)) return;
-      const wtMs = core.ms.filter(m => String(m[1]).startsWith(WT_ID + '|'));
-      const topMs = (wtMs.length ? wtMs : core.ms).slice(0, 6);
-      if (!topMs.length) return;
+      const [core, box] = await Promise.all([loadCore(), loadBox()]);
+      if (!core || !box || !box.box) return;
+      const wt2026 = (core.games || []).filter(g => (g[1] === WT_ID || g[2] === WT_ID) && String(g[0]).startsWith('2026'));
+      if (!wt2026.length) return;
 
+      const gameRecs = { h: [], rbi: [], r: [], sb: [], so: [] };
+      const tot = { h: {}, rbi: {}, r: {}, sb: {}, so: {} };
+
+      wt2026.forEach(g => {
+        const gid = String(g[10]), dt = g[0];
+        const sideIdx = g[1] === WT_ID ? 0 : 1;
+        const opp = teamName(core, sideIdx === 0 ? g[2] : g[1]);
+        const b = box.box[gid];
+        if (!b || !Array.isArray(b[sideIdx])) return;
+        b[sideIdx].forEach(p => {
+          const nm = p[0];
+          const st = Array.isArray(p[1]) ? p[1] : [0, 0, 0, 0, 0, 0];
+          const [ , , h, rbi, r, sb ] = st;
+          if (h > 0) gameRecs.h.push({ v: h, nm, dt, opp, gid });
+          if (rbi > 0) gameRecs.rbi.push({ v: rbi, nm, dt, opp, gid });
+          if (r > 0) gameRecs.r.push({ v: r, nm, dt, opp, gid });
+          if (sb > 0) gameRecs.sb.push({ v: sb, nm, dt, opp, gid });
+          tot.h[nm] = (tot.h[nm] || 0) + h;
+          tot.rbi[nm] = (tot.rbi[nm] || 0) + rbi;
+          tot.r[nm] = (tot.r[nm] || 0) + r;
+          tot.sb[nm] = (tot.sb[nm] || 0) + sb;
+          if (Array.isArray(p[2]) && p[2].length >= 4 && p[2][3] > 0) {
+            const so = p[2][3];
+            gameRecs.so.push({ v: so, nm, dt, opp, gid });
+            tot.so[nm] = (tot.so[nm] || 0) + so;
+          }
+        });
+      });
+
+      const pickTopGame = (arr, unit, label, icon) => {
+        if (!arr.length) return null;
+        const maxV = Math.max(...arr.map(x => x.v));
+        const tops = arr.filter(x => x.v === maxV);
+        const first = tops[0];
+        const extra = tops.length > 1 ? ` 외 ${tops.length - 1}건` : '';
+        return {
+          label: `${icon} ${label}`,
+          val: `${maxV}${unit}`,
+          who: `${first.nm}${extra}`,
+          sub: `${first.dt} vs ${first.opp}`,
+          href: `#/game/${first.gid}`
+        };
+      };
+      const pickTopSeason = (map, unit, label, icon) => {
+        const ents = Object.entries(map).filter(([, v]) => v > 0);
+        if (!ents.length) return null;
+        const maxV = Math.max(...ents.map(([, v]) => v));
+        const tops = ents.filter(([, v]) => v === maxV).map(([nm]) => nm);
+        return {
+          label: `${icon} ${label}`,
+          val: `${maxV}${unit}`,
+          who: tops.join(', '),
+          sub: '2026 시즌 누적 1위',
+          href: `#/player/${encodeURIComponent(WT_ID + '|' + tops[0])}`
+        };
+      };
+
+      const cards = [
+        pickTopGame(gameRecs.h, '안타', '한 경기 최다 안타', '🔥'),
+        pickTopGame(gameRecs.rbi, '타점', '한 경기 최다 타점', '💥'),
+        pickTopGame(gameRecs.r, '득점', '한 경기 최다 득점', '⚡'),
+        pickTopGame(gameRecs.sb, '도루', '한 경기 최다 도루', '🏃‍♀️'),
+        pickTopGame(gameRecs.so, 'K', '한 경기 최다 탈삼진', '🎯'),
+        pickTopSeason(tot.h, '안타', '2026 시즌 최다 안타', '🏏'),
+        pickTopSeason(tot.rbi, '타점', '2026 시즌 최다 타점', '🏆'),
+        pickTopSeason(tot.sb, '도루', '2026 시즌 최다 도루', '💨'),
+        pickTopSeason(tot.so, '탈삼진', '2026 시즌 최다 탈삼진', '⚾')
+      ].filter(Boolean);
+
+      if (!cards.length) return;
       const wrap = document.createElement('div');
       wrap.className = 'wt-ext-wrap';
       wrap.id = 'wt-ext-home-ms';
       wrap.innerHTML = `
         <div class="wt-ext-card">
           <div class="wt-ext-head">
-            <div class="wt-ext-title">🏅 ${wtMs.length ? 'WT프렌즈' : '2026 시즌'} 주요 기록 하이라이트</div>
-            <a class="wt-ext-badge gold" href="#/archive" style="text-decoration:none">역대 기록 더보기 ›</a>
+            <div class="wt-ext-title">🏆 2026 시즌 WT프렌즈 최고 기록</div>
+            <a class="wt-ext-badge gold" href="#/archive" style="text-decoration:none">2026 전체 경기 ›</a>
           </div>
           <div class="wt-ms-list">
-            ${topMs.map(m => {
-              const [dt, pkey, , label, , gid] = m;
-              const [tid, pn] = String(pkey).split('|');
-              const isWt = tid === WT_ID;
-              return `
-                <a class="wt-ms-item ${isWt ? 'is-wt' : ''}" href="#/game/${esc(gid)}">
-                  <div style="display:flex;justify-content:space-between;align-items:center">
-                    <span class="wt-ext-badge ${isWt ? 'gold' : ''}">${esc(label)}</span>
-                    <span style="font-size:11px;color:var(--sub)">${esc(dt)}</span>
-                  </div>
-                  <div style="font-size:13.5px;font-weight:800;margin-top:4px">${esc(pn)} <span style="font-size:11.5px;font-weight:600;color:var(--sub)">· ${esc(teamName(core, tid))}</span></div>
-                </a>`;
-            }).join('')}
+            ${cards.map(c => `
+              <a class="wt-ms-item is-wt" href="${c.href}">
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                  <span class="wt-ext-badge gold">${esc(c.label)}</span>
+                  <b style="font-size:15px;color:var(--gold)">${esc(c.val)}</b>
+                </div>
+                <div style="font-size:13.5px;font-weight:800;margin-top:4px">${esc(c.who)}</div>
+                <div style="font-size:11px;color:var(--sub)">${esc(c.sub)}</div>
+              </a>`).join('')}
           </div>
         </div>`;
       appEl.appendChild(wrap);
