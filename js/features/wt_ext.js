@@ -244,20 +244,70 @@
       return;
     }
 
-    // 기존 2026 경기 페이지 하단에 경기 흐름 섹션 추가
+    // 2026 시즌 WT프렌즈 경기일 경우 "그날 경기의 좋은 기록" 생성
+    function renderGameHighlightsHTML() {
+      if (!g || !boxEntry) return '';
+      const is2026WT = String(g[0]).startsWith('2026') && (g[1] === WT_ID || g[2] === WT_ID);
+      if (!is2026WT) return '';
+      const wtSideIdx = g[1] === WT_ID ? 0 : 1;
+      const wtPlayers = Array.isArray(boxEntry[wtSideIdx]) ? boxEntry[wtSideIdx] : [];
+      const hlList = [];
+      wtPlayers.forEach(p => {
+        const nm = p[0];
+        const st = Array.isArray(p[1]) ? p[1] : [0, 0, 0, 0, 0, 0];
+        const [, ab, h, rbi, r, sb] = st;
+        const batLog = typeof p[3] === 'string' ? p[3] : '';
+        const tags = [];
+        if (h >= 3) tags.push(`🔥 맹타 (${h}안타)`);
+        else if (h === 2) tags.push('✨ 멀티히트 (2안타)');
+        if (/홈런|HR/.test(batLog)) tags.push('💣 홈런');
+        else if (/3$|3루타/.test(batLog) || /\|[^|]*3(\| |$)/.test(batLog)) tags.push('⚡ 3루타');
+        else if (/2$|2루타/.test(batLog) || /\|[^|]*2(\| |$)/.test(batLog)) tags.push('💥 2루타');
+        if (rbi >= 2) tags.push(`🎯 ${rbi}타점`);
+        if (r >= 2) tags.push(`🏃 ${r}득점`);
+        if (sb >= 2) tags.push(`💨 ${sb}도루`);
+        if (Array.isArray(p[2]) && p[2].length >= 7) {
+          const [outs, , , so, ra, er, res] = p[2];
+          if (res === 'W') tags.push('🏆 승리투수');
+          if (so >= 2) tags.push(`🔥 ${so}탈삼진`);
+          if (outs >= 6 && er === 0) tags.push('🛡️ 무자책 호투');
+        }
+        if (tags.length) {
+          hlList.push({ nm, tags, ab, h, rbi, r, sb });
+        }
+      });
+      if (!hlList.length) return '';
+      return `
+        <div class="wt-ext-card" id="wt-ext-game-highlights">
+          <div class="wt-ext-head">
+            <div class="wt-ext-title">🌟 그날 경기의 좋은 기록 (WT프렌즈 하이라이트)</div>
+            <span class="wt-ext-badge gold">${esc(g[0])}</span>
+          </div>
+          <div class="wt-ms-list">
+            ${hlList.map(x => `
+              <a class="wt-ms-item is-wt" href="#/player/${encodeURIComponent(WT_ID + '|' + x.nm)}">
+                <div style="font-size:13.5px;font-weight:900">${esc(x.nm)}</div>
+                <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px">
+                  ${x.tags.map(tg => `<span class="wt-ext-badge gold">${esc(tg)}</span>`).join('')}
+                </div>
+              </a>`).join('')}
+          </div>
+        </div>`;
+    }
+
+    // 기존 2026 경기 페이지 하단에 좋은 기록 + 경기 흐름 섹션 추가
     if (document.getElementById('wt-ext-game-flow')) return;
     if (g && boxEntry) {
       const awayId = g[1], homeId = g[2];
       const awayName = teamName(core, awayId), homeName = teamName(core, homeId);
+      const hlHtml = renderGameHighlightsHTML();
       const innings = parseGameFlow(boxEntry, awayName, homeName);
-      if (innings) {
-        const html = renderFlowHTML(innings, awayName, homeName, awayId, homeId);
-        if (html) {
-          const wrap = document.createElement('div');
-          wrap.className = 'wt-ext-wrap';
-          wrap.innerHTML = html;
-          appEl.appendChild(wrap);
-        }
+      const flowHtml = innings ? renderFlowHTML(innings, awayName, homeName, awayId, homeId) : '';
+      if (hlHtml || flowHtml) {
+        const wrap = document.createElement('div');
+        wrap.className = 'wt-ext-wrap';
+        wrap.innerHTML = hlHtml + flowHtml;
+        appEl.appendChild(wrap);
       }
     }
   }
@@ -296,7 +346,7 @@
     const key = decodeURIComponent(rawKey || '');
     if (!key) return;
 
-    const [core, detail] = await Promise.all([loadCore(), loadDetail()]);
+    const [core, box, detail] = await Promise.all([loadCore(), loadBox(), loadDetail()]);
     if (!core || !detail) return;
 
     const parts = key.split('|');
@@ -389,6 +439,74 @@
       if (sel) sel.onchange = () => { selYear = sel.value; draw(); };
     }
     draw();
+
+    // 개인별 2026 시즌 최고 기록 & 역대(통산) 커리어 하이 카드
+    if (box && box.box && Array.isArray(core.games) && !document.getElementById('wt-ext-player-records')) {
+      const pGames = [];
+      core.games.forEach(g => {
+        if (g[1] !== tid && g[2] !== tid) return;
+        const gid = String(g[10]);
+        const sideIdx = g[1] === tid ? 0 : 1;
+        const b = box.box[gid];
+        if (!b || !Array.isArray(b[sideIdx])) return;
+        const pEntry = b[sideIdx].find(x => x[0] === pname);
+        if (!pEntry) return;
+        const opp = teamName(core, sideIdx === 0 ? g[2] : g[1]);
+        const st = Array.isArray(pEntry[1]) ? pEntry[1] : [0, 0, 0, 0, 0, 0];
+        const pt = Array.isArray(pEntry[2]) && pEntry[2].length >= 6 ? pEntry[2] : null;
+        pGames.push({ gid, dt: g[0], opp, h: st[2] || 0, rbi: st[3] || 0, r: st[4] || 0, sb: st[5] || 0, so: pt ? (pt[3] || 0) : 0 });
+      });
+
+      if (pGames.length) {
+        const bestOf = (list, field, unit, label, icon) => {
+          const valid = list.filter(x => x[field] > 0);
+          if (!valid.length) return null;
+          const maxV = Math.max(...valid.map(x => x[field]));
+          const best = valid.find(x => x[field] === maxV);
+          return { label: `${icon} ${label}`, val: `${maxV}${unit}`, sub: `${best.dt} vs ${best.opp}`, gid: best.gid };
+        };
+        const p2026 = pGames.filter(x => String(x.dt).startsWith('2026'));
+        const cards2026 = [
+          bestOf(p2026, 'h', '안타', '2026 최다 안타', '🔥'),
+          bestOf(p2026, 'rbi', '타점', '2026 최다 타점', '💥'),
+          bestOf(p2026, 'r', '득점', '2026 최다 득점', '⚡'),
+          bestOf(p2026, 'sb', '도루', '2026 최다 도루', '🏃‍♀️'),
+          bestOf(p2026, 'so', 'K', '2026 최다 탈삼진', '🎯')
+        ].filter(Boolean);
+
+        const cardsAll = [
+          bestOf(pGames, 'h', '안타', '역대 최다 안타', '👑'),
+          bestOf(pGames, 'rbi', '타점', '역대 최다 타점', '🏆'),
+          bestOf(pGames, 'r', '득점', '역대 최다 득점', '🌟'),
+          bestOf(pGames, 'sb', '도루', '역대 최다 도루', '💨'),
+          bestOf(pGames, 'so', 'K', '역대 최다 탈삼진', '⚾')
+        ].filter(Boolean);
+
+        if (cards2026.length || cardsAll.length) {
+          const recCard = document.createElement('div');
+          recCard.className = 'wt-ext-card';
+          recCard.id = 'wt-ext-player-records';
+          const renderGrid = arr => arr.map(c => `
+            <a class="wt-ms-item is-wt" href="#/game/${esc(c.gid)}">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <span class="wt-ext-badge gold">${esc(c.label)}</span>
+                <b style="font-size:15px;color:var(--gold)">${esc(c.val)}</b>
+              </div>
+              <div style="font-size:11.5px;color:var(--sub);margin-top:4px">${esc(c.sub)}</div>
+            </a>`).join('');
+
+          recCard.innerHTML = `
+            <div class="wt-ext-head">
+              <div class="wt-ext-title">🏅 ${esc(pname)} 선수 베스트 기록 하이라이트</div>
+              <span class="wt-ext-badge gold">클릭 시 해당 경기 이동</span>
+            </div>
+            ${cards2026.length ? `<div style="font-size:12.5px;font-weight:800;color:var(--accent);margin-bottom:6px">📅 2026 시즌 베스트</div><div class="wt-ms-list" style="margin-bottom:12px">${renderGrid(cards2026)}</div>` : ''}
+            ${cardsAll.length ? `<div style="font-size:12.5px;font-weight:800;color:var(--gold);margin-bottom:6px">✨ 역대 통산 커리어 하이 (2013~2026)</div><div class="wt-ms-list">${renderGrid(cardsAll)}</div>` : ''}
+          `;
+          wrap.appendChild(recCard);
+        }
+      }
+    }
   }
 
   async function enhanceHomeAndLists(routeName) {
