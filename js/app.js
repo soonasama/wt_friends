@@ -208,6 +208,7 @@ const Store = (() => {
     oppStarter,sumBat,sumPit,teamRecord,standings,bIdx,pIdx,prod,allowed,
     team:id=>teams.find(t=>t.id===id),game:id=>games.find(g=>g.id===id),player:k=>players.get(k)};
 })();
+window.Store = Store;
 
 /* 대체 선수 수준: 표본이 적은 선수는 평균이 아니라 '하위 25%' 쪽으로 보정해서 기록 없는 선수가 기존 선수보다 높게 나오지 않게 함 */
 const REP=(()=>{const q=(a,p)=>a.length?a[Math.floor(a.length*p)]:null;

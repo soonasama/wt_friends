@@ -165,8 +165,18 @@
     const [core, box] = await Promise.all([loadCore(), loadBox()]);
     if (!core || !box) return;
 
-    const g = (core.games || []).find(x => String(x[10]) === String(gid));
-    const boxEntry = box.box ? box.box[String(gid)] : null;
+    let g = (core.games || []).find(x => String(x[10]) === String(gid));
+    if (!g && window.Store && typeof window.Store.game === 'function') {
+      const sg = window.Store.game(gid);
+      if (sg && sg.away && sg.home) {
+        g = (core.games || []).find(x =>
+          x[0] === sg.date &&
+          ((x[1] === sg.away.id && x[2] === sg.home.id) || (x[1] === sg.home.id && x[2] === sg.away.id))
+        );
+      }
+    }
+    const boxId = g ? String(g[10]) : String(gid);
+    const boxEntry = box.box ? box.box[boxId] : null;
 
     // 과거 시즌 경기(2013~2025)로 기존 Store에 없어서 '경기를 찾을 수 없습니다'가 뜬 경우 전체 페이지 렌더링
     if (appEl.textContent.includes('경기를 찾을 수 없습니다') && g) {
