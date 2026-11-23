@@ -1070,6 +1070,12 @@
       }
       return Array.from(set).sort((a, b) => a.localeCompare(b, 'ko'));
     })();
+    function getAllCandidates() {
+      const guests = Array.isArray(manito.customGuests) ? manito.customGuests : [];
+      const merged = fullRoster.slice();
+      guests.forEach(g => { if (g && !merged.includes(g)) merged.push(g); });
+      return merged;
+    }
 
     function getPlayer2026Hint(pname) {
       let gCnt = 0, h = 0, rbi = 0, r = 0, sb = 0, so = 0;
@@ -1134,7 +1140,7 @@
             <div class="wt-cert-to-box">
               <div class="wt-cert-to-inner">
                 <div>성 명 : ${esc(target)}</div>
-                <div>소 속 : WT프렌즈 여자야구단</div>
+                <div>소 속 : ${Array.isArray(manito.customGuests) && manito.customGuests.includes(target) ? 'WT프렌즈의 소중한 친구' : 'WT프렌즈 여자야구단'}</div>
               </div>
             </div>
           </div>
@@ -1242,7 +1248,7 @@
                   <div style="font-size:12px;font-weight:700;color:var(--gold)">🤫 나만 아는 비밀 마니또</div>
                   <div style="font-size:21px;font-weight:900;margin:6px 0">당신의 마니또는 <span style="color:var(--accent)">${esc(myTarget)}</span> 님입니다!</div>
                   <div style="font-size:12px;color:var(--sub)">
-                    📊 2026 공식 기록 힌트: ${hint.gCnt}경기 · ${hint.h}안타 · ${hint.rbi}타점 · ${hint.sb}도루${hint.so > 0 ? ` · 탈삼진 ${hint.so}K` : ''}
+                    ${hint.gCnt > 0 ? `📊 2026 공식 기록 힌트: ${hint.gCnt}경기 · ${hint.h}안타 · ${hint.rbi}타점 · ${hint.sb}도루${hint.so > 0 ? ` · 탈삼진 ${hint.so}K` : ''}` : '🎈 연말총회에 함께하는 소중한 친구입니다! 따뜻한 응원의 상장을 적어주세요.'}
                   </div>
                 </div>
 
@@ -1278,11 +1284,19 @@
                 <button type="button" class="wt-ext-pillbtn" id="wtImportAttendBtn">📥 일정 참석자 불러오기</button>
                 <button type="button" class="wt-ext-pillbtn" id="wtSavePartsBtn">💾 날짜·명단만 저장</button>
               </div>
+              <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px">
+                <input type="text" id="wtGuestNameIn" placeholder="외부 친구/게스트 이름 입력" style="flex:1;min-width:170px;padding:7px 11px;border-radius:9px;font-size:13px">
+                <button type="button" class="wt-ext-pillbtn pri" id="wtAddGuestBtn">➕ 게스트 추가</button>
+              </div>
               <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;padding:10px;border-radius:10px;border:1px solid var(--line)">
-                ${fullRoster.map(nm => `
-                  <label style="display:inline-flex;align-items:center;gap:4px;font-size:12px;padding:3px 8px;border-radius:999px;border:1px solid var(--line);cursor:pointer">
-                    <input type="checkbox" class="wt-manito-chk" value="${esc(nm)}" ${parts.includes(nm) ? 'checked' : ''}> ${esc(nm)}
-                  </label>`).join('')}
+                ${getAllCandidates().map(nm => {
+                  const isGuest = Array.isArray(manito.customGuests) && manito.customGuests.includes(nm);
+                  return `
+                  <label style="display:inline-flex;align-items:center;gap:4px;font-size:12px;padding:3px 9px;border-radius:999px;border:1px solid ${isGuest ? 'rgba(245,158,11,0.5)' : 'var(--line)'};background:${isGuest ? 'rgba(245,158,11,0.08)' : 'transparent'};cursor:pointer">
+                    <input type="checkbox" class="wt-manito-chk" value="${esc(nm)}" ${parts.includes(nm) ? 'checked' : ''}> ${esc(nm)}${isGuest ? ' <span style="font-size:10px;color:var(--gold)">(친구)</span>' : ''}
+                    ${isGuest ? `<button type="button" data-del-guest="${esc(nm)}" title="게스트 삭제" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:11px;font-weight:900;padding:0 2px">✕</button>` : ''}
+                  </label>`;
+                }).join('')}
               </div>
               <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px">
                 <button type="button" class="wt-ext-pillbtn pri" id="wtMakePairsBtn">🎲 마니또 1:1 랜덤 매칭 생성</button>
@@ -1396,6 +1410,31 @@
       };
 
       if (isAdm) {
+        const addGuestFn = async () => {
+          const inp = document.getElementById('wtGuestNameIn');
+          const gName = (inp && inp.value || '').trim();
+          if (!gName) { alert('추가할 친구 이름을 입력해 주세요.'); return; }
+          manito.customGuests = Array.isArray(manito.customGuests) ? manito.customGuests : [];
+          manito.participants = Array.isArray(manito.participants) ? manito.participants : [];
+          if (!getAllCandidates().includes(gName)) manito.customGuests.push(gName);
+          if (!manito.participants.includes(gName)) manito.participants.push(gName);
+          await postManitoAction('saveManitoConfig', { manito });
+          draw();
+        };
+        const addGuestBtn = document.getElementById('wtAddGuestBtn');
+        const guestIn = document.getElementById('wtGuestNameIn');
+        if (addGuestBtn) addGuestBtn.onclick = addGuestFn;
+        if (guestIn) guestIn.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); addGuestFn(); } };
+        appEl.querySelectorAll('[data-del-guest]').forEach(db => {
+          db.onclick = async e => {
+            e.preventDefault(); e.stopPropagation();
+            const gn = db.dataset.delGuest;
+            manito.customGuests = (manito.customGuests || []).filter(x => x !== gn);
+            manito.participants = (manito.participants || []).filter(x => x !== gn);
+            await postManitoAction('saveManitoConfig', { manito });
+            draw();
+          };
+        });
         const importBtn = document.getElementById('wtImportAttendBtn');
         if (importBtn) importBtn.onclick = () => {
           const evs = clubData.events || [];
