@@ -1350,8 +1350,12 @@
                 </form>
 
                 <div style="font-size:12.5px;font-weight:800;color:var(--sub);margin-bottom:8px">👀 상장 실시간 미리보기</div>
-                <div class="wt-cert-preview">
-                  ${buildCertInner(myAward.title || '상장 제목', myTarget, myAward.body || '칭찬 문구를 입력하면 상장 미리보기가 완성됩니다.', manito.eventDate || '2026-11-28', authedUser, emblem)}
+                <div class="wt-cert-scale-outer" id="wtCertScaleOuter">
+                  <div class="wt-cert-scale-inner" id="wtCertScaleInner">
+                    <div class="wt-cert-preview">
+                      ${buildCertInner(myAward.title || '상장 제목', myTarget, myAward.body || '칭찬 문구를 입력하면 상장 미리보기가 완성됩니다.', manito.eventDate || '2026-11-28', authedUser, emblem)}
+                    </div>
+                  </div>
                 </div>
               `}
             `)}
@@ -1419,6 +1423,20 @@
           ` : ''}
         </div>`;
 
+      const fitCertScale = () => {
+        const outer = document.getElementById('wtCertScaleOuter');
+        const inner = document.getElementById('wtCertScaleInner');
+        if (!outer || !inner) return;
+        const avail = outer.clientWidth || window.innerWidth - 36;
+        const ratio = Math.min(1, avail / 540);
+        inner.style.transform = `scale(${ratio})`;
+        outer.style.height = Math.round(720 * ratio) + 'px';
+      };
+      fitCertScale();
+      window.removeEventListener('resize', window._wtCertResizeFn);
+      window._wtCertResizeFn = fitCertScale;
+      window.addEventListener('resize', window._wtCertResizeFn);
+
       const syncBtn = document.getElementById('wtManitoSync');
       if (syncBtn && window.ClubStore) {
         syncBtn.onclick = async () => {
@@ -1477,9 +1495,10 @@
       appEl.querySelectorAll('[data-tpl-idx]').forEach(btn => {
         btn.onclick = () => {
           const tp = templates[Number(btn.dataset.tplIdx)];
+          const cleanTitle = tp[0].replace(/^[^가-힣a-zA-Z0-9]+/, '').trim();
           const tEl = document.getElementById('wtAwardTitle');
           const bEl = document.getElementById('wtAwardBody');
-          if (tEl) { tEl.value = tp[0]; document.getElementById('wtPrevTitle').textContent = tp[0]; }
+          if (tEl) { tEl.value = cleanTitle; document.getElementById('wtPrevTitle').textContent = cleanTitle; }
           if (bEl && !bEl.value.trim()) { bEl.value = tp[1]; document.getElementById('wtPrevBody').textContent = tp[1]; }
         };
       });

@@ -710,3 +710,28 @@ select.wt-arch-sel {
   max-width: 100% !important;
   box-sizing: border-box !important;
 }
+
+/* 모바일 상장 미리보기 비례 축소 래퍼 (PC/인쇄물과 100% 동일 구도 유지, 하단 잘림 원천 차단) */
+.wt-cert-scale-outer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+}
+.wt-cert-scale-inner {
+  width: 540px;
+  flex: 0 0 540px;
+  transform-origin: top center;
+}
+.wt-cert-preview {
+  width: 540px !important;
+  max-width: 540px !important;
+  height: 720px !important;
+  aspect-ratio: 3 / 4 !important;
+  padding: 58px 56px 54px !important;
+}
+.wt-cert-head {
+  font-size: 28px;
+  letter-spacing: 2px;
+  word-break: keep-all;
+}
