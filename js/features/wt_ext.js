@@ -1061,21 +1061,25 @@
     function fixLegacyGuestName(m) {
       if (!m) return false;
       let changed = false;
-      const repArr = arr => Array.isArray(arr) ? arr.map(x => { if (x === '이지연') { changed = true; return '오지연'; } return x; }) : arr;
+      const renameMap = { '이지연': '오지연', '김설빈': '김은서' };
+      const repArr = arr => Array.isArray(arr) ? arr.map(x => { if (renameMap[x]) { changed = true; return renameMap[x]; } return x; }) : arr;
       m.customGuests = repArr(m.customGuests);
       m.participants = repArr(m.participants);
       ['pairs', 'awards', 'secrets'].forEach(k => {
         if (m[k] && typeof m[k] === 'object') {
-          if (m[k]['이지연'] !== undefined) {
-            m[k]['오지연'] = m[k]['이지연'];
-            delete m[k]['이지연'];
-            changed = true;
-          }
-          if (k === 'pairs') {
-            Object.keys(m.pairs).forEach(g => {
-              if (m.pairs[g] === '이지연') { m.pairs[g] = '오지연'; changed = true; }
-            });
-          }
+          Object.keys(renameMap).forEach(oldN => {
+            const newN = renameMap[oldN];
+            if (m[k][oldN] !== undefined) {
+              m[k][newN] = m[k][oldN];
+              delete m[k][oldN];
+              changed = true;
+            }
+            if (k === 'pairs') {
+              Object.keys(m.pairs).forEach(g => {
+                if (m.pairs[g] === oldN) { m.pairs[g] = newN; changed = true; }
+              });
+            }
+          });
         }
       });
       return changed;
@@ -1100,6 +1104,7 @@
           if (b && Array.isArray(b[si])) b[si].forEach(p => set.add(p[0]));
         });
       }
+      if (set.has('김설빈')) { set.delete('김설빈'); set.add('김은서'); }
       return Array.from(set).sort((a, b) => a.localeCompare(b, 'ko'));
     })();
     const DEFAULT_GUESTS = ['임은아', '유선아', '오지연'];
@@ -1111,13 +1116,14 @@
     }
 
     function getPlayer2026Hint(pname) {
+      const statName = pname === '김은서' ? '김설빈' : pname;
       let gCnt = 0, h = 0, rbi = 0, r = 0, sb = 0, so = 0;
       if (core && box && box.box) {
         (core.games || []).filter(g => (g[1] === WT_ID || g[2] === WT_ID) && String(g[0]).startsWith('2026')).forEach(g => {
           const b = box.box[String(g[10])];
           const si = g[1] === WT_ID ? 0 : 1;
           if (!b || !Array.isArray(b[si])) return;
-          const p = b[si].find(x => x[0] === pname);
+          const p = b[si].find(x => x[0] === statName);
           if (!p) return;
           gCnt++;
           const st = Array.isArray(p[1]) ? p[1] : [0, 0, 0, 0, 0, 0];
