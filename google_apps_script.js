@@ -189,6 +189,25 @@ function doPost(e) {
         .setMimeType(ContentService.MimeType.JSON);
     }
 
+    // 분기 A-5: 마니또 개인 비밀코드 최초 설정 / 초기화
+    if (data.action === 'setManitoSecret' && data.who) {
+      var rawM3 = getOrCreateSheet(ss, '_CLUB_RAW');
+      var rawMV3 = rawM3.getRange('A1').getValue();
+      var clubM3 = null;
+      if (rawMV3) { try { clubM3 = JSON.parse(rawMV3); } catch(err) { clubM3 = null; } }
+      if (!clubM3) clubM3 = { initialized: true, events: [], notices: [], setlogs: [], missions: [], settlements: [], gallery: [] };
+      clubM3.manito = clubM3.manito || { eventDate: '2026-11-28', participants: [], pairs: {}, awards: {}, secrets: {} };
+      clubM3.manito.secrets = clubM3.manito.secrets || {};
+      if (data.secret) {
+        clubM3.manito.secrets[data.who] = String(data.secret);
+      } else {
+        delete clubM3.manito.secrets[data.who];
+      }
+      rawM3.getRange('A1').setValue(JSON.stringify(clubM3));
+      return ContentService.createTextOutput(JSON.stringify({ status: 'success' }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
     // 분기 B: 클럽하우스 데이터 전체 동기화
     var clubData = data.data || data;
     

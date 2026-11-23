@@ -1184,24 +1184,23 @@
             <div class="wt-ext-head">
               <div class="wt-ext-title">🎁 2026 WT프렌즈 연말총회 마니또</div>
               <div style="display:flex;gap:6px;flex-wrap:wrap">
-                <span class="wt-ext-badge gold">💰 선물 예산: 2~3만 원대</span>
                 <button type="button" class="wt-ext-pillbtn" id="wtManitoSync">🔄 새로고침</button>
                 <a class="wt-ext-pillbtn" href="#/">🏠 홈으로</a>
               </div>
             </div>
 
             ${!parts.length ? `
-              <div class="empty" style="padding:20px 10px">아직 관리자가 연말총회 참석자 및 마니또 매칭을 확정하지 않았습니다.${isAdm ? ' 아래 관리자 영역에서 참석자를 불러와 매칭을 생성해 주세요!' : ''}</div>
+              <div class="empty" style="padding:20px 10px">아직 마니또 매칭이 시작되지 않았습니다.${isAdm ? ' 아래 [관리자 설정]에서 참석자를 체크하고 [매칭 생성] 버튼만 누르시면 바로 시작됩니다!' : ' (관리자이시면 상단 🔒 관리자 버튼을 먼저 켜주세요.)'}</div>
             ` : (!authedUser ? `
               <div style="border:1.5px solid var(--accent);border-radius:12px;padding:16px;display:grid;gap:10px;max-width:420px;margin:6px auto">
-                <b style="font-size:14.5px;color:var(--accent)">🔐 본인 인증 후 내 마니또 확인하기</b>
-                <div style="font-size:12px;color:var(--sub)">본인 이름을 선택하고 클럽하우스 개인 PIN 번호(기본: 등번호 4자리 또는 1234)를 입력해 주세요.</div>
+                <b style="font-size:14.5px;color:var(--accent)">🔐 나만의 비밀 코드로 마니또 확인하기</b>
+                <div id="wtManitoAuthDesc" style="font-size:12px;color:var(--sub);line-height:1.5">본인 이름을 선택해 주세요. 등번호가 아닌 <b>본인만 아는 비밀 번호</b>를 직접 정해 안전하게 잠금 설정합니다.</div>
                 <select id="wtManitoWho" class="wt-arch-sel" style="width:100% !important">
                   <option value="">-- 본인 이름 선택 --</option>
                   ${parts.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join('')}
                 </select>
-                <input type="password" id="wtManitoPin" inputmode="numeric" placeholder="개인 PIN 4자리" style="padding:8px 12px;border-radius:9px">
-                <button type="button" class="wt-ext-pillbtn pri" id="wtManitoLoginBtn" style="justify-content:center">✓ 본인 확인 및 마니또 열기</button>
+                <input type="password" id="wtManitoPin" placeholder="비밀 번호 4자리 이상" style="padding:8px 12px;border-radius:9px">
+                <button type="button" class="wt-ext-pillbtn pri" id="wtManitoLoginBtn" style="justify-content:center">✓ 마니또 열기</button>
               </div>
             ` : `
               <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px">
@@ -1253,10 +1252,13 @@
                 <div class="wt-ext-title">👑 관리자 전용 — 연말총회 마니또 설정 & 상장 출력</div>
                 <span class="wt-ext-badge gold">작성 완료 ${parts.filter(n => awards[n] && awards[n].body).length} / ${parts.length}명</span>
               </div>
+              <div style="font-size:12px;color:var(--sub);margin-bottom:10px;line-height:1.5">
+                <b>진행 순서:</b> ① 아래에서 참석자 체크(또는 불러오기) → ② <b>[🎲 마니또 1:1 랜덤 매칭 생성]</b> 클릭 → ③ 팀원들이 각자 PIN으로 로그인해 마니또 확인 & 상장 작성 → ④ 총회 전날 <b>[🖨️ 전체 상장 인쇄]</b>
+              </div>
               <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px">
                 <label style="font-size:12.5px;font-weight:700">행사 날짜: <input type="date" id="wtManitoDate" value="${esc(manito.eventDate || '2026-11-28')}" style="padding:5px 8px;border-radius:8px"></label>
-                <button type="button" class="wt-ext-pillbtn" id="wtImportAttendBtn">📥 일정 참석자 명단 불러오기</button>
-                <button type="button" class="wt-ext-pillbtn pri" id="wtSavePartsBtn">💾 명단·날짜 저장</button>
+                <button type="button" class="wt-ext-pillbtn" id="wtImportAttendBtn">📥 일정 참석자 불러오기</button>
+                <button type="button" class="wt-ext-pillbtn" id="wtSavePartsBtn">💾 날짜·명단만 저장</button>
               </div>
               <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;padding:10px;border-radius:10px;border:1px solid var(--line)">
                 ${fullRoster.map(nm => `
@@ -1274,13 +1276,15 @@
               </label>
               <div style="overflow-x:auto">
                 <table class="wt-spray-table">
-                  <thead><tr><th style="text-align:left">참여자</th><th>제출 상태</th>${showSpoiler ? '<th>내 마니또 대상</th>' : ''}</tr></thead>
+                  <thead><tr><th style="text-align:left">참여자</th><th>제출 상태</th><th>비밀코드</th>${showSpoiler ? '<th>내 마니또 대상</th>' : ''}</tr></thead>
                   <tbody>
                     ${parts.map(nm => {
                       const done = awards[nm] && awards[nm].body;
+                      const hasSec = !!(manito.secrets && manito.secrets[nm]);
                       return `<tr>
                         <td style="text-align:left"><b>${esc(nm)}</b></td>
                         <td style="color:${done ? '#10b981' : '#f59e0b'};font-weight:800">${done ? '✅ 작성 완료' : '⏳ 미작성'}</td>
+                        <td>${hasSec ? `<button type="button" class="wt-ext-pillbtn" data-reset-sec="${esc(nm)}" style="font-size:11px;padding:3px 8px">🔑 초기화</button>` : '<span style="font-size:11px;color:var(--sub)">미설정</span>'}</td>
                         ${showSpoiler ? `<td>${esc(pairs[nm] || '-')}</td>` : ''}
                       </tr>`;
                     }).join('')}
@@ -1301,13 +1305,37 @@
         };
       }
 
+      const whoSel = document.getElementById('wtManitoWho');
+      const authDesc = document.getElementById('wtManitoAuthDesc');
       const loginBtn = document.getElementById('wtManitoLoginBtn');
-      if (loginBtn) loginBtn.onclick = () => {
-        const who = document.getElementById('wtManitoWho').value;
-        const pin = document.getElementById('wtManitoPin').value.trim();
+      const secrets = manito.secrets || {};
+      if (whoSel) whoSel.onchange = () => {
+        const w = whoSel.value;
+        if (!w) {
+          authDesc.innerHTML = '본인 이름을 선택해 주세요. 등번호가 아닌 <b>본인만 아는 비밀 번호</b>를 직접 정해 안전하게 잠금 설정합니다.';
+          loginBtn.textContent = '✓ 마니또 열기';
+        } else if (!secrets[w]) {
+          authDesc.innerHTML = `<b style="color:var(--gold)">[최초 1회 설정]</b> <b>${esc(w)}</b> 님만 아는 비밀 번호(4자리 이상)를 새로 정해주세요. 다른 사람은 절대 볼 수 없습니다.`;
+          loginBtn.textContent = '🔐 비밀 번호 등록 & 마니또 열기';
+        } else {
+          authDesc.innerHTML = `<b>${esc(w)}</b> 님이 설정하신 비밀 번호를 입력해 주세요.`;
+          loginBtn.textContent = '✓ 확인 및 마니또 열기';
+        }
+      };
+      if (loginBtn) loginBtn.onclick = async () => {
+        const who = whoSel ? whoSel.value : '';
+        const pin = (document.getElementById('wtManitoPin').value || '').trim();
         if (!who) { alert('본인 이름을 선택해 주세요.'); return; }
-        const expected = window.getPlayerPin ? window.getPlayerPin(teamObj, who) : '1234';
-        if (pin !== expected) { alert('PIN 번호가 일치하지 않습니다. (기본: 등번호 4자리 또는 1234)'); return; }
+        if (pin.length < 4) { alert('비밀 번호는 4자리 이상으로 입력해 주세요.'); return; }
+        manito.secrets = manito.secrets || {};
+        if (!manito.secrets[who]) {
+          manito.secrets[who] = pin;
+          await postManitoAction('setManitoSecret', { who, secret: pin });
+          alert(`${who} 님의 비밀 번호가 등록되었습니다! 다음에도 이 번호로 들어오시면 됩니다.`);
+        } else if (manito.secrets[who] !== pin) {
+          alert('비밀 번호가 일치하지 않습니다. 분실 시 관리자에게 초기화를 요청해 주세요.');
+          return;
+        }
         authedUser = who;
         sessionStorage.setItem('wt_manito_user', who);
         draw();
@@ -1390,6 +1418,15 @@
           draw();
         };
 
+        appEl.querySelectorAll('[data-reset-sec]').forEach(rb => {
+          rb.onclick = async () => {
+            const targetNm = rb.dataset.resetSec;
+            if (!confirm(`${targetNm} 님의 마니또 비밀 번호를 초기화하시겠습니까?`)) return;
+            if (manito.secrets) delete manito.secrets[targetNm];
+            await postManitoAction('setManitoSecret', { who: targetNm, secret: '' });
+            draw();
+          };
+        });
         const spBtn = document.getElementById('wtToggleSpoilerBtn');
         if (spBtn) spBtn.onclick = () => { showSpoiler = !showSpoiler; draw(); };
         const exChk = document.getElementById('wtExclMeChk');
