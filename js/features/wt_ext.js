@@ -1130,6 +1130,7 @@
       return { gCnt, h, rbi, r, sb, so, evAtt };
     }
 
+    let serverSynced = false;
     async function postManitoAction(action, extra) {
       const url = (window.ClubStore && window.ClubStore.getSheetUrl(teamObj)) || window.WT_GOOGLE_SHEET_URL;
       clubData.manito = manito;
@@ -1143,7 +1144,11 @@
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: bodyStr
         });
-        if (res.ok) return true;
+        if (res.ok) {
+          const j = await res.json();
+          if (j && j.status === 'success') { serverSynced = true; return true; }
+          if (j && j.status === 'error') { alert('서버 저장 오류: ' + j.message + '\nApps Script 새 버전 배포 여부를 확인해 주세요.'); return false; }
+        }
       } catch (e) {
         await fetch(url, {
           method: 'POST',
@@ -1151,6 +1156,14 @@
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: bodyStr
         });
+        await new Promise(r => setTimeout(r, 1500));
+        try {
+          const chk = await fetch(url + (url.includes('?') ? '&' : '?') + 'action=get&teamId=' + WT_ID + '&t=' + Date.now());
+          if (chk.ok) {
+            const cj = await chk.json();
+            if (cj && cj.data && cj.data.manito) { serverSynced = true; return true; }
+          }
+        } catch (_) {}
       }
       return true;
     }
@@ -1314,7 +1327,10 @@
             <div class="wt-ext-card" style="border-color:rgba(245,158,11,0.45)">
               <div class="wt-ext-head">
                 <div class="wt-ext-title">👑 관리자 전용 — 연말총회 마니또 설정 & 상장 출력</div>
-                <span class="wt-ext-badge gold">작성 완료 ${parts.filter(n => awards[n] && awards[n].body).length} / ${parts.length}명</span>
+                <div style="display:flex;gap:6px;flex-wrap:wrap">
+                  <span class="wt-ext-badge ${serverSynced ? '' : 'gold'}">${serverSynced ? '☁️ 시트 저장됨' : '⏳ 시트 확인중'}</span>
+                  <span class="wt-ext-badge gold">작성 완료 ${parts.filter(n => awards[n] && awards[n].body).length} / ${parts.length}명</span>
+                </div>
               </div>
               <div style="font-size:12px;color:var(--sub);margin-bottom:10px;line-height:1.5">
                 <b>진행 순서:</b> ① 아래에서 참석자 체크(또는 불러오기) → ② <b>[🎲 마니또 1:1 랜덤 매칭 생성]</b> 클릭 → ③ 팀원들이 각자 PIN으로 로그인해 마니또 확인 & 상장 작성 → ④ 총회 전날 <b>[🖨️ 전체 상장 인쇄]</b>
@@ -1373,7 +1389,8 @@
         syncBtn.onclick = async () => {
           syncBtn.textContent = '⏳ 불러오는 중...';
           const remote = await window.ClubStore.fetchFromSheet(teamObj, true);
-          if (remote && remote.manito) { clubData = remote; manito = remote.manito; }
+          if (remote && remote.manito) {
+          serverSynced = true; clubData = remote; manito = remote.manito; }
           draw();
         };
       }
@@ -1551,6 +1568,7 @@
     if (window.ClubStore) {
       window.ClubStore.fetchFromSheet(teamObj, true).then(remote => {
         if (remote && remote.manito) {
+          serverSynced = true;
           clubData = remote;
           manito = remote.manito;
           if (fixLegacyGuestName(manito)) {

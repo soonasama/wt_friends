@@ -498,7 +498,7 @@ function mergeVisibleSheetsIntoData(ss, data) {
     var cDt = findColIdx(hdr, ['일시', '날짜']);
     var cTime = findColIdx(hdr, ['시간']);
     var cVenue = findColIdx(hdr, ['구장/장소', '장소', '구장']);
-    var cNames = findColIdx(hdr, ['참석자명단', '참석 명단', '참석자', '참석']);
+    var cNames = findColIdx(hdr, ['참석 명단 (차량)', '참석자명단', '참석 명단', '참석자', '참석']);
     var cOuts = findColIdx(hdr, ['불참자명단', '불참자', '불참']);
     var cTbds = findColIdx(hdr, ['미정자명단', '미정자', '미정']);
     var cNote = findColIdx(hdr, ['공지 및 준비물 메모', '비고', '메모', '공지']);
@@ -719,12 +719,10 @@ function mergeVisibleSheetsIntoData(ss, data) {
       }
     }
   }
-  if (!data.manito) {
-    var mSheet = ss.getSheetByName('_MANITO_RAW');
-    if (mSheet) {
-      var mRawVal = mSheet.getRange('A1').getValue();
-      if (mRawVal) { try { data.manito = JSON.parse(mRawVal); } catch(e) {} }
-    }
+  var mSheet = ss.getSheetByName('_MANITO_RAW');
+  if (mSheet) {
+    var mRawVal = mSheet.getRange('A1').getValue();
+    if (mRawVal) { try { data.manito = JSON.parse(mRawVal); } catch(e) {} }
   }
   return data;
 }
