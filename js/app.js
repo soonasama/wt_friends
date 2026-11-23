@@ -4040,28 +4040,28 @@ const ClubStore = {
 
   getSheetUrl(team) {
     try {
+      // 이전 링크/홈화면 캐시에 박혀 있던 구버전 시트 URL 자동 정리
+      localStorage.removeItem(this.sheetUrlKey + team.id);
+      localStorage.removeItem('kbsa_global_sheet_api_url');
       const {q} = parse();
       if (q && q.surl) {
-        localStorage.setItem(this.sheetUrlKey + team.id, q.surl.trim());
-        localStorage.setItem('kbsa_global_sheet_api_url', q.surl.trim());
-        return q.surl.trim();
+        const clean = q.surl.trim();
+        if (clean === WT_GAS_URL) return clean;
       }
-      const saved = localStorage.getItem(this.sheetUrlKey + team.id);
-      if (saved) return saved;
-      const gSaved = localStorage.getItem('kbsa_global_sheet_api_url');
-      if (gSaved) return gSaved;
+      const v2 = localStorage.getItem('kbsa_sheet_api_url_v2_' + team.id);
+      if (v2) return v2;
       return window.WT_GOOGLE_SHEET_URL || WT_GAS_URL;
     } catch(e) { return WT_GAS_URL; }
   },
   setSheetUrl(team, url) {
     try {
       const u = (url || '').trim();
-      if (!u) {
-        localStorage.removeItem(this.sheetUrlKey + team.id);
-        localStorage.removeItem('kbsa_global_sheet_api_url');
+      localStorage.removeItem(this.sheetUrlKey + team.id);
+      localStorage.removeItem('kbsa_global_sheet_api_url');
+      if (!u || u === WT_GAS_URL) {
+        localStorage.removeItem('kbsa_sheet_api_url_v2_' + team.id);
       } else {
-        localStorage.setItem(this.sheetUrlKey + team.id, u);
-        localStorage.setItem('kbsa_global_sheet_api_url', u);
+        localStorage.setItem('kbsa_sheet_api_url_v2_' + team.id, u);
       }
     } catch(e) {}
   },
