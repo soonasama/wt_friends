@@ -1,4 +1,4 @@
-const WT_CACHE_VER = 'wt-friends-20261124';
+const WT_CACHE_VER = 'wt-friends-20261124-4';
 self.addEventListener('install', (e) => {
   self.skipWaiting();
 });

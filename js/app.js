@@ -4025,7 +4025,7 @@ function openClubAwardStudio(teamId) {
 /* =========================================================================
    구단별 그룹모임 (일정·참석투표·공지·셋로그) & 전체 커뮤니티 모듈 (v15)
    ========================================================================= */
-const WT_GAS_URL = 'https://script.google.com/macros/s/AKfycbwJkdWv9a7BXTsI-rwdOasNLL11iJiBgMyzMrmIcGS_2VfR2_TeAA_z_nbEYY5Un7cO/exec';
+const WT_GAS_URL = 'https://script.google.com/macros/s/AKfycbxfUMGdrtriUPlCTRoE442KTiq3A_vhAN4OqLFNoSXZjNipzs3SipPfV_UfvXGhGgGV/exec';
 window.WT_GOOGLE_SHEET_URL = WT_GAS_URL;
 
 const ClubStore = {
@@ -4048,7 +4048,7 @@ const ClubStore = {
         const clean = q.surl.trim();
         if (clean === WT_GAS_URL) return clean;
       }
-      const v2 = localStorage.getItem('kbsa_sheet_api_url_v2_' + team.id);
+      const v2 = localStorage.getItem('kbsa_sheet_api_url_v3_' + team.id);
       if (v2) return v2;
       return window.WT_GOOGLE_SHEET_URL || WT_GAS_URL;
     } catch(e) { return WT_GAS_URL; }
@@ -4059,9 +4059,9 @@ const ClubStore = {
       localStorage.removeItem(this.sheetUrlKey + team.id);
       localStorage.removeItem('kbsa_global_sheet_api_url');
       if (!u || u === WT_GAS_URL) {
-        localStorage.removeItem('kbsa_sheet_api_url_v2_' + team.id);
+        localStorage.removeItem('kbsa_sheet_api_url_v2_' + team.id); localStorage.removeItem('kbsa_sheet_api_url_v3_' + team.id);
       } else {
-        localStorage.setItem('kbsa_sheet_api_url_v2_' + team.id, u);
+        localStorage.setItem('kbsa_sheet_api_url_v3_' + team.id, u);
       }
     } catch(e) {}
   },
