@@ -492,150 +492,186 @@ select.wt-arch-sel {
   font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif !important;
 }
 
-/* 2026 연말총회 마니또 & 고급 A4 상장 디자인 */
+/* 2026 연말총회 마니또 & 고급 A4 상장 디자인 (세로형 메달 + 사각 직인) */
 .wt-cert-preview,
 .wt-print-sheet {
-  background: radial-gradient(circle at 50% 35%, #ffffff 0%, #fdfaf0 65%, #f7f0dc 100%);
-  color: #0f172a;
-  border: 3px solid #0d1b3e;
-  outline: 2px solid #c59b27;
-  outline-offset: -9px;
-  border-radius: 6px;
-  padding: 28px 26px;
+  background: #ffffff;
+  color: #111827;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 22px;
   position: relative;
   text-align: center;
-  box-shadow: 0 12px 32px rgba(13, 27, 62, 0.22);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.22);
+  border-radius: 4px;
+  overflow: hidden;
+  font-family: 'Noto Serif KR', 'Batang', '바탕', Georgia, serif !important;
+}
+.wt-cert-preview *,
+.wt-print-sheet * {
+  font-family: 'Noto Serif KR', 'Batang', '바탕', Georgia, serif !important;
+}
+.wt-cert-frame {
+  position: relative;
+  border: 2.5px solid #c59b27;
+  padding: 6px;
+}
+.wt-cert-inner {
+  position: relative;
+  border: 1.2px solid #d4af37;
+  padding: 28px 26px 32px;
+  background: radial-gradient(circle at 50% 45%, #ffffff 0%, #fffef9 75%, #fcf7e8 100%);
   overflow: hidden;
 }
 .wt-cert-wm {
   position: absolute;
-  top: 52%;
+  top: 53%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 210px;
-  height: 210px;
-  opacity: 0.055;
+  width: 200px;
+  height: 200px;
+  opacity: 0.06;
   pointer-events: none;
-  filter: grayscale(20%);
+  filter: grayscale(35%);
 }
-.wt-cert-inner {
-  position: relative;
-  z-index: 1;
-  border: 1px solid rgba(197, 155, 39, 0.55);
-  padding: 26px 24px;
-  border-radius: 3px;
-}
-.wt-cert-corner {
+.wt-cert-corner-svg {
   position: absolute;
-  width: 22px;
-  height: 22px;
-  border-color: #c59b27;
-  border-style: solid;
+  width: 34px;
+  height: 34px;
   pointer-events: none;
+  z-index: 2;
 }
-.wt-cert-corner.tl { top: 8px; left: 8px; border-width: 3px 0 0 3px; }
-.wt-cert-corner.tr { top: 8px; right: 8px; border-width: 3px 3px 0 0; }
-.wt-cert-corner.bl { bottom: 8px; left: 8px; border-width: 0 0 3px 3px; }
-.wt-cert-corner.br { bottom: 8px; right: 8px; border-width: 0 3px 3px 0; }
+.wt-cert-corner-svg.tl { top: 4px; left: 4px; }
+.wt-cert-corner-svg.tr { top: 4px; right: 4px; transform: scaleX(-1); }
+.wt-cert-corner-svg.bl { bottom: 4px; left: 4px; transform: scaleY(-1); }
+.wt-cert-corner-svg.br { bottom: 4px; right: 4px; transform: scale(-1, -1); }
 
-.wt-cert-emblem {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #c59b27;
-  box-shadow: 0 3px 10px rgba(13, 27, 62, 0.18);
-  margin-bottom: 6px;
+/* 금빛 메달 + 빨간 리본 */
+.wt-medal-wrap {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 2px auto 12px;
+  z-index: 2;
 }
-.wt-cert-subbrand {
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 2.5px;
-  color: #c59b27;
-  text-transform: uppercase;
-  margin-bottom: 2px;
+.wt-medal-disc {
+  position: relative;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: conic-gradient(from 30deg, #f6e27a, #d4af37, #fff1a8, #b8860b, #f6e27a);
+  padding: 5px;
+  box-shadow: 0 4px 12px rgba(184, 134, 11, 0.45), inset 0 0 6px rgba(255, 255, 255, 0.8);
+  border: 2px dashed #b8860b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+.wt-medal-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fffbe6, #e8c458);
+  border: 1.5px solid #a67c00;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.wt-medal-inner img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  border-radius: 50%;
+}
+.wt-medal-ribbon {
+  margin-top: -12px;
+  z-index: 1;
 }
 .wt-cert-head {
   font-size: 30px;
   font-weight: 900;
-  letter-spacing: 12px;
-  padding-left: 12px;
-  color: #0d1b3e;
-  margin: 4px 0 10px;
-}
-.wt-cert-divider {
-  width: 80px;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #c59b27, transparent);
-  margin: 0 auto 14px;
+  letter-spacing: 6px;
+  color: #111827;
+  margin: 4px 0 4px;
+  position: relative;
+  z-index: 2;
 }
 .wt-cert-award-title {
-  display: inline-block;
-  font-size: 16.5px;
-  font-weight: 900;
-  color: #0d1b3e;
-  border-top: 1.5px solid #c59b27;
-  border-bottom: 1.5px solid #c59b27;
-  background: rgba(197, 155, 39, 0.1);
-  padding: 6px 22px;
-  margin-bottom: 18px;
-}
-.wt-cert-to {
   font-size: 16px;
   font-weight: 800;
-  text-align: right;
-  margin-bottom: 18px;
-  color: #1e293b;
+  color: #92400e;
+  margin-bottom: 22px;
+  position: relative;
+  z-index: 2;
 }
-.wt-cert-to span {
-  border-bottom: 1.5px solid #0d1b3e;
-  padding: 0 4px 2px;
+.wt-cert-to-box {
+  text-align: right;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1f2937;
+  line-height: 1.8;
+  margin: 0 10px 24px auto;
+  position: relative;
+  z-index: 2;
 }
 .wt-cert-body {
   font-size: 15px;
-  line-height: 1.95;
-  text-align: left;
+  line-height: 2.0;
+  text-align: center;
   white-space: pre-wrap;
-  min-height: 96px;
-  color: #1e293b;
-  margin-bottom: 26px;
-  padding: 10px 8px;
+  min-height: 110px;
+  color: #111827;
+  margin: 0 auto 34px;
+  padding: 6px 12px;
+  position: relative;
+  z-index: 2;
+  word-break: keep-all;
 }
 .wt-cert-foot {
-  font-size: 13px;
-  font-weight: 700;
-  color: #475569;
+  position: relative;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 16px;
 }
-.wt-cert-giver-row {
+.wt-cert-date {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #1f2937;
+  letter-spacing: 1px;
+}
+.wt-cert-sign-wrap {
+  position: relative;
   display: inline-flex;
+  flex-direction: column;
   align-items: center;
-  gap: 10px;
-  margin-top: 2px;
+  gap: 3px;
+  padding: 6px 46px 6px 12px;
+}
+.wt-cert-org {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #374151;
 }
 .wt-cert-giver {
   font-size: 17px;
   font-weight: 900;
-  color: #0d1b3e;
-  letter-spacing: 1px;
+  color: #111827;
+  letter-spacing: 2px;
 }
-.wt-cert-seal {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  border: 2px solid #b91c1c;
-  color: #b91c1c;
-  font-size: 10px;
-  font-weight: 900;
-  line-height: 1.05;
-  transform: rotate(-8deg);
-  opacity: 0.85;
+.wt-cert-stamp {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%) rotate(-3deg);
+  width: 44px;
+  height: 44px;
+  opacity: 0.88;
+  pointer-events: none;
 }
 .wt-print-overlay {
   position: fixed;
@@ -646,9 +682,9 @@ select.wt-arch-sel {
   padding: 20px;
 }
 .wt-print-sheet {
-  max-width: 700px;
+  max-width: 660px;
   margin: 0 auto 24px;
-  padding: 36px 34px;
+  padding: 26px;
   page-break-after: always;
   break-after: page;
 }
@@ -668,7 +704,7 @@ select.wt-arch-sel {
   .wt-print-sheet {
     max-width: 100% !important;
     margin: 0 !important;
-    min-height: 92vh;
+    min-height: 94vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
