@@ -1125,7 +1125,7 @@
           <text x="45" y="48" text-anchor="middle" font-size="14" font-weight="900" fill="#ffffff">즈</text>
         </svg>`;
       return `
-        <img class="wt-cert-bg-img" src="img/cert_bg_v4.jpg" alt="">
+        <img class="wt-cert-bg-img" src="img/cert_bg_v5.jpg" alt="">
         ${emblem ? `<img class="wt-cert-wm" src="${emblem}" alt="">` : ''}
         <div class="wt-cert-content">
           <div>
