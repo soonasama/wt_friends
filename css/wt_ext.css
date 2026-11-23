@@ -492,7 +492,7 @@ select.wt-arch-sel {
   font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif !important;
 }
 
-/* 2026 연말총회 마니또 & 이미지 배경 기반 고급 A4 상장 */
+/* 2026 연말총회 마니또 & 모던 에디토리얼 A4 상장 */
 .wt-cert-preview,
 .wt-print-sheet {
   position: relative;
@@ -500,17 +500,17 @@ select.wt-arch-sel {
   max-width: 540px;
   aspect-ratio: 3 / 4;
   margin: 0 auto;
-  padding: 58px 54px;
+  padding: 58px 56px 52px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   text-align: center;
-  color: #111827;
-  background: #fdfaf0;
+  color: #0f172a;
+  background: #faf8f3;
   border-radius: 4px;
   overflow: hidden;
-  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.28);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
   font-family: 'Noto Serif KR', 'Batang', '바탕', Georgia, serif !important;
   -webkit-print-color-adjust: exact !important;
   print-color-adjust: exact !important;
@@ -530,15 +530,15 @@ select.wt-arch-sel {
 }
 .wt-cert-wm {
   position: absolute;
-  top: 52%;
+  top: 54%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 190px;
-  height: 190px;
-  opacity: 0.055;
+  width: 220px;
+  height: 220px;
+  opacity: 0.04;
   pointer-events: none;
   z-index: 1;
-  filter: grayscale(25%);
+  filter: grayscale(40%);
 }
 .wt-cert-content {
   position: relative;
@@ -548,57 +548,86 @@ select.wt-arch-sel {
   flex-direction: column;
   justify-content: space-between;
 }
+.wt-cert-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 .wt-cert-logo {
-  width: 74px;
-  height: 74px;
+  width: 98px;
+  height: 98px;
   object-fit: contain;
-  margin: 0 auto 6px;
+  margin: 0 auto 8px;
   display: block;
+  filter: drop-shadow(0 4px 10px rgba(13, 27, 62, 0.14));
+}
+.wt-cert-eyebrow {
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: #b5892e;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  font-family: 'Pretendard Variable', Pretendard, sans-serif !important;
 }
 .wt-cert-head {
-  font-size: 28px;
+  font-size: 30px;
   font-weight: 900;
-  letter-spacing: 5px;
-  color: #111827;
-  margin: 2px 0 4px;
+  letter-spacing: 3px;
+  color: #0d1b3e;
+  margin: 0 0 10px;
   line-height: 1.25;
 }
-.wt-cert-award-title {
-  font-size: 14px;
-  font-weight: 800;
-  color: #92400e;
-  letter-spacing: 1px;
-  margin-bottom: 10px;
+.wt-cert-rule {
+  width: 46px;
+  height: 2px;
+  background: #c59b27;
+  margin: 0 auto 14px;
 }
 .wt-cert-to-box {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 4px;
+  box-sizing: border-box;
+}
+.wt-cert-to-inner {
   text-align: right;
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 700;
-  color: #1f2937;
-  line-height: 1.75;
-  padding-right: 6px;
+  color: #334155;
+  line-height: 1.85;
+  border-bottom: 1px solid rgba(197, 155, 39, 0.5);
+  padding-bottom: 6px;
+}
+.wt-cert-to-name {
+  font-size: 16px;
+  font-weight: 900;
+  color: #0d1b3e;
+  letter-spacing: 2px;
 }
 .wt-cert-body {
-  font-size: 14.5px;
-  line-height: 1.95;
+  font-size: 15px;
+  line-height: 2.0;
   text-align: center;
   white-space: pre-wrap;
-  color: #111827;
-  padding: 8px 10px;
-  margin: auto 0;
+  color: #1e293b;
+  max-width: 400px;
+  margin: auto;
+  padding: 10px 6px;
   word-break: keep-all;
 }
 .wt-cert-foot {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   padding-bottom: 4px;
 }
 .wt-cert-date {
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 700;
-  color: #1f2937;
+  color: #475569;
   letter-spacing: 1px;
 }
 .wt-cert-sign-wrap {
@@ -606,27 +635,28 @@ select.wt-arch-sel {
   display: inline-flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
-  padding: 4px 66px 4px 14px;
+  gap: 2px;
+  padding: 6px 70px 6px 16px;
 }
 .wt-cert-org {
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 700;
-  color: #374151;
+  color: #64748b;
+  letter-spacing: 1px;
 }
 .wt-cert-giver {
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 900;
-  color: #111827;
-  letter-spacing: 1.5px;
+  color: #0d1b3e;
+  letter-spacing: 2.5px;
 }
 .wt-cert-stamp {
   position: absolute;
-  right: 2px;
+  right: 0;
   top: 50%;
-  transform: translateY(-50%) rotate(-3deg);
-  width: 56px !important;
-  height: 56px !important;
+  transform: translateY(-50%) rotate(-6deg);
+  width: 64px !important;
+  height: 64px !important;
   opacity: 0.88;
   pointer-events: none;
 }
@@ -640,7 +670,7 @@ select.wt-arch-sel {
 }
 .wt-print-sheet {
   max-width: 680px;
-  padding: 74px 68px;
+  padding: 74px 70px 66px;
   margin: 0 auto 24px;
   page-break-after: always;
   break-after: page;
@@ -651,11 +681,12 @@ select.wt-arch-sel {
 }
 @media (max-width: 520px) {
   .wt-cert-preview {
-    padding: 36px 32px;
+    padding: 36px 32px 32px;
   }
-  .wt-cert-logo { width: 54px; height: 54px; }
-  .wt-cert-head { font-size: 22px; letter-spacing: 3px; }
+  .wt-cert-logo { width: 72px; height: 72px; }
+  .wt-cert-head { font-size: 22px; letter-spacing: 2px; }
   .wt-cert-body { font-size: 13px; line-height: 1.75; }
+  .wt-cert-stamp { width: 52px !important; height: 52px !important; }
 }
 @media print {
   body > *:not(#wtManitoPrintRoot) { display: none !important; }
@@ -670,7 +701,7 @@ select.wt-arch-sel {
     max-width: 100% !important;
     width: 100% !important;
     min-height: 95vh;
-    padding: 82px 76px !important;
+    padding: 82px 78px 72px !important;
     margin: 0 !important;
     box-shadow: none !important;
   }
