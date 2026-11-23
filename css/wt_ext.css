@@ -519,6 +519,18 @@ select.wt-arch-sel {
 .wt-print-sheet * {
   font-family: 'Noto Serif KR', 'Batang', '바탕', Georgia, serif !important;
 }
+.wt-cert-wm {
+  position: absolute;
+  top: 52%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 230px;
+  height: 230px;
+  object-fit: contain;
+  opacity: 0.065;
+  pointer-events: none;
+  z-index: 1;
+}
 .wt-cert-bg-img {
   position: absolute;
   inset: 0;
@@ -537,10 +549,10 @@ select.wt-arch-sel {
   justify-content: space-between;
 }
 .wt-cert-logo {
-  width: 88px;
-  height: 88px;
+  width: 132px;
+  height: 132px;
   object-fit: contain;
-  margin: 4px auto 12px;
+  margin: 0 auto 8px;
   display: block;
 }
 .wt-cert-head {
@@ -641,7 +653,7 @@ select.wt-arch-sel {
   .wt-cert-preview {
     padding: 36px 32px 32px;
   }
-  .wt-cert-logo { width: 66px; height: 66px; margin-bottom: 8px; }
+  .wt-cert-logo { width: 96px; height: 96px; margin-bottom: 6px; }
   .wt-cert-head { font-size: 23px; letter-spacing: 3px; margin-bottom: 12px; }
   .wt-cert-to-inner { font-size: 12.5px; }
   .wt-cert-body { font-size: 13px; line-height: 1.8; }

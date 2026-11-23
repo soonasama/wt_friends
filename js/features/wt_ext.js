@@ -1117,12 +1117,16 @@
       const stampSvg = `
         <svg class="wt-cert-stamp" viewBox="0 0 64 64" width="48" height="48">
           <rect x="2" y="2" width="60" height="60" rx="5" fill="#c81e1e"/>
-          <rect x="6" y="6" width="52" height="52" rx="3" fill="none" stroke="#ffffff" stroke-width="1.4" stroke-opacity="0.7"/>
-          <text x="32" y="27" text-anchor="middle" font-size="16" font-weight="900" letter-spacing="3" fill="#ffffff">WT</text>
-          <text x="32" y="49" text-anchor="middle" font-size="14.5" font-weight="900" letter-spacing="1" fill="#ffffff">프렌즈</text>
+          <rect x="6" y="6" width="52" height="52" rx="3" fill="none" stroke="#ffffff" stroke-width="1.4" stroke-opacity="0.72"/>
+          <text x="23" y="27" text-anchor="middle" font-size="16" font-weight="900" fill="#ffffff">W</text>
+          <text x="41" y="27" text-anchor="middle" font-size="16" font-weight="900" fill="#ffffff">T</text>
+          <text x="19" y="48" text-anchor="middle" font-size="14" font-weight="900" fill="#ffffff">프</text>
+          <text x="32" y="48" text-anchor="middle" font-size="14" font-weight="900" fill="#ffffff">렌</text>
+          <text x="45" y="48" text-anchor="middle" font-size="14" font-weight="900" fill="#ffffff">즈</text>
         </svg>`;
       return `
-        <img class="wt-cert-bg-img" src="img/cert_bg_v3.jpg" alt="">
+        <img class="wt-cert-bg-img" src="img/cert_bg_v4.jpg" alt="">
+        ${emblem ? `<img class="wt-cert-wm" src="${emblem}" alt="">` : ''}
         <div class="wt-cert-content">
           <div>
             ${emblem ? `<img class="wt-cert-logo" src="${emblem}" alt="WT프렌즈">` : ''}
@@ -1139,7 +1143,7 @@
             <div class="wt-cert-date">${esc(fmtKoDate(evDateTxt))}</div>
             <div class="wt-cert-sign-wrap">
               <div class="wt-cert-org">WT프렌즈 여자야구단</div>
-              <div class="wt-cert-giver">수여 ${esc(giver)}</div>
+              <div class="wt-cert-giver">${esc(giver)}</div>
               ${stampSvg}
             </div>
           </div>
