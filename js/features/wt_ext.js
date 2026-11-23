@@ -1050,8 +1050,38 @@
       };
     }
 
+    const DEFAULT_GUEST_BIOS = {
+      '임은아': '🌽 왕년의 WT팀원 · 현재는 홍촌 옥수수 농부 · 조보영 친구 · 원준이 엄마 | 올해 가장 잘한 일: 큰아들 장가보냄',
+      '유선아': '🏡 왕년의 WT팀원 · 우리 엠티숙소 사장님 후계자 · 전순아 친구 · 예린이·재형이 엄마 | 올해 가장 잘한 일: 씩씩하게 잘 살아나가고 있는 일',
+      '오지연': '🎉 말썽쟁이 우당탕탕 사고뭉치 · 김은서 친구 | 올해 가장 잘한 일: 은서 친구로 우리 팀에 와준 일'
+    };
+
+    function fixLegacyGuestName(m) {
+      if (!m) return false;
+      let changed = false;
+      const repArr = arr => Array.isArray(arr) ? arr.map(x => { if (x === '이지연') { changed = true; return '오지연'; } return x; }) : arr;
+      m.customGuests = repArr(m.customGuests);
+      m.participants = repArr(m.participants);
+      ['pairs', 'awards', 'secrets'].forEach(k => {
+        if (m[k] && typeof m[k] === 'object') {
+          if (m[k]['이지연'] !== undefined) {
+            m[k]['오지연'] = m[k]['이지연'];
+            delete m[k]['이지연'];
+            changed = true;
+          }
+          if (k === 'pairs') {
+            Object.keys(m.pairs).forEach(g => {
+              if (m.pairs[g] === '이지연') { m.pairs[g] = '오지연'; changed = true; }
+            });
+          }
+        }
+      });
+      return changed;
+    }
+
     let clubData = getClubData();
     let manito = clubData.manito || getDefaultManito();
+    const migratedLocal = fixLegacyGuestName(manito);
     let authedUser = sessionStorage.getItem('wt_manito_user') || '';
     let showSpoiler = false;
     let excludeMeOnPrint = true;
@@ -1248,7 +1278,7 @@
                   <div style="font-size:12px;font-weight:700;color:var(--gold)">🤫 나만 아는 비밀 마니또</div>
                   <div style="font-size:21px;font-weight:900;margin:6px 0">당신의 마니또는 <span style="color:var(--accent)">${esc(myTarget)}</span> 님입니다!</div>
                   <div style="font-size:12px;color:var(--sub)">
-                    ${hint.gCnt > 0 ? `📊 2026 공식 기록 힌트: ${hint.gCnt}경기 · ${hint.h}안타 · ${hint.rbi}타점 · ${hint.sb}도루${hint.so > 0 ? ` · 탈삼진 ${hint.so}K` : ''}` : '🎈 연말총회에 함께하는 소중한 친구입니다! 따뜻한 응원의 상장을 적어주세요.'}
+                    ${(manito.guestBios && manito.guestBios[myTarget]) || DEFAULT_GUEST_BIOS[myTarget] || (hint.gCnt > 0 ? `📊 2026 공식 기록 힌트: ${hint.gCnt}경기 · ${hint.h}안타 · ${hint.rbi}타점 · ${hint.sb}도루${hint.so > 0 ? ` · 탈삼진 ${hint.so}K` : ''}` : '🎈 연말총회에 함께하는 소중한 친구입니다! 따뜻한 응원의 상장을 적어주세요.')}
                   </div>
                 </div>
 
@@ -1506,10 +1536,18 @@
       }
     }
 
+    if (migratedLocal) { postManitoAction('saveManitoConfig', { manito }); }
     draw();
     if (window.ClubStore) {
       window.ClubStore.fetchFromSheet(teamObj, true).then(remote => {
-        if (remote && remote.manito) { clubData = remote; manito = remote.manito; draw(); }
+        if (remote && remote.manito) {
+          clubData = remote;
+          manito = remote.manito;
+          if (fixLegacyGuestName(manito)) {
+            postManitoAction('saveManitoConfig', { manito });
+          }
+          draw();
+        }
       });
     }
   }
