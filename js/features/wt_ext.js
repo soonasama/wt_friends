@@ -1100,10 +1100,11 @@
       }
       return Array.from(set).sort((a, b) => a.localeCompare(b, 'ko'));
     })();
+    const DEFAULT_GUESTS = ['임은아', '유선아', '오지연'];
     function getAllCandidates() {
       const guests = Array.isArray(manito.customGuests) ? manito.customGuests : [];
       const merged = fullRoster.slice();
-      guests.forEach(g => { if (g && !merged.includes(g)) merged.push(g); });
+      DEFAULT_GUESTS.concat(guests).forEach(g => { if (g && !merged.includes(g)) merged.push(g); });
       return merged;
     }
 
@@ -1179,7 +1180,7 @@
             <div class="wt-cert-to-box">
               <div class="wt-cert-to-inner">
                 <div>성 명 : ${esc(target)}</div>
-                <div>소 속 : ${Array.isArray(manito.customGuests) && manito.customGuests.includes(target) ? 'WT프렌즈의 소중한 친구' : 'WT프렌즈 여자야구단'}</div>
+                <div>소 속 : ${(DEFAULT_GUESTS.includes(target) || (Array.isArray(manito.customGuests) && manito.customGuests.includes(target))) ? 'WT프렌즈의 소중한 친구' : 'WT프렌즈 여자야구단'}</div>
               </div>
             </div>
           </div>
@@ -1329,7 +1330,7 @@
               </div>
               <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;padding:10px;border-radius:10px;border:1px solid var(--line)">
                 ${getAllCandidates().map(nm => {
-                  const isGuest = Array.isArray(manito.customGuests) && manito.customGuests.includes(nm);
+                  const isGuest = DEFAULT_GUESTS.includes(nm) || (Array.isArray(manito.customGuests) && manito.customGuests.includes(nm));
                   return `
                   <label style="display:inline-flex;align-items:center;gap:4px;font-size:12px;padding:3px 9px;border-radius:999px;border:1px solid ${isGuest ? 'rgba(245,158,11,0.5)' : 'var(--line)'};background:${isGuest ? 'rgba(245,158,11,0.08)' : 'transparent'};cursor:pointer">
                     <input type="checkbox" class="wt-manito-chk" value="${esc(nm)}" ${parts.includes(nm) ? 'checked' : ''}> ${esc(nm)}${isGuest ? ' <span style="font-size:10px;color:var(--gold)">(친구)</span>' : ''}

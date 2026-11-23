@@ -211,7 +211,11 @@ function doPost(e) {
         .setMimeType(ContentService.MimeType.JSON);
     }
 
-    // 분기 B: 클럽하우스 데이터 전체 동기화
+    // 분기 B: 클럽하우스 데이터 전체 동기화 (action이 'save'이거나 생략된 경우만 허용)
+    if (data.action && data.action !== 'save') {
+      return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: 'Unknown action: ' + data.action }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
     var clubData = data.data || data;
     var rawSheet = getOrCreateSheet(ss, '_CLUB_RAW');
     if (!clubData.manito) {
@@ -480,7 +484,7 @@ function mergeVisibleSheetsIntoData(ss, data) {
   data.notices = Array.isArray(data.notices) ? data.notices : [];
   data.missions = Array.isArray(data.missions) ? data.missions : [];
 
-  // 1) WT_일정_참석투표_DB 직접 수정/삭제분 100% 반영 (헤더만 남기고 전부 지운 경우에도 빈 배열로 동기화)
+  // 1) WT_일정_참석투표_DB 직접 수정/삭제분 100% 반영 (일정ID 유무와 무관하게 다양한 헤더 형식 모두 지원)
   var evSheet = ss.getSheetByName('WT_일정_참석투표_DB');
   if (evSheet && evSheet.getLastRow() >= 1) {
     if (evSheet.getLastRow() < 2) {
@@ -489,35 +493,47 @@ function mergeVisibleSheetsIntoData(ss, data) {
     var evVals = evSheet.getDataRange().getValues();
     var hdr = evVals[0] || [];
     var cId = findColIdx(hdr, ['일정ID', 'ID']);
-    var cTitle = findColIdx(hdr, ['일정제목', '제목']);
-    var cType = findColIdx(hdr, ['일정구분', '구분']);
+    var cTitle = findColIdx(hdr, ['일정제목', '일정 제목', '제목']);
+    var cType = findColIdx(hdr, ['일정구분', '구분', '일정']);
     var cDt = findColIdx(hdr, ['일시', '날짜']);
-    var cVenue = findColIdx(hdr, ['장소', '구장']);
-    var cNames = findColIdx(hdr, ['참석자명단', '참석자']);
-    var cOuts = findColIdx(hdr, ['불참자명단', '불참자']);
-    var cTbds = findColIdx(hdr, ['미정자명단', '미정자']);
-    var cNote = findColIdx(hdr, ['비고', '메모', '공지']);
+    var cTime = findColIdx(hdr, ['시간']);
+    var cVenue = findColIdx(hdr, ['구장/장소', '장소', '구장']);
+    var cNames = findColIdx(hdr, ['참석자명단', '참석 명단', '참석자', '참석']);
+    var cOuts = findColIdx(hdr, ['불참자명단', '불참자', '불참']);
+    var cTbds = findColIdx(hdr, ['미정자명단', '미정자', '미정']);
+    var cNote = findColIdx(hdr, ['공지 및 준비물 메모', '비고', '메모', '공지']);
 
-    if (cId !== -1 && cTitle !== -1) {
+    if (cTitle !== -1) {
       var evById = {};
-      data.events.forEach(function(ev) { if (ev && ev.id) evById[String(ev.id)] = ev; });
+      var evByKey = {};
+      data.events.forEach(function(ev) {
+        if (ev && ev.id) evById[String(ev.id)] = ev;
+        if (ev && ev.title) evByKey[(ev.date || '') + '|' + ev.title] = ev;
+      });
       var seenIds = {};
       var sheetEvents = [];
 
       for (var i = 1; i < evVals.length; i++) {
         var row = evVals[i];
-        var id = String(row[cId] || '').trim();
         var title = String(row[cTitle] || '').trim();
+        var id = cId !== -1 ? String(row[cId] || '').trim() : '';
         if (!id && !title) continue;
-        if (!id) id = 'ev_sheet_' + i;
-        if (seenIds[id]) continue; // 중복 ID 카드 생성 원천 차단!
+        var dtInfo = cDt !== -1 ? parseSheetDateTime(row[cDt]) : { date: '', time: '10:00' };
+        if (cTime !== -1 && row[cTime]) {
+          var tVal = row[cTime];
+          if (tVal instanceof Date) {
+            dtInfo.time = Utilities.formatDate(tVal, 'Asia/Seoul', 'HH:mm');
+          } else {
+            var tm = String(tVal).match(/(\d{1,2}:\d{2})/);
+            if (tm) dtInfo.time = tm[1].length === 4 ? ('0' + tm[1]) : tm[1];
+          }
+        }
+        var existing = (id && evById[id]) || evByKey[(dtInfo.date || '') + '|' + title] || { rsvp: {} };
+        if (!id) id = existing.id || ('ev_' + (dtInfo.date || i).replace(/-/g, '') + '_' + i);
+        if (seenIds[id]) continue;
         seenIds[id] = true;
 
-        var existing = evById[id] || { id: id, rsvp: {} };
-        var dtInfo = cDt !== -1 ? parseSheetDateTime(row[cDt]) : { date: existing.date || '', time: existing.time || '10:00' };
-
         var typeVal = cType !== -1 ? String(row[cType] || '').trim() : (existing.type || '훈련');
-        // Date 문자열이 잘못 들어온 경우 방어
         if (/^(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\s/.test(typeVal)) {
           typeVal = existing.type || '훈련';
         }
@@ -525,17 +541,22 @@ function mergeVisibleSheetsIntoData(ss, data) {
         var rsvp = existing.rsvp || {};
         var parseNames = function(colIdx) {
           if (colIdx === -1) return null;
-          var cell = String(row[colIdx] || '').trim();
-          return cell ? cell.split(/[,，\n]+/).map(function(s){ return s.trim(); }).filter(function(s){ return s && s.indexOf('/') === -1 && s.length <= 15; }) : [];
+          var cell = String(row[colIdx] || '').replace(/\[총\s*\d+명\]/g, '').trim();
+          if (!cell || cell === '없음' || cell === '-') return [];
+          return cell.split(/[,，\n]+/).map(function(s){ return s.trim(); }).filter(function(s){ return s && s !== '없음' && s.indexOf('/') === -1 && s.length <= 20; });
         };
         var inNames = parseNames(cNames);
         var outNames = parseNames(cOuts);
         var tbdNames = parseNames(cTbds);
         if (inNames !== null) {
           var inSet = {};
-          inNames.forEach(function(nm) {
+          inNames.forEach(function(rawNm) {
+            var isCar = /\(차량/.test(rawNm);
+            var nm = rawNm.replace(/\(.*?\)/g, '').trim();
+            if (!nm) return;
             inSet[nm] = true;
-            if (rsvp[nm] !== 'in' && rsvp[nm] !== 'car') rsvp[nm] = 'in';
+            if (isCar) rsvp[nm] = 'car';
+            else if (rsvp[nm] !== 'in' && rsvp[nm] !== 'car') rsvp[nm] = 'in';
           });
           Object.keys(rsvp).forEach(function(nm) {
             if ((rsvp[nm] === 'in' || rsvp[nm] === 'car') && !inSet[nm]) delete rsvp[nm];
@@ -543,14 +564,22 @@ function mergeVisibleSheetsIntoData(ss, data) {
         }
         if (outNames !== null) {
           var outSet = {};
-          outNames.forEach(function(nm) { outSet[nm] = true; rsvp[nm] = 'out'; });
+          outNames.forEach(function(rawNm) {
+            var nm = rawNm.replace(/\(.*?\)/g, '').trim();
+            if (!nm) return;
+            outSet[nm] = true; rsvp[nm] = 'out';
+          });
           Object.keys(rsvp).forEach(function(nm) {
             if (rsvp[nm] === 'out' && !outSet[nm]) delete rsvp[nm];
           });
         }
         if (tbdNames !== null) {
           var tbdSet = {};
-          tbdNames.forEach(function(nm) { tbdSet[nm] = true; rsvp[nm] = 'tbd'; });
+          tbdNames.forEach(function(rawNm) {
+            var nm = rawNm.replace(/\(.*?\)/g, '').trim();
+            if (!nm) return;
+            tbdSet[nm] = true; rsvp[nm] = 'tbd';
+          });
           Object.keys(rsvp).forEach(function(nm) {
             if (rsvp[nm] === 'tbd' && !tbdSet[nm]) delete rsvp[nm];
           });
