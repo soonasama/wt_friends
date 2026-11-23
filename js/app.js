@@ -7695,39 +7695,103 @@ function syncAdminUI() {
   }
 }
 
+function openWtAdminModal(opts) {
+  const old = document.getElementById('wtAdminModalOverlay');
+  if (old) old.remove();
+  const wrap = document.createElement('div');
+  wrap.id = 'wtAdminModalOverlay';
+  wrap.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(8,13,26,0.72);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;padding:18px;box-sizing:border-box';
+  wrap.innerHTML = `
+    <div style="width:100%;max-width:340px;background:var(--card-solid,#0f172a);color:var(--ink,#f8fafc);border:1.5px solid var(--border,rgba(255,255,255,0.14));border-radius:18px;padding:24px 20px 20px;box-shadow:0 18px 48px rgba(0,0,0,0.45);box-sizing:border-box;text-align:center;font-family:inherit">
+      <div style="width:46px;height:46px;margin:0 auto 10px;border-radius:50%;background:rgba(16,185,129,0.14);color:#10b981;display:flex;align-items:center;justify-content:center;font-size:22px">${opts.icon || '🔐'}</div>
+      <div style="font-size:16px;font-weight:900;margin-bottom:6px;letter-spacing:-0.2px">${opts.title}</div>
+      <div style="font-size:12.5px;color:var(--sub,#94a3b8);line-height:1.55;margin-bottom:16px;word-break:keep-all">${opts.desc}</div>
+      ${opts.bodyHtml || ''}
+    </div>`;
+  wrap.onclick = e => { if (e.target === wrap) wrap.remove(); };
+  document.body.appendChild(wrap);
+  return wrap;
+}
+
 function handleAdminAuthClick() {
   if (isAdmin()) {
-    const choice = confirm('👑 현재 구단 관리자 모드로 로그인되어 있습니다.\n\n[확인]: 관리자 모드 로그아웃 (일반 방문자 모드로 전환)\n[취소]: 관리자 비밀번호 변경');
-    if (choice) {
+    const m = openWtAdminModal({
+      icon: '👑',
+      title: '관리자 모드 실행 중',
+      desc: '현재 구단 관리자 권한이 활성화되어 있습니다. 원하시는 작업을 선택해 주세요.',
+      bodyHtml: `
+        <div style="display:grid;gap:8px">
+          <button type="button" id="wtAdmLogoutBtn" style="width:100%;height:42px;border-radius:11px;border:none;background:#ef4444;color:#fff;font-size:13.5px;font-weight:800;cursor:pointer">🔒 관리자 모드 로그아웃</button>
+          <button type="button" id="wtAdmChgPinBtn" style="width:100%;height:42px;border-radius:11px;border:1px solid var(--border,rgba(255,255,255,0.16));background:transparent;color:var(--ink);font-size:13.5px;font-weight:700;cursor:pointer">🔑 관리자 비밀번호 변경</button>
+          <button type="button" id="wtAdmCloseBtn" style="width:100%;height:38px;border-radius:11px;border:none;background:rgba(148,163,184,0.15);color:var(--sub);font-size:13px;font-weight:700;cursor:pointer">닫기</button>
+        </div>`
+    });
+    m.querySelector('#wtAdmCloseBtn').onclick = () => m.remove();
+    m.querySelector('#wtAdmLogoutBtn').onclick = () => {
       localStorage.removeItem('wt_admin_auth');
+      m.remove();
       syncAdminUI();
       render();
-      alert('일반 방문자 모드로 전환되었습니다.\n(구글 시트 저장 및 DB 관리 권한이 잠겼습니다.)');
-    } else {
-      const curPin = prompt('현재 관리자 비밀번호를 입력해주세요:');
-      if (curPin === getAdminPin()) {
-        const newPin = prompt('새로운 관리자 비밀번호를 입력해주세요 (4자리 이상 권장):');
-        if (newPin && newPin.trim().length >= 2) {
-          localStorage.setItem('wt_admin_pin', newPin.trim());
-          alert('비밀번호가 성공적으로 변경되었습니다!');
-        } else if (newPin) {
-          alert('비밀번호를 입력해주세요.');
-        }
-      } else if (curPin !== null) {
-        alert('현재 비밀번호가 일치하지 않습니다.');
-      }
-    }
+    };
+    m.querySelector('#wtAdmChgPinBtn').onclick = () => {
+      const m2 = openWtAdminModal({
+        icon: '🔑',
+        title: '관리자 비밀번호 변경',
+        desc: '현재 비밀번호와 새로 사용할 비밀번호를 입력해 주세요.',
+        bodyHtml: `
+          <form id="wtAdmPinChgForm" style="display:grid;gap:9px">
+            <input type="password" id="wtCurPinIn" inputmode="numeric" placeholder="현재 비밀번호" required style="width:100%;height:42px;padding:0 12px;border-radius:10px;box-sizing:border-box;font-size:14px;text-align:center">
+            <input type="password" id="wtNewPinIn" inputmode="numeric" placeholder="새 비밀번호 (4자리 이상 권장)" required style="width:100%;height:42px;padding:0 12px;border-radius:10px;box-sizing:border-box;font-size:14px;text-align:center">
+            <div id="wtPinChgErr" style="font-size:12px;color:#ef4444;min-height:16px"></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <button type="button" id="wtPinChgCancel" style="height:40px;border-radius:10px;border:none;background:rgba(148,163,184,0.16);color:var(--sub);font-size:13px;font-weight:700;cursor:pointer">취소</button>
+              <button type="submit" style="height:40px;border-radius:10px;border:none;background:#10b981;color:#fff;font-size:13px;font-weight:800;cursor:pointer">저장하기</button>
+            </div>
+          </form>`
+      });
+      m2.querySelector('#wtPinChgCancel').onclick = () => m2.remove();
+      m2.querySelector('#wtAdmPinChgForm').onsubmit = e => {
+        e.preventDefault();
+        const cur = m2.querySelector('#wtCurPinIn').value.trim();
+        const nxt = m2.querySelector('#wtNewPinIn').value.trim();
+        const err = m2.querySelector('#wtPinChgErr');
+        if (cur !== getAdminPin()) { err.textContent = '현재 비밀번호가 일치하지 않습니다.'; return; }
+        if (nxt.length < 2) { err.textContent = '새 비밀번호를 2자리 이상 입력해 주세요.'; return; }
+        localStorage.setItem('wt_admin_pin', nxt);
+        m2.remove();
+        const okM = openWtAdminModal({ icon: '✅', title: '변경 완료', desc: '관리자 비밀번호가 안전하게 변경되었습니다.', bodyHtml: '<button type="button" id="wtOkClose" style="width:100%;height:40px;border-radius:10px;border:none;background:#10b981;color:#fff;font-size:13.5px;font-weight:800;cursor:pointer">확인</button>' });
+        okM.querySelector('#wtOkClose').onclick = () => okM.remove();
+      };
+    };
   } else {
-    const input = prompt('🔐 WT프렌즈 구단 관리자 인증\n\n구글 시트 DB 연동 및 관리 권한을 활성화하려면 관리자 비밀번호를 입력해주세요:');
-    if (input === null) return;
-    if (input.trim() === getAdminPin()) {
-      localStorage.setItem('wt_admin_auth', '1');
-      syncAdminUI();
-      render();
-      alert('👑 구단 관리자 인증이 완료되었습니다!\n\n이제 라인업 구글 시트 저장 및 구단 DB 링크를 자유롭게 이용하실 수 있습니다.');
-    } else {
-      alert('비밀번호가 일치하지 않습니다. 관리자만 이용할 수 있습니다.');
-    }
+    const m = openWtAdminModal({
+      icon: '🔐',
+      title: 'WT프렌즈 구단 관리자 인증',
+      desc: '구글 시트 DB 연동 및 마니또·일정 관리 권한을 켜려면 관리자 비밀번호를 입력해 주세요.',
+      bodyHtml: `
+        <form id="wtAdmLoginForm" style="display:grid;gap:10px">
+          <input type="password" id="wtAdmPinIn" inputmode="numeric" placeholder="관리자 비밀번호 입력" required style="width:100%;height:44px;padding:0 12px;border-radius:11px;box-sizing:border-box;font-size:15px;text-align:center;letter-spacing:2px">
+          <div id="wtAdmLoginErr" style="font-size:12px;color:#ef4444;min-height:16px"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <button type="button" id="wtAdmLoginCancel" style="height:42px;border-radius:11px;border:none;background:rgba(148,163,184,0.16);color:var(--sub);font-size:13.5px;font-weight:700;cursor:pointer">취소</button>
+            <button type="submit" style="height:42px;border-radius:11px;border:none;background:linear-gradient(135deg,#10b981,#059669);color:#fff;font-size:13.5px;font-weight:800;cursor:pointer">✓ 인증하기</button>
+          </div>
+        </form>`
+    });
+    setTimeout(() => m.querySelector('#wtAdmPinIn')?.focus(), 60);
+    m.querySelector('#wtAdmLoginCancel').onclick = () => m.remove();
+    m.querySelector('#wtAdmLoginForm').onsubmit = e => {
+      e.preventDefault();
+      const input = m.querySelector('#wtAdmPinIn').value.trim();
+      if (input === getAdminPin()) {
+        localStorage.setItem('wt_admin_auth', '1');
+        m.remove();
+        syncAdminUI();
+        render();
+      } else {
+        m.querySelector('#wtAdmLoginErr').textContent = '비밀번호가 일치하지 않습니다. 관리자만 이용할 수 있습니다.';
+      }
+    };
   }
 }
 

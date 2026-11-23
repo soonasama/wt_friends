@@ -1313,7 +1313,7 @@
             ${!parts.length ? `
               <div class="empty" style="padding:20px 10px">아직 마니또 매칭이 시작되지 않았습니다.${isAdm ? ' 아래 [관리자 설정]에서 참석자를 체크하고 [매칭 생성] 버튼만 누르시면 바로 시작됩니다!' : ' (관리자이시면 상단 🔒 관리자 버튼을 먼저 켜주세요.)'}</div>
             ` : (!authedUser ? `
-              <div style="border:1.5px solid var(--accent);border-radius:12px;padding:16px;display:grid;gap:10px;max-width:420px;margin:6px auto">
+              <div id="wtManitoAuthBox" style="border:1.5px solid var(--accent);border-radius:12px;padding:14px;display:grid;grid-template-columns:minmax(0,1fr);gap:10px;max-width:420px;width:100%;margin:6px auto;box-sizing:border-box">
                 <b style="font-size:14.5px;color:var(--accent)">🔐 나만의 비밀 코드로 마니또 확인하기</b>
                 <div id="wtManitoAuthDesc" style="font-size:12px;color:var(--sub);line-height:1.5">본인 이름을 선택해 주세요. 등번호가 아닌 <b>본인만 아는 비밀 번호</b>를 직접 정해 안전하게 잠금 설정합니다.</div>
                 <select id="wtManitoWho" class="wt-arch-sel" style="width:100% !important">
@@ -1376,7 +1376,7 @@
                 <button type="button" class="wt-ext-pillbtn" id="wtCopyManitoLinkBtn" style="color:#0284c7;border-color:#bae6fd">🔗 팀원 초대링크 복사</button>
               </div>
               <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px">
-                <input type="text" id="wtGuestNameIn" placeholder="외부 친구/게스트 이름 입력" style="flex:1;min-width:170px;padding:7px 11px;border-radius:9px;font-size:13px">
+                <input type="text" id="wtGuestNameIn" placeholder="외부 친구/게스트 이름 입력" style="flex:1 1 140px;min-width:0;padding:7px 11px;border-radius:9px;font-size:13px">
                 <button type="button" class="wt-ext-pillbtn pri" id="wtAddGuestBtn">➕ 게스트 추가</button>
               </div>
               <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;padding:10px;border-radius:10px;border:1px solid var(--line)">

@@ -677,3 +677,36 @@ select.wt-arch-sel {
     box-shadow: none !important;
   }
 }
+
+/* 갤럭시 폴드5 접은 화면(초소형 폭 ~320px) 가로 넘침 원천 방지 */
+.wt-ext-card,
+.wt-ext-card form,
+.wt-ext-card input,
+.wt-ext-card select,
+.wt-ext-card textarea,
+.wt-ext-card button {
+  box-sizing: border-box !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+.wt-ext-card form {
+  grid-template-columns: minmax(0, 1fr) !important;
+  width: 100% !important;
+}
+#wtManitoAuthBox,
+#wtManitoAwardForm {
+  grid-template-columns: minmax(0, 1fr) !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+#wtManitoWho,
+#wtManitoPin,
+#wtManitoLoginBtn,
+#wtAwardTitle,
+#wtAwardBody,
+#wtAwardSubmit {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
