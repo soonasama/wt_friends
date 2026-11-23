@@ -1115,38 +1115,22 @@
     }
     function buildCertInner(title, target, body, evDateTxt, giver, emblem) {
       const stampSvg = `
-        <svg class="wt-cert-stamp" viewBox="0 0 80 80" width="64" height="64">
-          <defs>
-            <path id="wtSealTop" d="M 16,40 A 24,24 0 1,1 64,40" />
-            <path id="wtSealBot" d="M 64,40 A 24,24 0 1,1 16,40" />
-          </defs>
-          <circle cx="40" cy="40" r="36" fill="rgba(185,28,28,0.04)" stroke="#b91c1c" stroke-width="2.8"/>
-          <circle cx="40" cy="40" r="31" fill="none" stroke="#b91c1c" stroke-width="0.9"/>
-          <circle cx="40" cy="40" r="19" fill="none" stroke="#b91c1c" stroke-width="0.9"/>
-          <text font-size="6.8" font-weight="800" fill="#b91c1c" letter-spacing="1.4">
-            <textPath href="#wtSealTop" startOffset="50%" text-anchor="middle">WT FRIENDS</textPath>
-          </text>
-          <text font-size="6.4" font-weight="800" fill="#b91c1c" letter-spacing="1.2">
-            <textPath href="#wtSealBot" startOffset="50%" text-anchor="middle">2026 인증</textPath>
-          </text>
-          <text x="40" y="38" text-anchor="middle" font-size="11.5" font-weight="900" fill="#b91c1c" letter-spacing="1">WT</text>
-          <text x="40" y="50" text-anchor="middle" font-size="10.5" font-weight="900" fill="#b91c1c">프렌즈</text>
+        <svg class="wt-cert-stamp" viewBox="0 0 64 64" width="48" height="48">
+          <rect x="2" y="2" width="60" height="60" rx="5" fill="#c81e1e"/>
+          <rect x="6" y="6" width="52" height="52" rx="3" fill="none" stroke="#ffffff" stroke-width="1.4" stroke-opacity="0.7"/>
+          <text x="32" y="27" text-anchor="middle" font-size="16" font-weight="900" letter-spacing="3" fill="#ffffff">WT</text>
+          <text x="32" y="49" text-anchor="middle" font-size="14.5" font-weight="900" letter-spacing="1" fill="#ffffff">프렌즈</text>
         </svg>`;
       return `
-        <img class="wt-cert-bg-img" src="img/cert_bg.jpg" alt="">
-        ${emblem ? `<img class="wt-cert-wm" src="${emblem}" alt="">` : ''}
+        <img class="wt-cert-bg-img" src="img/cert_bg_v3.jpg" alt="">
         <div class="wt-cert-content">
           <div>
-            <div class="wt-cert-top">
-              ${emblem ? `<img class="wt-cert-logo" src="${emblem}" alt="WT프렌즈">` : ''}
-              <div class="wt-cert-eyebrow">2026 WT FRIENDS · YEAR-END AWARDS</div>
-              <div class="wt-cert-head" id="wtPrevTitle">${esc(title)}</div>
-              <div class="wt-cert-rule"></div>
-            </div>
+            ${emblem ? `<img class="wt-cert-logo" src="${emblem}" alt="WT프렌즈">` : ''}
+            <div class="wt-cert-head" id="wtPrevTitle">${esc(title)}</div>
             <div class="wt-cert-to-box">
               <div class="wt-cert-to-inner">
-                <div>소 속 · WT프렌즈 여자야구단</div>
-                <div class="wt-cert-to-name">성 명 · ${esc(target)}</div>
+                <div>성 명 : ${esc(target)}</div>
+                <div>소 속 : WT프렌즈 여자야구단</div>
               </div>
             </div>
           </div>
@@ -1155,7 +1139,7 @@
             <div class="wt-cert-date">${esc(fmtKoDate(evDateTxt))}</div>
             <div class="wt-cert-sign-wrap">
               <div class="wt-cert-org">WT프렌즈 여자야구단</div>
-              <div class="wt-cert-giver">수여 · ${esc(giver)}</div>
+              <div class="wt-cert-giver">수여 ${esc(giver)}</div>
               ${stampSvg}
             </div>
           </div>
