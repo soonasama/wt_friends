@@ -1131,6 +1131,7 @@
     }
 
     let serverSynced = false;
+    let serverCount = 0;
     async function postManitoAction(action, extra) {
       const url = (window.ClubStore && window.ClubStore.getSheetUrl(teamObj)) || window.WT_GOOGLE_SHEET_URL;
       clubData.manito = manito;
@@ -1146,8 +1147,16 @@
         });
         if (res.ok) {
           const j = await res.json();
-          if (j && j.status === 'success') { serverSynced = true; return true; }
-          if (j && j.status === 'error') { alert('서버 저장 오류: ' + j.message + '\nApps Script 새 버전 배포 여부를 확인해 주세요.'); return false; }
+          if (j && j.status === 'success') {
+            serverSynced = true;
+            serverCount = (manito.participants || []).length;
+            return true;
+          }
+          if (j && j.status === 'error') {
+            serverSynced = false;
+            alert('⚠️ 서버 저장 실패: ' + j.message + '\n구글 시트 → Apps Script에서 새 버전으로 배포했는지 확인해 주세요!');
+            return false;
+          }
         }
       } catch (e) {
         await fetch(url, {
@@ -1156,14 +1165,24 @@
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: bodyStr
         });
-        await new Promise(r => setTimeout(r, 1500));
+        await new Promise(r => setTimeout(r, 2000));
         try {
           const chk = await fetch(url + (url.includes('?') ? '&' : '?') + 'action=get&teamId=' + WT_ID + '&t=' + Date.now());
           if (chk.ok) {
             const cj = await chk.json();
-            if (cj && cj.data && cj.data.manito) { serverSynced = true; return true; }
+            const sm = cj && cj.data && cj.data.manito;
+            const sLen = sm && Array.isArray(sm.participants) ? sm.participants.length : -1;
+            const lLen = (manito.participants || []).length;
+            if (sm && sLen === lLen) {
+              serverSynced = true;
+              serverCount = sLen;
+              return true;
+            }
           }
         } catch (_) {}
+        serverSynced = false;
+        alert('⚠️ 구글 시트 서버에 저장이 반영되지 않았습니다!\n구글 시트 → 확장 프로그램 → Apps Script에 최신 google_apps_script.js를 붙여넣고 [배포 관리 → 수정 → 새 버전 → 배포]를 완료한 뒤 다시 시도해 주세요.');
+        return false;
       }
       return true;
     }
@@ -1328,7 +1347,7 @@
               <div class="wt-ext-head">
                 <div class="wt-ext-title">👑 관리자 전용 — 연말총회 마니또 설정 & 상장 출력</div>
                 <div style="display:flex;gap:6px;flex-wrap:wrap">
-                  <span class="wt-ext-badge ${serverSynced ? '' : 'gold'}">${serverSynced ? '☁️ 시트 저장됨' : '⏳ 시트 확인중'}</span>
+                  <span class="wt-ext-badge ${serverSynced && serverCount > 0 ? '' : 'gold'}">${serverSynced ? `☁️ 시트 저장됨 (${serverCount}명)` : '⚠️ 시트 미저장'}</span>
                   <span class="wt-ext-badge gold">작성 완료 ${parts.filter(n => awards[n] && awards[n].body).length} / ${parts.length}명</span>
                 </div>
               </div>
@@ -1390,7 +1409,8 @@
           syncBtn.textContent = '⏳ 불러오는 중...';
           const remote = await window.ClubStore.fetchFromSheet(teamObj, true);
           if (remote && remote.manito) {
-          serverSynced = true; clubData = remote; manito = remote.manito; }
+          serverSynced = true;
+          serverCount = Array.isArray(remote.manito.participants) ? remote.manito.participants.length : 0; clubData = remote; manito = remote.manito; }
           draw();
         };
       }
