@@ -1027,9 +1027,11 @@
   async function renderManitoPage() {
     const appEl = document.getElementById('app');
     if (!appEl) return;
+    appEl.innerHTML = '<div class="loading">🎁 연말총회 마니또를 불러오는 중…</div>';
     const isAdm = localStorage.getItem('wt_admin_auth') === '1';
     const teamObj = { id: WT_ID, short: 'WT프렌즈' };
-    const [core, box] = await Promise.all([loadCore(), loadBox()]);
+    let core = cache.core || window.WT_CORE || null;
+    let box = cache.box || window.WT_BOX || null;
 
     function getClubData() {
       if (window.ClubStore) return window.ClubStore.getTeamData(teamObj);
@@ -1173,7 +1175,14 @@
             const sm = cj && cj.data && cj.data.manito;
             const sLen = sm && Array.isArray(sm.participants) ? sm.participants.length : -1;
             const lLen = (manito.participants || []).length;
-            if (sm && sLen === lLen) {
+            let actionOk = !!(sm && sLen === lLen);
+            if (actionOk && action === 'saveManitoAward' && extra && extra.giver) {
+              actionOk = !!(sm.awards && sm.awards[extra.giver] && sm.awards[extra.giver].body === extra.award.body);
+            }
+            if (actionOk && action === 'setManitoSecret' && extra && extra.who) {
+              actionOk = extra.secret ? !!(sm.secrets && sm.secrets[extra.who] === String(extra.secret)) : !(sm.secrets && sm.secrets[extra.who]);
+            }
+            if (actionOk) {
               serverSynced = true;
               serverCount = sLen;
               return true;
@@ -1358,6 +1367,7 @@
                 <label style="font-size:12.5px;font-weight:700">행사 날짜: <input type="date" id="wtManitoDate" value="${esc(manito.eventDate || '2026-11-28')}" style="padding:5px 8px;border-radius:8px"></label>
                 <button type="button" class="wt-ext-pillbtn" id="wtImportAttendBtn">📥 일정 참석자 불러오기</button>
                 <button type="button" class="wt-ext-pillbtn" id="wtSavePartsBtn">💾 날짜·명단만 저장</button>
+                <button type="button" class="wt-ext-pillbtn" id="wtCopyManitoLinkBtn" style="color:#0284c7;border-color:#bae6fd">🔗 팀원 초대링크 복사</button>
               </div>
               <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px">
                 <input type="text" id="wtGuestNameIn" placeholder="외부 친구/게스트 이름 입력" style="flex:1;min-width:170px;padding:7px 11px;border-radius:9px;font-size:13px">
@@ -1481,8 +1491,9 @@
         const nowStr = new Date().toISOString().slice(0, 16).replace('T', ' ');
         manito.awards = manito.awards || {};
         manito.awards[authedUser] = { title, body, updatedAt: nowStr };
-        await postManitoAction('saveManitoAward', { giver: authedUser, award: manito.awards[authedUser] });
-        alert('상장 문구가 저장되었습니다! 마감 전까지 언제든 다시 수정할 수 있습니다.');
+        const ok = await postManitoAction('saveManitoAward', { giver: authedUser, award: manito.awards[authedUser] });
+        if (!ok) return;
+        alert('상장 문구가 구글 시트에 안전하게 저장되었습니다! 마감 전까지 언제든 다시 수정할 수 있습니다.');
         draw();
       };
 
@@ -1512,6 +1523,17 @@
             draw();
           };
         });
+        const copyLinkBtn = document.getElementById('wtCopyManitoLinkBtn');
+        if (copyLinkBtn) copyLinkBtn.onclick = () => {
+          const surl = (window.ClubStore && window.ClubStore.getSheetUrl(teamObj)) || window.WT_GOOGLE_SHEET_URL || '';
+          const base = location.href.split('#')[0];
+          const link = `${base}#/manito${surl ? ('?surl=' + encodeURIComponent(surl)) : ''}`;
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(link).then(() => alert('마니또 전용 초대 링크가 복사되었습니다!\n카톡방에 그대로 붙여넣기 해주세요.')).catch(() => prompt('아래 링크를 복사해 주세요:', link));
+          } else {
+            prompt('아래 링크를 복사해 주세요:', link);
+          }
+        };
         const importBtn = document.getElementById('wtImportAttendBtn');
         if (importBtn) importBtn.onclick = () => {
           const evs = clubData.events || [];
@@ -1584,18 +1606,23 @@
     }
 
     if (migratedLocal) { postManitoAction('saveManitoConfig', { manito }); }
-    draw();
     if (window.ClubStore) {
-      window.ClubStore.fetchFromSheet(teamObj, true).then(remote => {
-        if (remote && remote.manito) {
-          serverSynced = true;
-          clubData = remote;
-          manito = remote.manito;
-          if (fixLegacyGuestName(manito)) {
-            postManitoAction('saveManitoConfig', { manito });
-          }
-          draw();
+      const remote = await window.ClubStore.fetchFromSheet(teamObj, true);
+      if (remote && remote.manito) {
+        serverSynced = true;
+        serverCount = Array.isArray(remote.manito.participants) ? remote.manito.participants.length : 0;
+        clubData = remote;
+        manito = remote.manito;
+        if (fixLegacyGuestName(manito)) {
+          postManitoAction('saveManitoConfig', { manito });
         }
+      }
+    }
+    draw();
+    if (!core || !box) {
+      Promise.all([loadCore(), loadBox()]).then(([c, b]) => {
+        core = c; box = b;
+        if (authedUser || isAdm) draw();
       });
     }
   }

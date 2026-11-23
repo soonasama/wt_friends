@@ -174,41 +174,59 @@ function doPost(e) {
         .setMimeType(ContentService.MimeType.JSON);
     }
 
-    // 분기 A-4: 연말총회 마니또 개인 상장 문구 제출/수정 (동시성 안전)
+    // 분기 A-4: 연말총회 마니또 개인 상장 문구 제출/수정 (_MANITO_RAW 우선 동시성 안전)
     if (data.action === 'saveManitoAward' && data.giver && data.award) {
+      var lock2 = LockService.getScriptLock();
+      lock2.tryLock(8000);
+      try {
+      var mRawS2 = getOrCreateSheet(ss, '_MANITO_RAW');
+      var mRawV2 = mRawS2.getRange('A1').getValue();
       var rawM2 = getOrCreateSheet(ss, '_CLUB_RAW');
       var rawMV2 = rawM2.getRange('A1').getValue();
       var clubM2 = null;
       if (rawMV2) { try { clubM2 = JSON.parse(rawMV2); } catch(err) { clubM2 = null; } }
       if (!clubM2) clubM2 = { initialized: true, events: [], notices: [], setlogs: [], missions: [], settlements: [], gallery: [] };
-      clubM2.manito = clubM2.manito || { eventDate: '2026-11-28', participants: [], pairs: {}, awards: {} };
-      clubM2.manito.awards = clubM2.manito.awards || {};
-      clubM2.manito.awards[data.giver] = data.award;
+      var mObj2 = null;
+      if (mRawV2) { try { mObj2 = JSON.parse(mRawV2); } catch(err) { mObj2 = null; } }
+      if (!mObj2) mObj2 = clubM2.manito || { eventDate: '2026-11-28', participants: [], pairs: {}, awards: {}, secrets: {} };
+      mObj2.awards = mObj2.awards || {};
+      mObj2.awards[data.giver] = data.award;
+      mRawS2.getRange('A1').setValue(JSON.stringify(mObj2));
+      clubM2.manito = mObj2;
       rawM2.getRange('A1').setValue(JSON.stringify(clubM2));
-      getOrCreateSheet(ss, '_MANITO_RAW').getRange('A1').setValue(JSON.stringify(clubM2.manito));
-      updateManitoSheet(ss, clubM2.manito);
-      return ContentService.createTextOutput(JSON.stringify({ status: 'success', manito: clubM2.manito }))
+      updateManitoSheet(ss, mObj2);
+      return ContentService.createTextOutput(JSON.stringify({ status: 'success', manito: mObj2 }))
         .setMimeType(ContentService.MimeType.JSON);
+      } finally { lock2.releaseLock(); }
     }
 
-    // 분기 A-5: 마니또 개인 비밀코드 최초 설정 / 초기화
+    // 분기 A-5: 마니또 개인 비밀코드 최초 설정 / 초기화 (_MANITO_RAW 우선)
     if (data.action === 'setManitoSecret' && data.who) {
+      var lock3 = LockService.getScriptLock();
+      lock3.tryLock(8000);
+      try {
+      var mRawS3 = getOrCreateSheet(ss, '_MANITO_RAW');
+      var mRawV3 = mRawS3.getRange('A1').getValue();
       var rawM3 = getOrCreateSheet(ss, '_CLUB_RAW');
       var rawMV3 = rawM3.getRange('A1').getValue();
       var clubM3 = null;
       if (rawMV3) { try { clubM3 = JSON.parse(rawMV3); } catch(err) { clubM3 = null; } }
       if (!clubM3) clubM3 = { initialized: true, events: [], notices: [], setlogs: [], missions: [], settlements: [], gallery: [] };
-      clubM3.manito = clubM3.manito || { eventDate: '2026-11-28', participants: [], pairs: {}, awards: {}, secrets: {} };
-      clubM3.manito.secrets = clubM3.manito.secrets || {};
+      var mObj3 = null;
+      if (mRawV3) { try { mObj3 = JSON.parse(mRawV3); } catch(err) { mObj3 = null; } }
+      if (!mObj3) mObj3 = clubM3.manito || { eventDate: '2026-11-28', participants: [], pairs: {}, awards: {}, secrets: {} };
+      mObj3.secrets = mObj3.secrets || {};
       if (data.secret) {
-        clubM3.manito.secrets[data.who] = String(data.secret);
+        mObj3.secrets[data.who] = String(data.secret);
       } else {
-        delete clubM3.manito.secrets[data.who];
+        delete mObj3.secrets[data.who];
       }
+      mRawS3.getRange('A1').setValue(JSON.stringify(mObj3));
+      clubM3.manito = mObj3;
       rawM3.getRange('A1').setValue(JSON.stringify(clubM3));
-      getOrCreateSheet(ss, '_MANITO_RAW').getRange('A1').setValue(JSON.stringify(clubM3.manito));
       return ContentService.createTextOutput(JSON.stringify({ status: 'success' }))
         .setMimeType(ContentService.MimeType.JSON);
+      } finally { lock3.releaseLock(); }
     }
 
     // 분기 B: 클럽하우스 데이터 전체 동기화 (action이 'save'이거나 생략된 경우만 허용)
