@@ -1288,6 +1288,7 @@
                 <button type="button" class="wt-ext-pillbtn pri" id="wtMakePairsBtn">🎲 마니또 1:1 랜덤 매칭 생성</button>
                 <button type="button" class="wt-ext-pillbtn" id="wtToggleSpoilerBtn">${showSpoiler ? '🙈 스포일러 숨기기' : '👀 매칭 결과 잠깐 보기'}</button>
                 <button type="button" class="wt-ext-pillbtn pri" id="wtOpenPrintBtn" style="background:linear-gradient(135deg,#f59e0b,#d97706)">🖨️ 전체 상장 인쇄 / PDF</button>
+                <button type="button" class="wt-ext-pillbtn" id="wtResetManitoBtn" style="color:#ef4444;border-color:rgba(239,68,68,0.4)">🧹 테스트 초기화</button>
               </div>
               <label style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--sub);margin-bottom:10px">
                 <input type="checkbox" id="wtExclMeChk" ${excludeMeOnPrint ? 'checked' : ''}> 🙈 인쇄할 때 내 상장(내가 받을 상장)은 제외하기 (스포일러 방지)
@@ -1451,6 +1452,18 @@
         if (exChk) exChk.onchange = () => { excludeMeOnPrint = exChk.checked; };
         const prBtn = document.getElementById('wtOpenPrintBtn');
         if (prBtn) prBtn.onclick = () => openPrintOverlay();
+        const rstBtn = document.getElementById('wtResetManitoBtn');
+        if (rstBtn) rstBtn.onclick = async () => {
+          if (!confirm('테스트로 입력한 매칭 결과, 개인 비밀 번호, 상장 문구를 모두 초기화할까요?\n(참석자 명단은 유지되므로 바로 새 매칭을 돌리실 수 있습니다.)')) return;
+          manito.pairs = {};
+          manito.awards = {};
+          manito.secrets = {};
+          authedUser = '';
+          sessionStorage.removeItem('wt_manito_user');
+          await postManitoAction('saveManitoConfig', { manito });
+          alert('초기화가 완료되었습니다! 이제 [🎲 마니또 1:1 랜덤 매칭 생성]을 눌러 실전 매칭을 시작하세요.');
+          draw();
+        };
       }
     }
 
