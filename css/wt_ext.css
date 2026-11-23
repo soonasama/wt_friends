@@ -492,154 +492,111 @@ select.wt-arch-sel {
   font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif !important;
 }
 
-/* 2026 연말총회 마니또 & 고급 A4 상장 디자인 (세로형 메달 + 사각 직인) */
+/* 2026 연말총회 마니또 & 이미지 배경 기반 고급 A4 상장 */
 .wt-cert-preview,
 .wt-print-sheet {
-  background: #ffffff;
-  color: #111827;
-  max-width: 520px;
-  margin: 0 auto;
-  padding: 22px;
   position: relative;
+  width: 100%;
+  max-width: 540px;
+  aspect-ratio: 3 / 4;
+  margin: 0 auto;
+  padding: 58px 54px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   text-align: center;
-  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.22);
+  color: #111827;
+  background: #fdfaf0;
   border-radius: 4px;
   overflow: hidden;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.28);
   font-family: 'Noto Serif KR', 'Batang', '바탕', Georgia, serif !important;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
 }
 .wt-cert-preview *,
 .wt-print-sheet * {
   font-family: 'Noto Serif KR', 'Batang', '바탕', Georgia, serif !important;
 }
-.wt-cert-frame {
-  position: relative;
-  border: 2.5px solid #c59b27;
-  padding: 6px;
-}
-.wt-cert-inner {
-  position: relative;
-  border: 1.2px solid #d4af37;
-  padding: 28px 26px 32px;
-  background: radial-gradient(circle at 50% 45%, #ffffff 0%, #fffef9 75%, #fcf7e8 100%);
-  overflow: hidden;
+.wt-cert-bg-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  z-index: 0;
+  pointer-events: none;
 }
 .wt-cert-wm {
   position: absolute;
-  top: 53%;
+  top: 52%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 200px;
-  height: 200px;
-  opacity: 0.06;
+  width: 190px;
+  height: 190px;
+  opacity: 0.055;
   pointer-events: none;
-  filter: grayscale(35%);
-}
-.wt-cert-corner-svg {
-  position: absolute;
-  width: 34px;
-  height: 34px;
-  pointer-events: none;
-  z-index: 2;
-}
-.wt-cert-corner-svg.tl { top: 4px; left: 4px; }
-.wt-cert-corner-svg.tr { top: 4px; right: 4px; transform: scaleX(-1); }
-.wt-cert-corner-svg.bl { bottom: 4px; left: 4px; transform: scaleY(-1); }
-.wt-cert-corner-svg.br { bottom: 4px; right: 4px; transform: scale(-1, -1); }
-
-/* 금빛 메달 + 빨간 리본 */
-.wt-medal-wrap {
-  position: relative;
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 2px auto 12px;
-  z-index: 2;
-}
-.wt-medal-disc {
-  position: relative;
-  width: 76px;
-  height: 76px;
-  border-radius: 50%;
-  background: conic-gradient(from 30deg, #f6e27a, #d4af37, #fff1a8, #b8860b, #f6e27a);
-  padding: 5px;
-  box-shadow: 0 4px 12px rgba(184, 134, 11, 0.45), inset 0 0 6px rgba(255, 255, 255, 0.8);
-  border: 2px dashed #b8860b;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2;
-}
-.wt-medal-inner {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #fffbe6, #e8c458);
-  border: 1.5px solid #a67c00;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-.wt-medal-inner img {
-  width: 48px;
-  height: 48px;
-  object-fit: contain;
-  border-radius: 50%;
-}
-.wt-medal-ribbon {
-  margin-top: -12px;
   z-index: 1;
+  filter: grayscale(25%);
+}
+.wt-cert-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.wt-cert-logo {
+  width: 74px;
+  height: 74px;
+  object-fit: contain;
+  margin: 0 auto 6px;
+  display: block;
 }
 .wt-cert-head {
-  font-size: 30px;
+  font-size: 28px;
   font-weight: 900;
-  letter-spacing: 6px;
+  letter-spacing: 5px;
   color: #111827;
-  margin: 4px 0 4px;
-  position: relative;
-  z-index: 2;
+  margin: 2px 0 4px;
+  line-height: 1.25;
 }
 .wt-cert-award-title {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 800;
   color: #92400e;
-  margin-bottom: 22px;
-  position: relative;
-  z-index: 2;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
 }
 .wt-cert-to-box {
   text-align: right;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
   color: #1f2937;
-  line-height: 1.8;
-  margin: 0 10px 24px auto;
-  position: relative;
-  z-index: 2;
+  line-height: 1.75;
+  padding-right: 6px;
 }
 .wt-cert-body {
-  font-size: 15px;
-  line-height: 2.0;
+  font-size: 14.5px;
+  line-height: 1.95;
   text-align: center;
   white-space: pre-wrap;
-  min-height: 110px;
   color: #111827;
-  margin: 0 auto 34px;
-  padding: 6px 12px;
-  position: relative;
-  z-index: 2;
+  padding: 8px 10px;
+  margin: auto 0;
   word-break: keep-all;
 }
 .wt-cert-foot {
-  position: relative;
-  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
+  padding-bottom: 4px;
 }
 .wt-cert-date {
-  font-size: 14.5px;
+  font-size: 14px;
   font-weight: 700;
   color: #1f2937;
   letter-spacing: 1px;
@@ -650,10 +607,10 @@ select.wt-arch-sel {
   flex-direction: column;
   align-items: center;
   gap: 3px;
-  padding: 6px 46px 6px 12px;
+  padding: 4px 66px 4px 14px;
 }
 .wt-cert-org {
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 700;
   color: #374151;
 }
@@ -661,15 +618,15 @@ select.wt-arch-sel {
   font-size: 17px;
   font-weight: 900;
   color: #111827;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
 }
 .wt-cert-stamp {
   position: absolute;
-  right: 0;
+  right: 2px;
   top: 50%;
   transform: translateY(-50%) rotate(-3deg);
-  width: 44px;
-  height: 44px;
+  width: 56px !important;
+  height: 56px !important;
   opacity: 0.88;
   pointer-events: none;
 }
@@ -682,15 +639,23 @@ select.wt-arch-sel {
   padding: 20px;
 }
 .wt-print-sheet {
-  max-width: 660px;
+  max-width: 680px;
+  padding: 74px 68px;
   margin: 0 auto 24px;
-  padding: 26px;
   page-break-after: always;
   break-after: page;
 }
 .wt-print-sheet:last-child {
   page-break-after: auto;
   break-after: auto;
+}
+@media (max-width: 520px) {
+  .wt-cert-preview {
+    padding: 36px 32px;
+  }
+  .wt-cert-logo { width: 54px; height: 54px; }
+  .wt-cert-head { font-size: 22px; letter-spacing: 3px; }
+  .wt-cert-body { font-size: 13px; line-height: 1.75; }
 }
 @media print {
   body > *:not(#wtManitoPrintRoot) { display: none !important; }
@@ -703,11 +668,10 @@ select.wt-arch-sel {
   .wt-print-noprint { display: none !important; }
   .wt-print-sheet {
     max-width: 100% !important;
+    width: 100% !important;
+    min-height: 95vh;
+    padding: 82px 76px !important;
     margin: 0 !important;
-    min-height: 94vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
     box-shadow: none !important;
   }
 }

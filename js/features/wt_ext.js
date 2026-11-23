@@ -1114,44 +1114,31 @@
       return m ? `${m[1]}년 ${Number(m[2])}월 ${Number(m[3])}일` : (d || '2026년 11월 28일');
     }
     function buildCertInner(title, target, body, evDateTxt, giver, emblem) {
-      const cornerSvg = `<svg viewBox="0 0 40 40" fill="none"><path d="M2 38V14C2 7.37 7.37 2 14 2H38" stroke="#c59b27" stroke-width="2.2"/><path d="M8 22C8 14.27 14.27 8 22 8" stroke="#c59b27" stroke-width="1.3"/><circle cx="14" cy="14" r="2.2" fill="#c59b27"/><path d="M18 6c2 2 2 5 0 7-2-2-2-5 0-7zM6 18c2-2 5-2 7 0-2 2-5 2-7 0z" fill="#c59b27"/></svg>`;
-      const ribbonSvg = `<svg class="wt-medal-ribbon" width="56" height="30" viewBox="0 0 56 30"><polygon points="10,0 24,0 16,28 9,22 2,28" fill="#b91c1c" stroke="#7f1d1d" stroke-width="1"/><polygon points="32,0 46,0 54,28 47,22 40,28" fill="#dc2626" stroke="#7f1d1d" stroke-width="1"/></svg>`;
-      const stampSvg = `<svg class="wt-cert-stamp" viewBox="0 0 60 60"><rect x="3" y="3" width="54" height="54" rx="4" fill="none" stroke="#c81e1e" stroke-width="3.2"/><rect x="7" y="7" width="46" height="46" rx="2" fill="none" stroke="#c81e1e" stroke-width="1"/><text x="19" y="27" text-anchor="middle" font-size="14" font-weight="900" fill="#c81e1e">W</text><text x="41" y="27" text-anchor="middle" font-size="14" font-weight="900" fill="#c81e1e">T</text><text x="19" y="47" text-anchor="middle" font-size="13" font-weight="900" fill="#c81e1e">프</text><text x="41" y="47" text-anchor="middle" font-size="13" font-weight="900" fill="#c81e1e">렌</text></svg>`;
+      const stampSvg = `<svg class="wt-cert-stamp" viewBox="0 0 64 64" width="56" height="56"><rect x="3" y="3" width="58" height="58" rx="4" fill="none" stroke="#c81e1e" stroke-width="3"/><rect x="7" y="7" width="50" height="50" rx="2" fill="none" stroke="#c81e1e" stroke-width="1"/><text x="32" y="27" text-anchor="middle" font-size="16" font-weight="900" letter-spacing="3" fill="#c81e1e">WT</text><text x="32" y="48" text-anchor="middle" font-size="14" font-weight="900" letter-spacing="1" fill="#c81e1e">프렌즈</text></svg>`;
       return `
-        <div class="wt-cert-frame">
-          <div class="wt-cert-inner">
-            <span class="wt-cert-corner-svg tl">${cornerSvg}</span>
-            <span class="wt-cert-corner-svg tr">${cornerSvg}</span>
-            <span class="wt-cert-corner-svg bl">${cornerSvg}</span>
-            <span class="wt-cert-corner-svg br">${cornerSvg}</span>
-            ${emblem ? `<img class="wt-cert-wm" src="${emblem}" alt="">` : ''}
-            <div class="wt-medal-wrap">
-              <div class="wt-medal-disc">
-                <div class="wt-medal-inner">
-                  ${emblem ? `<img src="${emblem}" alt="WT프렌즈">` : '<b style="color:#92400e">WT</b>'}
-                </div>
-              </div>
-              ${ribbonSvg}
-            </div>
+        <img class="wt-cert-bg-img" src="img/cert_bg.jpg" alt="">
+        ${emblem ? `<img class="wt-cert-wm" src="${emblem}" alt="">` : ''}
+        <div class="wt-cert-content">
+          <div>
+            ${emblem ? `<img class="wt-cert-logo" src="${emblem}" alt="WT프렌즈">` : ''}
             <div class="wt-cert-head" id="wtPrevTitle">${esc(title)}</div>
             <div class="wt-cert-award-title">2026 WT프렌즈 연말총회</div>
             <div class="wt-cert-to-box">
               <div>소 속 : WT프렌즈 여자야구단</div>
               <div>성 명 : ${esc(target)}</div>
             </div>
-            <div class="wt-cert-body" id="wtPrevBody">${esc(body)}</div>
-            <div class="wt-cert-foot">
-              <div class="wt-cert-date">${esc(fmtKoDate(evDateTxt))}</div>
-              <div class="wt-cert-sign-wrap">
-                <div class="wt-cert-org">WT프렌즈</div>
-                <div class="wt-cert-giver">수여 : ${esc(giver)}</div>
-                ${stampSvg}
-              </div>
+          </div>
+          <div class="wt-cert-body" id="wtPrevBody">${esc(body)}</div>
+          <div class="wt-cert-foot">
+            <div class="wt-cert-date">${esc(fmtKoDate(evDateTxt))}</div>
+            <div class="wt-cert-sign-wrap">
+              <div class="wt-cert-org">WT프렌즈 여자야구단</div>
+              <div class="wt-cert-giver">수여 : ${esc(giver)}</div>
+              ${stampSvg}
             </div>
           </div>
         </div>`;
     }
-
     function openPrintOverlay() {
       const old = document.getElementById('wtManitoPrintRoot');
       if (old) old.remove();
