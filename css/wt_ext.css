@@ -484,75 +484,158 @@ select.wt-arch-sel {
   object-fit: contain;
 }
 
-/* 2026 연말총회 마니또 & A4 상장 인쇄 스타일 */
-.wt-cert-preview {
-  background: linear-gradient(135deg, #fffdf7 0%, #fef9e7 100%);
-  color: #1e293b;
-  border: 6px double #d97706;
-  border-radius: 12px;
-  padding: 26px 24px;
+/* 입력창(textarea/input/select/button) Pretendard 폰트 통일 (굴림체 방지) */
+#app input,
+#app textarea,
+#app select,
+#app button {
+  font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif !important;
+}
+
+/* 2026 연말총회 마니또 & 고급 A4 상장 디자인 */
+.wt-cert-preview,
+.wt-print-sheet {
+  background: radial-gradient(circle at 50% 35%, #ffffff 0%, #fdfaf0 65%, #f7f0dc 100%);
+  color: #0f172a;
+  border: 3px solid #0d1b3e;
+  outline: 2px solid #c59b27;
+  outline-offset: -9px;
+  border-radius: 6px;
+  padding: 28px 26px;
   position: relative;
   text-align: center;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 12px 32px rgba(13, 27, 62, 0.22);
+  overflow: hidden;
+}
+.wt-cert-wm {
+  position: absolute;
+  top: 52%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 210px;
+  height: 210px;
+  opacity: 0.055;
+  pointer-events: none;
+  filter: grayscale(20%);
 }
 .wt-cert-inner {
-  border: 1.5px solid rgba(217, 119, 6, 0.45);
-  padding: 22px 18px;
-  border-radius: 6px;
+  position: relative;
+  z-index: 1;
+  border: 1px solid rgba(197, 155, 39, 0.55);
+  padding: 26px 24px;
+  border-radius: 3px;
 }
+.wt-cert-corner {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-color: #c59b27;
+  border-style: solid;
+  pointer-events: none;
+}
+.wt-cert-corner.tl { top: 8px; left: 8px; border-width: 3px 0 0 3px; }
+.wt-cert-corner.tr { top: 8px; right: 8px; border-width: 3px 3px 0 0; }
+.wt-cert-corner.bl { bottom: 8px; left: 8px; border-width: 0 0 3px 3px; }
+.wt-cert-corner.br { bottom: 8px; right: 8px; border-width: 0 3px 3px 0; }
+
 .wt-cert-emblem {
-  width: 52px;
-  height: 52px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   object-fit: cover;
+  border: 2px solid #c59b27;
+  box-shadow: 0 3px 10px rgba(13, 27, 62, 0.18);
   margin-bottom: 6px;
 }
+.wt-cert-subbrand {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2.5px;
+  color: #c59b27;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
 .wt-cert-head {
-  font-size: 26px;
+  font-size: 30px;
   font-weight: 900;
-  letter-spacing: 8px;
-  color: #92400e;
-  margin: 4px 0 8px;
+  letter-spacing: 12px;
+  padding-left: 12px;
+  color: #0d1b3e;
+  margin: 4px 0 10px;
+}
+.wt-cert-divider {
+  width: 80px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #c59b27, transparent);
+  margin: 0 auto 14px;
 }
 .wt-cert-award-title {
   display: inline-block;
-  font-size: 16px;
+  font-size: 16.5px;
   font-weight: 900;
-  color: #065f46;
-  background: rgba(16, 185, 129, 0.14);
-  padding: 5px 16px;
-  border-radius: 999px;
-  margin-bottom: 14px;
+  color: #0d1b3e;
+  border-top: 1.5px solid #c59b27;
+  border-bottom: 1.5px solid #c59b27;
+  background: rgba(197, 155, 39, 0.1);
+  padding: 6px 22px;
+  margin-bottom: 18px;
 }
 .wt-cert-to {
   font-size: 16px;
   font-weight: 800;
   text-align: right;
-  margin-bottom: 14px;
-  color: #0f172a;
+  margin-bottom: 18px;
+  color: #1e293b;
+}
+.wt-cert-to span {
+  border-bottom: 1.5px solid #0d1b3e;
+  padding: 0 4px 2px;
 }
 .wt-cert-body {
-  font-size: 14.5px;
-  line-height: 1.85;
+  font-size: 15px;
+  line-height: 1.95;
   text-align: left;
   white-space: pre-wrap;
-  min-height: 90px;
+  min-height: 96px;
   color: #1e293b;
-  margin-bottom: 22px;
-  padding: 0 6px;
+  margin-bottom: 26px;
+  padding: 10px 8px;
 }
 .wt-cert-foot {
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 700;
   color: #475569;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  align-items: center;
+  gap: 8px;
+}
+.wt-cert-giver-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 2px;
 }
 .wt-cert-giver {
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 900;
-  color: #0f172a;
+  color: #0d1b3e;
+  letter-spacing: 1px;
+}
+.wt-cert-seal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid #b91c1c;
+  color: #b91c1c;
+  font-size: 10px;
+  font-weight: 900;
+  line-height: 1.05;
+  transform: rotate(-8deg);
+  opacity: 0.85;
 }
 .wt-print-overlay {
   position: fixed;
@@ -563,13 +646,9 @@ select.wt-arch-sel {
   padding: 20px;
 }
 .wt-print-sheet {
-  max-width: 720px;
+  max-width: 700px;
   margin: 0 auto 24px;
-  background: #fffdf7;
-  color: #1e293b;
-  border: 8px double #d97706;
   padding: 36px 34px;
-  border-radius: 6px;
   page-break-after: always;
   break-after: page;
 }

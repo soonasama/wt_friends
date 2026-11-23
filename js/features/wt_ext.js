@@ -1109,6 +1109,33 @@
       return true;
     }
 
+    function fmtKoDate(d) {
+      const m = String(d || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      return m ? `${m[1]}년 ${Number(m[2])}월 ${Number(m[3])}일` : (d || '2026년 11월 28일');
+    }
+    function buildCertInner(title, target, body, evDateTxt, giver, emblem) {
+      return `
+        ${emblem ? `<img class="wt-cert-wm" src="${emblem}" alt="">` : ''}
+        <div class="wt-cert-inner">
+          <span class="wt-cert-corner tl"></span><span class="wt-cert-corner tr"></span>
+          <span class="wt-cert-corner bl"></span><span class="wt-cert-corner br"></span>
+          ${emblem ? `<img class="wt-cert-emblem" src="${emblem}" alt="WT프렌즈">` : ''}
+          <div class="wt-cert-subbrand">Winners Together · FRIENDS</div>
+          <div class="wt-cert-head">상 장</div>
+          <div class="wt-cert-divider"></div>
+          <div class="wt-cert-award-title" id="wtPrevTitle">「 ${esc(title)} 」</div>
+          <div class="wt-cert-to">성 명 : <span>WT프렌즈 ${esc(target)}</span></div>
+          <div class="wt-cert-body" id="wtPrevBody">${esc(body)}</div>
+          <div class="wt-cert-foot">
+            <div>${esc(fmtKoDate(evDateTxt))} · 2026 WT프렌즈 연말총회</div>
+            <div class="wt-cert-giver-row">
+              <span class="wt-cert-giver">수여 : ${esc(giver)}</span>
+              <span class="wt-cert-seal">WT<br>인증</span>
+            </div>
+          </div>
+        </div>`;
+    }
+
     function openPrintOverlay() {
       const old = document.getElementById('wtManitoPrintRoot');
       if (old) old.remove();
@@ -1142,19 +1169,7 @@
           const title = aw.title || '2026 WT프렌즈 특별상';
           const body = aw.body || '올 한 해 WT프렌즈와 함께 힘차게 뛰어주셔서 감사합니다!';
           return `
-            <div class="wt-print-sheet">
-              <div class="wt-cert-inner" style="text-align:center">
-                ${emblem ? `<img class="wt-cert-emblem" src="${emblem}" alt="WT프렌즈">` : ''}
-                <div class="wt-cert-head">상 장</div>
-                <div class="wt-cert-award-title">${esc(title)}</div>
-                <div class="wt-cert-to">WT프렌즈 · <u>${esc(target)}</u></div>
-                <div class="wt-cert-body">${esc(body)}</div>
-                <div class="wt-cert-foot">
-                  <div>${esc(evDateTxt)} · 2026 WT프렌즈 연말총회</div>
-                  <div class="wt-cert-giver">수여: ${esc(giver)}</div>
-                </div>
-              </div>
-            </div>`;
+            <div class="wt-print-sheet">${buildCertInner(title, target, body, evDateTxt, giver, emblem)}</div>`;
         }).join('')}`;
       document.body.appendChild(root);
       document.getElementById('wtPrintCloseBtn').onclick = () => root.remove();
@@ -1214,7 +1229,7 @@
                   <div style="font-size:12px;font-weight:700;color:var(--gold)">🤫 나만 아는 비밀 마니또</div>
                   <div style="font-size:21px;font-weight:900;margin:6px 0">당신의 마니또는 <span style="color:var(--accent)">${esc(myTarget)}</span> 님입니다!</div>
                   <div style="font-size:12px;color:var(--sub)">
-                    📊 2026 기록 힌트: 공식 ${hint.gCnt}경기 · ${hint.h}안타 · ${hint.rbi}타점 · ${hint.sb}도루 · 탈삼진 ${hint.so}K · 팀 일정 출석 ${hint.evAtt}회
+                    📊 2026 공식 기록 힌트: ${hint.gCnt}경기 · ${hint.h}안타 · ${hint.rbi}타점 · ${hint.sb}도루${hint.so > 0 ? ` · 탈삼진 ${hint.so}K` : ''}
                   </div>
                 </div>
 
@@ -1230,17 +1245,7 @@
 
                 <div style="font-size:12.5px;font-weight:800;color:var(--sub);margin-bottom:8px">👀 상장 실시간 미리보기</div>
                 <div class="wt-cert-preview">
-                  <div class="wt-cert-inner">
-                    ${emblem ? `<img class="wt-cert-emblem" src="${emblem}" alt="WT프렌즈">` : ''}
-                    <div class="wt-cert-head">상 장</div>
-                    <div class="wt-cert-award-title" id="wtPrevTitle">${esc(myAward.title || '상장 제목이 여기에 표시됩니다')}</div>
-                    <div class="wt-cert-to">WT프렌즈 · <u>${esc(myTarget)}</u></div>
-                    <div class="wt-cert-body" id="wtPrevBody">${esc(myAward.body || '칭찬 문구를 입력하면 상장 미리보기가 완성됩니다.')}</div>
-                    <div class="wt-cert-foot">
-                      <div>${esc(manito.eventDate || '2026-11-28')} · 2026 WT프렌즈 연말총회</div>
-                      <div class="wt-cert-giver">수여: ${esc(authedUser)}</div>
-                    </div>
-                  </div>
+                  ${buildCertInner(myAward.title || '상장 제목이 여기에 표시됩니다', myTarget, myAward.body || '칭찬 문구를 입력하면 상장 미리보기가 완성됩니다.', manito.eventDate || '2026-11-28', authedUser, emblem)}
                 </div>
               `}
             `)}
@@ -1353,14 +1358,14 @@
           const tp = templates[Number(btn.dataset.tplIdx)];
           const tEl = document.getElementById('wtAwardTitle');
           const bEl = document.getElementById('wtAwardBody');
-          if (tEl) { tEl.value = tp[0]; document.getElementById('wtPrevTitle').textContent = tp[0]; }
+          if (tEl) { tEl.value = tp[0]; document.getElementById('wtPrevTitle').textContent = '「 ' + tp[0] + ' 」'; }
           if (bEl && !bEl.value.trim()) { bEl.value = tp[1]; document.getElementById('wtPrevBody').textContent = tp[1]; }
         };
       });
 
       const tIn = document.getElementById('wtAwardTitle');
       const bIn = document.getElementById('wtAwardBody');
-      if (tIn) tIn.oninput = () => { document.getElementById('wtPrevTitle').textContent = tIn.value || '상장 제목이 여기에 표시됩니다'; };
+      if (tIn) tIn.oninput = () => { document.getElementById('wtPrevTitle').textContent = '「 ' + (tIn.value || '상장 제목이 여기에 표시됩니다') + ' 」'; };
       if (bIn) bIn.oninput = () => { document.getElementById('wtPrevBody').textContent = bIn.value || '칭찬 문구를 입력하면 상장 미리보기가 완성됩니다.'; };
 
       const awForm = document.getElementById('wtManitoAwardForm');
