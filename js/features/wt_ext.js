@@ -1132,16 +1132,25 @@
     async function postManitoAction(action, extra) {
       const url = (window.ClubStore && window.ClubStore.getSheetUrl(teamObj)) || window.WT_GOOGLE_SHEET_URL;
       clubData.manito = manito;
+      if (window.ClubStore) window.ClubStore._lastSaveAt = Date.now();
       try { localStorage.setItem('kbsa_club_v20_' + WT_ID, JSON.stringify(clubData)); } catch (e) {}
       if (!url) return true;
+      const bodyStr = JSON.stringify(Object.assign({ action }, extra));
       try {
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: bodyStr
+        });
+        if (res.ok) return true;
+      } catch (e) {
         await fetch(url, {
           method: 'POST',
           mode: 'no-cors',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify(Object.assign({ action }, extra))
+          body: bodyStr
         });
-      } catch (e) { console.warn('Manito sync err:', e); }
+      }
       return true;
     }
 

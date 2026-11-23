@@ -4215,7 +4215,16 @@ const ClubStore = {
   },
   saveTeamData(team, data) {
     this._lastSaveAt = Date.now();
-    try { localStorage.setItem(this.key + team.id, JSON.stringify(data)); } catch (e) {}
+    try {
+      if (!data.manito) {
+        const prevRaw = localStorage.getItem(this.key + team.id);
+        if (prevRaw) {
+          const prevObj = JSON.parse(prevRaw);
+          if (prevObj && prevObj.manito) data.manito = prevObj.manito;
+        }
+      }
+      localStorage.setItem(this.key + team.id, JSON.stringify(data));
+    } catch (e) {}
     this.syncToSheet(team, data);
   },
 

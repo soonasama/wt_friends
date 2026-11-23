@@ -168,6 +168,7 @@ function doPost(e) {
       if (!clubM) clubM = { initialized: true, events: [], notices: [], setlogs: [], missions: [], settlements: [], gallery: [] };
       clubM.manito = data.manito;
       rawM.getRange('A1').setValue(JSON.stringify(clubM));
+      getOrCreateSheet(ss, '_MANITO_RAW').getRange('A1').setValue(JSON.stringify(data.manito));
       updateManitoSheet(ss, clubM.manito);
       return ContentService.createTextOutput(JSON.stringify({ status: 'success', manito: clubM.manito }))
         .setMimeType(ContentService.MimeType.JSON);
@@ -184,6 +185,7 @@ function doPost(e) {
       clubM2.manito.awards = clubM2.manito.awards || {};
       clubM2.manito.awards[data.giver] = data.award;
       rawM2.getRange('A1').setValue(JSON.stringify(clubM2));
+      getOrCreateSheet(ss, '_MANITO_RAW').getRange('A1').setValue(JSON.stringify(clubM2.manito));
       updateManitoSheet(ss, clubM2.manito);
       return ContentService.createTextOutput(JSON.stringify({ status: 'success', manito: clubM2.manito }))
         .setMimeType(ContentService.MimeType.JSON);
@@ -204,15 +206,25 @@ function doPost(e) {
         delete clubM3.manito.secrets[data.who];
       }
       rawM3.getRange('A1').setValue(JSON.stringify(clubM3));
+      getOrCreateSheet(ss, '_MANITO_RAW').getRange('A1').setValue(JSON.stringify(clubM3.manito));
       return ContentService.createTextOutput(JSON.stringify({ status: 'success' }))
         .setMimeType(ContentService.MimeType.JSON);
     }
 
     // 분기 B: 클럽하우스 데이터 전체 동기화
     var clubData = data.data || data;
+    var rawSheet = getOrCreateSheet(ss, '_CLUB_RAW');
+    if (!clubData.manito) {
+      var mRawS = ss.getSheetByName('_MANITO_RAW');
+      if (mRawS) {
+        var mVal = mRawS.getRange('A1').getValue();
+        if (mVal) { try { clubData.manito = JSON.parse(mVal); } catch(e) {} }
+      }
+    } else {
+      getOrCreateSheet(ss, '_MANITO_RAW').getRange('A1').setValue(JSON.stringify(clubData.manito));
+    }
     
     // 1) RAW JSON 백업
-    var rawSheet = getOrCreateSheet(ss, '_CLUB_RAW');
     rawSheet.getRange('A1').setValue(JSON.stringify(clubData));
     rawSheet.getRange('B1').setValue('마지막 업데이트: ' + Utilities.formatDate(new Date(), 'Asia/Seoul', 'yyyy-MM-dd HH:mm:ss'));
     
@@ -676,6 +688,13 @@ function mergeVisibleSheetsIntoData(ss, data) {
         }
         data.gallery = galList;
       }
+    }
+  }
+  if (!data.manito) {
+    var mSheet = ss.getSheetByName('_MANITO_RAW');
+    if (mSheet) {
+      var mRawVal = mSheet.getRange('A1').getValue();
+      if (mRawVal) { try { data.manito = JSON.parse(mRawVal); } catch(e) {} }
     }
   }
   return data;
