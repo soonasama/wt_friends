@@ -503,6 +503,7 @@ function isPlayerAuthed(team, playerName) {
   return localStorage.getItem('wt_player_pin_auth_' + team.id + '_' + playerName) === '1';
 }
 
+window.getPlayerPin = getPlayerPin;
 function getPlayerPin(team, playerName) {
   const data = ClubStore.getTeamData(team);
   const pins = data.pins || {};

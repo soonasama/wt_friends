@@ -159,6 +159,36 @@ function doPost(e) {
         .setMimeType(ContentService.MimeType.JSON);
     }
 
+    // 분기 A-3: 연말총회 마니또 설정/매칭 저장 (관리자)
+    if (data.action === 'saveManitoConfig' && data.manito) {
+      var rawM = getOrCreateSheet(ss, '_CLUB_RAW');
+      var rawMV = rawM.getRange('A1').getValue();
+      var clubM = null;
+      if (rawMV) { try { clubM = JSON.parse(rawMV); } catch(err) { clubM = null; } }
+      if (!clubM) clubM = { initialized: true, events: [], notices: [], setlogs: [], missions: [], settlements: [], gallery: [] };
+      clubM.manito = data.manito;
+      rawM.getRange('A1').setValue(JSON.stringify(clubM));
+      updateManitoSheet(ss, clubM.manito);
+      return ContentService.createTextOutput(JSON.stringify({ status: 'success', manito: clubM.manito }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // 분기 A-4: 연말총회 마니또 개인 상장 문구 제출/수정 (동시성 안전)
+    if (data.action === 'saveManitoAward' && data.giver && data.award) {
+      var rawM2 = getOrCreateSheet(ss, '_CLUB_RAW');
+      var rawMV2 = rawM2.getRange('A1').getValue();
+      var clubM2 = null;
+      if (rawMV2) { try { clubM2 = JSON.parse(rawMV2); } catch(err) { clubM2 = null; } }
+      if (!clubM2) clubM2 = { initialized: true, events: [], notices: [], setlogs: [], missions: [], settlements: [], gallery: [] };
+      clubM2.manito = clubM2.manito || { eventDate: '2026-11-28', participants: [], pairs: {}, awards: {} };
+      clubM2.manito.awards = clubM2.manito.awards || {};
+      clubM2.manito.awards[data.giver] = data.award;
+      rawM2.getRange('A1').setValue(JSON.stringify(clubM2));
+      updateManitoSheet(ss, clubM2.manito);
+      return ContentService.createTextOutput(JSON.stringify({ status: 'success', manito: clubM2.manito }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
     // 분기 B: 클럽하우스 데이터 전체 동기화
     var clubData = data.data || data;
     
@@ -186,6 +216,9 @@ function doPost(e) {
     }
     if (clubData.gallery && Array.isArray(clubData.gallery)) {
       updateGallerySheet(ss, clubData.gallery);
+    }
+    if (clubData.manito) {
+      updateManitoSheet(ss, clubData.manito);
     }
     
     return ContentService.createTextOutput(JSON.stringify({ status: "success", message: "WT프렌즈 클럽하우스 전체 DB 동기화 완료" }))
@@ -647,6 +680,31 @@ function updateGallerySheet(ss, gallery) {
         g.viewUrl || '',
         g.uploader || '관리자',
         g.date || ''
+      ]);
+    });
+  }
+}
+
+
+// 9. 연말총회 마니또 시트
+function updateManitoSheet(ss, manito) {
+  var sheet = getOrCreateSheet(ss, 'WT_마니또_2026_DB');
+  sheet.clear();
+  sheet.appendRow(['작성자(마니또)', '받는사람(대상)', '상장제목', '상장문구', '수정일시', '행사일']);
+  if (manito && Array.isArray(manito.participants)) {
+    var pairs = manito.pairs || {};
+    var awards = manito.awards || {};
+    var evDate = manito.eventDate || '';
+    manito.participants.forEach(function(giver) {
+      var target = pairs[giver] || '';
+      var aw = awards[giver] || {};
+      sheet.appendRow([
+        giver,
+        target,
+        aw.title || '',
+        aw.body || '',
+        aw.updatedAt || '',
+        evDate
       ]);
     });
   }

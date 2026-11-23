@@ -531,7 +531,8 @@
       bar.innerHTML = `
         <a class="wt-ext-pillbtn pri" href="#/archive">📅 14시즌 아카이브 (2013~2026)</a>
         <a class="wt-ext-pillbtn" href="#/h2h">⚔️ WT프렌즈 역대 상대전적</a>
-        <a class="wt-ext-pillbtn" href="#/gallery">📷 팀 갤러리 · 자료실</a>`;
+        <a class="wt-ext-pillbtn" href="#/gallery">📷 팀 갤러리 · 자료실</a>
+        <a class="wt-ext-pillbtn" href="#/manito">🎁 연말총회 마니또</a>`;
       appEl.prepend(bar);
     }
 
@@ -1021,6 +1022,391 @@
     }
   }
 
+
+  // 2026 연말총회 마니또 & 상장 제작 시스템
+  async function renderManitoPage() {
+    const appEl = document.getElementById('app');
+    if (!appEl) return;
+    const isAdm = localStorage.getItem('wt_admin_auth') === '1';
+    const teamObj = { id: WT_ID, short: 'WT프렌즈' };
+    const [core, box] = await Promise.all([loadCore(), loadBox()]);
+
+    function getClubData() {
+      if (window.ClubStore) return window.ClubStore.getTeamData(teamObj);
+      try {
+        const raw = localStorage.getItem('kbsa_club_v20_' + WT_ID);
+        if (raw) return JSON.parse(raw);
+      } catch (e) {}
+      return { events: [], notices: [], manito: null };
+    }
+
+    function getDefaultManito() {
+      return {
+        eventDate: '2026-11-28',
+        budgetNote: '선물 예산: 2~3만 원대',
+        participants: [],
+        pairs: {},
+        awards: {}
+      };
+    }
+
+    let clubData = getClubData();
+    let manito = clubData.manito || getDefaultManito();
+    let authedUser = sessionStorage.getItem('wt_manito_user') || '';
+    let showSpoiler = false;
+    let excludeMeOnPrint = true;
+
+    const fullRoster = (() => {
+      const set = new Set();
+      if (window.Store && Array.isArray(window.Store.players)) {
+        window.Store.players.filter(p => p.team && p.team.id === WT_ID).forEach(p => set.add(p.name));
+      }
+      if (core && box && box.box) {
+        (core.games || []).filter(g => (g[1] === WT_ID || g[2] === WT_ID) && String(g[0]).startsWith('2026')).forEach(g => {
+          const b = box.box[String(g[10])];
+          const si = g[1] === WT_ID ? 0 : 1;
+          if (b && Array.isArray(b[si])) b[si].forEach(p => set.add(p[0]));
+        });
+      }
+      return Array.from(set).sort((a, b) => a.localeCompare(b, 'ko'));
+    })();
+
+    function getPlayer2026Hint(pname) {
+      let gCnt = 0, h = 0, rbi = 0, r = 0, sb = 0, so = 0;
+      if (core && box && box.box) {
+        (core.games || []).filter(g => (g[1] === WT_ID || g[2] === WT_ID) && String(g[0]).startsWith('2026')).forEach(g => {
+          const b = box.box[String(g[10])];
+          const si = g[1] === WT_ID ? 0 : 1;
+          if (!b || !Array.isArray(b[si])) return;
+          const p = b[si].find(x => x[0] === pname);
+          if (!p) return;
+          gCnt++;
+          const st = Array.isArray(p[1]) ? p[1] : [0, 0, 0, 0, 0, 0];
+          h += st[2] || 0; rbi += st[3] || 0; r += st[4] || 0; sb += st[5] || 0;
+          if (Array.isArray(p[2]) && p[2].length >= 4) so += p[2][3] || 0;
+        });
+      }
+      const evAtt = (clubData.events || []).filter(ev => {
+        const st = ev.rsvp && ev.rsvp[pname];
+        return st === 'in' || st === 'car' || st === 'ok';
+      }).length;
+      return { gCnt, h, rbi, r, sb, so, evAtt };
+    }
+
+    async function postManitoAction(action, extra) {
+      const url = (window.ClubStore && window.ClubStore.getSheetUrl(teamObj)) || window.WT_GOOGLE_SHEET_URL;
+      clubData.manito = manito;
+      try { localStorage.setItem('kbsa_club_v20_' + WT_ID, JSON.stringify(clubData)); } catch (e) {}
+      if (!url) return true;
+      try {
+        await fetch(url, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(Object.assign({ action }, extra))
+        });
+      } catch (e) { console.warn('Manito sync err:', e); }
+      return true;
+    }
+
+    function openPrintOverlay() {
+      const old = document.getElementById('wtManitoPrintRoot');
+      if (old) old.remove();
+      const parts = manito.participants || [];
+      const pairs = manito.pairs || {};
+      const awards = manito.awards || {};
+      const myName = (window.ClubStore && window.ClubStore.getMe(teamObj)) || authedUser || '';
+      const list = parts.filter(giver => {
+        const target = pairs[giver];
+        if (!target) return false;
+        if (excludeMeOnPrint && myName && target === myName) return false;
+        return true;
+      });
+      if (!list.length) { alert('출력할 상장이 없습니다.'); return; }
+      const root = document.createElement('div');
+      root.id = 'wtManitoPrintRoot';
+      root.className = 'wt-print-overlay';
+      const emblem = window.WT_EMBLEM || '';
+      const evDateTxt = manito.eventDate || '2026-11-28';
+      root.innerHTML = `
+        <div class="wt-print-noprint" style="max-width:720px;margin:0 auto 14px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+          <b style="color:#fff;font-size:14px">🖨️ 총 ${list.length}장 인쇄 미리보기 (A4 1페이지당 1장)</b>
+          <div style="display:flex;gap:8px">
+            <button type="button" class="wt-ext-pillbtn pri" id="wtPrintNowBtn">🖨️ 인쇄 / PDF 저장</button>
+            <button type="button" class="wt-ext-pillbtn" id="wtPrintCloseBtn">✕ 닫기</button>
+          </div>
+        </div>
+        ${list.map(giver => {
+          const target = pairs[giver];
+          const aw = awards[giver] || {};
+          const title = aw.title || '2026 WT프렌즈 특별상';
+          const body = aw.body || '올 한 해 WT프렌즈와 함께 힘차게 뛰어주셔서 감사합니다!';
+          return `
+            <div class="wt-print-sheet">
+              <div class="wt-cert-inner" style="text-align:center">
+                ${emblem ? `<img class="wt-cert-emblem" src="${emblem}" alt="WT프렌즈">` : ''}
+                <div class="wt-cert-head">상 장</div>
+                <div class="wt-cert-award-title">${esc(title)}</div>
+                <div class="wt-cert-to">WT프렌즈 · <u>${esc(target)}</u></div>
+                <div class="wt-cert-body">${esc(body)}</div>
+                <div class="wt-cert-foot">
+                  <div>${esc(evDateTxt)} · 2026 WT프렌즈 연말총회</div>
+                  <div class="wt-cert-giver">수여: ${esc(giver)}</div>
+                </div>
+              </div>
+            </div>`;
+        }).join('')}`;
+      document.body.appendChild(root);
+      document.getElementById('wtPrintCloseBtn').onclick = () => root.remove();
+      document.getElementById('wtPrintNowBtn').onclick = () => window.print();
+    }
+
+    function draw() {
+      const parts = manito.participants || [];
+      const pairs = manito.pairs || {};
+      const awards = manito.awards || {};
+      const myTarget = authedUser ? (pairs[authedUser] || '') : '';
+      const myAward = authedUser ? (awards[authedUser] || { title: '', body: '' }) : { title: '', body: '' };
+      const hint = myTarget ? getPlayer2026Hint(myTarget) : null;
+      const emblem = window.WT_EMBLEM || '';
+
+      const templates = [
+        ['⚡ 번개같은 도루상', '빠른 발과 과감한 주루 플레이로 매 경기 팀에 활력을 불어넣어 주었기에 이 상장을 드립니다!'],
+        ['🔥 불꽃 타격상', '중요한 순간마다 터지는 시원한 타격으로 팀의 승리를 이끌어 주었기에 감사한 마음을 담아 드립니다!'],
+        ['🛡️ 철벽 수비상', '흔들림 없는 집중력과 안정적인 수비로 팀의 뒷문을 든든하게 지켜주었기에 이 상장을 드립니다!'],
+        ['🌞 더그아웃 분위기메이커상', '언제나 밝은 에너지와 따뜻한 응원으로 팀원들에게 큰 힘을 주었기에 감사의 마음을 전합니다!'],
+        ['📅 성실한 출석요정상', '궂은 날씨에도 변함없이 훈련과 경기에 함께하며 팀의 중심을 잡아주었기에 이 상장을 드립니다!']
+      ];
+
+      appEl.innerHTML = `
+        <div class="wt-ext-wrap">
+          <div class="wt-ext-card">
+            <div class="wt-ext-head">
+              <div class="wt-ext-title">🎁 2026 WT프렌즈 연말총회 마니또</div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap">
+                <span class="wt-ext-badge gold">💰 선물 예산: 2~3만 원대</span>
+                <button type="button" class="wt-ext-pillbtn" id="wtManitoSync">🔄 새로고침</button>
+                <a class="wt-ext-pillbtn" href="#/">🏠 홈으로</a>
+              </div>
+            </div>
+
+            ${!parts.length ? `
+              <div class="empty" style="padding:20px 10px">아직 관리자가 연말총회 참석자 및 마니또 매칭을 확정하지 않았습니다.${isAdm ? ' 아래 관리자 영역에서 참석자를 불러와 매칭을 생성해 주세요!' : ''}</div>
+            ` : (!authedUser ? `
+              <div style="border:1.5px solid var(--accent);border-radius:12px;padding:16px;display:grid;gap:10px;max-width:420px;margin:6px auto">
+                <b style="font-size:14.5px;color:var(--accent)">🔐 본인 인증 후 내 마니또 확인하기</b>
+                <div style="font-size:12px;color:var(--sub)">본인 이름을 선택하고 클럽하우스 개인 PIN 번호(기본: 등번호 4자리 또는 1234)를 입력해 주세요.</div>
+                <select id="wtManitoWho" class="wt-arch-sel" style="width:100% !important">
+                  <option value="">-- 본인 이름 선택 --</option>
+                  ${parts.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join('')}
+                </select>
+                <input type="password" id="wtManitoPin" inputmode="numeric" placeholder="개인 PIN 4자리" style="padding:8px 12px;border-radius:9px">
+                <button type="button" class="wt-ext-pillbtn pri" id="wtManitoLoginBtn" style="justify-content:center">✓ 본인 확인 및 마니또 열기</button>
+              </div>
+            ` : `
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+                <div style="font-size:13.5px;font-weight:800">🙋‍♀️ <b>${esc(authedUser)}</b> 님으로 인증됨</div>
+                <button type="button" class="wt-ext-pillbtn" id="wtManitoLogout">🔄 다른 선수로 전환</button>
+              </div>
+              ${!myTarget ? `
+                <div class="empty">아직 마니또 매칭이 배정되지 않았습니다. 관리자가 매칭을 완료하면 바로 확인할 수 있습니다.</div>
+              ` : `
+                <div style="background:rgba(245,158,11,0.1);border:1.5px solid rgba(245,158,11,0.45);border-radius:14px;padding:16px;text-align:center;margin-bottom:14px">
+                  <div style="font-size:12px;font-weight:700;color:var(--gold)">🤫 나만 아는 비밀 마니또</div>
+                  <div style="font-size:21px;font-weight:900;margin:6px 0">당신의 마니또는 <span style="color:var(--accent)">${esc(myTarget)}</span> 님입니다!</div>
+                  <div style="font-size:12px;color:var(--sub)">
+                    📊 2026 기록 힌트: 공식 ${hint.gCnt}경기 · ${hint.h}안타 · ${hint.rbi}타점 · ${hint.sb}도루 · 탈삼진 ${hint.so}K · 팀 일정 출석 ${hint.evAtt}회
+                  </div>
+                </div>
+
+                <form id="wtManitoAwardForm" style="display:grid;gap:10px;margin-bottom:16px">
+                  <div style="font-size:13px;font-weight:800">✨ 원클릭 상장 제목 추천 (누르면 자동 입력 · 수정 가능)</div>
+                  <div style="display:flex;flex-wrap:wrap;gap:6px">
+                    ${templates.map((tp, idx) => `<button type="button" class="wt-ext-pillbtn" data-tpl-idx="${idx}" style="font-size:11.5px;padding:5px 10px">${esc(tp[0])}</button>`).join('')}
+                  </div>
+                  <input type="text" id="wtAwardTitle" value="${esc(myAward.title)}" placeholder="상장 제목 (예: 번개같은 도루상)" required style="padding:9px 12px;border-radius:9px;font-weight:700">
+                  <textarea id="wtAwardBody" rows="4" placeholder="${esc(myTarget)} 님이 올해 가장 잘한 일이나 칭찬하고 싶은 내용을 적어주세요!" required style="padding:10px 12px;border-radius:9px;line-height:1.6">${esc(myAward.body)}</textarea>
+                  <button type="submit" class="wt-ext-pillbtn pri" id="wtAwardSubmit" style="justify-content:center">✓ 상장 문구 제출 / 수정 저장</button>
+                </form>
+
+                <div style="font-size:12.5px;font-weight:800;color:var(--sub);margin-bottom:8px">👀 상장 실시간 미리보기</div>
+                <div class="wt-cert-preview">
+                  <div class="wt-cert-inner">
+                    ${emblem ? `<img class="wt-cert-emblem" src="${emblem}" alt="WT프렌즈">` : ''}
+                    <div class="wt-cert-head">상 장</div>
+                    <div class="wt-cert-award-title" id="wtPrevTitle">${esc(myAward.title || '상장 제목이 여기에 표시됩니다')}</div>
+                    <div class="wt-cert-to">WT프렌즈 · <u>${esc(myTarget)}</u></div>
+                    <div class="wt-cert-body" id="wtPrevBody">${esc(myAward.body || '칭찬 문구를 입력하면 상장 미리보기가 완성됩니다.')}</div>
+                    <div class="wt-cert-foot">
+                      <div>${esc(manito.eventDate || '2026-11-28')} · 2026 WT프렌즈 연말총회</div>
+                      <div class="wt-cert-giver">수여: ${esc(authedUser)}</div>
+                    </div>
+                  </div>
+                </div>
+              `}
+            `)}
+          </div>
+
+          ${isAdm ? `
+            <div class="wt-ext-card" style="border-color:rgba(245,158,11,0.45)">
+              <div class="wt-ext-head">
+                <div class="wt-ext-title">👑 관리자 전용 — 연말총회 마니또 설정 & 상장 출력</div>
+                <span class="wt-ext-badge gold">작성 완료 ${parts.filter(n => awards[n] && awards[n].body).length} / ${parts.length}명</span>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px">
+                <label style="font-size:12.5px;font-weight:700">행사 날짜: <input type="date" id="wtManitoDate" value="${esc(manito.eventDate || '2026-11-28')}" style="padding:5px 8px;border-radius:8px"></label>
+                <button type="button" class="wt-ext-pillbtn" id="wtImportAttendBtn">📥 일정 참석자 명단 불러오기</button>
+                <button type="button" class="wt-ext-pillbtn pri" id="wtSavePartsBtn">💾 명단·날짜 저장</button>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;padding:10px;border-radius:10px;border:1px solid var(--line)">
+                ${fullRoster.map(nm => `
+                  <label style="display:inline-flex;align-items:center;gap:4px;font-size:12px;padding:3px 8px;border-radius:999px;border:1px solid var(--line);cursor:pointer">
+                    <input type="checkbox" class="wt-manito-chk" value="${esc(nm)}" ${parts.includes(nm) ? 'checked' : ''}> ${esc(nm)}
+                  </label>`).join('')}
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+                <button type="button" class="wt-ext-pillbtn pri" id="wtMakePairsBtn">🎲 마니또 1:1 랜덤 매칭 생성</button>
+                <button type="button" class="wt-ext-pillbtn" id="wtToggleSpoilerBtn">${showSpoiler ? '🙈 스포일러 숨기기' : '👀 매칭 결과 잠깐 보기'}</button>
+                <button type="button" class="wt-ext-pillbtn pri" id="wtOpenPrintBtn" style="background:linear-gradient(135deg,#f59e0b,#d97706)">🖨️ 전체 상장 인쇄 / PDF</button>
+              </div>
+              <label style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--sub);margin-bottom:10px">
+                <input type="checkbox" id="wtExclMeChk" ${excludeMeOnPrint ? 'checked' : ''}> 🙈 인쇄할 때 내 상장(내가 받을 상장)은 제외하기 (스포일러 방지)
+              </label>
+              <div style="overflow-x:auto">
+                <table class="wt-spray-table">
+                  <thead><tr><th style="text-align:left">참여자</th><th>제출 상태</th>${showSpoiler ? '<th>내 마니또 대상</th>' : ''}</tr></thead>
+                  <tbody>
+                    ${parts.map(nm => {
+                      const done = awards[nm] && awards[nm].body;
+                      return `<tr>
+                        <td style="text-align:left"><b>${esc(nm)}</b></td>
+                        <td style="color:${done ? '#10b981' : '#f59e0b'};font-weight:800">${done ? '✅ 작성 완료' : '⏳ 미작성'}</td>
+                        ${showSpoiler ? `<td>${esc(pairs[nm] || '-')}</td>` : ''}
+                      </tr>`;
+                    }).join('')}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          ` : ''}
+        </div>`;
+
+      const syncBtn = document.getElementById('wtManitoSync');
+      if (syncBtn && window.ClubStore) {
+        syncBtn.onclick = async () => {
+          syncBtn.textContent = '⏳ 불러오는 중...';
+          const remote = await window.ClubStore.fetchFromSheet(teamObj, true);
+          if (remote && remote.manito) { clubData = remote; manito = remote.manito; }
+          draw();
+        };
+      }
+
+      const loginBtn = document.getElementById('wtManitoLoginBtn');
+      if (loginBtn) loginBtn.onclick = () => {
+        const who = document.getElementById('wtManitoWho').value;
+        const pin = document.getElementById('wtManitoPin').value.trim();
+        if (!who) { alert('본인 이름을 선택해 주세요.'); return; }
+        const expected = window.getPlayerPin ? window.getPlayerPin(teamObj, who) : '1234';
+        if (pin !== expected) { alert('PIN 번호가 일치하지 않습니다. (기본: 등번호 4자리 또는 1234)'); return; }
+        authedUser = who;
+        sessionStorage.setItem('wt_manito_user', who);
+        draw();
+      };
+
+      const logoutBtn = document.getElementById('wtManitoLogout');
+      if (logoutBtn) logoutBtn.onclick = () => {
+        authedUser = '';
+        sessionStorage.removeItem('wt_manito_user');
+        draw();
+      };
+
+      appEl.querySelectorAll('[data-tpl-idx]').forEach(btn => {
+        btn.onclick = () => {
+          const tp = templates[Number(btn.dataset.tplIdx)];
+          const tEl = document.getElementById('wtAwardTitle');
+          const bEl = document.getElementById('wtAwardBody');
+          if (tEl) { tEl.value = tp[0]; document.getElementById('wtPrevTitle').textContent = tp[0]; }
+          if (bEl && !bEl.value.trim()) { bEl.value = tp[1]; document.getElementById('wtPrevBody').textContent = tp[1]; }
+        };
+      });
+
+      const tIn = document.getElementById('wtAwardTitle');
+      const bIn = document.getElementById('wtAwardBody');
+      if (tIn) tIn.oninput = () => { document.getElementById('wtPrevTitle').textContent = tIn.value || '상장 제목이 여기에 표시됩니다'; };
+      if (bIn) bIn.oninput = () => { document.getElementById('wtPrevBody').textContent = bIn.value || '칭찬 문구를 입력하면 상장 미리보기가 완성됩니다.'; };
+
+      const awForm = document.getElementById('wtManitoAwardForm');
+      if (awForm) awForm.onsubmit = async e => {
+        e.preventDefault();
+        const title = document.getElementById('wtAwardTitle').value.trim();
+        const body = document.getElementById('wtAwardBody').value.trim();
+        const nowStr = new Date().toISOString().slice(0, 16).replace('T', ' ');
+        manito.awards = manito.awards || {};
+        manito.awards[authedUser] = { title, body, updatedAt: nowStr };
+        await postManitoAction('saveManitoAward', { giver: authedUser, award: manito.awards[authedUser] });
+        alert('상장 문구가 저장되었습니다! 마감 전까지 언제든 다시 수정할 수 있습니다.');
+        draw();
+      };
+
+      if (isAdm) {
+        const importBtn = document.getElementById('wtImportAttendBtn');
+        if (importBtn) importBtn.onclick = () => {
+          const evs = clubData.events || [];
+          const targetEv = evs.find(x => (x.title || '').includes('연말') || (x.title || '').includes('총회') || (x.type === '모임')) || evs[0];
+          if (!targetEv || !targetEv.rsvp) { alert('참석 투표가 등록된 일정이 없습니다.'); return; }
+          const ins = Object.entries(targetEv.rsvp).filter(([, v]) => v === 'in' || v === 'car' || v === 'ok').map(([nm]) => nm);
+          appEl.querySelectorAll('.wt-manito-chk').forEach(chk => { chk.checked = ins.includes(chk.value); });
+          if (targetEv.date) document.getElementById('wtManitoDate').value = targetEv.date;
+          alert(`'${targetEv.title}' 참석자 ${ins.length}명을 체크했습니다. 확인 후 [명단·날짜 저장]을 눌러주세요!`);
+        };
+
+        const savePartsBtn = document.getElementById('wtSavePartsBtn');
+        if (savePartsBtn) savePartsBtn.onclick = async () => {
+          manito.eventDate = document.getElementById('wtManitoDate').value || '2026-11-28';
+          manito.participants = Array.from(appEl.querySelectorAll('.wt-manito-chk:checked')).map(c => c.value);
+          await postManitoAction('saveManitoConfig', { manito });
+          alert(`참여자 ${manito.participants.length}명과 행사 날짜가 저장되었습니다.`);
+          draw();
+        };
+
+        const pairsBtn = document.getElementById('wtMakePairsBtn');
+        if (pairsBtn) pairsBtn.onclick = async () => {
+          const selected = Array.from(appEl.querySelectorAll('.wt-manito-chk:checked')).map(c => c.value);
+          if (selected.length < 3) { alert('마니또 매칭은 최소 3명 이상이어야 합니다.'); return; }
+          if (Object.keys(manito.pairs || {}).length && !confirm('이미 매칭된 결과가 있습니다. 새로 다시 뽑으시겠습니까?')) return;
+          // 단일 순환 셔플 (자기 자신 뽑기 & 2인 맞교환 원천 차단)
+          const arr = selected.slice();
+          for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+          }
+          const newPairs = {};
+          arr.forEach((giver, i) => { newPairs[giver] = arr[(i + 1) % arr.length]; });
+          manito.eventDate = document.getElementById('wtManitoDate').value || '2026-11-28';
+          manito.participants = selected;
+          manito.pairs = newPairs;
+          await postManitoAction('saveManitoConfig', { manito });
+          alert(`${selected.length}명 1:1 마니또 매칭이 완료되어 구글 시트에 저장되었습니다!`);
+          draw();
+        };
+
+        const spBtn = document.getElementById('wtToggleSpoilerBtn');
+        if (spBtn) spBtn.onclick = () => { showSpoiler = !showSpoiler; draw(); };
+        const exChk = document.getElementById('wtExclMeChk');
+        if (exChk) exChk.onchange = () => { excludeMeOnPrint = exChk.checked; };
+        const prBtn = document.getElementById('wtOpenPrintBtn');
+        if (prBtn) prBtn.onclick = () => openPrintOverlay();
+      }
+    }
+
+    draw();
+    if (window.ClubStore) {
+      window.ClubStore.fetchFromSheet(teamObj, true).then(remote => {
+        if (remote && remote.manito) { clubData = remote; manito = remote.manito; draw(); }
+      });
+    }
+  }
+
   window.addEventListener('wt:rendered', e => {
     const info = e.detail || {};
     const name = info.name || 'home';
@@ -1028,6 +1414,7 @@
     if (name === 'archive') { renderArchivePage(); return; }
     if (name === 'h2h') { renderH2HPage(); return; }
     if (name === 'gallery') { renderGalleryPage(); return; }
+    if (name === 'manito') { renderManitoPage(); return; }
     if (name === 'game' && parts[1]) { enhanceGameView(parts[1]); return; }
     if (name === 'player' && parts[1]) { enhancePlayerView(parts[1]); return; }
     enhanceHomeAndLists(name);
