@@ -1156,6 +1156,7 @@
         if (res.ok) {
           const j = await res.json();
           if (j && j.status === 'success') {
+            if (j.manito) { manito = j.manito; clubData.manito = j.manito; }
             serverSynced = true;
             serverCount = (manito.participants || []).length;
             return true;
@@ -1188,7 +1189,11 @@
             if (actionOk && action === 'setManitoSecret' && extra && extra.who) {
               actionOk = extra.secret ? !!(sm.secrets && sm.secrets[extra.who] === String(extra.secret)) : !(sm.secrets && sm.secrets[extra.who]);
             }
+            if (action === 'resetManito') {
+              actionOk = !!(sm && !sm.locked && Object.keys(sm.pairs || {}).length === 0);
+            }
             if (actionOk) {
+              manito = sm; clubData.manito = sm;
               serverSynced = true;
               serverCount = sLen;
               return true;
@@ -1597,7 +1602,10 @@
         if (pairsBtn) pairsBtn.onclick = async () => {
           const selected = Array.from(appEl.querySelectorAll('.wt-manito-chk:checked')).map(c => c.value);
           if (selected.length < 3) { alert('마니또 매칭은 최소 3명 이상이어야 합니다.'); return; }
-          if (Object.keys(manito.pairs || {}).length && !confirm('이미 매칭된 결과가 있습니다. 새로 다시 뽑으시겠습니까?')) return;
+          if (manito.locked && Object.keys(manito.pairs || {}).length) {
+            alert('🔒 현재 매칭이 확정 잠금 상태입니다!\n팀원들이 작성 중일 때 매칭이 바뀌지 않도록 잠겨 있습니다.\n정말 새로 다시 뽑으시려면 먼저 [🧹 테스트 초기화]를 눌러 초기화한 뒤 진행해 주세요.');
+            return;
+          }
           // 단일 순환 셔플 (자기 자신 뽑기 & 2인 맞교환 원천 차단)
           const arr = selected.slice();
           for (let i = arr.length - 1; i > 0; i--) {
@@ -1609,6 +1617,8 @@
           manito.eventDate = document.getElementById('wtManitoDate').value || '2026-11-28';
           manito.participants = selected;
           manito.pairs = newPairs;
+          manito.locked = true;
+          manito.matchId = 'm_' + Date.now().toString(36);
           await postManitoAction('saveManitoConfig', { manito });
           alert(`${selected.length}명 1:1 마니또 매칭이 완료되어 구글 시트에 저장되었습니다!`);
           draw();
@@ -1635,16 +1645,18 @@
           manito.pairs = {};
           manito.awards = {};
           manito.secrets = {};
+          manito.locked = false;
+          manito.matchId = '';
           authedUser = '';
           sessionStorage.removeItem('wt_manito_user');
-          await postManitoAction('saveManitoConfig', { manito });
+          await postManitoAction('resetManito', { manito });
           alert('초기화가 완료되었습니다! 이제 [🎲 마니또 1:1 랜덤 매칭 생성]을 눌러 실전 매칭을 시작하세요.');
           draw();
         };
       }
     }
 
-    if (migratedLocal) { postManitoAction('saveManitoConfig', { manito }); }
+
     if (window.ClubStore) {
       const remote = await window.ClubStore.fetchFromSheet(teamObj, true);
       if (remote && remote.manito) {
@@ -1652,16 +1664,17 @@
         serverCount = Array.isArray(remote.manito.participants) ? remote.manito.participants.length : 0;
         clubData = remote;
         manito = remote.manito;
-        if (fixLegacyGuestName(manito)) {
-          postManitoAction('saveManitoConfig', { manito });
-        }
+        fixLegacyGuestName(manito);
       }
     }
     draw();
     if (!core || !box) {
       Promise.all([loadCore(), loadBox()]).then(([c, b]) => {
         core = c; box = b;
-        if (authedUser || isAdm) draw();
+        const act = document.activeElement;
+        const isTyping = act && (act.tagName === 'INPUT' || act.tagName === 'TEXTAREA' || act.tagName === 'SELECT');
+        const hasDraft = (document.getElementById('wtAwardTitle')?.value || '').trim() || (document.getElementById('wtAwardBody')?.value || '').trim();
+        if (!isTyping && !hasDraft && (authedUser || isAdm)) draw();
       });
     }
   }

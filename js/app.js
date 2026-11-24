@@ -4215,17 +4215,18 @@ const ClubStore = {
   },
   saveTeamData(team, data) {
     this._lastSaveAt = Date.now();
+    const copy = Object.assign({}, data);
+    delete copy.manito; // 마니또는 전용 DB로만 관리 (일반 탭 저장 시 절대 덮어쓰기 방지)
     try {
-      if (!data.manito) {
-        const prevRaw = localStorage.getItem(this.key + team.id);
-        if (prevRaw) {
-          const prevObj = JSON.parse(prevRaw);
-          if (prevObj && prevObj.manito) data.manito = prevObj.manito;
-        }
+      const prevRaw = localStorage.getItem(this.key + team.id);
+      const localSave = Object.assign({}, copy);
+      if (prevRaw) {
+        const prevObj = JSON.parse(prevRaw);
+        if (prevObj && prevObj.manito) localSave.manito = prevObj.manito;
       }
-      localStorage.setItem(this.key + team.id, JSON.stringify(data));
+      localStorage.setItem(this.key + team.id, JSON.stringify(localSave));
     } catch (e) {}
-    this.syncToSheet(team, data);
+    this.syncToSheet(team, copy);
   },
 
   seedTeamData(team) {
