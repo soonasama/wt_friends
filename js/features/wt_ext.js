@@ -1331,11 +1331,25 @@
               ${!myTarget ? `
                 <div class="empty">아직 마니또 매칭이 배정되지 않았습니다. 관리자가 매칭을 완료하면 바로 확인할 수 있습니다.</div>
               ` : `
-                <div style="background:rgba(245,158,11,0.1);border:1.5px solid rgba(245,158,11,0.45);border-radius:14px;padding:16px;text-align:center;margin-bottom:14px">
+                <div style="background:rgba(245,158,11,0.1);border:1.5px solid rgba(245,158,11,0.45);border-radius:14px;padding:16px 14px;text-align:center;margin-bottom:14px;word-break:keep-all">
                   <div style="font-size:12px;font-weight:700;color:var(--gold)">🤫 나만 아는 비밀 마니또</div>
-                  <div style="font-size:21px;font-weight:900;margin:6px 0">당신의 마니또는 <span style="color:var(--accent)">${esc(myTarget)}</span> 님입니다!</div>
-                  <div style="font-size:12px;color:var(--sub)">
-                    ${(manito.guestBios && manito.guestBios[myTarget]) || DEFAULT_GUEST_BIOS[myTarget] || (hint.gCnt > 0 ? `📊 2026 공식 기록 힌트: ${hint.gCnt}경기 · ${hint.h}안타 · ${hint.rbi}타점 · ${hint.sb}도루${hint.so > 0 ? ` · 탈삼진 ${hint.so}K` : ''}` : '🎈 연말총회에 함께하는 소중한 친구입니다! 따뜻한 응원의 상장을 적어주세요.')}
+                  <div style="font-size:clamp(17px,4.8vw,21px);font-weight:900;margin:8px 0;line-height:1.45;word-break:keep-all">
+                    <span style="white-space:nowrap">당신의 마니또는</span> <span style="white-space:nowrap"><span style="color:var(--accent)">${esc(myTarget)}</span> 님입니다!</span>
+                  </div>
+                  <div style="font-size:12px;color:var(--sub);line-height:1.55;word-break:keep-all">
+                    ${(() => {
+                      const bio = (manito.guestBios && manito.guestBios[myTarget]) || DEFAULT_GUEST_BIOS[myTarget];
+                      if (bio) return bio;
+                      if (hint.gCnt > 0) {
+                        const items = [`${hint.gCnt}경기`];
+                        if (hint.h > 0) items.push(`${hint.h}안타`);
+                        if (hint.rbi > 0) items.push(`${hint.rbi}타점`);
+                        if (hint.sb > 0) items.push(`${hint.sb}도루`);
+                        if (hint.so > 0) items.push(`탈삼진 ${hint.so}K`);
+                        return `📊 2026 공식 기록: ${items.join(' · ')}`;
+                      }
+                      return '🎈 연말총회에 함께하는 소중한 친구입니다! 따뜻한 응원의 상장을 적어주세요.';
+                    })()}
                   </div>
                 </div>
 
